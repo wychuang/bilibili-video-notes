@@ -13,6 +13,7 @@ from bili_notes.summary import (
 )
 from bili_notes.transcript import (
     _has_cuda_runtime,
+    _visual_sample_count,
     choose_subtitle,
     display_time,
     parse_srt,
@@ -116,6 +117,13 @@ class TranscriptTests(unittest.TestCase):
 第二句 <b>重点</b>
 """
 
+    def test_visual_sampling_builds_a_broader_bounded_candidate_pool(self):
+        self.assertEqual(1, _visual_sample_count(0.5))
+        self.assertEqual(5, _visual_sample_count(5))
+        self.assertEqual(8, _visual_sample_count(90))
+        self.assertEqual(20, _visual_sample_count(600))
+        self.assertEqual(24, _visual_sample_count(3600))
+
     def test_parse_srt_and_format_times(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "video.zh-Hans.srt"
@@ -186,7 +194,8 @@ class SummaryTests(unittest.TestCase):
     def test_visual_prompt_uses_timestamped_frames(self):
         prompt = build_prompt("standard", "visual-frames")
         self.assertIn("visual/frames.json", prompt)
-        self.assertIn("时间戳画面", prompt)
+        self.assertIn("时间戳候选画面", prompt)
+        self.assertIn("直接支撑相邻观点", prompt)
         self.assertIn("[[FRAME:HH:MM:SS|", prompt)
 
     def test_hybrid_prompt_combines_transcript_and_frames(self):
@@ -315,7 +324,7 @@ class SummaryTests(unittest.TestCase):
         self.assertIn("人物影像承担主视觉。", rendered)
         self.assertNotIn("关键画面图版", rendered)
 
-    def test_markdown_renderer_preserves_unreferenced_frames_in_atlas(self):
+    def test_markdown_renderer_omits_unreferenced_candidate_frames(self):
         frames = [
             {
                 "index": 1,
@@ -325,8 +334,8 @@ class SummaryTests(unittest.TestCase):
             }
         ]
         rendered, _ = _markdown_to_safe_html("## 观察\n\n正文。", frames)
-        self.assertIn("关键画面图版", rendered)
-        self.assertIn('src="../../visual/frame_01.jpg"', rendered)
+        self.assertNotIn("关键画面图版", rendered)
+        self.assertNotIn('src="../../visual/frame_01.jpg"', rendered)
 
     def test_rendered_page_uses_local_wenkai_body_font(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -354,6 +363,7 @@ class SummaryTests(unittest.TestCase):
         self.assertIn('font-family:"Bili WenKai"', rendered)
         self.assertIn("LXGWWenKaiGBScreen.ttf", rendered)
         self.assertIn("font-size:17px", rendered)
+        self.assertIn("正文截图：0 张", rendered)
 
 
 if __name__ == "__main__":

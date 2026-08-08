@@ -14,7 +14,7 @@ The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path re
 
 `scripts\start.ps1` contains Chinese interface text and must remain UTF-8 with BOM so Windows PowerShell 5.1 reads it correctly. `scripts\check.ps1` runs the real 5.1 setup path as a regression check.
 
-The verification script resolves Codex from `CODEX_HOME`, falling back to the current user's `.codex` directory. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
+The repository owns the canonical skill at `skills/summarize-bilibili-video/`. The launcher synchronizes its two runtime files into `CODEX_HOME`, falling back to the current user's `.codex` directory. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
 
 ## Commands
 
@@ -45,7 +45,7 @@ $env:PYTHONPATH = "$PWD\src"
 
 ## Verification scope
 
-`scripts\check.ps1` compiles the package, runs unit tests, validates the installed skill, checks single-video and part-aware timestamp/frame HTML embedding, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and Codex generation require a real user-provided Bilibili URL and are intentionally kept out of the deterministic check.
+`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks single-video and part-aware timestamp/frame HTML embedding, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and Codex generation require a real user-provided Bilibili URL and are intentionally kept out of the deterministic check.
 
 ## Important constraints
 
@@ -56,5 +56,6 @@ $env:PYTHONPATH = "$PWD\src"
 - Resolve screenshot markers only against validated files listed in `visual/frames.json`; never trust model-generated image paths.
 - Keep collection media deduplicated. Reuse an existing single-part archive through `collection.json` instead of copying its source video into the collection directory.
 - Collection timestamps and frame markers must carry a part number so the offline player can switch videos before seeking.
-- Update `README.md`, this file, the installed skill, and the workspace project map when the workflow changes.
+- Treat extracted frames as candidates. Render only frame markers that the summarizer selected after visual inspection; keep unselected candidates on disk.
+- Update `README.md`, this file, the bundled skill, and the workspace project map when the workflow changes. Run the launcher to synchronize the installed skill.
 - Before publishing, verify that `library/`, `.cache/`, `.state/`, `.venv/`, `.env*`, logs, and editor-local settings remain ignored. Use a GitHub noreply address for commit metadata when author-email privacy matters.

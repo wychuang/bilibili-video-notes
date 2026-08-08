@@ -29,7 +29,7 @@ $resolvedCodexHome = if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
     $env:CODEX_HOME
 }
 $validator = Join-Path $resolvedCodexHome "skills\.system\skill-creator\scripts\quick_validate.py"
-$skillDir = Join-Path $resolvedCodexHome "skills\summarize-bilibili-video"
+$skillDir = Join-Path $projectRoot "skills\summarize-bilibili-video"
 if (-not (Test-Path -LiteralPath $validator)) {
     throw "没有找到 Codex skill 验证器：$validator"
 }
@@ -59,6 +59,12 @@ Write-Host "[5/8] Windows PowerShell 5.1 启动兼容检查"
 $windowsPowerShell = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
 & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start.ps1") -SetupOnly
 if ($LASTEXITCODE -ne 0) { throw "Windows PowerShell 5.1 无法运行启动器。" }
+$installedSkill = Join-Path $resolvedCodexHome "skills\summarize-bilibili-video\SKILL.md"
+$bundledSkill = Join-Path $skillDir "SKILL.md"
+if (-not (Test-Path -LiteralPath $installedSkill)) { throw "启动器没有安装项目内置 skill。" }
+if ((Get-FileHash -Algorithm SHA256 $installedSkill).Hash -ne (Get-FileHash -Algorithm SHA256 $bundledSkill).Hash) {
+    throw "已安装 skill 与项目内置版本不一致。"
+}
 
 Write-Host "[6/8] 本地转写运行库检查"
 $localModel = Join-Path $projectRoot ".cache\models\faster-whisper-small"
@@ -99,7 +105,7 @@ $resolvedUrl = & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Byp
 if ($LASTEXITCODE -ne 0 -or $resolvedUrl -ne $shareUrl) { throw "启动器无法从 B 站分享文字中提取视频链接。" }
 
 Write-Host "[8/8] 禁用措辞检查"
-$badText = rg -n "不是.+而是" README.md DEVELOPMENT.md src tests scripts\start.ps1 2>$null
+$badText = rg -n "不是.+而是" README.md DEVELOPMENT.md src tests scripts\start.ps1 skills 2>$null
 if ($LASTEXITCODE -eq 0) { throw "发现工作区禁止的措辞：`n$badText" }
 
 Write-Host "全部检查通过。" -ForegroundColor Green

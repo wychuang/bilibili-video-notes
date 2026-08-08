@@ -1,0 +1,4 @@
+interface:
+  display_name: "B站视频与合集图文总结"
+  short_description: "把单个B站视频或多P合集整理成带截图、时间戳和证据说明的分级学习笔记"
+  default_prompt: "使用 $summarize-bilibili-video 将本地单视频或多P合集证据整理成标准强度的中文图文学习笔记。"

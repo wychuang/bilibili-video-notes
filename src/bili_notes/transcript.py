@@ -165,12 +165,24 @@ def _transcribe_model(video_path: Path, model_name: str, device: str, compute_ty
     return segments, info
 
 
+VISUAL_SAMPLING_VERSION = 2
+
+
+def _visual_sample_count(duration: float) -> int:
+    target = min(24, max(8, round(duration / 30)))
+    return max(1, min(target, int(duration)))
+
+
 def prepare_visual_frames(video_path: Path, visual_dir: Path) -> dict[str, Any]:
     manifest_path = visual_dir / "frames.json"
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         frames = manifest.get("frames") or []
-        if frames and all((visual_dir / str(item.get("file", ""))).exists() for item in frames):
+        if (
+            manifest.get("sampling_version") == VISUAL_SAMPLING_VERSION
+            and frames
+            and all((visual_dir / str(item.get("file", ""))).exists() for item in frames)
+        ):
             print("[画面] 复用已有时间戳抽帧。")
             return manifest
 
@@ -197,12 +209,12 @@ def prepare_visual_frames(video_path: Path, visual_dir: Path) -> dict[str, Any]:
     except ValueError as exc:
         raise WorkflowError("FFprobe 返回了无效的视频时长。") from exc
 
-    frame_count = min(12, max(6, round(duration / 10)))
+    frame_count = _visual_sample_count(duration)
     timestamps = [duration * (index + 0.5) / frame_count for index in range(frame_count)]
     visual_dir.mkdir(parents=True, exist_ok=True)
     frames: list[dict[str, Any]] = []
     for index, timestamp in enumerate(timestamps, start=1):
-        filename = f"frame_{index:02d}_{display_time(timestamp).replace(':', '')}.jpg"
+        filename = f"frame_v{VISUAL_SAMPLING_VERSION}_{index:02d}_{display_time(timestamp).replace(':', '')}.jpg"
         frame_path = visual_dir / filename
         completed = subprocess.run(
             [
@@ -240,12 +252,13 @@ def prepare_visual_frames(video_path: Path, visual_dir: Path) -> dict[str, Any]:
 
     manifest = {
         "source": "timestamped-video-frames",
+        "sampling_version": VISUAL_SAMPLING_VERSION,
         "duration_seconds": round(duration, 3),
         "frame_count": len(frames),
         "frames": frames,
     }
     write_json(manifest_path, manifest)
-    print(f"[画面] 已提取 {len(frames)} 张带时间戳画面。")
+    print(f"[画面] 已提取 {len(frames)} 张带时间戳候选画面。")
     return manifest
 
 

@@ -34,6 +34,40 @@ function Add-ProjectGpuRuntimeToPath {
     }
 }
 
+function Sync-BundledSkill {
+    $bundledSkillDir = Join-Path $projectRoot "skills\summarize-bilibili-video"
+    if (-not (Test-Path -LiteralPath (Join-Path $bundledSkillDir "SKILL.md"))) {
+        throw "项目内置的 summarize-bilibili-video skill 不完整。"
+    }
+    $resolvedCodexHome = if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
+        Join-Path $env:USERPROFILE ".codex"
+    } else {
+        $env:CODEX_HOME
+    }
+    $installedSkillDir = Join-Path $resolvedCodexHome "skills\summarize-bilibili-video"
+    $installedAgentsDir = Join-Path $installedSkillDir "agents"
+    New-Item -ItemType Directory -Path $installedAgentsDir -Force | Out-Null
+    $skillFiles = @(
+        @((Join-Path $bundledSkillDir "SKILL.md"), (Join-Path $installedSkillDir "SKILL.md")),
+        @((Join-Path $bundledSkillDir "agents\openai.yaml"), (Join-Path $installedAgentsDir "openai.yaml"))
+    )
+    $updated = $false
+    foreach ($pair in $skillFiles) {
+        $sourceFile = $pair[0]
+        $targetFile = $pair[1]
+        if (-not (Test-Path -LiteralPath $sourceFile)) { throw "项目内置 skill 缺少文件：$sourceFile" }
+        $needsCopy = -not (Test-Path -LiteralPath $targetFile)
+        if (-not $needsCopy) {
+            $needsCopy = (Get-FileHash -Algorithm SHA256 $sourceFile).Hash -ne (Get-FileHash -Algorithm SHA256 $targetFile).Hash
+        }
+        if ($needsCopy) {
+            Copy-Item -LiteralPath $sourceFile -Destination $targetFile -Force
+            $updated = $true
+        }
+    }
+    if ($updated) { Write-Host "[Skill] 已同步项目内置总结规则。" -ForegroundColor Cyan }
+}
+
 function Find-BilibiliUrl {
     param([AllowEmptyString()][string]$Text)
 
@@ -75,6 +109,7 @@ try {
     Require-Command "ffmpeg" "没有找到 FFmpeg。请先安装 FFmpeg 并加入 PATH。"
     Require-Command "ffprobe" "没有找到 FFprobe。请确认 FFmpeg 安装完整。"
     Require-Command "codex.cmd" "没有找到 Codex CLI。请先安装并登录 Codex。"
+    Sync-BundledSkill
 
     if (-not (Test-Path $venvPython)) {
         Write-Host "[首次设置] 创建项目独立 Python 环境……" -ForegroundColor Cyan
