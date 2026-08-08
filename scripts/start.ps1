@@ -79,6 +79,193 @@ function Find-BilibiliUrl {
     return $match.Value.TrimEnd($trailingPunctuation)
 }
 
+function Invoke-SaveLlmSettings {
+    param([string]$PayloadJson)
+
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $venvPython
+    $startInfo.Arguments = "-m bili_notes --save-llm-settings"
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardInput = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.StandardOutputEncoding = $utf8
+    $startInfo.StandardErrorEncoding = $utf8
+    $startInfo.EnvironmentVariables["PYTHONPATH"] = Join-Path $projectRoot "src"
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $startInfo
+    [void]$process.Start()
+    $payloadBytes = $utf8.GetBytes($PayloadJson)
+    $process.StandardInput.BaseStream.Write($payloadBytes, 0, $payloadBytes.Length)
+    $process.StandardInput.BaseStream.Close()
+    $output = $process.StandardOutput.ReadToEnd()
+    $errorOutput = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+    if ($process.ExitCode -ne 0) {
+        $message = if ([string]::IsNullOrWhiteSpace($errorOutput)) { "AI 设置保存失败。" } else { $errorOutput.Trim() }
+        throw $message
+    }
+    return ($output | ConvertFrom-Json)
+}
+
+function Show-AiSettingsDialog {
+    param($Settings, $Owner)
+
+    $dialog = New-Object System.Windows.Forms.Form
+    $dialog.Text = "AI 引擎设置"
+    $dialog.StartPosition = "CenterParent"
+    $dialog.ClientSize = New-Object System.Drawing.Size(560, 430)
+    $dialog.FormBorderStyle = "FixedDialog"
+    $dialog.MaximizeBox = $false
+    $dialog.MinimizeBox = $false
+    $dialog.ShowInTaskbar = $false
+    $dialog.Font = New-Object System.Drawing.Font("Microsoft YaHei UI", 10)
+
+    $heading = New-Object System.Windows.Forms.Label
+    $heading.Text = "选择谁来写总结"
+    $heading.Font = New-Object System.Drawing.Font("Microsoft YaHei UI", 17, [System.Drawing.FontStyle]::Bold)
+    $heading.AutoSize = $true
+    $heading.Location = New-Object System.Drawing.Point(26, 22)
+    $dialog.Controls.Add($heading)
+
+    $description = New-Object System.Windows.Forms.Label
+    $description.Text = "默认继续使用 Codex。外部 API 暂时只依据逐字稿，不生成关键截图。"
+    $description.ForeColor = [System.Drawing.Color]::FromArgb(88, 99, 93)
+    $description.AutoSize = $false
+    $description.Size = New-Object System.Drawing.Size(506, 42)
+    $description.Location = New-Object System.Drawing.Point(29, 62)
+    $dialog.Controls.Add($description)
+
+    $providerLabel = New-Object System.Windows.Forms.Label
+    $providerLabel.Text = "文本模型服务"
+    $providerLabel.AutoSize = $true
+    $providerLabel.Location = New-Object System.Drawing.Point(28, 116)
+    $dialog.Controls.Add($providerLabel)
+
+    $providerBox = New-Object System.Windows.Forms.ComboBox
+    $providerBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
+    $providerBox.Location = New-Object System.Drawing.Point(30, 142)
+    $providerBox.Size = New-Object System.Drawing.Size(500, 28)
+    $dialog.Controls.Add($providerBox)
+
+    $modelLabel = New-Object System.Windows.Forms.Label
+    $modelLabel.Text = "模型名称"
+    $modelLabel.AutoSize = $true
+    $modelLabel.Location = New-Object System.Drawing.Point(28, 186)
+    $dialog.Controls.Add($modelLabel)
+
+    $modelBox = New-Object System.Windows.Forms.TextBox
+    $modelBox.Location = New-Object System.Drawing.Point(30, 212)
+    $modelBox.Size = New-Object System.Drawing.Size(500, 28)
+    $dialog.Controls.Add($modelBox)
+
+    $baseLabel = New-Object System.Windows.Forms.Label
+    $baseLabel.Text = "Base URL"
+    $baseLabel.AutoSize = $true
+    $baseLabel.Location = New-Object System.Drawing.Point(28, 252)
+    $dialog.Controls.Add($baseLabel)
+
+    $baseBox = New-Object System.Windows.Forms.TextBox
+    $baseBox.Location = New-Object System.Drawing.Point(30, 278)
+    $baseBox.Size = New-Object System.Drawing.Size(500, 28)
+    $dialog.Controls.Add($baseBox)
+
+    $keyLabel = New-Object System.Windows.Forms.Label
+    $keyLabel.Text = "API Key"
+    $keyLabel.AutoSize = $true
+    $keyLabel.Location = New-Object System.Drawing.Point(28, 318)
+    $dialog.Controls.Add($keyLabel)
+
+    $keyBox = New-Object System.Windows.Forms.TextBox
+    $keyBox.Location = New-Object System.Drawing.Point(30, 344)
+    $keyBox.Size = New-Object System.Drawing.Size(345, 28)
+    $keyBox.UseSystemPasswordChar = $true
+    $dialog.Controls.Add($keyBox)
+
+    $keyHint = New-Object System.Windows.Forms.Label
+    $keyHint.Text = if ($Settings.text.has_api_key) { "已保存 · 留空继续使用" } else { "留空则不修改" }
+    $keyHint.ForeColor = [System.Drawing.Color]::FromArgb(85, 105, 95)
+    $keyHint.AutoSize = $true
+    $keyHint.Location = New-Object System.Drawing.Point(382, 349)
+    $dialog.Controls.Add($keyHint)
+
+    $cancel = New-Object System.Windows.Forms.Button
+    $cancel.Text = "取消"
+    $cancel.Location = New-Object System.Drawing.Point(350, 385)
+    $cancel.Size = New-Object System.Drawing.Size(82, 34)
+    $cancel.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+    $dialog.Controls.Add($cancel)
+    $dialog.CancelButton = $cancel
+
+    $save = New-Object System.Windows.Forms.Button
+    $save.Text = "保存"
+    $save.Location = New-Object System.Drawing.Point(444, 385)
+    $save.Size = New-Object System.Drawing.Size(86, 34)
+    $save.BackColor = [System.Drawing.Color]::FromArgb(22, 139, 98)
+    $save.ForeColor = [System.Drawing.Color]::White
+    $save.FlatStyle = "Flat"
+    $dialog.Controls.Add($save)
+    $dialog.AcceptButton = $save
+
+    $textPresets = @($Settings.presets)
+    $selectedIndex = 0
+    for ($index = 0; $index -lt $textPresets.Count; $index++) {
+        [void]$providerBox.Items.Add([string]$textPresets[$index].label)
+        if ($textPresets[$index].provider -eq $Settings.text.provider) { $selectedIndex = $index }
+    }
+    $providerBox.SelectedIndex = $selectedIndex
+    $modelBox.Text = [string]$Settings.text.model
+    $baseBox.Text = [string]$Settings.text.base_url
+    $initialIsCodex = $textPresets[$selectedIndex].provider -eq "codex"
+    $modelBox.Enabled = -not $initialIsCodex
+    $baseBox.Enabled = -not $initialIsCodex
+    $keyBox.Enabled = -not $initialIsCodex
+    $keyHint.Visible = -not $initialIsCodex
+
+    $providerBox.Add_SelectedIndexChanged({
+        if ($providerBox.SelectedIndex -lt 0) { return }
+        $preset = $textPresets[$providerBox.SelectedIndex]
+        $isCodex = $preset.provider -eq "codex"
+        if ($preset.provider -ne $Settings.text.provider) {
+            $modelBox.Text = [string]$preset.model
+            $baseBox.Text = [string]$preset.base_url
+            $keyBox.Text = ""
+            $keyHint.Text = "留空会尝试已有凭据"
+        }
+        $modelBox.Enabled = -not $isCodex
+        $baseBox.Enabled = -not $isCodex
+        $keyBox.Enabled = -not $isCodex
+        $keyHint.Visible = -not $isCodex
+    })
+
+    $save.Add_Click({
+        if ($providerBox.SelectedIndex -lt 0) { return }
+        $preset = $textPresets[$providerBox.SelectedIndex]
+        if ($preset.provider -ne "codex" -and [string]::IsNullOrWhiteSpace($modelBox.Text)) {
+            [System.Windows.Forms.MessageBox]::Show("请填写模型名称。", "设置不完整", "OK", "Warning") | Out-Null
+            return
+        }
+        $payload = [ordered]@{
+            text_provider = [string]$preset.provider
+            text_model = $modelBox.Text.Trim()
+            text_base_url = $baseBox.Text.Trim()
+            text_api_key = $keyBox.Text.Trim()
+        }
+        try {
+            $payloadJson = $payload | ConvertTo-Json -Compress
+            $dialog.Tag = Invoke-SaveLlmSettings $payloadJson
+            $dialog.DialogResult = [System.Windows.Forms.DialogResult]::OK
+            $dialog.Close()
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show($_.Exception.Message, "保存失败", "OK", "Error") | Out-Null
+        }
+    })
+
+    [void]$dialog.ShowDialog($Owner)
+    return $dialog.Tag
+}
+
 try {
     if ($PSBoundParameters.ContainsKey("TestUrlInput")) {
         $testUrl = Find-BilibiliUrl $TestUrlInput
@@ -108,7 +295,6 @@ try {
     Require-Command "python" "没有找到 Python。请安装 Python 3.11 或更新版本。"
     Require-Command "ffmpeg" "没有找到 FFmpeg。请先安装 FFmpeg 并加入 PATH。"
     Require-Command "ffprobe" "没有找到 FFprobe。请确认 FFmpeg 安装完整。"
-    Require-Command "codex.cmd" "没有找到 Codex CLI。请先安装并登录 Codex。"
     Sync-BundledSkill
 
     if (-not (Test-Path $venvPython)) {
@@ -123,7 +309,7 @@ try {
     $installedHash = if (Test-Path $stampPath) { (Get-Content -Raw -Encoding UTF8 $stampPath).Trim() } else { "" }
     $importsOk = $false
     if ($installedHash -eq $requirementsHash) {
-        & $venvPython -c "import bleach, faster_whisper, markdown, yt_dlp" 2>$null
+        & $venvPython -c "import bleach, faster_whisper, keyring, markdown, yt_dlp" 2>$null
         $importsOk = $LASTEXITCODE -eq 0
     }
 
@@ -135,6 +321,7 @@ try {
     }
 
     Add-ProjectGpuRuntimeToPath
+    $env:PYTHONPATH = Join-Path $projectRoot "src"
 
     if ($SetupOnly) {
         Write-Host "环境准备完成。" -ForegroundColor Green
@@ -144,6 +331,10 @@ try {
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
     [System.Windows.Forms.Application]::EnableVisualStyles()
+
+    $settingsOutput = @(& $venvPython -m bili_notes --show-llm-settings)
+    if ($LASTEXITCODE -ne 0) { throw "无法读取 AI 设置，请查看上方输出。" }
+    $script:llmSettings = ($settingsOutput -join "`n") | ConvertFrom-Json
 
     $clipboardText = ""
     try { $clipboardText = Get-Clipboard -Raw -ErrorAction Stop } catch { }
@@ -278,7 +469,22 @@ try {
     $form.Controls.Add($cancelButton)
     $form.CancelButton = $cancelButton
 
-    $env:PYTHONPATH = Join-Path $projectRoot "src"
+    $settingsButton = New-Object System.Windows.Forms.Button
+    $settingsButton.Text = "AI · $($script:llmSettings.text.label)"
+    $settingsButton.Location = New-Object System.Drawing.Point(32, 326)
+    $settingsButton.Size = New-Object System.Drawing.Size(190, 40)
+    $settingsButton.FlatStyle = "Flat"
+    $settingsButton.ForeColor = [System.Drawing.Color]::FromArgb(37, 89, 67)
+    $settingsButton.BackColor = [System.Drawing.Color]::FromArgb(237, 247, 241)
+    $form.Controls.Add($settingsButton)
+    $settingsButton.Add_Click({
+        $savedSettings = Show-AiSettingsDialog $script:llmSettings $form
+        if ($savedSettings) {
+            $script:llmSettings = $savedSettings
+            $settingsButton.Text = "AI · $($script:llmSettings.text.label)"
+        }
+    })
+
     $script:selectedUrl = $null
     $script:selectedStrength = "standard"
     $script:selectedCollection = $false
@@ -299,6 +505,17 @@ try {
             return
         }
         $urlBox.Text = $value
+        if ($script:llmSettings.text.provider -eq "codex") {
+            $codexCommand = Get-Command "codex.cmd" -ErrorAction SilentlyContinue
+            if (-not $codexCommand) { $codexCommand = Get-Command "codex" -ErrorAction SilentlyContinue }
+            if (-not $codexCommand) {
+                [System.Windows.Forms.MessageBox]::Show("没有找到 Codex CLI。请先安装并登录，或点左下角 AI 按钮切换到 API。", "Codex 不可用", "OK", "Warning") | Out-Null
+                return
+            }
+        } elseif (-not $script:llmSettings.text.has_api_key) {
+            [System.Windows.Forms.MessageBox]::Show("当前模型还没有 API Key。请点左下角 AI 按钮完成设置。", "缺少 API Key", "OK", "Warning") | Out-Null
+            return
+        }
 
         if ($script:probedUrl -ne $value) {
             $startButton.Enabled = $false
@@ -343,6 +560,7 @@ try {
                 $quick.Location = New-Object System.Drawing.Point(34, 468)
                 $standard.Location = New-Object System.Drawing.Point(34, 500)
                 $deep.Location = New-Object System.Drawing.Point(34, 532)
+                $settingsButton.Location = New-Object System.Drawing.Point(32, 590)
                 $cancelButton.Location = New-Object System.Drawing.Point(322, 590)
                 $startButton.Location = New-Object System.Drawing.Point(420, 590)
                 $startButton.Text = "处理整套 $($probe.part_count) 集"

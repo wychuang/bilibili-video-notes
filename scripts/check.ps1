@@ -14,15 +14,15 @@ if (-not (Test-Path $venvPython)) {
 $env:PYTHONPATH = Join-Path $projectRoot "src"
 Set-Location $projectRoot
 
-Write-Host "[1/8] Python 编译检查"
+Write-Host "[1/9] Python 编译检查"
 & $venvPython -m compileall -q src tests
 if ($LASTEXITCODE -ne 0) { throw "Python 编译检查失败。" }
 
-Write-Host "[2/8] 单元测试"
+Write-Host "[2/9] 单元测试"
 & $venvPython -m unittest discover -s tests -p "test*.py"
 if ($LASTEXITCODE -ne 0) { throw "单元测试失败。" }
 
-Write-Host "[3/8] Skill 结构验证"
+Write-Host "[3/9] Skill 结构验证"
 $resolvedCodexHome = if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
     Join-Path $env:USERPROFILE ".codex"
 } else {
@@ -42,7 +42,7 @@ $env:PYTHONUTF8 = "1"
 $env:PYTHONUTF8 = $previousPythonUtf8
 if ($LASTEXITCODE -ne 0) { throw "Skill 验证失败。" }
 
-Write-Host "[4/8] PowerShell 语法检查"
+Write-Host "[4/9] PowerShell 语法检查"
 $tokens = $null
 $syntaxErrors = $null
 [System.Management.Automation.Language.Parser]::ParseFile(
@@ -55,7 +55,7 @@ if ($syntaxErrors.Count -gt 0) {
     throw ($syntaxText -join "`n")
 }
 
-Write-Host "[5/8] Windows PowerShell 5.1 启动兼容检查"
+Write-Host "[5/9] Windows PowerShell 5.1 启动兼容检查"
 $windowsPowerShell = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
 & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start.ps1") -SetupOnly
 if ($LASTEXITCODE -ne 0) { throw "Windows PowerShell 5.1 无法运行启动器。" }
@@ -66,7 +66,7 @@ if ((Get-FileHash -Algorithm SHA256 $installedSkill).Hash -ne (Get-FileHash -Alg
     throw "已安装 skill 与项目内置版本不一致。"
 }
 
-Write-Host "[6/8] 本地转写运行库检查"
+Write-Host "[6/9] 本地转写运行库检查"
 $localModel = Join-Path $projectRoot ".cache\models\faster-whisper-small"
 if (Test-Path (Join-Path $localModel "model.bin")) {
     $previousHfHome = $env:HF_HOME
@@ -98,13 +98,21 @@ if (Test-Path (Join-Path $localModel "model.bin")) {
     Write-Host "本地模型尚未下载，跳过运行库加载检查。"
 }
 
-Write-Host "[7/8] B 站分享文字提取检查"
+Write-Host "[7/9] B 站分享文字提取检查"
 $shareUrl = "https://www.bilibili.com/video/BV1REDACTED0/?share_source=copy_web&vd_source=redacted-test-id"
 $shareText = "【示例视频标题】 " + $shareUrl
 $resolvedUrl = & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start.ps1") -TestUrlInput $shareText
 if ($LASTEXITCODE -ne 0 -or $resolvedUrl -ne $shareUrl) { throw "启动器无法从 B 站分享文字中提取视频链接。" }
 
-Write-Host "[8/8] 禁用措辞检查"
+Write-Host "[8/9] AI 设置脱敏检查"
+$settingsOutput = @(& $venvPython -m bili_notes --show-llm-settings)
+if ($LASTEXITCODE -ne 0) { throw "AI 设置无法读取。" }
+$settingsJson = $settingsOutput -join "`n"
+$settings = $settingsJson | ConvertFrom-Json
+if (-not $settings.ok -or -not $settings.text.provider) { throw "AI 设置输出结构无效。" }
+if ($settingsJson -match '"api_key"\s*:') { throw "AI 设置输出包含密钥字段。" }
+
+Write-Host "[9/9] 禁用措辞检查"
 $badText = rg -n "不是.+而是" README.md DEVELOPMENT.md src tests scripts\start.ps1 skills 2>$null
 if ($LASTEXITCODE -eq 0) { throw "发现工作区禁止的措辞：`n$badText" }
 

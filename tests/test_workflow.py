@@ -1,11 +1,22 @@
+import io
 import json
 import os
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 
+from bili_notes.providers import (
+    EndpointConfig,
+    ProviderClient,
+    ProviderError,
+    _request_json,
+    load_llm_settings,
+    save_llm_settings,
+)
 from bili_notes.summary import (
+    _single_api_prompt,
     _write_summary_metadata,
     _markdown_to_safe_html,
     build_prompt,
@@ -215,6 +226,33 @@ class SummaryTests(unittest.TestCase):
         self.assertIn("visual/frames.json", prompt)
         self.assertIn("画面补足", prompt)
 
+    def test_text_only_api_prompt_forbids_frame_markers(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job_dir = Path(temp)
+            transcript_dir = job_dir / "transcript"
+            transcript_dir.mkdir()
+            (job_dir / "source.json").write_text("{}", encoding="utf-8")
+            (transcript_dir / "metadata.json").write_text(
+                json.dumps({"source": "faster-whisper"}), encoding="utf-8"
+            )
+            (transcript_dir / "transcript.srt").write_text(
+                "1\n00:00:01,000 --> 00:00:02,000\n正文\n", encoding="utf-8"
+            )
+            prompt = _single_api_prompt(job_dir, "standard")
+        self.assertIn("不得输出任何 [[FRAME:...]]", prompt)
+
+    def test_visual_only_api_prompt_requires_codex(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job_dir = Path(temp)
+            transcript_dir = job_dir / "transcript"
+            transcript_dir.mkdir()
+            (job_dir / "source.json").write_text("{}", encoding="utf-8")
+            (transcript_dir / "metadata.json").write_text(
+                json.dumps({"source": "visual-frames"}), encoding="utf-8"
+            )
+            with self.assertRaises(WorkflowError):
+                _single_api_prompt(job_dir, "standard")
+
     def test_markdown_renderer_adds_time_button_and_strips_script(self):
         rendered, toc = _markdown_to_safe_html(
             "# 标题\n\n## 第一节\n\n[00:01:02] 内容<script>alert(1)</script>"
@@ -375,6 +413,129 @@ class SummaryTests(unittest.TestCase):
         self.assertIn("LXGWWenKaiGBScreen.ttf", rendered)
         self.assertIn("font-size:17px", rendered)
         self.assertIn("正文截图：0 张", rendered)
+
+
+class ProviderTests(unittest.TestCase):
+    def test_default_text_provider_remains_codex(self):
+        with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {}, clear=True):
+            settings = load_llm_settings(Path(temp))
+        self.assertEqual("codex", settings.text.provider)
+
+    def test_saving_deepseek_keeps_secret_out_of_settings_file(self):
+        with (
+            tempfile.TemporaryDirectory() as temp,
+            patch("bili_notes.providers._keyring_set") as keyring_set,
+            patch("bili_notes.providers._keyring_get", return_value=""),
+            patch.dict(os.environ, {}, clear=True),
+        ):
+            root = Path(temp)
+            save_llm_settings(
+                root,
+                {
+                    "text_provider": "deepseek",
+                    "text_model": "deepseek-v4-flash",
+                    "text_base_url": "",
+                    "text_api_key": "unit-test-secret",
+                },
+            )
+            stored = (root / ".state" / "llm-settings.json").read_text(encoding="utf-8")
+        self.assertNotIn("unit-test-secret", stored)
+        keyring_set.assert_called_once_with("deepseek", "unit-test-secret")
+
+    def test_deepseek_uses_openai_chat_protocol_without_images(self):
+        config = EndpointConfig(
+            provider="deepseek",
+            label="DeepSeek",
+            protocol="openai-chat",
+            base_url="https://api.deepseek.com",
+            model="deepseek-v4-flash",
+            api_key_env="DEEPSEEK_API_KEY",
+        )
+        with (
+            patch("bili_notes.providers.resolve_api_key", return_value="secret"),
+            patch(
+                "bili_notes.providers._request_json",
+                return_value={"choices": [{"message": {"content": "完成"}}]},
+            ) as request_json,
+        ):
+            result = ProviderClient(config).generate(
+                "规则", "证据", max_tokens=1234
+            )
+        self.assertEqual("完成", result)
+        url, _, payload = request_json.call_args.args
+        self.assertEqual("https://api.deepseek.com/chat/completions", url)
+        self.assertEqual(1234, payload["max_tokens"])
+        self.assertEqual({"type": "disabled"}, payload["thinking"])
+        self.assertIsInstance(payload["messages"][1]["content"], str)
+
+    def test_gemini_text_adapter_uses_generate_content(self):
+        config = EndpointConfig(
+            provider="gemini",
+            label="Google Gemini",
+            protocol="gemini",
+            base_url="https://generativelanguage.googleapis.com/v1beta",
+            model="gemini-3.6-flash",
+            api_key_env="GEMINI_API_KEY",
+        )
+        with (
+            patch("bili_notes.providers.resolve_api_key", return_value="secret"),
+            patch(
+                "bili_notes.providers._request_json",
+                return_value={
+                    "candidates": [{"content": {"parts": [{"text": "完成"}]}}]
+                },
+            ) as request_json,
+        ):
+            result = ProviderClient(config).generate("规则", "证据")
+        self.assertEqual("完成", result)
+        url, headers, payload = request_json.call_args.args
+        self.assertTrue(url.endswith("/models/gemini-3.6-flash:generateContent"))
+        self.assertEqual("secret", headers["x-goog-api-key"])
+        self.assertEqual("规则", payload["system_instruction"]["parts"][0]["text"])
+
+    def test_anthropic_text_adapter_uses_messages_api(self):
+        config = EndpointConfig(
+            provider="anthropic",
+            label="Anthropic Claude",
+            protocol="anthropic",
+            base_url="https://api.anthropic.com",
+            model="claude-sonnet-5",
+            api_key_env="ANTHROPIC_API_KEY",
+        )
+        with (
+            patch("bili_notes.providers.resolve_api_key", return_value="secret"),
+            patch(
+                "bili_notes.providers._request_json",
+                return_value={"content": [{"type": "text", "text": "完成"}]},
+            ) as request_json,
+        ):
+            result = ProviderClient(config).generate("规则", "证据")
+        self.assertEqual("完成", result)
+        url, headers, payload = request_json.call_args.args
+        self.assertEqual("https://api.anthropic.com/v1/messages", url)
+        self.assertEqual("2023-06-01", headers["anthropic-version"])
+        self.assertEqual("证据", payload["messages"][0]["content"][0]["text"])
+
+    def test_http_error_redacts_api_key_from_provider_message(self):
+        secret = "unit-test-secret-value"
+        error = urllib.error.HTTPError(
+            "https://example.invalid/chat/completions",
+            401,
+            "Unauthorized",
+            {},
+            io.BytesIO(f"invalid key: {secret}".encode("utf-8")),
+        )
+        with (
+            patch("bili_notes.providers.urllib.request.urlopen", side_effect=error),
+            self.assertRaises(ProviderError) as raised,
+        ):
+            _request_json(
+                "https://example.invalid/chat/completions",
+                {"Authorization": f"Bearer {secret}"},
+                {"model": "test"},
+            )
+        self.assertNotIn(secret, str(raised.exception))
+        self.assertIn("[REDACTED]", str(raised.exception))
 
 
 if __name__ == "__main__":
