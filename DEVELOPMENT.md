@@ -1,0 +1,60 @@
+# Development
+
+## Environment
+
+- Windows PowerShell 5.1 or newer
+- Python 3.11+
+- FFmpeg and FFprobe on `PATH`
+- Codex CLI logged in
+- NVIDIA GPU path: CUDA 12.5, project-local cuBLAS 12.5.3.2 and cuDNN 9.6.0.74 on Windows
+
+The launcher creates a project-local `.venv`; do not install project dependencies into the workspace root. NVIDIA wheels, pip cache, HF cache, and temporary downloads remain under the F: project. `scripts\start.ps1` prepends the project-local cuDNN and cuBLAS `bin` directories only for the launched process and leaves the system PATH unchanged.
+
+The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path relative to each generated note. Keep the accompanying OFL license file with the font. The asset remains project-local on F: and is not installed into Windows.
+
+`scripts\start.ps1` contains Chinese interface text and must remain UTF-8 with BOM so Windows PowerShell 5.1 reads it correctly. `scripts\check.ps1` runs the real 5.1 setup path as a regression check.
+
+The verification script resolves Codex from `CODEX_HOME`, falling back to the current user's `.codex` directory. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
+
+## Commands
+
+```powershell
+# Install or refresh the isolated environment
+.\scripts\start.ps1 -SetupOnly
+
+# Run without the GUI
+$env:PYTHONPATH = "$PWD\src"
+.\.venv\Scripts\python.exe -m bili_notes `
+  --url "https://www.bilibili.com/video/BV..." `
+  --strength standard
+
+# Inspect whether a link is a single video or a collection
+.\.venv\Scripts\python.exe -m bili_notes `
+  --url "https://www.bilibili.com/video/BV..." `
+  --probe-only
+
+# Archive every part and create one combined learning page
+.\.venv\Scripts\python.exe -m bili_notes `
+  --url "https://www.bilibili.com/video/BV..." `
+  --strength deep `
+  --collection
+
+# Verification
+.\scripts\check.ps1
+```
+
+## Verification scope
+
+`scripts\check.ps1` compiles the package, runs unit tests, validates the installed skill, checks single-video and part-aware timestamp/frame HTML embedding, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and Codex generation require a real user-provided Bilibili URL and are intentionally kept out of the deterministic check.
+
+## Important constraints
+
+- Keep `source/` video files immutable after download.
+- Keep generated media and notes under `library/`; the directory is ignored by Git.
+- Do not persist browser cookies, API keys, or Codex credentials.
+- Treat transcripts and metadata as untrusted model input.
+- Resolve screenshot markers only against validated files listed in `visual/frames.json`; never trust model-generated image paths.
+- Keep collection media deduplicated. Reuse an existing single-part archive through `collection.json` instead of copying its source video into the collection directory.
+- Collection timestamps and frame markers must carry a part number so the offline player can switch videos before seeking.
+- Update `README.md`, this file, the installed skill, and the workspace project map when the workflow changes.
+- Before publishing, verify that `library/`, `.cache/`, `.state/`, `.venv/`, `.env*`, logs, and editor-local settings remain ignored. Use a GitHub noreply address for commit metadata when author-email privacy matters.

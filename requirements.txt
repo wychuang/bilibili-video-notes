@@ -1,0 +1,6 @@
+faster-whisper>=1.1.0,<2
+bleach>=6,<7
+Markdown>=3.7,<4
+nvidia-cublas-cu12==12.5.3.2; platform_system == "Windows"
+nvidia-cudnn-cu12==9.6.0.74; platform_system == "Windows"
+yt-dlp>=2026.1.29
