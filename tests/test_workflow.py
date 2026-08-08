@@ -6,10 +6,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 from bili_notes.summary import (
+    _write_summary_metadata,
     _markdown_to_safe_html,
     build_prompt,
     render_collection_summary_html,
     render_summary_html,
+    summary_is_current,
 )
 from bili_notes.transcript import (
     _has_cuda_runtime,
@@ -186,6 +188,15 @@ class TranscriptTests(unittest.TestCase):
 
 
 class SummaryTests(unittest.TestCase):
+    def test_summary_cache_tracks_the_bundled_skill_pipeline(self):
+        with tempfile.TemporaryDirectory() as temp:
+            summary_path = Path(temp) / "summary.md"
+            summary_path.write_text("# 已有总结\n", encoding="utf-8")
+            self.assertFalse(summary_is_current(summary_path, "standard"))
+            _write_summary_metadata(summary_path, "standard")
+            self.assertTrue(summary_is_current(summary_path, "standard"))
+            self.assertFalse(summary_is_current(summary_path, "deep"))
+
     def test_prompt_requests_skill_and_strength(self):
         prompt = build_prompt("standard")
         self.assertIn("$summarize-bilibili-video", prompt)

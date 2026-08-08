@@ -57,5 +57,6 @@ $env:PYTHONPATH = "$PWD\src"
 - Keep collection media deduplicated. Reuse an existing single-part archive through `collection.json` instead of copying its source video into the collection directory.
 - Collection timestamps and frame markers must carry a part number so the offline player can switch videos before seeking.
 - Treat extracted frames as candidates. Render only frame markers that the summarizer selected after visual inspection; keep unselected candidates on disk.
+- Bump `SUMMARY_PIPELINE_VERSION` when prompt or presentation rules change. The summary sidecar invalidates old text once, then restores normal cache reuse.
 - Update `README.md`, this file, the bundled skill, and the workspace project map when the workflow changes. Run the launcher to synchronize the installed skill.
 - Before publishing, verify that `library/`, `.cache/`, `.state/`, `.venv/`, `.env*`, logs, and editor-local settings remain ignored. Use a GitHub noreply address for commit metadata when author-email privacy matters.

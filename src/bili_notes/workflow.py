@@ -495,7 +495,7 @@ def process_video(
     use_browser: bool = True,
     force_summary: bool = False,
 ) -> dict[str, Any]:
-    from .summary import create_summary, render_summary_html
+    from .summary import create_summary, render_summary_html, summary_is_current
 
     normalized_url = validate_bilibili_url(url)
     preferred_browser = detect_browser() if use_browser else None
@@ -524,7 +524,7 @@ def process_video(
         notes_dir = job_dir / "notes" / strength
         notes_dir.mkdir(parents=True, exist_ok=True)
         summary_path = notes_dir / "summary.md"
-        if force_summary or not summary_path.exists():
+        if force_summary or not summary_is_current(summary_path, strength):
             create_summary(job_dir, strength, summary_path)
         else:
             print(f"[总结] 复用已有 {strength} 总结。")
@@ -564,7 +564,11 @@ def process_collection(
     use_browser: bool = True,
     force_summary: bool = False,
 ) -> dict[str, Any]:
-    from .summary import create_collection_summary, render_collection_summary_html
+    from .summary import (
+        create_collection_summary,
+        render_collection_summary_html,
+        summary_is_current,
+    )
 
     normalized_url = validate_bilibili_url(url)
     preferred_browser = detect_browser() if use_browser else None
@@ -676,7 +680,7 @@ def process_collection(
         notes_dir = collection_dir / "notes" / strength
         notes_dir.mkdir(parents=True, exist_ok=True)
         summary_path = notes_dir / "summary.md"
-        if force_summary or not summary_path.exists():
+        if force_summary or not summary_is_current(summary_path, strength):
             create_collection_summary(collection_dir, strength, summary_path)
         else:
             print(f"[总结] 复用已有合集 {strength} 总结。")

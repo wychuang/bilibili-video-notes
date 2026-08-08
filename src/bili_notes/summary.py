@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -26,6 +27,50 @@ EXECUTION_PROFILES = {
     "standard": ("gpt-5.6-terra", "medium"),
     "deep": ("gpt-5.6-sol", "high"),
 }
+
+SUMMARY_PIPELINE_VERSION = "2-direct-voice-evidence-gate"
+
+
+def _summary_metadata_path(summary_path: Path) -> Path:
+    return summary_path.with_name("summary.meta.json")
+
+
+def _summary_pipeline_fingerprint() -> str:
+    digest = hashlib.sha256(SUMMARY_PIPELINE_VERSION.encode("utf-8"))
+    skill_path = (
+        Path(__file__).resolve().parents[2]
+        / "skills"
+        / "summarize-bilibili-video"
+        / "SKILL.md"
+    )
+    if skill_path.is_file():
+        digest.update(skill_path.read_bytes())
+    return digest.hexdigest()
+
+
+def summary_is_current(summary_path: Path, strength: str) -> bool:
+    metadata_path = _summary_metadata_path(summary_path)
+    if not summary_path.is_file() or not metadata_path.is_file():
+        return False
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        metadata.get("strength") == strength
+        and metadata.get("pipeline_fingerprint") == _summary_pipeline_fingerprint()
+    )
+
+
+def _write_summary_metadata(summary_path: Path, strength: str) -> None:
+    metadata = {
+        "strength": strength,
+        "pipeline_fingerprint": _summary_pipeline_fingerprint(),
+    }
+    _summary_metadata_path(summary_path).write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def build_prompt(strength: str, evidence_source: str = "transcript") -> str:
@@ -206,6 +251,7 @@ def create_summary(job_dir: Path, strength: str, summary_path: Path) -> Path:
 
     content = _strip_outer_fence(summary_path.read_text(encoding="utf-8", errors="replace"))
     summary_path.write_text(content + "\n", encoding="utf-8")
+    _write_summary_metadata(summary_path, strength)
     return summary_path
 
 
@@ -263,6 +309,7 @@ def create_collection_summary(
         raise WorkflowError("Codex 已结束，但没有生成有效的合集 Markdown 总结。")
     content = _strip_outer_fence(summary_path.read_text(encoding="utf-8", errors="replace"))
     summary_path.write_text(content + "\n", encoding="utf-8")
+    _write_summary_metadata(summary_path, strength)
     return summary_path
 
 
