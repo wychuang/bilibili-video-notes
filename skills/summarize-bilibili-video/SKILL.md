@@ -126,6 +126,8 @@ For `quick`, keep the core sentence followed immediately by timestamp navigation
 
 Disclose weak ASR or sparse visual evidence near the source block and lower certainty. Never wrap timestamps in backticks.
 
+Preserve meaningful mathematics as LaTeX. Use `\(...\)` for inline expressions and `\[...\]` for standalone equations. Keep each standalone delimiter on its own lines when the equation is part of a longer paragraph. Do not place formulas in code fences, convert them to Unicode approximations, or emit raw HTML; the offline renderer converts these delimiters to static MathML.
+
 For a screenshot, place this exact standalone marker immediately after its supporting paragraph:
 
 ```text

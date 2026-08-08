@@ -12,6 +12,8 @@ The launcher creates a project-local `.venv`; do not install project dependencie
 
 The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path relative to each generated note. Keep the accompanying OFL license file with the font. The asset remains project-local on F: and is not installed into Windows.
 
+Formula rendering is fully offline. `_markdown_to_safe_html` freezes LaTeX before Markdown and Bleach processing, converts it with `latex2mathml`, validates the resulting XML as MathML only, and reinserts the static fragment after sanitization. Keep `\[...\]`, `$$...$$`, `\(...\)`, and `$...$` support covered by tests; never add a CDN or runtime JavaScript dependency for formulas.
+
 `scripts\start.ps1` contains Chinese interface text and must remain UTF-8 with BOM so Windows PowerShell 5.1 reads it correctly. `scripts\check.ps1` runs the real 5.1 setup path as a regression check.
 
 The repository owns the canonical skill at `skills/summarize-bilibili-video/`. The launcher synchronizes its two runtime files into `CODEX_HOME`, falling back to the current user's `.codex` directory. API providers load the same `SKILL.md` as their system instruction. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
@@ -53,7 +55,7 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ## Verification scope
 
-`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
+`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, verifies static MathML rendering and code-block protection, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
 
 ## Important constraints
 

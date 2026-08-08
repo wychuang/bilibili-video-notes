@@ -272,6 +272,43 @@ class SummaryTests(unittest.TestCase):
         self.assertNotIn("&lt;button", rendered)
         self.assertNotIn("<code>", rendered)
 
+    def test_markdown_renderer_converts_display_latex_to_static_mathml(self):
+        rendered, _ = _markdown_to_safe_html(
+            r"## Riccati 方程" "\n\n" r"\[\dot{\kappa}=r+\kappa^2\]"
+        )
+        self.assertIn('class="math-display"', rendered)
+        self.assertIn('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">', rendered)
+        self.assertIn("<mover>", rendered)
+        self.assertIn("<msup>", rendered)
+        self.assertNotIn(r"\[", rendered)
+        self.assertNotIn(r"\]", rendered)
+
+    def test_markdown_renderer_supports_inline_and_dollar_math(self):
+        rendered, _ = _markdown_to_safe_html(
+            r"行内 \(E=mc^2\)，下标 $x_1+y_2$。" "\n\n" r"$$a^2+b^2=c^2$$"
+        )
+        self.assertEqual(2, rendered.count('class="math-inline"'))
+        self.assertEqual(1, rendered.count('class="math-display"'))
+        self.assertIn("<msup>", rendered)
+        self.assertIn("<msub>", rendered)
+
+    def test_markdown_renderer_does_not_parse_latex_inside_code(self):
+        rendered, _ = _markdown_to_safe_html(
+            r"代码 `\(E=mc^2\)` 保持原样。"
+            "\n\n```latex\n$$x^2$$\n```"
+        )
+        self.assertNotIn('class="math-inline"', rendered)
+        self.assertNotIn('class="math-display"', rendered)
+        self.assertIn("<code>", rendered)
+        self.assertIn("$$x^2$$", rendered)
+
+    def test_markdown_renderer_escapes_markup_inside_latex(self):
+        rendered, _ = _markdown_to_safe_html(
+            r"\(\text{<script>alert(1)</script>}\)"
+        )
+        self.assertIn('class="math-inline"', rendered)
+        self.assertNotIn("<script>", rendered)
+
     def test_markdown_renderer_supports_part_aware_timestamps_and_frames(self):
         frames = [
             {

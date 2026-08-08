@@ -309,7 +309,7 @@ try {
     $installedHash = if (Test-Path $stampPath) { (Get-Content -Raw -Encoding UTF8 $stampPath).Trim() } else { "" }
     $importsOk = $false
     if ($installedHash -eq $requirementsHash) {
-        & $venvPython -c "import bleach, faster_whisper, keyring, markdown, yt_dlp" 2>$null
+        & $venvPython -c "import bleach, faster_whisper, keyring, latex2mathml, markdown, yt_dlp" 2>$null
         $importsOk = $LASTEXITCODE -eq 0
     }
 

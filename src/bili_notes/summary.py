@@ -7,11 +7,13 @@ import os
 import re
 import shutil
 import subprocess
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
 
 import bleach
 import markdown
+from latex2mathml.converter import convert as latex_to_mathml
 
 from .providers import (
     LLMSettings,
@@ -34,7 +36,7 @@ EXECUTION_PROFILES = {
     "deep": ("gpt-5.6-sol", "high"),
 }
 
-SUMMARY_PIPELINE_VERSION = "3-provider-text-fallback"
+SUMMARY_PIPELINE_VERSION = "4-static-mathml"
 
 
 def _project_root() -> Path:
@@ -562,6 +564,85 @@ def _frame_figure(frame: dict[str, Any], caption: str) -> str:
 </figure>"""
 
 
+MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML"
+ET.register_namespace("", MATHML_NAMESPACE)
+
+
+def _math_fragment(latex: str, display: bool) -> str:
+    source = latex.strip()
+    try:
+        converted = latex_to_mathml(source, display="block" if display else "inline")
+        root = ET.fromstring(converted)
+        for element in root.iter():
+            if not element.tag.startswith(f"{{{MATHML_NAMESPACE}}}"):
+                raise ValueError("unexpected non-MathML element")
+            for attribute in element.attrib:
+                local_name = attribute.rsplit("}", 1)[-1].lower()
+                if local_name.startswith("on") or local_name in {"href", "src", "style"}:
+                    raise ValueError("unsafe MathML attribute")
+        mathml = ET.tostring(root, encoding="unicode", short_empty_elements=True)
+    except Exception:
+        fallback = html.escape(source)
+        if display:
+            return f'<div class="math-display math-fallback"><code>{fallback}</code></div>'
+        return f'<code class="math-inline math-fallback">{fallback}</code>'
+    label = html.escape(source, quote=True)
+    if display:
+        return f'<div class="math-display" aria-label="{label}">{mathml}</div>'
+    return f'<span class="math-inline" aria-label="{label}">{mathml}</span>'
+
+
+def _freeze_math(content: str) -> tuple[str, list[tuple[str, str, bool]]]:
+    protected_code: list[tuple[str, str]] = []
+    math_fragments: list[tuple[str, str, bool]] = []
+
+    def protect_code(match: re.Match[str]) -> str:
+        token = f"BILINOTESCODESOURCE{len(protected_code):04d}TOKEN"
+        protected_code.append((token, match.group(0)))
+        return token
+
+    value = re.sub(
+        r"(?ms)^ {0,3}(```|~~~)[^\n]*\n.*?^ {0,3}\1[ \t]*$",
+        protect_code,
+        content,
+    )
+    value = re.sub(r"(?<!`)(`+)([^`\n]+?)\1(?!`)", protect_code, value)
+
+    def register_math(match: re.Match[str], display: bool) -> str:
+        latex = match.group(1)
+        if not latex.strip() or (not display and latex != latex.strip()):
+            return match.group(0)
+        token = f"BILINOTESMATH{len(math_fragments):04d}TOKEN"
+        math_fragments.append((token, _math_fragment(latex, display), display))
+        return f"\n\n{token}\n\n" if display else token
+
+    value = re.sub(
+        r"\\\[(.+?)\\\]",
+        lambda match: register_math(match, True),
+        value,
+        flags=re.DOTALL,
+    )
+    value = re.sub(
+        r"(?<!\\)\$\$(.+?)(?<!\\)\$\$",
+        lambda match: register_math(match, True),
+        value,
+        flags=re.DOTALL,
+    )
+    value = re.sub(
+        r"\\\(([^\n]+?)\\\)",
+        lambda match: register_math(match, False),
+        value,
+    )
+    value = re.sub(
+        r"(?<!\\)(?<!\$)\$(?!\$)([^\n$]+?)(?<!\\)\$(?!\$)",
+        lambda match: register_math(match, False),
+        value,
+    )
+    for token, original in protected_code:
+        value = value.replace(token, original)
+    return value, math_fragments
+
+
 def _markdown_to_safe_html(
     content: str,
     visual_frames: list[dict[str, Any]] | None = None,
@@ -572,6 +653,7 @@ def _markdown_to_safe_html(
         content,
         flags=re.IGNORECASE | re.DOTALL,
     )
+    content, math_fragments = _freeze_math(content)
     frames = visual_frames or []
     frames_by_timecode = {
         (int(item.get("part_index") or 0), str(item["timecode"])): item for item in frames
@@ -666,6 +748,10 @@ def _markdown_to_safe_html(
         safe = safe.replace(f"<p>{token}</p>", figure)
     for token, button in time_buttons:
         safe = safe.replace(token, button)
+    for token, fragment, display in math_fragments:
+        if display:
+            safe = safe.replace(f"<p>{token}</p>", fragment)
+        safe = safe.replace(token, fragment)
 
     return safe, engine.toc
 
@@ -801,6 +887,13 @@ def render_summary_html(
     article table {{ width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }}
     article th, article td {{ padding:10px 12px; border:1px solid var(--line); text-align:left; }}
     article code {{ padding:.15em .4em; border-radius:4px; background:#ece8de; }}
+    article math {{ font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }}
+    .math-display {{ margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }}
+    .math-display math {{ min-width:max-content; margin-inline:auto; font-size:1.18em; }}
+    .math-inline {{ display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }}
+    .math-inline math {{ font-size:1.02em; }}
+    .math-fallback {{ color:#7d3f35; background:#f7ebe6; }}
+    .math-display.math-fallback {{ text-align:left; }}
     .timecode {{ margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }}
     .timecode:hover {{ color:white; background:var(--accent); }}
     .evidence-figure {{ margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }}
@@ -820,7 +913,7 @@ def render_summary_html(
     .lightbox-close:hover {{ color:#102119; background:#a9e4ca; }}
     .foot {{ margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }}
     @media (max-width:900px) {{ .shell {{ grid-template-columns:1fr; }} aside {{ position:static; max-height:none; padding:14px 16px; }} .toc-toggle {{ margin:0; }} .toc-content {{ margin-top:10px; }} .hero {{ padding-top:46px; }} }}
-    @media (max-width:600px) {{ .shell {{ width:calc(100% - 18px); margin-top:12px; gap:12px; }} article {{ padding:28px 19px; }} .hero {{ padding-inline:18px; }} .meta {{ display:grid; gap:6px; overflow-wrap:anywhere; }} .player {{ padding:8px; }} article h2 {{ font-size:26px; }} .evidence-figure {{ margin:1.6em -10px 2em; border-radius:12px; }} .evidence-figure figcaption {{ grid-template-columns:1fr; gap:9px; }} .frame-jump {{ width:max-content; }} .lightbox {{ width:calc(100vw - 16px); }} }}
+    @media (max-width:600px) {{ .shell {{ width:calc(100% - 18px); margin-top:12px; gap:12px; }} article {{ padding:28px 19px; }} .hero {{ padding-inline:18px; }} .meta {{ display:grid; gap:6px; overflow-wrap:anywhere; }} .player {{ padding:8px; }} article h2 {{ font-size:26px; }} .math-display {{ margin-inline:-8px; padding-inline:12px; text-align:left; }} .evidence-figure {{ margin:1.6em -10px 2em; border-radius:12px; }} .evidence-figure figcaption {{ grid-template-columns:1fr; gap:9px; }} .frame-jump {{ width:max-content; }} .lightbox {{ width:calc(100vw - 16px); }} }}
     @media (prefers-reduced-motion:reduce) {{ html {{ scroll-behavior:auto; }} .frame-image img {{ transition:none; }} }}
   </style>
 </head>
