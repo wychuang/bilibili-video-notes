@@ -60,6 +60,24 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(share_url, extract_bilibili_url(share_text))
         self.assertEqual("https://b23.tv/abc", extract_bilibili_url("分享：https://b23.tv/abc。"))
 
+    def test_watchlater_link_is_canonicalized_to_one_video(self):
+        watchlater_url = (
+            "https://www.bilibili.com/list/watchlater/"
+            "?oid=100000000000000&bvid=BV1AbCdEfGhJ"
+            "&watchlater_cfg=%7B%7D&spm_id_from=333.0.0.0"
+        )
+        expected = "https://www.bilibili.com/video/BV1AbCdEfGhJ"
+        self.assertEqual(expected, validate_bilibili_url(watchlater_url))
+        self.assertEqual(expected, extract_bilibili_url(f"[稍后再看]({watchlater_url})"))
+
+    def test_watchlater_link_requires_a_valid_bvid(self):
+        with self.assertRaises(WorkflowError):
+            validate_bilibili_url(
+                "https://www.bilibili.com/list/watchlater/?bvid=invalid"
+            )
+        with self.assertRaises(WorkflowError):
+            validate_bilibili_url("https://www.bilibili.com/list/watchlater/")
+
     def test_rejects_non_bilibili_url(self):
         with self.assertRaises(WorkflowError):
             validate_bilibili_url("https://example.com/video/BV1abc")

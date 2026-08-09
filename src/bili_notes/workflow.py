@@ -15,8 +15,9 @@ from urllib.parse import parse_qs, urlparse
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".flv", ".mov", ".avi"}
 SUPPORTED_HOSTS = {"bilibili.com", "www.bilibili.com", "m.bilibili.com", "b23.tv"}
-WEB_URL_PATTERN = re.compile(r'https?://[^\s<>"）】》」]+', re.IGNORECASE)
+WEB_URL_PATTERN = re.compile(r'https?://[^\s<>"()\[\]）】》」]+', re.IGNORECASE)
 TRAILING_URL_PUNCTUATION = ".,;!)]}，。；！？）》】」"
+BVID_PATTERN = re.compile(r"BV[A-Za-z0-9]{10}")
 
 
 class WorkflowError(RuntimeError):
@@ -52,9 +53,16 @@ def extract_bilibili_url(text: str) -> str:
         supported_host = any(
             host == allowed or host.endswith("." + allowed) for allowed in SUPPORTED_HOSTS
         )
-        is_video_path = host == "b23.tv" or host.endswith(".b23.tv") or parsed.path.startswith("/video/")
-        if parsed.scheme in {"http", "https"} and supported_host and is_video_path:
+        if parsed.scheme not in {"http", "https"} or not supported_host:
+            continue
+        if host == "b23.tv" or host.endswith(".b23.tv"):
             return candidate
+        if parsed.path.startswith("/video/"):
+            return candidate
+        if parsed.path.rstrip("/") == "/list/watchlater":
+            bvid_values = parse_qs(parsed.query).get("bvid", [])
+            if len(bvid_values) == 1 and BVID_PATTERN.fullmatch(bvid_values[0]):
+                return f"https://www.bilibili.com/video/{bvid_values[0]}"
 
     raise WorkflowError("没有从分享文字中找到 bilibili.com 或 b23.tv 的单视频链接。")
 

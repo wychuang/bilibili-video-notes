@@ -55,7 +55,7 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ## Verification scope
 
-`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, verifies static MathML rendering and code-block protection, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
+`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks direct, short, and watch-later single-video URL normalization, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, verifies static MathML rendering and code-block protection, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
 
 ## Important constraints
 
