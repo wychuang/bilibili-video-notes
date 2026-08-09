@@ -103,6 +103,12 @@ $shareUrl = "https://www.bilibili.com/video/BV1REDACTED0/?share_source=copy_web&
 $shareText = "【示例视频标题】 " + $shareUrl
 $resolvedUrl = & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start.ps1") -TestUrlInput $shareText
 if ($LASTEXITCODE -ne 0 -or $resolvedUrl -ne $shareUrl) { throw "启动器无法从 B 站分享文字中提取视频链接。" }
+$watchlaterUrl = "https://www.bilibili.com/list/watchlater/?oid=100000000000000&bvid=BV1AbCdEfGhJ&watchlater_cfg=%7B%7D&spm_id_from=333.0.0.0"
+$canonicalWatchlaterUrl = "https://www.bilibili.com/video/BV1AbCdEfGhJ"
+$resolvedWatchlaterUrl = & $windowsPowerShell -NoLogo -NoProfile -Sta -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start.ps1") -TestUrlInput $watchlaterUrl
+if ($LASTEXITCODE -ne 0 -or $resolvedWatchlaterUrl -ne $canonicalWatchlaterUrl) {
+    throw "启动器无法把稍后再看地址规范化为单视频链接。"
+}
 
 Write-Host "[8/9] AI 设置脱敏检查"
 $settingsOutput = @(& $venvPython -m bili_notes --show-llm-settings)

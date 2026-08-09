@@ -72,11 +72,17 @@ function Find-BilibiliUrl {
     param([AllowEmptyString()][string]$Text)
 
     if ([string]::IsNullOrWhiteSpace($Text)) { return $null }
-    $pattern = 'https?://(?:[\w-]+\.)?bilibili\.com/video/[^\s<>"）】》」]+|https?://(?:[\w-]+\.)?b23\.tv/[^\s<>"）】》」]+'
-    $match = [regex]::Match($Text, $pattern, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-    if (-not $match.Success) { return $null }
-    $trailingPunctuation = [char[]]".,;!)]}，。；！？）》】」"
-    return $match.Value.TrimEnd($trailingPunctuation)
+    if (-not (Test-Path -LiteralPath $venvPython)) { return $null }
+    $previousPythonPath = $env:PYTHONPATH
+    try {
+        $env:PYTHONPATH = Join-Path $projectRoot "src"
+        $normalized = @(& $venvPython -m bili_notes --normalize-url --url $Text 2>$null)
+        $normalizeExitCode = $LASTEXITCODE
+        if ($normalizeExitCode -ne 0 -or $normalized.Count -eq 0) { return $null }
+        return (($normalized -join "`n").Trim())
+    } finally {
+        $env:PYTHONPATH = $previousPythonPath
+    }
 }
 
 function Invoke-SaveLlmSettings {

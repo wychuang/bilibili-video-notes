@@ -11,6 +11,7 @@ from .workflow import (
     process_collection,
     process_video,
     submission_overview,
+    validate_bilibili_url,
     write_json,
 )
 
@@ -33,6 +34,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-browser-cookies", action="store_true")
     parser.add_argument("--force-summary", action="store_true")
     parser.add_argument("--probe-only", action="store_true", help="只识别单视频或合集")
+    parser.add_argument(
+        "--normalize-url",
+        action="store_true",
+        help="提取并输出规范化的单视频地址",
+    )
     parser.add_argument("--collection", action="store_true", help="将多 P 视频作为一个项目处理")
     parser.add_argument("--show-llm-settings", action="store_true", help="输出已脱敏的 AI 设置")
     parser.add_argument(
@@ -58,6 +64,10 @@ def main() -> int:
                 raise ProviderError("AI 设置必须是一个 JSON 对象。")
             result = save_llm_settings(project_root(), payload)
             print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0
+        if args.normalize_url:
+            input_text = args.url if args.url is not None else sys.stdin.read()
+            print(validate_bilibili_url(input_text))
             return 0
         if not args.url:
             raise WorkflowError("请提供 --url，或使用 AI 设置参数。")
