@@ -502,6 +502,7 @@ def process_video(
     result_file: Path | None = None,
     use_browser: bool = True,
     force_summary: bool = False,
+    export_root: Path | None = None,
 ) -> dict[str, Any]:
     from .summary import create_summary, render_summary_html, summary_is_current
 
@@ -538,6 +539,12 @@ def process_video(
             print(f"[总结] 复用已有 {strength} 总结。")
 
         html_path = render_summary_html(job_dir, strength, summary_path, manifest, transcript_meta)
+        export_result = None
+        if export_root is not None:
+            from .export import export_summary
+
+            export_result = export_summary(job_dir, strength, summary_path, export_root)
+            print(f"[导出] Lightloom 笔记：{export_result['note']}")
         update_status(
             job_dir,
             "completed",
@@ -552,6 +559,9 @@ def process_video(
             "html": str(html_path),
             "strength": strength,
         }
+        if export_result is not None:
+            result["export"] = str(export_result["note"])
+            result["export_frame_count"] = export_result["frame_count"]
         if result_file:
             write_json(result_file, result)
         print(f"\n[完成] 学习页：{html_path}")
@@ -571,6 +581,7 @@ def process_collection(
     result_file: Path | None = None,
     use_browser: bool = True,
     force_summary: bool = False,
+    export_root: Path | None = None,
 ) -> dict[str, Any]:
     from .summary import (
         create_collection_summary,
@@ -698,6 +709,18 @@ def process_collection(
             summary_path,
             collection_manifest,
         )
+        export_result = None
+        if export_root is not None:
+            from .export import export_summary
+
+            export_result = export_summary(
+                collection_dir,
+                strength,
+                summary_path,
+                export_root,
+                collection=collection_manifest,
+            )
+            print(f"[导出] Lightloom 合集笔记：{export_result['note']}")
         update_status(
             collection_dir,
             "completed",
@@ -716,6 +739,9 @@ def process_collection(
             "strength": strength,
             "part_count": len(parts),
         }
+        if export_result is not None:
+            result["export"] = str(export_result["note"])
+            result["export_frame_count"] = export_result["frame_count"]
         if result_file:
             write_json(result_file, result)
         print(f"\n[完成] 合集学习页：{html_path}")

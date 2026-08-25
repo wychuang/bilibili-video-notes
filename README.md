@@ -2,7 +2,9 @@
 
 复制一个 B 站视频链接，双击桌面的 **B站视频总结**，选择总结强度，等待本地学习页自动打开。默认继续使用 Codex；也可以点窗口里的 **AI · Codex**，切换到 DeepSeek、OpenAI、通义千问、Gemini、Claude、Kimi、智谱或自定义 OpenAI-compatible API。遇到多 P 视频时，确认窗口会列出完整选集，并允许把整套内容作为一个学习项目处理。
 
-单个视频会长期保存原视频、来源信息、字幕或本地转写、关键画面、Markdown 总结和图文离线 HTML 阅读页。合集会逐集保存同样的原始证据，再生成一份跨集总学习稿和带选集播放器的离线页面。
+单个视频会长期保存原视频、来源信息、字幕或本地转写、关键画面、Markdown 总结和图文离线 HTML 阅读页。合集会逐集保存同样的原始证据，再生成一份跨集总学习稿和带选集播放器的离线页面。配置阅读目录后，完成的 Markdown 与正文截图还会自动导出给 Lightloom、Obsidian 等本地知识库使用。
+
+仓库的 [`notes/`](notes/) 收录已主动公开的学习总结与正文证据截图。原视频、逐字稿、候选帧和本机来源记录继续只保存在本地。
 
 ## 最快开始
 
@@ -12,7 +14,7 @@
 4. 想换模型时，点左下角 **AI · Codex**。选择 DeepSeek 后粘贴 API Key，保存即可；不切换就沿用 Codex。
 5. 多 P 视频会显示集数、标题和时长，默认选择“整套处理为一个学习项目”；仍可改成只处理当前集。
 6. 选择 `快览`、`标准` 或 `深度`，点击“开始总结”。
-7. 完成后，离线 HTML 学习页会自动打开。
+7. 完成后，离线 HTML 学习页会自动打开；已配置阅读目录时，完成窗口也会显示 Markdown 导出位置。
 
 标准 `/video/BV...` 地址、`b23.tv` 短链和带 `bvid` 的 `/list/watchlater/` 稍后再看地址都可以直接粘贴。稍后再看地址会先转换成标准单视频地址，列表配置、`oid` 与追踪参数不会交给下载器。
 
@@ -28,14 +30,14 @@ Whisper 模型、HF 缓存、pip 缓存和运行临时文件固定保存在本�
 
 ## 隐私边界
 
-Git 仓库只保存程序源码、测试、说明和随字体附带的 OFL 许可。以下本地内容由 `.gitignore` 强制排除，不会上传 GitHub：
+Git 仓库保存程序源码、测试、说明、字体许可，以及经过脱敏后主动导出的 `notes/` 阅读副本。以下本地内容由 `.gitignore` 强制排除，不会上传 GitHub：
 
 - `library/` 中的视频、字幕、转写、截图、来源地址与学习笔记；
 - `.cache/` 中的 Whisper 模型、HF/pip 缓存和下载文件；
-- `.state/` 中的运行状态、临时文件、浏览器测试资料和日志；
+- `.state/` 中的运行状态、本机导出路径、临时文件、浏览器测试资料和日志；
 - `.venv/`、`.env*`、凭据、Cookie 与编辑器的本机配置。
 
-B 站分享链接的 `vd_source` 等追踪参数在源码样例中只使用虚构值。程序处理真实链接时，完整来源信息只会进入已忽略的本地 `library/`。发布前可运行 `git status --short`，确认上述目录没有进入待提交列表。
+B 站分享链接的 `vd_source` 等追踪参数在源码样例中只使用虚构值。程序处理真实链接时，完整来源信息只会进入已忽略的本地 `library/`；导出的公开阅读副本会把 B 站链接改写为无查询参数的标准地址。发布前可运行 `git status --short`，确认上述目录没有进入待提交列表。
 
 API Key 通过 Python `keyring` 写入 Windows 凭据管理器，服务名为 `bilibili-video-notes`。`.state/llm-settings.json` 只保存 Provider、模型名和 Base URL，不保存密钥；界面中的密钥框留空会继续使用原有凭据。
 
@@ -54,6 +56,38 @@ API Key 通过 Python `keyring` 写入 Windows 凭据管理器，服务名为 `b
 合集只调用一次 AI 生成总学习稿。各集拥有独立视频、转写和画面证据，下载或转写中断后可逐集续跑；已经单独处理过的集会直接复用，避免媒体重复占空间。合集时间戳使用 `[P02 00:12:34]`，点击后会自动切换到对应选集并跳到该集时间。
 
 深度档会按视频时长和信息密度控制篇幅。短视频优先写成有场景、对比和推进感的讲解文章，避免把十分钟内容扩成机械报告；长课程与访谈才展开完整推理、案例和边界。
+
+## 导出到 Lightloom 或其他 Markdown 资料库
+
+完整视频、逐字稿和候选画面继续保存在 `library/`。导出目录只接收可阅读 Markdown 与正文实际引用的截图，避免复制视频和整套候选帧。每次完成新总结后会自动刷新对应强度的导出文件；不同强度互不覆盖。
+
+把本机路径写进已被 Git 忽略的 `.state/export-settings.json`：
+
+```json
+{
+  "export_root": "D:\\YourLightloomVault\\B站视频笔记"
+}
+```
+
+也可以临时使用 `--export-root`，或设置环境变量 `BILI_NOTES_EXPORT_ROOT`。命令行参数优先于环境变量，环境变量优先于本机设置。将既有归档一次性导出：
+
+```powershell
+$env:PYTHONPATH = "$PWD\src"
+.\.venv\Scripts\python.exe -m bili_notes --export-existing
+```
+
+导出结构保持简洁：
+
+```text
+<export-root>/
+└─ <UP主>/
+   └─ <视频标题>__<BV号>/
+      └─ 标准总结.md
+```
+
+如果导出目录位于有效的 Lightloom Vault 内，正文截图会自动放进 Vault 的 `derived/media/bilibili-video-notes/`，由文章显示且不会各自生成一条 Idea。普通 Markdown 目录继续使用文章旁的 `assets/<强度>/`。合集和快览、深度档沿用同一规则。截图标记在导出时会转换为标准 Markdown 图片；无效路径、未入选候选帧和视频文件不会进入阅读目录。LaTeX 公式保留原文，支持数学渲染的阅读器可直接排版；离线 HTML 始终提供静态 MathML 版本。程序本身不提供云同步。
+
+向公开仓库导出时使用 `notes/` 作为目标目录。导出器会清除 B 站分享链接里的追踪参数；隐藏导出清单由 Git 忽略。提交前仍需检查正文和截图是否适合公开。
 
 ## 保存位置
 
@@ -132,4 +166,4 @@ API 路径把同一份 skill 规则作为系统指令，再把本地逐字稿、
 
 ## English
 
-Copy one Bilibili video URL, double-click the desktop shortcut, choose a summary intensity, and wait for the offline study page. For a multi-part video, the confirmation window can archive every part as one project and generate one illustrated study guide with a part-aware player. The tool does not include subscriptions or external synchronization.
+Copy one Bilibili video URL, double-click the desktop shortcut, choose a summary intensity, and wait for the offline study page. For a multi-part video, the confirmation window can archive every part as one project and generate one illustrated study guide with a part-aware player. An optional local export root receives standard Markdown plus selected evidence frames for tools such as Lightloom or Obsidian. The tool does not include subscriptions or external synchronization.

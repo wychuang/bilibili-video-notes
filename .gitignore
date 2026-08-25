@@ -2,6 +2,7 @@
 .cache/
 .state/
 library/
+notes/**/.bili-export-*.json
 __pycache__/
 *.py[cod]
 .pytest_cache/

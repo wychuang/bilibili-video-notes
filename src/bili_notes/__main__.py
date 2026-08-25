@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+from .export import configured_export_root, export_existing_library
 from .providers import ProviderError, public_settings, save_llm_settings
 from .workflow import (
     WorkflowError,
@@ -30,6 +31,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="总结强度",
     )
     parser.add_argument("--library", type=Path, default=project_root() / "library")
+    parser.add_argument("--export-root", type=Path, help="额外导出可阅读 Markdown 的目录")
+    parser.add_argument(
+        "--export-existing",
+        action="store_true",
+        help="把归档中已有的全部总结导出到已配置目录",
+    )
     parser.add_argument("--result-file", type=Path)
     parser.add_argument("--no-browser-cookies", action="store_true")
     parser.add_argument("--force-summary", action="store_true")
@@ -69,6 +76,25 @@ def main() -> int:
             input_text = args.url if args.url is not None else sys.stdin.read()
             print(validate_bilibili_url(input_text))
             return 0
+        export_root = configured_export_root(project_root(), args.export_root)
+        if args.export_existing:
+            if export_root is None:
+                raise WorkflowError(
+                    "尚未配置导出位置。请使用 --export-root 或 BILI_NOTES_EXPORT_ROOT。"
+                )
+            exported = export_existing_library(args.library.resolve(), export_root)
+            print(
+                json.dumps(
+                    {
+                        "ok": True,
+                        "export_root": str(export_root),
+                        "exported_count": len(exported),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
+            return 0
         if not args.url:
             raise WorkflowError("请提供 --url，或使用 AI 设置参数。")
         if args.probe_only:
@@ -85,6 +111,7 @@ def main() -> int:
             result_file=args.result_file.resolve() if args.result_file else None,
             use_browser=not args.no_browser_cookies,
             force_summary=args.force_summary,
+            export_root=export_root,
         )
         return 0
     except (WorkflowError, ProviderError) as exc:

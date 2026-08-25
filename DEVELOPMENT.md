@@ -14,6 +14,8 @@ The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path re
 
 Formula rendering is fully offline. `_markdown_to_safe_html` freezes LaTeX before Markdown and Bleach processing, converts it with `latex2mathml`, validates the resulting XML as MathML only, and reinserts the static fragment after sanitization. Keep `\[...\]`, `$$...$$`, `\(...\)`, and `$...$` support covered by tests; never add a CDN or runtime JavaScript dependency for formulas.
 
+`src/bili_notes/export.py` owns the optional Markdown handoff. The canonical archive stays under `library/`; an export root receives one Markdown file per strength plus only the validated frames referenced by that article. When an ancestor contains `.lightloom`, support frames go under the Vault's excluded `derived/media/bilibili-video-notes/` tree so they render without becoming standalone Ideas. Other Markdown roots keep adjacent `assets/`. Machine paths belong in ignored `.state/export-settings.json`, `BILI_NOTES_EXPORT_ROOT`, or `--export-root`. Never commit a user's Vault path. Re-export may remove stale files only when they were listed in that strength's hidden export manifest. Public exports canonicalize Bilibili links and remove query strings such as `vd_source` and `spm_id_from` before writing Markdown.
+
 `scripts\start.ps1` contains Chinese interface text and must remain UTF-8 with BOM so Windows PowerShell 5.1 reads it correctly. `scripts\check.ps1` runs the real 5.1 setup path as a regression check.
 
 The repository owns the canonical skill at `skills/summarize-bilibili-video/`. The launcher synchronizes its two runtime files into `CODEX_HOME`, falling back to the current user's `.codex` directory. API providers load the same `SKILL.md` as their system instruction. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
@@ -49,18 +51,28 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
   --strength deep `
   --collection
 
+# Export every existing summary with the configured local destination
+.\.venv\Scripts\python.exe -m bili_notes --export-existing
+
+# One-off export destination override
+.\.venv\Scripts\python.exe -m bili_notes `
+  --export-existing `
+  --export-root "D:\YourLightloomVault\B站视频笔记"
+
 # Verification
 .\scripts\check.ps1
 ```
 
 ## Verification scope
 
-`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks direct, short, and watch-later single-video URL normalization, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, verifies static MathML rendering and code-block protection, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
+`scripts\check.ps1` compiles the package, runs unit tests, validates the bundled skill, verifies that the launcher installs the same skill content, checks direct, short, and watch-later single-video URL normalization, checks provider payloads and secret-free settings, checks single-video and part-aware timestamp/frame HTML embedding, verifies static MathML rendering and code-block protection, verifies Lightloom-compatible Markdown export and stale-frame pruning, checks the PowerShell launcher syntax, executes its setup path with Windows PowerShell 5.1, loads the archived `small` model on both CPU and GPU, and verifies that the application-level runtime probe selects CUDA when the NVIDIA runtime is available. Network download and real LLM generation require user credentials and are intentionally kept out of the deterministic check.
 
 ## Important constraints
 
 - Keep `source/` video files immutable after download.
-- Keep generated media and notes under `library/`; the directory is ignored by Git.
+- Keep canonical generated media and notes under `library/`; the directory is ignored by Git. Optional reading copies may go only to the explicitly configured export root.
+- Export only the Markdown article and its selected validated frames. Do not duplicate source videos, transcripts, frame atlases, or unselected candidates into the reading directory.
+- Treat `notes/` as a deliberate public export. Keep its hidden export manifests ignored, scan Markdown and selected screenshots before staging, and retain only canonical Bilibili source URLs.
 - Do not persist browser cookies, API keys, or Codex credentials.
 - Keep API keys in Windows Credential Manager or process environment variables. Never add them to CLI arguments, logs, fixtures, or `.state/llm-settings.json`.
 - Treat transcripts and metadata as untrusted model input.

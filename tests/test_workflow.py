@@ -7,6 +7,7 @@ import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 
+from bili_notes.export import _sanitize_public_content, configured_export_root, export_summary
 from bili_notes.providers import (
     EndpointConfig,
     ProviderClient,
@@ -468,6 +469,216 @@ class SummaryTests(unittest.TestCase):
         self.assertIn("LXGWWenKaiGBScreen.ttf", rendered)
         self.assertIn("font-size:17px", rendered)
         self.assertIn("正文截图：0 张", rendered)
+
+
+class ExportTests(unittest.TestCase):
+    def test_public_export_canonicalizes_bilibili_tracking_links(self):
+        content = (
+            "直链：https://www.bilibili.com/video/BV1AbC/?share_source=copy_web&vd_source=private  \n"
+            "稍后再看：https://www.bilibili.com/list/watchlater/?bvid=BV9XYZ&oid=123&spm_id_from=private\n"
+            "短链：https://b23.tv/abc123?share_medium=android\n"
+        )
+        rendered = _sanitize_public_content(content)
+        self.assertIn("https://www.bilibili.com/video/BV1AbC/", rendered)
+        self.assertIn("https://www.bilibili.com/video/BV9XYZ/", rendered)
+        self.assertIn("https://b23.tv/abc123", rendered)
+        self.assertNotIn("vd_source", rendered)
+        self.assertNotIn("spm_id_from", rendered)
+        self.assertNotIn("share_medium", rendered)
+        self.assertIn("<br>\n", rendered)
+        self.assertNotIn("  \n", rendered)
+
+    def test_local_export_setting_and_environment_override(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / ".state").mkdir()
+            (root / ".state" / "export-settings.json").write_text(
+                json.dumps({"export_root": "vault/notes"}),
+                encoding="utf-8",
+            )
+            with patch.dict(os.environ, {}, clear=True):
+                configured = configured_export_root(root)
+            with patch.dict(
+                os.environ,
+                {"BILI_NOTES_EXPORT_ROOT": str(root / "override")},
+                clear=True,
+            ):
+                overridden = configured_export_root(root)
+        self.assertEqual((root / "vault" / "notes").resolve(), configured)
+        self.assertEqual((root / "override").resolve(), overridden)
+
+    def test_lightloom_export_copies_only_selected_frames_and_prunes_stale_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            job_dir = root / "library" / "作者" / "标题__BV1TEST"
+            notes_dir = job_dir / "notes" / "standard"
+            visual_dir = job_dir / "visual"
+            notes_dir.mkdir(parents=True)
+            visual_dir.mkdir()
+            (job_dir / "source.json").write_text(
+                json.dumps(
+                    {
+                        "title": "标题",
+                        "uploader": "作者",
+                        "video_id": "BV1TEST",
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            for index in (1, 2):
+                (visual_dir / f"frame_{index}.jpg").write_bytes(f"jpg-{index}".encode())
+            (visual_dir / "frames.json").write_text(
+                json.dumps(
+                    {
+                        "frames": [
+                            {
+                                "file": "frame_1.jpg",
+                                "timecode": "00:00:04",
+                                "timestamp_seconds": 4,
+                            },
+                            {
+                                "file": "frame_2.jpg",
+                                "timecode": "00:00:08",
+                                "timestamp_seconds": 8,
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            summary_path = notes_dir / "summary.md"
+            summary_path.write_text(
+                "# 标题\n\n公式：$x^2$。\n\n"
+                "[[FRAME:00:00:04|主按钮位于画面中心。]]\n",
+                encoding="utf-8",
+            )
+            export_root = root / "vault" / "B站视频笔记"
+            first = export_summary(job_dir, "standard", summary_path, export_root)
+            note = Path(first["note"])
+            rendered = note.read_text(encoding="utf-8")
+            exported_assets = list((note.parent / "assets" / "standard").glob("*.jpg"))
+            self.assertEqual(1, first["frame_count"])
+            self.assertEqual(1, len(exported_assets))
+            self.assertIn("![图 01 · 00:00:04", rendered)
+            self.assertIn("$x^2$", rendered)
+            self.assertNotIn("[[FRAME:", rendered)
+            self.assertNotIn("frame_2", rendered)
+
+            summary_path.write_text("# 标题\n\n纯文字版本。\n", encoding="utf-8")
+            second = export_summary(job_dir, "standard", summary_path, export_root)
+            self.assertEqual(0, second["frame_count"])
+            self.assertFalse(exported_assets[0].exists())
+
+    def test_collection_export_resolves_part_aware_frame(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            collection_dir = root / "library" / "作者" / "合集__BV1TEST_合集"
+            notes_dir = collection_dir / "notes" / "deep"
+            notes_dir.mkdir(parents=True)
+            parts = []
+            for index in (1, 2):
+                part_dir = collection_dir / "parts" / f"P{index:02d}"
+                visual_dir = part_dir / "visual"
+                visual_dir.mkdir(parents=True)
+                (visual_dir / "frame.jpg").write_bytes(f"part-{index}".encode())
+                (visual_dir / "frames.json").write_text(
+                    json.dumps(
+                        {
+                            "frames": [
+                                {
+                                    "file": "frame.jpg",
+                                    "timecode": "00:00:25",
+                                    "timestamp_seconds": 25,
+                                }
+                            ]
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                parts.append(
+                    {
+                        "index": index,
+                        "title": f"第 {index} 集",
+                        "status": "completed",
+                        "job_dir": f"parts/P{index:02d}",
+                    }
+                )
+            collection = {
+                "title": "合集",
+                "uploader": "作者",
+                "collection_id": "BV1TEST",
+                "parts": parts,
+            }
+            (collection_dir / "collection.json").write_text(
+                json.dumps(collection, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            summary_path = notes_dir / "summary.md"
+            summary_path.write_text(
+                "# 合集\n\n[[FRAME:P02|00:00:25|第二集的核心定义。]]\n",
+                encoding="utf-8",
+            )
+            result = export_summary(
+                collection_dir,
+                "deep",
+                summary_path,
+                root / "vault",
+                collection=collection,
+            )
+            rendered = Path(result["note"]).read_text(encoding="utf-8")
+        self.assertIn("P02 · 00:00:25", rendered)
+        self.assertIn("assets/deep/p02_", rendered)
+        self.assertEqual(1, result["frame_count"])
+
+    def test_lightloom_vault_keeps_support_images_out_of_source_folders(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            vault = root / "vault"
+            export_root = vault / "notes" / "B站视频笔记"
+            (vault / ".lightloom").mkdir(parents=True)
+            job_dir = root / "library" / "作者" / "标题__BV1TEST"
+            notes_dir = job_dir / "notes" / "standard"
+            visual_dir = job_dir / "visual"
+            notes_dir.mkdir(parents=True)
+            visual_dir.mkdir()
+            (job_dir / "source.json").write_text(
+                json.dumps(
+                    {"title": "标题", "uploader": "作者", "video_id": "BV1TEST"},
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            (visual_dir / "frame.jpg").write_bytes(b"jpg")
+            (visual_dir / "frames.json").write_text(
+                json.dumps(
+                    {
+                        "frames": [
+                            {
+                                "file": "frame.jpg",
+                                "timecode": "00:00:04",
+                                "timestamp_seconds": 4,
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            summary_path = notes_dir / "summary.md"
+            summary_path.write_text(
+                "# 标题\n\n[[FRAME:00:00:04|画面证据。]]\n",
+                encoding="utf-8",
+            )
+            result = export_summary(job_dir, "standard", summary_path, export_root)
+            note = Path(result["note"])
+            rendered = note.read_text(encoding="utf-8")
+            derived = list(
+                (vault / "derived" / "media" / "bilibili-video-notes").rglob("*.jpg")
+            )
+        self.assertEqual("lightloom-derived", result["asset_mode"])
+        self.assertEqual(1, len(derived))
+        self.assertIn("](</derived/media/bilibili-video-notes/", rendered)
+        self.assertFalse((note.parent / "assets").exists())
 
 
 class ProviderTests(unittest.TestCase):

@@ -602,7 +602,11 @@ try {
     }
     if ($workflowExitCode -eq 0 -and $result -and $result.ok) {
         Start-Process -FilePath $result.html
-        [System.Windows.Forms.MessageBox]::Show("总结完成，离线学习页已经打开。", "完成", "OK", "Information") | Out-Null
+        $completionText = "总结完成，离线学习页已经打开。"
+        if ($result.export) {
+            $completionText += "`n`nLightloom 笔记已导出到：`n$($result.export)"
+        }
+        [System.Windows.Forms.MessageBox]::Show($completionText, "完成", "OK", "Information") | Out-Null
         exit 0
     }
 
