@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>Agent 的能力，长在整套基础设施上 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">Agent 的能力，长在整套基础设施上</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">“想拥抱朋友”与“完成拥抱”隔着许多工作</a></li>
+<li><a href="#_3">用六个问题检查基础设施</a></li>
+<li><a href="#_4">记忆要区分存在哪里、怎样拿出来</a></li>
+<li><a href="#_5">工作环境会影响用户体验</a></li>
+<li><a href="#_6">迁移练习：把“它不聪明”改写成可检查的问题</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Rz4iz1Exz" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1Rz4iz1Exz"><div class="provenance">来源：秋芝2046 · <a href="https://www.bilibili.com/video/BV1Rz4iz1Exz/" target="_blank" rel="noopener">BV1Rz4iz1Exz 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 的能力，长在整套基础设施上</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1Rz4iz1Exz/">秋芝2046 · Agent Infra 到底是什么</a> · 23 分钟 · 快读。含云产品介绍与未来展望，本文提炼结构，不作购买建议。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>Agent 的实际效果由模型、调度、记忆、工具、运维治理和协作共同决定；先找出薄弱环节，再谈升级模型。</p>
+<h2 id="_2">“想拥抱朋友”与“完成拥抱”隔着许多工作</h2>
+<p>视频用机场遇到朋友的例子：识别并产生行动意图是一部分，协调身体、利用记忆、完成动作又是另一部分。这个比喻用来说明，模型输出行动意图后，系统还要把它接到真实执行中。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=135" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:15]">[00:02:15]</a></p>
+<p>对数字 Agent 也一样。说“我会搜索资料”不等于已经搜索；说“报告已保存”不等于文件确实存在且能打开。</p>
+<h2 id="_3">用六个问题检查基础设施</h2>
+<table>
+<thead>
+<tr>
+<th>视频中的层次</th>
+<th>我会追问什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型</td>
+<td>它能理解约束并选对下一步吗？</td>
+</tr>
+<tr>
+<td>调度</td>
+<td>步骤如何衔接，失败怎样重试？</td>
+</tr>
+<tr>
+<td>记忆</td>
+<td>当前信息从哪来，过期内容怎样更新？</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>能采取什么行动，结果是否可验证？</td>
+</tr>
+<tr>
+<td>运维与治理</td>
+<td>成本、权限、异常和审计怎样管理？</td>
+</tr>
+<tr>
+<td>协作</td>
+<td>多个执行者怎样共享目标并合并结果？</td>
+</tr>
+</tbody>
+</table>
+<p>这是作者便于理解的分层法，并非唯一行业标准。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=58" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:58]">[00:00:58]</a></p>
+<h2 id="_4">记忆要区分存在哪里、怎样拿出来</h2>
+<p>视频区分参数中的知识、当前对话、任务中间状态、长期偏好以及外部资料库。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=350" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:50]">[00:05:50]</a></p>
+<p>关键区别是更新方式。外部记忆可以修改或删除；参数中的知识通常需要训练等机制改变；会话历史则要由系统选择、压缩或取回，再交给模型。</p>
+<p>有些系统会发送完整历史，有些只发送摘要和片段。不要把某一种演示机制当作所有产品的实现。保存了信息，也不代表当前任务一定能正确检索出来。</p>
+<h2 id="_5">工作环境会影响用户体验</h2>
+<p>Agent 使用本机桌面时，可能占用鼠标和窗口，还会接触私人文件。独立工作环境可以减少这些干扰，提供专用浏览器、代码运行区和持久化文件。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=710" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:50]">[00:11:50]</a></p>
+<p>但本地与云端各有风险：本地要控制文件和凭据访问，云端要关注传输、服务方权限、保存期限和费用。环境位置本身不能决定谁更安全。</p>
+<p>视频关于系统自动进化、无限算力、软件入口全面变化的部分属于产品叙事或预测。一次工具反馈是否用于训练、怎样改变后续行为，必须看具体实现，不能默认所有 Agent 都会越用越聪明。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=820" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:40]">[00:13:40]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=1275" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:15]">[00:21:15]</a></p>
+<h2 id="_6">迁移练习：把“它不聪明”改写成可检查的问题</h2>
+<p>找一段失败输出，按六层各提出一个可能原因，然后只验证最有证据的一项。例如找不到生成文件，先看保存工具是否成功、路径是否正确，再考虑模型能力。</p>
+<p>练习结束时写出一句具体结论：“调用成功，但界面给了错误下载链接。”这样的定位才有明确的负责人和修复入口。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

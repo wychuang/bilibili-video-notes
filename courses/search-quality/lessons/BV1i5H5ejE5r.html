@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>RAG 落地要同时管三件事 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#rag">RAG 落地要同时管三件事</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">时间戳导航</a></li>
+<li><a href="#_3">三个环节怎样连起来</a></li>
+<li><a href="#_4">技术名词放回各自的位置</a></li>
+<li><a href="#_5">补充判断与边界</a></li>
+<li><a href="#_6">下一步</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1i5H5ejE5r" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1i5H5ejE5r"><div class="provenance">来源：西瓜讲大模型 · <a href="https://www.bilibili.com/video/BV1i5H5ejE5r/" target="_blank" rel="noopener">BV1i5H5ejE5r 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="rag">RAG 落地要同时管三件事</h1>
+<blockquote>
+<p>原视频：落地 RAG 的技术栈推荐 · 西瓜讲大模型 · 约 6 分钟。快览；工具名称与推荐反映录制时经验。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>知识进入系统、系统回答问题、结果接受评测，这三个环节需要各自可维护，才能形成完整的 RAG 产品。</p>
+<h2 id="_2">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=22" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:22]">[00:00:22]</a> 原始文件经过解析、切片、向量化后入库。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=58" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:58]">[00:00:58]</a> 问题触发检索，再筛选相关材料。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=91" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:31]">[00:01:31]</a> 材料和原问题进入生成环节。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=108" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:48]">[00:01:48]</a> 知识管理、检索服务、效果评估三个子项目。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=146" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:26]">[00:02:26]</a> 数据安全影响部署选择。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=330" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:30]">[00:05:30]</a> 人工与模型辅助评估。</li>
+</ul>
+<h2 id="_3">三个环节怎样连起来</h2>
+<p>知识管理负责把文件变成可用信息，并维护增删改。文档解析错、表格错列或旧版本没有下线，后续检索可能一直在错误材料里找答案。</p>
+<p>检索服务负责接受问题、返回候选、重排并组织生成上下文。<a class="timecode" href="https://www.bilibili.com/video/BV1i5H5ejE5r/?t=60" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:00]">[00:01:00]</a> 演示用“五份候选留下三份”说明过滤噪声的过程。具体数量应由问题覆盖与成本测试决定。</p>
+<p>评估服务负责告诉我这个系统是否真的满足任务。它应独立保留问题和标准，避免改完代码只凭几次顺手测试判断效果。</p>
+<h2 id="_4">技术名词放回各自的位置</h2>
+<p>原视频列举文档解析、向量模型、向量索引、应用框架、前后端和模型评估等选项。把这些名字当作流程中的可替换组件，比较它们对当前瓶颈的帮助即可。</p>
+<p>例如，前端采用什么框架，不会直接修好文档解析错误；换一个更大的生成模型，也未必找回从未被入库的证据。</p>
+<h2 id="_5">补充判断与边界</h2>
+<p>原视频把项目分为“需要考虑数据安全”和“不需要考虑”的情况。更稳妥的实践是：所有业务都要识别数据类别、访问权限和外发风险，只是约束程度不同。客服文本也可能包含个人信息。</p>
+<p>embedding 与生成模型无须因为品牌相同才可以配合；关键在于任务表现、语言领域、向量维度和调用接口等条件。索引规模也应结合内存、维度、更新频率和查询时延估算，不能把一个条数当作通用选型线。</p>
+<h2 id="_6">下一步</h2>
+<p>迁移练习：画三栏“知识管理／回答流程／评估”。在每栏写一项你能观察的失败、一份要保留的证据、一个最小验证动作。</p>
+<p>这张图可直接帮助解释项目架构，也能防止把所有失败都归到“大模型不够聪明”。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

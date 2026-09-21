@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>统计学生人数，为什么该把计算交给数据库？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">统计学生人数，为什么该把计算交给数据库？</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">从一个具体问题开始</a></li>
+<li><a href="#1">1. 分清三层职责</a></li>
+<li><a href="#2">2. 看一条失败是怎样被定位的</a></li>
+<li><a href="#3">3. 比较方案时，要比较相同的任务</a></li>
+<li><a href="#4">4. 准确之外，还要管住成本与权限</a></li>
+<li><a href="#_4">时间戳导航</a></li>
+<li><a href="#_5">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV12nRzYPEiK" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV12nRzYPEiK"><div class="provenance">来源：code秘密花园 · <a href="https://www.bilibili.com/video/BV12nRzYPEiK/" target="_blank" rel="noopener">BV12nRzYPEiK 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">统计学生人数，为什么该把计算交给数据库？</h1>
+<blockquote>
+<p>原视频：MCP + 数据库，一种提高结构化数据检索精度的新方式 · code 秘密花园 · 约 25 分钟。工具界面和兼容情况属于录制时版本。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p><strong>需要精确筛选、计数和关联的数据问题，应考虑让数据库执行查询，再让模型解释结果。</strong></p>
+<h2 id="_3">从一个具体问题开始</h2>
+<p>“有多少身高超过 180、姓李的男同学？”</p>
+<p>如果我只从学生资料里找出几段与问题相似的文本，再让模型数人，检索阶段可能已经漏掉了符合条件的记录。模型就算把手里的几条资料数对，也无法得到完整答案。<a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1198" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:58]">[00:19:58]</a></p>
+<p>数据库查询可以把条件写明确，再在授权的数据范围内执行筛选和计数。这个案例的关键收益来自结构化数据及查询执行方式；MCP 帮助客户端把这些能力接到模型周围。</p>
+<h2 id="1">1. 分清三层职责</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=210" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:30]">[00:03:30]</a> 工具调用让模型能够提出访问外部系统的请求。运行程序需要解析请求、验证参数、执行操作，再把结果返回模型。模型生成一句“我已经查了”，并不能证明查询真的发生。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=375" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:15]">[00:06:15]</a> MCP 提供模型应用与工具／数据服务之间的协议。原视频用统一插头作类比：服务实现可以被兼容的客户端复用，减少每个应用重复接入的工作。</p>
+<figure><a href="../assets/frames/BV12nRzYPEiK-00450.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV12nRzYPEiK-00450.jpg" alt="架构图把模型所在的 Host、内部 Client、外部 Server 与数据库等资源分开，连接协议不等于查询推理本身。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=450&amp;p=1" target="_blank" rel="noopener">[00:07:30]</a> 架构图把模型所在的 Host、内部 Client、外部 Server 与数据库等资源分开，连接协议不等于查询推理本身。</figcaption></figure>
+<p>这三层可以这样记：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>负责什么</th>
+<th>常见失败</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型与上下文</td>
+<td>理解问题，决定调用哪个工具和哪些参数</td>
+<td>条件理解错、猜字段</td>
+</tr>
+<tr>
+<td>客户端与协议</td>
+<td>发现能力、传递请求、处理返回</td>
+<td>能力不兼容、错误处理缺失</td>
+</tr>
+<tr>
+<td>数据库与执行权限</td>
+<td>在授权范围内计算、筛选、关联</td>
+<td>权限过大、结果过多、数据缺失</td>
+</tr>
+</tbody>
+</table>
+<p>MCP 的存在不会自动保证上面每层正确，也不等于所有模型天然具备稳定的工具调用能力。<a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=721" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:01]">[00:12:01]</a> 演示里不同客户端就有不同的模型支持方式。</p>
+<p>补充核对：官方文档明确把 MCP 范围限定为上下文交换协议；应用如何使用模型与上下文，仍由应用自身设计。<a href="https://modelcontextprotocol.io/docs/learn/architecture">MCP 架构说明</a></p>
+<h2 id="2">2. 看一条失败是怎样被定位的</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 当问题变成“哪些同学期末考试成绩比平时好”时，模型最初不知道分数对应的字段，也不知道成绩在哪张表。它先猜错，再查看数据库里的表和字段，最后构造查询。</p>
+<p>这里已有一个清楚的失败原因：数据库虽然连上了，模型却没有获得足够的数据结构说明。直接换模型未必是最小修复。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1290" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:30]">[00:21:30]</a> 优化做法是在上下文中说明表结构、字段和使用条件。再次提问时，模型能更直接地形成查询计划，减少来回探查。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1350" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:30]">[00:22:30]</a> 另一个例子需要先定位学计算机的某位同学，再关联到教师信息。它展示了多步数据关系查询。涉及实际联系方式时，还必须有合法用途和访问权限；本课程不复制演示中的个人联系字段。</p>
+<h2 id="3">3. 比较方案时，要比较相同的任务</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1380" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:00]">[00:23:00]</a> 原视频把同样的数据导入一个普通知识库，比较计数、条件过滤和跨表关系问题。在这些示例里，数据库路线表现更好。</p>
+<p>能够支持的结论是：<strong>这些结构化任务，值得采用能执行精确查询的工具。</strong> 这组演示没有证明所有 RAG 架构都无法计数或多轮查询，也没有完成所有产品之间的公平基准比较。</p>
+<p>文本检索与数据库查询也可以出现在同一个系统里。比如先查库存，再检索某型号的使用限制，最后组织成一段回答。把任务路由到合适的信息源，比给技术贴胜负标签更有用。</p>
+<h2 id="4">4. 准确之外，还要管住成本与权限</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1417" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:37]">[00:23:37]</a> 查询结果过大可能增加上下文消耗，甚至拖垮客户端。返回数量、字段范围和查询时限都需要限制。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a> 演示中的数据库服务有不同配置方式，包含只读选项。迁移到真实业务时，应优先从只读、最小权限和限定数据库开始。用户要求查信息，不自动包含修改或删除记录的授权。</p>
+<p>原视频把某些客户端的 token 消耗归因于提示词和协议实现。这属于当时具体实现的观察，不能作为 MCP 必然昂贵的通用定律。</p>
+<h2 id="_4">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=61" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:01]">[00:01:01]</a> 普通知识库的任务边界。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=210" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:30]">[00:03:30]</a> 工具调用的作用。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=375" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:15]">[00:06:15]</a> MCP 的协议角色。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=721" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:01]">[00:12:01]</a> 客户端兼容差异。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a> 数据库连接与只读配置。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1198" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:58]">[00:19:58]</a> 条件计数。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 不知道表结构导致的试错。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1290" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:30]">[00:21:30]</a> 用 schema 说明减少错误。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV12nRzYPEiK/?t=1417" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:37]">[00:23:37]</a> 结果量和上下文成本。</li>
+</ul>
+<h2 id="_5">复习与行动清单</h2>
+<p>迁移练习：建立一个完全虚构的十行书单，包含作者、年份、页数。准备三题：统计、条件筛选、跨字段比较。先手工写出正确答案，再检查模型发出的查询和返回结果。</p>
+<p>把“理解问题正确”“查询正确”“结果解释正确”分别打勾。这样才知道一次失败发生在哪层。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

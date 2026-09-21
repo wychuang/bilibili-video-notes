@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>Agent 真正在做什么：沿执行轨迹看运行框架 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">Agent 真正在做什么：沿执行轨迹看运行框架</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#readme">“帮我读 README”后面发生了什么</a></li>
+<li><a href="#_2">一条用户消息，可能触发多种请求</a></li>
+<li><a href="#_3">五块职责，比记源码函数名更有用</a></li>
+<li><a href="#_4">为什么长任务需要事件流</a></li>
+<li><a href="#_5">工具需要两份说明</a></li>
+<li><a href="#_6">上下文压缩：续上任务，也可能丢掉关键约束</a></li>
+<li><a href="#_7">迁移练习：做一张最小执行轨迹表</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV18Uu36rEbu" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV18Uu36rEbu"><div class="provenance">来源：清华大学计算机系科协 · <a href="https://www.bilibili.com/video/BV18Uu36rEbu/" target="_blank" rel="noopener">BV18Uu36rEbu 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 真正在做什么：沿执行轨迹看运行框架</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV18Uu36rEbu/">B 站原讲解 · Claude Code 与 Harness</a> · 49 分钟 · 标准学习稿。视频包括运行轨迹演示与作者对旧版代码的分析；后者提及非正式披露版本，不能视为当前官方实现证明。本篇只提炼通用结构，不转载相关源码。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>模型提出下一步，运行框架决定它能否执行、怎样执行、如何把结果交回模型，以及什么时候结束。</p>
+<h2 id="readme">“帮我读 README”后面发生了什么</h2>
+<p>用户只输入一句话。系统先把任务、规则、可用工具和会话状态组织成请求；模型返回读取文件的工具调用；程序检查参数与权限，再执行读取；文件内容作为工具结果进入下一轮。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=165" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:45]">[00:02:45]</a></p>
+<p>如果模型已经能回答，就结束这一轮任务；如果还要查别的文件，则继续。这条循环是理解 Agent 的主干：</p>
+<p><strong>准备上下文 → 请求模型 → 检查行动 → 执行工具 → 回传结果 → 再次判断。</strong></p>
+<p>注意两个区别：输出一个工具调用只表示意图；工具成功返回，也不代表用户的整个目标已经完成。</p>
+<h2 id="_2">一条用户消息，可能触发多种请求</h2>
+<p>演示中，系统先生成会话标题，再进入主要任务循环。标题请求和实际做事的请求目的不同。分析调用次数与成本时，应把辅助请求单独辨认出来。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=410" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:50]">[00:06:50]</a></p>
+<p>后续请求会带入历史消息和工具结果。项目规则、时间、工作目录等上下文，也可能由运行框架自动加入。用户看到的聊天记录通常只展示了其中一部分。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a></p>
+<p>这提示了一种排查方法：发现回答异常时，查看实际送入模型的请求结构，确认规则与资料是否被加载。日志包含敏感数据时，应先脱敏，再分享最小必要片段。</p>
+<h2 id="_3">五块职责，比记源码函数名更有用</h2>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>负责什么</th>
+<th>对应的体验问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口与界面</td>
+<td>接收输入、显示过程、响应取消</td>
+<td>用户是否知道任务还在运行？</td>
+</tr>
+<tr>
+<td>应用编排</td>
+<td>配置、命令、扩展、任务安排</td>
+<td>当前启用了哪些能力？</td>
+</tr>
+<tr>
+<td>核心运行循环</td>
+<td>模型请求、工具执行、上下文管理</td>
+<td>下一步怎样决定，循环怎样结束？</td>
+</tr>
+<tr>
+<td>状态与观测</td>
+<td>会话恢复、执行记录、成本与延迟</td>
+<td>出错后能否定位、恢复？</td>
+</tr>
+<tr>
+<td>外部环境</td>
+<td>模型服务、文件、网络、远程工具</td>
+<td>依赖失败或权限变化时怎么办？</td>
+</tr>
+</tbody>
+</table>
+<p>这张表是对视频结构的归纳，便于跨产品比较。具体函数名和内部边界随版本变化。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:20]">[00:11:20]</a></p>
+<h2 id="_4">为什么长任务需要事件流</h2>
+<p>任务可能运行几分钟。如果程序只在最后返回一个结果，界面中间就像卡住了。视频用异步事件解释：新文本、工具开始、工具结束、错误等，都可以逐步交给界面显示。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1212" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:12]">[00:20:12]</a></p>
+<p>事件流既改善等待体验，也让不同入口复用同一套执行逻辑。终端、网页或 SDK 可以消费相同类型的事件，分别呈现给用户。</p>
+<p>好的进度提示应说明正在处理什么、已经得到什么、是否需要用户决定。不断转圈或反复说“处理中”，信息价值很低。</p>
+<h2 id="_5">工具需要两份说明</h2>
+<p>对模型，要说明工具名、用途和参数结构。对执行器，还要说明是否可用、怎样检查权限、怎样执行、是否允许并发、怎样处理异常。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1660" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:40]">[00:27:40]</a></p>
+<p>例如读取两个独立文件可以并行；同时改同一个文件就可能互相覆盖。一个命令被模型描述为“只读”，仍应由程序检查。无法可靠判断的复合操作，需要更保守的处理。</p>
+<p>MCP 工具接入后也应遵守同样的执行边界。协议连接让调用形式更统一，不会自动消除远程服务的错误、敏感信息风险或授权要求。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1930" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:32:10]">[00:32:10]</a></p>
+<h2 id="_6">上下文压缩：续上任务，也可能丢掉关键约束</h2>
+<p>演示中，手动压缩把较长历史整理成摘要，下一轮使用摘要继续。原始细节可能保存在另一个记录中，需要时再查。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=2660" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:44:20]">[00:44:20]</a></p>
+<p>评测压缩质量，不能只看摘要短了多少。还要检查用户最新要求、已完成事项、未解决错误、关键证据位置以及禁止事项是否保留。少掉一句“不要覆盖原文件”，可能比少掉整段闲聊严重得多。</p>
+<p>视频也展示了子任务委派：主任务派出独立工作，等待结果再整合。并发应有清晰边界，避免重复搜索、冲突写入与把一个子任务的失败藏在总结果里。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=2495" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:41:35]">[00:41:35]</a></p>
+<h2 id="_7">迁移练习：做一张最小执行轨迹表</h2>
+<p>找一次可安全重现的 Agent 失败，记录五列：步骤、预期行动、实际工具与参数、返回结果、下一步决策。只保留必要信息，删除令牌、私人文件内容和真实账号。</p>
+<p>然后判断问题发生在哪里：模型选择错了、参数不合法、工具没执行成功、结果没被理解，还是任务早早宣告完成？每个标签都要指向一条可观察记录。</p>
+<p>补充边界：本课讲解中的 API 格式、工具列表和压缩细节都是录制时的例子。实际接入前应核对目标服务当前文档，不能仅通过更换模型名推定接口兼容。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

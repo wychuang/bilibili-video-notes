@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>高质量数据集：先判断样本值不值得学 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">高质量数据集：先判断样本值不值得学</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">推理主干</a></li>
+<li><a href="#1">1. 先确定要教什么，再去找材料</a></li>
+<li><a href="#2">2. 格式在教模型怎样参与对话</a></li>
+<li><a href="#3">3. 五类问题会让数据帮倒忙</a></li>
+<li><a href="#4">4. 生成出来的题，也需要筛选</a></li>
+<li><a href="#5">5. 最后一关是判断，不能只看导出成功</a></li>
+<li><a href="#_4">补充判断：别把老师的自信当成正确答案</a></li>
+<li><a href="#_5">时间戳导航</a></li>
+<li><a href="#_6">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1MRMnz1EGW" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1MRMnz1EGW"><div class="provenance">来源：code秘密花园 · <a href="https://www.bilibili.com/video/BV1MRMnz1EGW/" target="_blank" rel="noopener">BV1MRMnz1EGW 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">高质量数据集：先判断样本值不值得学</h1>
+<blockquote>
+<p>原视频：LLaMA Factory 微调教程：如何构建高质量数据集？ · code 秘密花园 · 约 25 分钟。以 Web 安全领域微调为教学案例，本文聚焦数据生产与质量判断，不复现训练。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p><strong>一个样本是否值得进入训练集，取决于它是否准确、独立可理解、贴近任务，并且补充了已有数据没有覆盖的能力。</strong></p>
+<h2 id="_3">推理主干</h2>
+<p>明确目标行为 → 选择可靠材料 → 正确解析与分块 → 生成问题与答案 → 人工检查 → 去重、划分数据 → 验证模型行为。</p>
+<p>数据准备不只是把文件换成 JSON。它在决定模型将反复模仿哪些行为，以及哪些错误会被成批放大。<a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a></p>
+<h2 id="1">1. 先确定要教什么，再去找材料</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=20" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:20]">[00:00:20]</a> 教学案例希望把一个较小的指令模型调整为 Web 安全助手，能回答领域问题，也能对业务与代码风险给出提示。选择领域书籍、相关研究与合成问答，都是围绕这个目标展开。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 同一个领域里的材料，仍可能与目标任务不匹配。财经新闻主要描述事件，金融问答需要解决具体问题；把二者混在一起，并不会自动获得更好的问答能力。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=640" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:40]">[00:10:40]</a> 多样性也不限于换几个同义词。解释、比较、推理、操作等指令，对应不同任务；长短句、背景完整度和使用场景，也会改变难度。</p>
+<p>原视频演示了训练前后若干回答。它们有助于观察变化，但几条展示题不足以证明泛化、避免过拟合或全面超越另一个模型。回答更长、出现推理段落，也不能替代正确性与任务完成度的检验。</p>
+<h2 id="2">2. 格式在教模型怎样参与对话</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=279" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:39]">[00:04:39]</a> 课程介绍 Alpaca 与 ShareGPT 等数据格式。可以先把它们理解成不同的对话记录约定：谁提出要求，是否有系统说明，工具返回了什么，助手应输出什么。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=450" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:30]">[00:07:30]</a> 工具读取数据配置后，还会映射字段、套用对应的对话模板、分词，再设置哪些位置参与训练损失。这些步骤任何一个错位，都可能让“看起来正常”的 JSON 变成错误的训练信号。</p>
+<p>因此，检查数据至少包括两个层面：语义是否正确，以及数据被工具加载后是否仍表达同一个对话。导入预览和少量样本检查值得保留。</p>
+<h2 id="3">3. 五类问题会让数据帮倒忙</h2>
+<figure><a href="../assets/frames/BV1MRMnz1EGW-00600.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1MRMnz1EGW-00600.jpg" alt="原课件把数据问题分成数量、噪声、分布、任务相关性与多样性五类；其中样本数量为教学经验值，不是效果保证。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=600&amp;p=1" target="_blank" rel="noopener">[00:10:00]</a> 原课件把数据问题分成数量、噪声、分布、任务相关性与多样性五类；其中样本数量为教学经验值，不是效果保证。</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>直观表现</th>
+<th>我如何检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数量或覆盖不足</td>
+<td>只见过一种问法，稍微变形就失败</td>
+<td>看任务类型和难度分布</td>
+</tr>
+<tr>
+<td>噪声与错误标注</td>
+<td>错别字、错答案、角色或标签颠倒</td>
+<td>对照来源与字段规则</td>
+</tr>
+<tr>
+<td>分布偏差</td>
+<td>训练中几乎全是某一类，真实使用却不同</td>
+<td>对比目标场景分布</td>
+</tr>
+<tr>
+<td>任务相关性不足</td>
+<td>主题相关，但没有练到实际行为</td>
+<td>逐题问“它教会什么”</td>
+</tr>
+<tr>
+<td>多样性不足</td>
+<td>大量近似表达重复同一点</td>
+<td>合并重复，补缺失场景</td>
+</tr>
+</tbody>
+</table>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=533" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:53]">[00:08:53]</a> 原视频给出过数据量经验值。所需样本数取决于任务、原模型和样本质量，不能把某个数量理解成训练有效的保证。</p>
+<h2 id="4">4. 生成出来的题，也需要筛选</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=990" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:30]">[00:16:30]</a> 一种扩展方法是组合内容载体与目标读者：同一知识可以写成不同结构、不同深度的内容。这样做的价值是覆盖表达与使用场景，前提是核心事实不能在改写中变化。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:20]">[00:18:20]</a> 流程中先检查领域结构和文档分块，再生成问题。解析时漏掉表头或限定条件，后面的问答生成会沿着错误材料继续工作。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:30]">[00:19:30]</a> 不合格问题的例子包括只问“作者的未来工作”、笼统的“文献里的数据是什么”，以及脱离原文就无法理解的“这个变量 K 是什么”。这些题即使有流畅答案，也可能没有教会目标能力。</p>
+<p>这个筛选原则有适用范围：如果目标就是论文阅读，作者未来工作的归纳可能有价值；在这次领域助手训练中，它不符合主要目标。质量标准要与任务绑定。</p>
+<h2 id="5">5. 最后一关是判断，不能只看导出成功</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1296" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:36]">[00:21:36]</a> 生成的答案需要人工复核。原视频强调事实与材料一致、不过度超出来源、直接回答问题、保留关键条件、统一术语、合并重复，以及修正模糊表述。</p>
+<p>例如“数据质量很高”几乎没有可执行信息。应该进一步明确：覆盖哪些情况、怎样标注、哪些条件仍未知。改成具体事实，才方便下一位审核者确认。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:23]">[00:23:23]</a> 演示最后保留 2876 条数据并导入训练工具。这是该次案例的产量，不构成通用的推荐规模。导入成功只说明格式被接受，效果还需要独立评测。</p>
+<h2 id="_4">补充判断：别把老师的自信当成正确答案</h2>
+<p>用更强模型生成样本，可以提高生产效率，也会继承它的遗漏与偏差。用户可见的推理文本也不等于可验证的内部推理过程；应围绕结果、证据和需要训练的行为进行审核。</p>
+<p>从同一篇材料生成的近似问答，划分训练与测试时尤其要防止泄漏。否则模型可能在测试中见到换一种说法的旧答案。这个检查属于本课程补充的数据纪律。</p>
+<h2 id="_5">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a> 数据质量影响训练。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=279" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:39]">[00:04:39]</a> 数据格式。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=450" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:30]">[00:07:30]</a> 字段、模板、分词与标签。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=533" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:53]">[00:08:53]</a> 小样本、噪声、偏差与覆盖。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 领域相关不等于任务相关。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=990" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:30]">[00:16:30]</a> 表达形式与受众组合。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:30]">[00:19:30]</a> 筛掉不适合目标的题。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1296" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:36]">[00:21:36]</a> 答案审核规则。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:23]">[00:23:23]</a> 数据导出与实际效果分开验收。</li>
+</ul>
+<h2 id="_6">复习与行动清单</h2>
+<p>迁移练习：从一篇公开技术文档生成十个问题，先人工留下五个。给每个删除决定写一句理由，再逐句核对留下的答案。记录“有来源的事实”和“需要额外证据的推测”。</p>
+<p>暂时不训练模型也能完成这个练习。它直接训练数据判断、标注说明和问题归因的能力。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

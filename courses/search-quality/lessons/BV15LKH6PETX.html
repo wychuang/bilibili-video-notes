@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>这才是UI设计该有的“呼吸感” · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#ui">这才是UI设计该有的“呼吸感”</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">时间戳导航</a></li>
+<li><a href="#_3">核心问题与推理主线</a></li>
+<li><a href="#1">1. 先给主任务足够大的舞台</a></li>
+<li><a href="#2">2. 让组件之间保留可识别的边界</a></li>
+<li><a href="#3">3. 临时界面出现时，保留上下文并建立焦点</a></li>
+<li><a href="#4">4. 用状态样式表达交互，不靠堆叠说明文字</a></li>
+<li><a href="#5">5. 信息密集页面依靠分区和行距保持从容</a></li>
+<li><a href="#6">6. 淡化非当前内容，让页面具备景深</a></li>
+<li><a href="#_4">具体案例与画面细节</a></li>
+<li><a href="#_5">边界、疑点与时效性</a></li>
+<li><a href="#_6">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV15LKH6PETX" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>补充 · 既有学习稿</span></div><article data-lesson="BV15LKH6PETX"><h1 id="ui">这才是UI设计该有的“呼吸感”</h1>
+<blockquote>
+<p><strong>上传者</strong>：UXUI良制品<br>
+<strong>时长</strong>：01:37<br>
+<strong>视频链接</strong>：https://www.bilibili.com/video/BV15LKH6PETX/<br>
+<strong>视频 ID</strong>：BV15LKH6PETX<br>
+<strong>总结强度</strong>：standard<br>
+<strong>证据来源</strong>：10 张时间戳画面；元数据显示未检测到语音。以下内容以画面观察为依据，关于设计意图与交互效果的部分均作谨慎推断。画面采样间隔约 10 秒，不能据此还原每一段完整动效。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>这组 UI 案例共同呈现出一种“呼吸感”：让内容拥有足够的留白、层级间有明确距离、状态变化获得独立舞台，并借由柔和的光影、圆角和渐隐来减轻界面的压迫感。</p>
+<h2 id="_2">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:04]">[00:00:04]</a> 医疗视频会诊界面：大画面承载主任务，控件退到边缘。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=14" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:14]">[00:00:14]</a> AI Assistant：卡片栅格与输入框分层。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=24" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:24]">[00:00:24]</a> 数据概览：两个图表卡片之间留出明显呼吸区。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a> 移动端日历：弹层覆盖后仍保留任务上下文。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a> 表单选择：焦点描边、下拉面板与协作指针同时出现。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 健康保险仪表盘：模块被大块留白组织为清晰区域。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=63" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:03]">[00:01:03]</a> 表格局部：行高、分隔线与状态色承担阅读秩序。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=72" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:12]">[00:01:12]</a> 明细页：大面积淡化背景，强调当前导航状态。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=82" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:22]">[00:01:22]</a> 融资结构图：中心图形周围保留宽阔空域。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=92" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:32]">[00:01:32]</a> 地图展示：信息点稀疏分布，避免地图沦为噪声背景。</li>
+</ul>
+<h2 id="_3">核心问题与推理主线</h2>
+<p>从画面序列可观察到，视频并未将“呼吸感”收窄为单一的留白技巧。它呈现的是一套组合关系：</p>
+
+<code class="language-text">空间留白
+  + 清晰主次
+  + 低干扰的容器与边界
+  + 对状态变化的聚焦
+  = 更从容的视觉节奏
+</code>
+<p>这里的关键在于：留白本身不直接等于舒适。留白需要服务于任务层级。主任务要有足够大的视觉面积；次级操作要靠近相关对象；临时状态要出现得明确，同时避免把原有上下文完全抹去。</p>
+<h2 id="1">1. 先给主任务足够大的舞台</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:04]">[00:00:04]</a> 的远程医疗界面把医生的视频画面放在中央，占据绝大部分窗口。顶部导航、右上角操作、底部通话工具条均以较小尺寸贴近边缘。画面中的背景和控件使用半透明、低对比处理，视觉注意力自然集中到人物脸部这一主任务上。</p>
+<p>可见事实：导航项、录制入口、通知与头像都存在，但它们不与视频主体争夺面积。<br>
+谨慎推断：这是一种以空间比例建立优先级的方式；用户首先能理解“正在会诊”，再处理工具与设置。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_001_00-00-04.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_001_00-00-04.jpg" alt="图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。" loading="lazy"></a><figcaption>图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。</figcaption></figure>
+<p><em>图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。</em></p>
+<p>这也提示一个实用判断：当页面只有一个明确核心任务时，优先扩大任务对象，避免为了“信息齐全”把所有能力放到同一视觉权重上。</p>
+<h2 id="2">2. 让组件之间保留可识别的边界</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=14" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:14]">[00:00:14]</a> 的 AI Assistant 将四个功能入口置于两列卡片中，下方另设一条独立的输入区域。功能卡片内部有大号图标、简短名称和充裕内边距；输入框以蓝色描边突出当前焦点，附件、语音和发送按钮沿右侧排列。</p>
+<p>可见事实：功能选择区和输入区之间有明确纵向间隔，控件未彼此贴紧。<br>
+谨慎推断：这种分组有助于用户区分“选择预设能力”和“直接输入请求”两类动作。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_002_00-00-14.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_002_00-00-14.jpg" alt="图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。" loading="lazy"></a><figcaption>图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。</figcaption></figure>
+<p><em>图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。</em></p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=24" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:24]">[00:00:24]</a> 的数据卡片进一步说明，呼吸感不需要依赖巨大页面。两个并列卡片各自拥有标题、角标图标与图形主体；图表周围留出空白，尤其环形图的中心保持干净，折线图也未塞入密集坐标和标签。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_003_00-00-24.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_003_00-00-24.jpg" alt="图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。" loading="lazy"></a><figcaption>图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。</figcaption></figure>
+<p><em>图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。</em></p>
+<p>可复用的检查方式：</p>
+<ul>
+<li>同一组组件内部距离应稳定。</li>
+<li>两个不同模块之间的距离，应大于模块内部元素的距离。</li>
+<li>图表、按钮和输入框要有可感知的“安全边界”，避免视觉元素贴着容器边缘。</li>
+</ul>
+<h2 id="3">3. 临时界面出现时，保留上下文并建立焦点</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a> 展示一个移动端“Room cleaning”任务编辑界面。日期选择器位于页面中部，以浮层形式覆盖原表单；背景字段仍可隐约识别。右侧还展示了独立日历弹窗与协作者列表，左侧是提醒时间和任务分类面板。</p>
+<p>可见事实：日历弹层使用白色面板、圆角、阴影和浅色背景遮罩；当前选中的“18”以蓝色圆形强调。<br>
+谨慎推断：画面意在表达一种渐进式操作状态——用户正在处理日期，却仍能感知它属于当前任务编辑流程。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_004_00-00-34.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_004_00-00-34.jpg" alt="图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。" loading="lazy"></a><figcaption>图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。</figcaption></figure>
+<p><em>图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。</em></p>
+<p>这种做法的重点是“焦点转移”：弹层需要足够醒目，让用户知道当前该操作哪里；背景信息仍应保留适量可见性，帮助用户理解自己从哪里进入、操作完成后会回到哪里。</p>
+<h2 id="4">4. 用状态样式表达交互，不靠堆叠说明文字</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a> 的表单画面同时呈现文本输入、下拉选择、多人协作。上方“Company name”输入框有深蓝焦点描边和文本光标；下方“Category”下拉框以青色描边显示激活状态；下拉列表中，“Marketing”所在行有灰色悬停底色。右侧出现带名字的协作指针标签。</p>
+<p>可见事实：不同状态以边框颜色、行底色、光标和指针标记区分。<br>
+谨慎推断：界面将“正在编辑”“当前焦点”“候选项悬停”“另一位协作者的位置”拆成可迅速扫读的视觉信号。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_005_00-00-43.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_005_00-00-43.jpg" alt="图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。" loading="lazy"></a><figcaption>图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。</figcaption></figure>
+<p><em>图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。</em></p>
+<p>值得注意的是，状态反馈也需要“呼吸空间”。焦点描边、标签和悬停底色各占一个明确层次；若同时出现过多强色边框、动效与提示气泡，用户反而难以判断当前真正需要回应的状态。</p>
+<h2 id="5">5. 信息密集页面依靠分区和行距保持从容</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 的保险仪表盘包含会员信息、计划卡片、累计金额图、筛选器与理赔表格，信息量明显增大。画面仍通过大块区域切分：顶部导航独立成深色横栏；“Active Plans”作为一组横向卡片；下方再分为左侧统计和右侧理赔明细。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_006_00-00-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_006_00-00-53.jpg" alt="图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。" loading="lazy"></a><figcaption>图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。</figcaption></figure>
+<p><em>图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。</em></p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=63" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:03]">[00:01:03]</a> 放大到表格局部后，能看到每一行拥有较充足高度，图标、理赔名称、日期、金额、状态与操作按钮沿固定列排列。浅色分隔线存在，但对比度较低；“Pending”“Paid”“Denied”使用黄、绿、红显示差异。</p>
+<p>可见事实：表格用对齐、行距、细分隔线和有限状态色建立秩序。<br>
+谨慎推断：在高密度信息中，呼吸感来自稳定的节奏与克制的强调，未必来自把信息删到很少。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_007_00-01-03.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_007_00-01-03.jpg" alt="图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。" loading="lazy"></a><figcaption>图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。</figcaption></figure>
+<p><em>图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。</em></p>
+<h2 id="6">6. 淡化非当前内容，让页面具备景深</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=72" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:12]">[00:01:12]</a> 的保险明细页中，顶部“Eligibility”导航项被圆形高亮强调；页面主体整体呈浅淡状态，仍可辨认个人资料、筛选控件和理赔记录。基于单帧画面，无法确认这是否为实际转场中的渐隐阶段，或是视频后期叠加的展示效果。</p>
+<p>可见事实：当前导航有更高对比和清晰边界，其他区域明显更淡。<br>
+谨慎推断：这种对比构成了“前景—背景”的景深关系，可用于引导注意力进入当前步骤。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_008_00-01-12.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_008_00-01-12.jpg" alt="图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。" loading="lazy"></a><figcaption>图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。</figcaption></figure>
+<p><em>图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。</em></p>
+<p>在实际设计中，应谨慎使用大范围模糊或降低对比：若背景内容仍需阅读或操作，过度淡化会损害可用性。适合降低背景权重的场景包括弹层、引导、焦点切换与过渡状态。</p>
+<h2 id="_4">具体案例与画面细节</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=82" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:22]">[00:01:22]</a> 的“Funding Structure”页面使用非常宽松的构图：标题位于上方中央，环形图置于页面中部，彩色环段与说明线散布在外围，中心和四周都留有大量白色空间。窗口外层的蓝紫渐变背景与内层白色内容面形成明确分层。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_009_00-01-22.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_009_00-01-22.jpg" alt="图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。" loading="lazy"></a><figcaption>图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。</figcaption></figure>
+<p><em>图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。</em></p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=92" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:32]">[00:01:32]</a> 的“Testimonials”地图页面同样使用低密度分布。标题、说明文字和浅蓝世界地图占据背景，少数蓝色圆点标记承载数值；标记彼此相距较远，地图轮廓也使用很淡的蓝色。</p>
+<p>可见事实：地图作为承载层，数值节点被控制在少量且明显的位置。<br>
+谨慎推断：通过降低底图存在感、限制标记数量和保留空白，信息点更容易成为视觉焦点。</p>
+<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_010_00-01-32.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_010_00-01-32.jpg" alt="图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。" loading="lazy"></a><figcaption>图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。</figcaption></figure>
+<p><em>图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。</em></p>
+<h2 id="_5">边界、疑点与时效性</h2>
+<ul>
+<li>该视频未检测到语音字幕，因此无法确认作者对“呼吸感”的原始定义、评价标准或具体设计规则。</li>
+<li>画面仅为 10 个时间点采样。可观察到静态 UI 状态与构图，不能确认任意两个画面之间的真实动效曲线、时长、触发条件或完整操作路径。</li>
+<li>多个案例带有视频水印和展示性背景，部分淡化、模糊、倾斜及渐变效果可能属于视频呈现方式，未必是产品界面的原生交互效果。</li>
+<li>文中关于“帮助理解”“引导注意力”等表述是基于画面结构的谨慎设计推断，不构成用户测试结论。</li>
+</ul>
+<h2 id="_6">复习与行动清单</h2>
+<ul>
+<li>[ ] 先写下每个页面唯一的主任务，确认它是否拥有最大的视觉面积。</li>
+<li>[ ] 检查模块间距是否大于模块内部间距，避免所有元素等距挤在一起。</li>
+<li>[ ] 为输入、悬停、选中、禁用和协作状态分配清晰且数量受控的视觉信号。</li>
+<li>[ ] 设计弹层时，确认焦点内容突出，同时仍保留足够的来源上下文。</li>
+<li>[ ] 审视表格和数据图：行高、对齐、图表空白与状态色能否建立稳定节奏。</li>
+<li>[ ] 对大面积模糊、淡化和渐变做可读性检查，尤其关注文字对比度与操作可达性。</li>
+<li>[ ] 复看问题：页面中的每一块留白，究竟在服务层级、分组、聚焦，还是只是在填补空缺？</li>
+</ul></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

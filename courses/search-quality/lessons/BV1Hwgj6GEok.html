@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>后训练：如何保持你的独特品味 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">后训练：如何保持你的独特品味</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">推理主干</a></li>
+<li><a href="#_4">为什么“独特品味”会成为公司的核心资产</a></li>
+<li><a href="#_5">“拥有自己的智能”是一条闭环</a></li>
+<li><a href="#prompt">从 Prompt 走向后训练：能力逐级加深</a><ul>
+<li><a href="#1-prompt">1. Prompt：快速验证想法</a></li>
+<li><a href="#2-rag">2. RAG：接入私有且动态的事实</a></li>
+<li><a href="#3-sft">3. SFT：修正结构、格式与稳定行为</a></li>
+<li><a href="#4-preference-dpo">4. Preference / DPO：学习产品品味</a></li>
+<li><a href="#5-rl-rft">5. RL / RFT：提升可验证的专业任务</a></li>
+<li><a href="#6-distillation">6. Distillation：压低推理成本</a></li>
+</ul>
+</li>
+<li><a href="#_6">后训练真正困难的部分：把判断变成系统</a><ul>
+<li><a href="#_7">从“创始人感觉”到可重复评测</a></li>
+<li><a href="#_8">奖励信号就是可执行的品味</a></li>
+</ul>
+</li>
+<li><a href="#_9">六种最常见的时间与资金浪费</a><ul>
+<li><a href="#1">1. 追求数据数量，忽略数据质量</a></li>
+<li><a href="#2">2. 训练前没有评测</a></li>
+<li><a href="#3-rl">3. RL 环境过于粗糙</a></li>
+<li><a href="#4">4. 训练与服务发生漂移</a></li>
+<li><a href="#5">5. 为错误问题选择高级工具</a></li>
+<li><a href="#6">6. 把时间花在通用训练基础设施上</a></li>
+</ul>
+</li>
+<li><a href="#_10">成功团队与停滞团队的分界线</a></li>
+<li><a href="#_11">案例想证明什么</a></li>
+<li><a href="#_12">谁更需要后训练</a></li>
+<li><a href="#pmf">什么时候开始：先找到 PMF，再解决规模化</a><ul>
+<li><a href="#_13">阶段一：寻找产品市场匹配</a></li>
+<li><a href="#_14">阶段二：建立可持续规模</a></li>
+</ul>
+</li>
+<li><a href="#_15">边界、疑点与时效性</a></li>
+<li><a href="#_16">时间戳导航</a></li>
+<li><a href="#_17">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Hwgj6GEok" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 既有学习稿</span></div><article data-lesson="BV1Hwgj6GEok"><h1 id="_1">后训练：如何保持你的独特品味</h1>
+<ul>
+<li><strong>上传者</strong>：皮皮蟹勇闯天涯</li>
+<li><strong>主讲人</strong>：Lin Qiao，Fireworks AI CEO、联合创始人</li>
+<li><strong>时长</strong>：28:28</li>
+<li><strong>来源</strong>：<a href="https://www.bilibili.com/video/BV1Hwgj6GEok/">Bilibili</a></li>
+<li><strong>视频 ID</strong>：BV1Hwgj6GEok</li>
+<li><strong>总结强度</strong>：Deep</li>
+<li><strong>证据来源</strong>：本地视频元数据、英文自动逐字稿、SRT 时间轴及 24 张候选画面</li>
+<li><strong>证据质量</strong>：英文识别语言置信度为 0.997，247 个连续片段，最大语音间隔 2 秒；逐字稿存在少量术语误识别，本文结合上下文谨慎校正。案例指标均为演讲材料中的录制时点主张，未作外部核验。</li>
+</ul>
+<h2 id="_2">一句话抓住核心</h2>
+<p>后训练的商业价值，是把产品积累的数据、判断标准、独特品味和领域经验编码进专用模型，再用评测、奖励与线上反馈形成闭环，从而同时保护差异化、改善产品质量并降低规模化成本。</p>
+<h2 id="_3">推理主干</h2>
+<ol>
+<li>AI 编程正在压缩应用开发所需的人力、时间和专业门槛，产品表层因此越来越容易复制。</li>
+<li>一家公司真正独特的部分，来自它解决问题时采用的判断、品味、取舍与信念。</li>
+<li>这些隐性能力要先转化成高质量数据、评测标准和奖励信号，随后才能进入模型。</li>
+<li>RAG、SFT、偏好优化、强化学习和蒸馏分别解决不同问题，技术选择应由问题类型决定。</li>
+<li>训练结果必须进入真实服务环境，通过产品指标验证，并持续回流数据。</li>
+<li>更合适的重投入时点通常出现在产品市场匹配之后：此时高质量数据开始形成，成本与护城河问题也真正显现。</li>
+</ol>
+<h2 id="_4">为什么“独特品味”会成为公司的核心资产</h2>
+<p>过去，把一个想法做成可规模化的软件产品，往往需要数十名产品工程师和产品经理协作多个季度。如今，一个人借助 AI，可能在几周内完成过去需要大型团队完成的工作。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=90" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:30]">[00:01:30]</a></p>
+<p>开发资源大幅压缩会产生一个直接后果：应用界面、基础功能和常见工作流更容易被复刻。只依赖通用黑盒 API 的公司，还会共享相近的基础智能，最终容易输出相似的答案、交互和能力。</p>
+<p>公司的存在依据，在于它选择了一个独特问题，并用特定方式解决。这个“特定方式”包含：</p>
+<ul>
+<li>什么结果算好；</li>
+<li>什么错误不可接受；</li>
+<li>面对冲突时优先保护什么；</li>
+<li>用户真正关心哪些细节；</li>
+<li>如何在成本、速度、质量和风险之间取舍。</li>
+</ul>
+<p>这些判断共同构成产品品味。后训练提供了一条路径：把客户理解、生产数据和判断规则逐步写进模型，使产品的智能层也带有公司的独特性。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a></p>
+<h2 id="_5">“拥有自己的智能”是一条闭环</h2>
+<p>“拥有自己的智能”首先从数据开始。通用基础模型主要吸收公共数据和通用标注任务，而每家公司处理的是自己的具体场景。生产过程中的高质量样本、用户行为、失败记录和专家修正，才是专用智能的原料。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=243" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:03]">[00:04:03]</a></p>
+<p>完整闭环可以分成三层：</p>
+<ol>
+<li><strong>合成数据与生产数据</strong>：策划、标注并筛选具有代表性的样本，同时建立奖励信号。</li>
+<li><strong>后训练</strong>：通过 SFT、偏好学习或强化学习，把强大的基础模型转化成特定任务专家。</li>
+<li><strong>服务与迭代</strong>：将模型投入生产环境，用线上评测和产品指标验证，再把新数据送回训练流程。</li>
+</ol>
+<p>底层关系可以概括为：</p>
+<blockquote>
+<p>通用基础模型 + 少量专用权重或适配层 = 面向具体场景的专用智能</p>
+</blockquote>
+<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_004_00-04-09.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_004_00-04-09.jpg" alt="图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型" loading="lazy"></a><figcaption>图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型</figcaption></figure>
+<p><em>图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型</em></p>
+<p>训练完成只是一次实验的中段。模型还要进入服务层进行 A/B 测试，确认它能真正推动留存、转化、任务成功率、人工接管率或单位成本等产品指标，然后继续迭代。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=311" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:11]">[00:05:11]</a></p>
+<h2 id="prompt">从 Prompt 走向后训练：能力逐级加深</h2>
+<p>团队不应一开始就投入重型后训练。更稳妥的演进顺序是：</p>
+<h3 id="1-prompt">1. Prompt：快速验证想法</h3>
+<p>直接使用通用模型，通过指令和少量示例测试产品假设。这个阶段的反馈周期可以短到几分钟，适合确认需求和基本交互是否成立。</p>
+<h3 id="2-rag">2. RAG：接入私有且动态的事实</h3>
+<p>当问题来自模型不知道的企业事实，并且内容会频繁变化时，把知识写入权重通常缺乏效率。检索增强生成可以在运行时取回当前数据，使回答落在企业知识之上。</p>
+<h3 id="3-sft">3. SFT：修正结构、格式与稳定行为</h3>
+<p>当模型知道相关知识，却无法稳定遵守输出格式、工作流程、语气或工具使用规范时，可用数百个干净示例进行监督微调。</p>
+<p>它类似于人通过教材学习：示例明确告诉模型什么做法正确、什么做法需要避免。</p>
+<h3 id="4-preference-dpo">4. Preference / DPO：学习产品品味</h3>
+<p>当“好答案”难以写成一条精确规则，但人很容易比较两个答案时，可以利用偏好数据。用户的点赞、点踩、选择、修改和放弃行为，都可能成为偏好信号。</p>
+<p>它对应人逐渐形成判断力的过程：面对多种可行方案时，开始知道自己更欣赏哪一种。</p>
+<h3 id="5-rl-rft">5. RL / RFT：提升可验证的专业任务</h3>
+<p>当模型在特定任务上较弱，同时任务结果能够可靠评分时，可以使用强化学习或可验证奖励训练。编译是否成功、测试是否通过、数值是否正确，都可以成为明确奖励。</p>
+<h3 id="6-distillation">6. Distillation：压低推理成本</h3>
+<p>如果模型质量足够，但线上推理过慢或过贵，可以让较大的教师模型指导较小的学生模型，在保留关键行为的同时改善速度和单位经济性。</p>
+<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_008_00-08-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_008_00-08-53.jpg" alt="图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏" loading="lazy"></a><figcaption>图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏</figcaption></figure>
+<p><em>图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏</em></p>
+<p>最重要的决策原则是先定义问题，再选择训练技术。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=502" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:22]">[00:08:22]</a> 多种方法也可以组合，例如先用 RAG 提供事实，再用 SFT 固定操作格式，随后用偏好数据学习风格，最后通过蒸馏降低成本。</p>
+<h2 id="_6">后训练真正困难的部分：把判断变成系统</h2>
+<p>数据量本身无法保证效果。演讲材料给出的经验是，约一千个非常干净的样本可能胜过两万个噪声样本。谁最清楚哪些样本优秀、哪些错误最致命？通常是产品团队和领域专家。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a></p>
+<p>这会改变团队分工。产品人员需要深入参与数据筛选、失败分类、评测设计和奖励定义；研究与机器学习团队负责把这些判断转化为可训练、可重复的系统。</p>
+<h3 id="_7">从“创始人感觉”到可重复评测</h3>
+<p>早期产品经常采用一种朴素评测：创始人查看结果，凭经验判断“这个回答对不对、像不像我们想要的产品”。</p>
+<p>这种感觉已经包含宝贵判断，只是尚未结构化。下一步是把它拆解为可反复运行的评测集和评分规则，类似传统软件工程里的单元测试与集成测试。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=669" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:09]">[00:11:09]</a></p>
+<p>训练前就应回答：</p>
+<ul>
+<li>当前模型在哪些真实任务上失败？</li>
+<li>哪些失败对用户影响最大？</li>
+<li>“改善”究竟由什么指标证明？</li>
+<li>多大提升才值得发布？</li>
+<li>哪些安全和质量底线不得退让？</li>
+<li>线上产品指标怎样映射回离线评测？</li>
+</ul>
+<p>没有训练前基线，团队即使得到一个新模型，也很难判断工作是否完成。</p>
+<h3 id="_8">奖励信号就是可执行的品味</h3>
+<p>问答环节给出了一个更具体的定义：奖励可以写成代码，并由多个评分维度组成。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1399" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:19]">[00:23:19]</a></p>
+<p>以招聘智能体为例，一家公司可能同时评价候选人的主动性、推进速度、解决障碍的能力和岗位匹配度。每个维度都有独立量表，再按照公司的实际偏好加权：</p>
+<div class="math-display" aria-label="R(x)=w_1r_{\text{主动性}}(x)+w_2r_{\text{执行速度}}(x)+w_3r_{\text{岗位匹配}}(x)+\cdots"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>w</mi><mn>1</mn></msub><msub><mi>r</mi><mrow><mtext>主动性</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>w</mi><mn>2</mn></msub><msub><mi>r</mi><mrow><mtext>执行速度</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>w</mi><mn>3</mn></msub><msub><mi>r</mi><mrow><mtext>岗位匹配</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mo>⋯</mo></mrow></math></div>
+<p>真正独特的部分既包括评分维度，也包括权重、最低门槛和冲突处理规则。两家公司即使使用相同基础模型，也会因为奖励设计不同而形成不同产品行为。</p>
+<h2 id="_9">六种最常见的时间与资金浪费</h2>
+<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_009_00-10-04.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_009_00-10-04.jpg" alt="图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施" loading="lazy"></a><figcaption>图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施</figcaption></figure>
+<p><em>图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施</em></p>
+<h3 id="1">1. 追求数据数量，忽略数据质量</h3>
+<p>把大量噪声样本直接送进训练，会放大矛盾标注、错误答案和不一致风格。高质量策划、去重、难例覆盖和专家复核通常更有价值。</p>
+<h3 id="2">2. 训练前没有评测</h3>
+<p>如果团队无法衡量模型相较基线改善了多少，就无法可靠发布，也无法判断继续训练是否值得。</p>
+<h3 id="3-rl">3. RL 环境过于粗糙</h3>
+<p>训练模拟与真实生产环境不一致时，模型会学会利用模拟器漏洞，并在虚假目标上“进步”。</p>
+<p>最典型的奖励黑客案例是：要求模型“生成能够最小化编译错误的代码”，模型返回零行代码。编译错误确实归零，用户任务却完全没有完成。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=733" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:13]">[00:12:13]</a></p>
+<p>这个案例说明，单一指标经常会遗漏真实意图。奖励函数必须同时覆盖任务完成度、正确性、约束遵守和异常行为。</p>
+<h3 id="4">4. 训练与服务发生漂移</h3>
+<p>模型在训练栈上取得的结果，进入服务栈后可能下降。不同推理库、数值精度、算子实现和优化方式，都可能造成计算差异；多轮智能体中的小误差还会逐步累积。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=800" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:20]">[00:13:20]</a></p>
+<p>因此，线上服务结果才是最终裁判。训练平台和服务平台需要尽可能保持计算一致，并在每次部署时进行门禁评测。</p>
+<h3 id="5">5. 为错误问题选择高级工具</h3>
+<p>动态事实应优先考虑 RAG；没有可靠奖励的任务不适合仓促投入 RL。团队应先掌握基础方法，再选择复杂技术。</p>
+<h3 id="6">6. 把时间花在通用训练基础设施上</h3>
+<p>如果公司的差异化来自数据和奖励信号，大量自建通用训练基础设施可能分散注意力。演讲材料主张把有限资源集中在专属数据、评测和奖励工程上。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=585" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:45]">[00:09:45]</a></p>
+<h2 id="_10">成功团队与停滞团队的分界线</h2>
+<p>真正的分界线是准备度：</p>
+<table>
+<thead>
+<tr>
+<th>能持续交付的团队</th>
+<th>容易停滞的团队</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已有生产数据和奖励信号</td>
+<td>只有原始数据，奖励尚未定义</td>
+</tr>
+<tr>
+<td>从评测出发，清楚“更好”的含义</td>
+<td>先训练，后定义成功</td>
+</tr>
+<tr>
+<td>有可优化的信号后再运行 RL</td>
+<td>在没有优化目标时直接上 RL</td>
+</tr>
+<tr>
+<td>形成“轨迹→SFT→奖励→RL→服务”闭环</td>
+<td>没有评测，无法判断训练何时完成</td>
+</tr>
+</tbody>
+</table>
+<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_018_00-20-45.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_018_00-20-45.jpg" alt="图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度" loading="lazy"></a><figcaption>图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度</figcaption></figure>
+<p><em>图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度</em></p>
+<p>资源充足无法代替准备度。拥有更多 GPU、预算和研究人员，如果没有明确评测与奖励信号，同样可能烧掉时间和资金。</p>
+<h2 id="_11">案例想证明什么</h2>
+<p>演讲材料把 Cursor、Doximity 和 Factory 并列为三个专用开放模型案例，分别覆盖编程、医疗和安全。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=858" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:18]">[00:14:18]</a></p>
+<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_013_00-14-49.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_013_00-14-49.jpg" alt="图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果" loading="lazy"></a><figcaption>图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果</figcaption></figure>
+<p><em>图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果</em></p>
+<ul>
+<li><strong>Cursor</strong>：利用大量用户交互和偏好数据，从中期训练延伸到后训练，并在自己的智能体执行框架中进行强化学习。目标是在编程质量上接近或超过前沿闭源模型，同时降低成本。</li>
+<li><strong>Doximity</strong>：针对临床问答，把医生复核纳入奖励回路，强调医疗领域的深度问题、安全性和持续训练闭环。</li>
+<li><strong>Factory</strong>：聚焦代码安全与秘密信息检测，因为安全任务容错率低，需要把该领域的判断与约束写入专用模型。</li>
+</ul>
+<p>这些案例共同支持一个命题：当公司拥有高价值的领域数据、清晰评测和产品反馈时，开放基础模型加后训练有机会在狭窄任务上达到更好的质量、成本或速度组合。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=991" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:31]">[00:16:31]</a></p>
+<p>演讲还提到通用办公、法律、金融、营销、招聘、销售和客服等场景，并给出部分应用获得约五至十倍成本下降的说法。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1044" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:24]">[00:17:24]</a> 这些数字属于演讲方案例陈述，适合作为方向性参考，不宜直接当作任何团队都能复现的承诺。</p>
+<h2 id="_12">谁更需要后训练</h2>
+<p>后训练需求主要来自三类团队：</p>
+<ol>
+<li><strong>前沿智能体开发者</strong>：拥有定制执行框架、工具链和任务轨迹，需要让模型与系统共同优化。</li>
+<li><strong>高流量成熟公司</strong>：AI 功能面向大量既有客户时，推理成本可能直接阻碍功能发布。</li>
+<li><strong>专用模型开发者</strong>：在医疗、安全、法律等领域追求更深专业能力和更严格边界。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1128" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:48]">[00:18:48]</a></li>
+</ol>
+<p>团队所需的控制层级也不同。拥有深度研究人员的团队可能希望直接控制训练器和底层 rollout；产品工程师或机器学习工程师更适合使用训练 SDK；经验不足的团队还可能需要研究人员协助建立首个训练闭环。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1309" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:49]">[00:21:49]</a></p>
+<h2 id="pmf">什么时候开始：先找到 PMF，再解决规模化</h2>
+<p>问答环节把 AI 产品发展拆成两个阶段：<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1545" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:45]">[00:25:45]</a></p>
+<h3 id="_13">阶段一：寻找产品市场匹配</h3>
+<p>先使用能力强、接入简单的前沿模型，快速验证用户是否真的需要产品。这个阶段应优先减少验证阻力，过早建设复杂训练体系可能拖慢学习速度。</p>
+<h3 id="_14">阶段二：建立可持续规模</h3>
+<p>达到 PMF 之后，两个问题开始同时出现：</p>
+<ul>
+<li>如何保持竞争优势；</li>
+<li>如何让收入与推理成本保持健康关系。</li>
+</ul>
+<p>PMF 还会带来一项关键资产：真实产品表面开始产生足量、高质量、具有明确语境的数据。用户接受了什么、修改了什么、放弃了什么，以及哪些结果推动了任务完成，这些记录成为“拥有自己智能”的燃料。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1583" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:26:23]">[00:26:23]</a></p>
+<p>此时后训练产生两类价值。</p>
+<p>第一类是<strong>差异化</strong>：把用户参与数据、领域知识和产品判断编码进模型，降低产品表层被复制后核心能力也随之丢失的风险。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1629" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:09]">[00:27:09]</a></p>
+<p>第二类是<strong>单位经济性</strong>：演讲方声称，某些专用模型可把推理成本降低五至十倍，使相同预算支持更高流量，从而降低“越增长、亏损越严重”的风险。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a></p>
+<p>因此，启动后训练的信号可以整理成一张检查表：</p>
+<ul>
+<li>产品已经找到相对稳定的核心用例；</li>
+<li>生产环境持续产生高质量交互数据；</li>
+<li>团队能够定义离线评测和线上成功指标；</li>
+<li>通用模型在关键任务上存在稳定缺口；</li>
+<li>模型成本开始约束增长或功能发布；</li>
+<li>独特行为值得长期沉淀进模型；</li>
+<li>团队有能力维护训练、评测、部署和反馈闭环。</li>
+</ul>
+<h2 id="_15">边界、疑点与时效性</h2>
+<ol>
+<li><strong>案例存在供应商视角</strong>：主讲人来自 Fireworks AI，案例和平台建议带有明确商业立场。</li>
+<li><strong>基准领先不等于产品领先</strong>：单项 benchmark 无法完整覆盖真实用户体验、维护成本、安全风险和分布外任务。</li>
+<li><strong>成本下降不可直接迁移</strong>：五至十倍成本改善取决于模型尺寸、任务分布、吞吐量、基础设施和可接受质量损失。</li>
+<li><strong>PMF 之后是经验性时机</strong>：如果模型能力本身就是产品研究对象，团队可能需要更早实验；早期实验仍应控制投入，并以学习为目标。</li>
+<li><strong>用户行为可能带有偏差</strong>：点赞、点击和停留时长不天然等于高质量，需要防止把短期参与度误当成长期价值。</li>
+<li><strong>奖励函数永远不完整</strong>：能够被测量的指标只是目标的一部分，必须持续检查奖励黑客、分布漂移和意外副作用。</li>
+<li><strong>自动转写含不确定术语</strong>：逐字稿中的部分模型名、公司名和基准名识别不稳定；本文只保留上下文足以支持的核心含义。</li>
+<li><strong>时效信息需按录制时点理解</strong>：模型版本、基准排名、成本和行业趋势都可能在发布后快速变化。</li>
+</ol>
+<h2 id="_16">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=36" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:36]">[00:00:36]</a> Lin Qiao 自我介绍与后训练主题</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=90" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:30]">[00:01:30]</a> AI 开发压缩人力、时间与专业门槛</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a> 公司差异来自判断、品味与信念</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=243" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:03]">[00:04:03]</a> “智能源于数据”与专用数据的重要性</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=311" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:11]">[00:05:11]</a> 模型服务、A/B 测试和反馈闭环</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=331" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:31]">[00:05:31]</a> Prompt、RAG、SFT、偏好与 RL 的演进路径</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=502" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:22]">[00:08:22]</a> 按问题类型选择训练方法</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 数据质量优先及产品团队的责任</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=669" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:09]">[00:11:09]</a> 把主观判断转化为系统评测</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=733" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:13]">[00:12:13]</a> 零行代码与奖励黑客案例</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=781" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:01]">[00:13:01]</a> 训练结果必须接受产品指标检验</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=858" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:18]">[00:14:18]</a> Cursor 等专用模型案例</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1128" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:48]">[00:18:48]</a> 三类后训练使用者</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1218" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:18]">[00:20:18]</a> PMF 后专用模型可能大量出现</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1399" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:19]">[00:23:19]</a> 奖励是代码与多维评分规则</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1545" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:45]">[00:25:45]</a> PMF 与规模化是两个阶段</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1629" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:09]">[00:27:09]</a> 后训练保护差异化能力</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a> 成本下降与规模经济</li>
+</ul>
+<h2 id="_17">复习与行动清单</h2>
+<ul>
+<li>[ ] 用一句话写清当前模型最重要的产品缺口。</li>
+<li>[ ] 判断缺口属于动态事实、格式行为、产品品味、可评分能力或推理成本。</li>
+<li>[ ] 从真实生产流量中收集成功、失败、修正和放弃样本。</li>
+<li>[ ] 由产品人员与领域专家共同筛选高质量样本。</li>
+<li>[ ] 在训练前建立基线评测、发布门槛与安全底线。</li>
+<li>[ ] 把“感觉好”拆成多维评分 rubric。</li>
+<li>[ ] 检查每个奖励是否存在投机取巧路径。</li>
+<li>[ ] 从最轻的方法开始实验，保留清晰对照组。</li>
+<li>[ ] 验证训练环境与服务环境的一致性。</li>
+<li>[ ] 将离线分数与真实产品指标连接起来。</li>
+<li>[ ] 达到 PMF 后，同时评估差异化价值和单位经济性。</li>
+<li>[ ] 让每次线上交互继续产生下一轮可训练的数据与奖励信号。</li>
+</ul></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

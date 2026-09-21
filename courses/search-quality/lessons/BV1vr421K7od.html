@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>找到、答对、帮上忙：RAG 的三道关 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#rag">找到、答对、帮上忙：RAG 的三道关</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">一个“水龙头漏水”的问题，为什么能难住检索</a></li>
+<li><a href="#_3">把整个流程想成一条证据流水线</a></li>
+<li><a href="#_4">引用存在，也要检查它到底支持了哪一句</a></li>
+<li><a href="#_5">客服案例：用户通常还需要下一步</a></li>
+<li><a href="#rag_1">多模态 RAG：图也需要能被追溯</a></li>
+<li><a href="#_6">迁移练习：给同一个回答分三次分</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1vr421K7od" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1vr421K7od"><div class="provenance">来源：Google中国 · <a href="https://www.bilibili.com/video/BV1vr421K7od/" target="_blank" rel="noopener">BV1vr421K7od 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="rag">找到、答对、帮上忙：RAG 的三道关</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1vr421K7od/">Google 中国 · 基于 Gemini 和向量搜索的生成式推荐</a> · 33 分钟 · 自动转写。本文提炼流程与案例，具体云服务规格按录制时期理解。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>检索找得到证据，回答忠实于证据，用户据此能行动——这三件事要分别检查。</p>
+<h2 id="_2">一个“水龙头漏水”的问题，为什么能难住检索</h2>
+<p>我问“怎样修好漏水的水龙头”，系统找回三段文字：一段抱怨漏水，一段讨论浪费水，另一段讲更换零件的步骤。前三段都和漏水有关，只有第三段直接支持修理任务。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=935" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:15:35]">[00:15:35]</a></p>
+<p>这说明“主题相近”和“能回答问题”存在差距。向量召回先广泛找候选，重排序再比较候选是否满足当前问题。重排序只能处理已找回的内容，正确资料压根没进候选集时，还要回到召回环节排查。</p>
+<figure><a href="../assets/frames/BV1vr421K7od-00986.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1vr421K7od-00986.jpg" alt="同一个“水龙头漏水”问题，谈维修步骤的段落比抱怨漏水或讨论浪费更贴合任务；图中两组分数只是该演示中的相对比较。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=986&amp;p=1" target="_blank" rel="noopener">[00:16:26]</a> 同一个“水龙头漏水”问题，谈维修步骤的段落比抱怨漏水或讨论浪费更贴合任务；图中两组分数只是该演示中的相对比较。</figcaption></figure>
+<h2 id="_3">把整个流程想成一条证据流水线</h2>
+<p>文档进入系统后，先经过解析与切块，再转成可搜索的表示。用户提问时，检索取回候选，排序挑选证据，模型据此组织答案，最后检查答案中的断言是否有依据。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=212" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:32]">[00:03:32]</a></p>
+<p>视频里的 PDF 例子很实用：标题要与对应段落保持关系，表格要保留行列含义。只按字符数截断，可能把“适用对象”和“收费金额”分到两个互不相连的片段里。后续搜索再准，也会遇到证据残缺的问题。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=852" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:12]">[00:14:12]</a></p>
+<p>关键词检索与语义检索可以一起使用。前者照顾明确术语，后者照顾不同表达。近似最近邻搜索解决的是大规模搜索的效率问题；采用更快的索引，不会自动解决文档本身不相关的问题。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=485" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:05]">[00:08:05]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=689" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:29]">[00:11:29]</a></p>
+<h2 id="_4">引用存在，也要检查它到底支持了哪一句</h2>
+<p>视频用电影介绍演示 grounding 检查：导演和剧情可能有来源，票房或奖项却没有对应证据。一段回答只要混入两句无依据的结论，就不能因为附带几个链接而整体判定可靠。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1247" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:47]">[00:20:47]</a></p>
+<p>检查时可逐条列出：答案的断言、对应证据、是否支持、是否冲突。这里的“支持”仅说明答案与所提供资料一致；资料本身可能过期或有误，还需要来源质量和时效检查。</p>
+<p>录制演示中的分数用于该服务和该例子，不能直接解释为“整段回答真实的概率”。不同系统对分数的定义可能不同。</p>
+<h2 id="_5">客服案例：用户通常还需要下一步</h2>
+<p>视频展示了司机帮助场景：用户问背景调查为什么迟迟没有结果。一个可用回答需要说明通常耗时、可能的延迟原因，以及超过条件后可以采取的行动。只解释背景调查概念，用户仍不知道接下来怎么办。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1336" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:16]">[00:22:16]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1645" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:25]">[00:27:25]</a></p>
+<p>这个案例把质量拆成三层：</p>
+<table>
+<thead>
+<tr>
+<th>检查对象</th>
+<th>要问的问题</th>
+<th>常见失败</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>找回的文档</td>
+<td>正确帮助材料进来了吗？</td>
+<td>错产品、错地区、旧版本</td>
+</tr>
+<tr>
+<td>生成的回答</td>
+<td>每个关键断言与材料一致吗？</td>
+<td>混淆条件、补造流程、漏掉限制</td>
+</tr>
+<tr>
+<td>用户的任务</td>
+<td>回答完整且可执行吗？</td>
+<td>解释很多，却没有下一步</td>
+</tr>
+</tbody>
+</table>
+<p>还要检查权限：知识库存在的内容，不一定都能给当前用户看。权限过滤应贯穿检索与使用过程，不能让模型凭感觉决定哪些信息可以披露。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1540" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:40]">[00:25:40]</a></p>
+<h2 id="rag_1">多模态 RAG：图也需要能被追溯</h2>
+<p>最后一部分讨论怎样回答关于 TPU 扩展效率的问题。单靠论文正文可能说不清，相关曲线图能直接展示趋势。流程可以提取原图，为图生成描述，再让描述参与检索；回答时带回对应的原图。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:40]">[00:28:40]</a></p>
+<p>图片描述与原图必须绑定，否则系统可能检索到正确解释，却展示错图。描述中还可能出现识别错误，因此应保留原图、页码和来源，方便核查。</p>
+<h2 id="_6">迁移练习：给同一个回答分三次分</h2>
+<p>自拟一个售后问题，准备两段政策材料和一个候选回答。先只评价检索是否充分，再评价回答是否有依据，最后评价用户是否知道下一步。不要用一个笼统的“准确率”把三层混在一起。</p>
+<p>补充判断：视频标题强调生成式推荐，主体更集中在 RAG 组件、客服及多模态检索。这里按实际内容组织，未把它扩写成一套完整推荐系统课程。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

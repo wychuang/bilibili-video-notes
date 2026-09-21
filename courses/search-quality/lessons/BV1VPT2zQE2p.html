@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>工具调用要测两次：选对了吗，执行对了吗？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">工具调用要测两次：选对了吗，执行对了吗？</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">时间戳导航</a></li>
+<li><a href="#_4">少一点模糊职责</a></li>
+<li><a href="#_5">参数错了，怎样修复？</a></li>
+<li><a href="#_6">把监测变成证据</a></li>
+<li><a href="#_7">下一步</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1VPT2zQE2p" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1VPT2zQE2p"><div class="provenance">来源：费曼学徒冬瓜 · <a href="https://www.bilibili.com/video/BV1VPT2zQE2p/" target="_blank" rel="noopener">BV1VPT2zQE2p 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">工具调用要测两次：选对了吗，执行对了吗？</h1>
+<blockquote>
+<p>原视频：从 4 个方面，速通 15 个 Agent 工具调用技巧 · 费曼学徒冬瓜 · 约 7 分钟。证据：本地 GPU 自动转写，部分同音词按上下文校正。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p>降低工具接口的歧义，并记录选择、参数和执行结果，才能让 Agent 的行动可检查、可改进。</p>
+<h2 id="_3">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> 工具选择与调用指令是两个关键点。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=64" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:04]">[00:01:04]</a> 规划出行和实际订票具有不同职责。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=81" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:21]">[00:01:21]</a> 让程序提供已知参数，减少模型猜测。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=123" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:03]">[00:02:03]</a> 后端验证、错误分类和有限重试。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=159" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:39]">[00:02:39]</a> 写清工具说明、输入输出与适用条件。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a> 用调用示例减少歧义。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=365" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:05]">[00:06:05]</a> 上线前测试，运行后保留日志。</li>
+</ul>
+<h2 id="_4">少一点模糊职责</h2>
+<p>查天气与订酒店放在同一个含糊的大工具里，模型需要同时判断任务和隐藏分支。把职责、参数和返回值写清楚，更容易知道一次调用究竟承诺完成什么。</p>
+<p>已经可靠掌握的会话标识、授权范围等信息，应由程序提供，避免模型从自然语言里猜。需要用户补充的条件则应显式询问，不能为了调用成功擅自填写。</p>
+<p>原视频建议控制工具数量，也给出若干经验数字。数量没有脱离任务的统一上限；关键是相关工具能否被找到、描述是否重叠，以及错误和延迟是否随规模恶化。</p>
+<h2 id="_5">参数错了，怎样修复？</h2>
+<p>结构化输出只解决“程序能否解析”。一个完全合法的 JSON，仍可能填错日期、账户或金额。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=123" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:03]">[00:02:03]</a> 后端应检查类型、必填项和允许范围，并把可理解的错误反馈给模型。补充安全边界：有副作用的操作，还要检查权限和用户授权。重新尝试付款等操作前，需要避免重复执行。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a> 成功的历史调用可以成为示例，但必须去除个人信息，并挑选与当前任务真正相近的案例。失败样本也有价值，它能告诉我哪种表达容易把模型带到错误工具。</p>
+<h2 id="_6">把监测变成证据</h2>
+<figure><a href="../assets/frames/BV1VPT2zQE2p-00379.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1VPT2zQE2p-00379.jpg" alt="原课件左侧列出接口与调用检查项，最后收束到上线后的日志监测；这里需要保留可观察行为，才能判断改动效果。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1VPT2zQE2p/?t=379&amp;p=1" target="_blank" rel="noopener">[00:06:19]</a> 原课件左侧列出接口与调用检查项，最后收束到上线后的日志监测；这里需要保留可观察行为，才能判断改动效果。</figcaption></figure>
+<p>至少保留：用户任务、候选工具、实际选择、参数验证结果、执行状态，以及最终交付是否满足要求。敏感参数应脱敏，日志本身也要受权限保护。</p>
+<p>一个低频工具可能承担重要的回退或安全功能，不能仅凭调用少就删除。一个经常被选中的工具，也可能正在抢走其他工具本应处理的任务。</p>
+<h2 id="_7">下一步</h2>
+<p>迁移练习：给“查找图书”工具写一句用途、三个参数和两个失败示例，再让另一位读者只看说明判断何时该调用它。</p>
+<p>检查原视频建议时，也保留隐私意识：对当前任务无关的个人属性，不应为了“也许有用”全部塞入上下文。简化接口需要同时减少信息外泄。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

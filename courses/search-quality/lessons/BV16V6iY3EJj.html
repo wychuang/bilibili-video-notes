@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>Agent 要动手：先选接口，再设计失手之后怎么办 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">Agent 要动手：先选接口，再设计失手之后怎么办</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">一次“调用工具”，到底是谁在执行？</a></li>
+<li><a href="#_3">能拿到结构化信息，就别只猜屏幕</a></li>
+<li><a href="#_4">真正拉开体验差距的，是出错之后</a></li>
+<li><a href="#_5">迁移练习：给一个动作写验收标准</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV16V6iY3EJj" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV16V6iY3EJj"><div class="provenance">来源：左右横眺 · <a href="https://www.bilibili.com/video/BV16V6iY3EJj/" target="_blank" rel="noopener">BV16V6iY3EJj 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 要动手：先选接口，再设计失手之后怎么办</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV16V6iY3EJj/">左右横眺｜关于 Agent、GUI 与 API 的产品讨论</a>；全片约 19 分钟。产品演示与预测具有录制时间背景，本文保留能迁移的分析方法。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>Agent 完成任务，需要把模型的意图变成受约束、可观察、可恢复的操作；会点击按钮只是其中一环。</p>
+<h2 id="_2">一次“调用工具”，到底是谁在执行？</h2>
+<p>我说“查一下订单”。模型可以生成一个结构化请求：调用查单函数，参数是某个订单号。真正读取数据库、检查权限、返回结果的是宿主程序。模型提出动作，运行程序执行动作，二者需要分开理解。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=105" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:45]">[00:01:45]</a></p>
+<p>另一条路线是操作界面：观察截图或页面结构，再点击、输入、滚动。它接近人使用电脑的过程，能够接触很多没有专用接口的任务。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a></p>
+<p>这两条路线各有成本。结构化接口通常更容易验证参数和结果，但覆盖范围由接口决定；界面操作能利用现有软件，却容易受到弹窗、布局变化和识别错误影响。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=400" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:40]">[00:06:40]</a> <a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=620" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:20]">[00:10:20]</a></p>
+<h2 id="_3">能拿到结构化信息，就别只猜屏幕</h2>
+<p>视频提到一种务实方向：把 API、页面结构与视觉观察结合起来。界面元素能提供明确的文字或标识时，可以利用这些信息；确实依赖画面的任务，再观察图像。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=570" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:30]">[00:09:30]</a> <a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:20]">[00:11:20]</a></p>
+<p>例如查找报表，可以通过稳定接口获取列表，再让用户在界面里确认下载对象。无需为了显得“像人在操作”，把一个可靠调用拆成十几次鼠标点击。</p>
+<p>操作方式也不改变权限边界。GUI 只能在用户已有、明确授予的访问范围内行动；登录、验证码、支付确认与平台限制依然需要被尊重。这里是对执行边界的补充说明。</p>
+<h2 id="_4">真正拉开体验差距的，是出错之后</h2>
+<p>视频借用 RPA 的经验提醒：自动化要考虑日志、可靠性、隐私以及异常处理。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=735" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:15]">[00:12:15]</a></p>
+<p>把这句话落成三个测试就很具体：</p>
+<table>
+<thead>
+<tr>
+<th>测试情境</th>
+<th>我需要看见的行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查订单接口返回 404</td>
+<td>解释未找到，核对对象，不编造订单状态</td>
+</tr>
+<tr>
+<td>点击前出现了新弹窗</td>
+<td>重新观察页面，不沿用失效坐标继续点</td>
+</tr>
+<tr>
+<td>提交后网络中断</td>
+<td>先查是否已经成功，避免重复下单或发送</td>
+</tr>
+</tbody>
+</table>
+<p>以上是迁移测试，视频没有提供这三项的实测数据。它们帮助我把“Agent 不稳定”拆成可以复现的问题。</p>
+<p>对会发消息、改文件、花钱的动作，还应有适当确认、最小权限和可追溯记录。失败后能否恢复原状，需要按具体工具设计，不能仅靠一句提示词保证。</p>
+<h2 id="_5">迁移练习：给一个动作写验收标准</h2>
+<p>挑选一个低风险任务，例如“从公开网页找出三篇相关文章，存成草稿”。写出允许访问的范围、完成产物、失败信号和停止条件。</p>
+<p>验收时统计任务是否完成、引用是否正确、是否越权、是否出现重复操作。点击次数和思考长度只作为过程信息，不能直接充当完成质量。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

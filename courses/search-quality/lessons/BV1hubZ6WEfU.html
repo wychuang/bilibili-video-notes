@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证” · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证”</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">从业务链路开始，技术词才有位置</a></li>
+<li><a href="#_3">连续追问一：为什么这样切文档、选数据库？</a></li>
+<li><a href="#agent_1">连续追问二：为什么需要多个 Agent？</a></li>
+<li><a href="#_4">连续追问三：模型拿不准时，系统怎么办？</a></li>
+<li><a href="#_5">最值得练的一问：坏例子消失，怎样知道是谁修好的？</a></li>
+<li><a href="#ai">允许使用 AI，也要能负责决策</a></li>
+<li><a href="#_6">迁移练习：准备一张能承受追问的案例卡</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1hubZ6WEfU" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1hubZ6WEfU"><div class="provenance">来源：假如今天可以躺平 · <a href="https://www.bilibili.com/video/BV1hubZ6WEfU/" target="_blank" rel="noopener">BV1hubZ6WEfU 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证”</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1hubZ6WEfU/">假如今天可以躺平｜我的 AI Agent 面试复盘</a>；全片约 36 分钟。主要涉及研发与 AI 应用工程面试，为讲述者个人回忆和事后思考，不能视作任何公司的统一题库或当前招聘标准。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>一个项目能被追问下去，靠的是具体约束、选型理由、失败处理和效果证据，而不只是一串框架名。</p>
+<h2 id="_2">从业务链路开始，技术词才有位置</h2>
+<p>视频的一道场景题是分析客户端性能变化：先取得不同阶段的指标，发现退化位置，再逐层检查，最后输出解释和报告。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=242" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:02]">[00:04:02]</a></p>
+<p>讲述者复盘后将确定的数据查询与聚合，和模型帮助选择路径、组织解释的部分分开。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=361" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:01]">[00:06:01]</a> 对搜索评测，这个区分同样重要：哪些是确定事实，哪些是判断，哪些只是待验证的原因假设？</p>
+<p>如果数值计算错误，先检查查询、口径与程序；如果解释跳跃，再检查证据选择与推断。全部归结为“模型不够聪明”，会错过可修复的环节。</p>
+<h2 id="_3">连续追问一：为什么这样切文档、选数据库？</h2>
+<p>车辆技术手册有车型、故障码、现象和处理步骤。机械按固定长度切开，可能把现象与办法分到两块。视频因此讨论先按结构拆分，过长部分再切，并保留必要元信息。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=602" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:02]">[00:10:02]</a></p>
+<p>数据库选型也回到规模与约束：原型里的少量手册、低并发，与多租户、持续更新、高可用需求，不必使用同一套方案。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
+<p>可复用的回答顺序是：当前任务是什么，有哪些约束，比较过什么，为什么先选这一项，以及什么变化会让我换方案。</p>
+<h2 id="agent_1">连续追问二：为什么需要多个 Agent？</h2>
+<p>固定流程和动态决策可以组合：关键业务节点明确控制，局部检索或工具选择保留灵活性。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=482" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:02]">[00:08:02]</a></p>
+<p>拆成多个角色时，需要交代独立职责、上下文、工具权限和协调成本。仅仅把三个顺序步骤分别命名为 Agent，不能证明复杂度有价值。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=965" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:05]">[00:16:05]</a></p>
+<p>后续还会问状态里存什么、谁更新、失败后从哪里恢复，以及重复消息是否造成重复副作用。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=842" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:02]">[00:14:02]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a> 这些内容让流程图中的箭头有了实际含义。</p>
+<h2 id="_4">连续追问三：模型拿不准时，系统怎么办？</h2>
+<p>Text-to-SQL 的例子很直接：“卖得最好”指销量、销售额还是利润？如果业务口径不明确，贸然生成一段 SQL 可能得到精确但答非所问的数字。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1140" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:00]">[00:19:00]</a></p>
+<p>对应需要澄清、字段说明、表关系、权限与结果校验。视频另讨论脚本沙箱、读写区分、高风险动作确认和超时停止。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1448" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:08]">[00:24:08]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1561" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:26:01]">[00:26:01]</a></p>
+<p>这些是设计检查方向，不是仅靠提示词就能得到的保证。对质量分析，可以把每次失败明确落在“理解、取数、执行、解释或交付”的位置，再保留对应证据。</p>
+<h2 id="_5">最值得练的一问：坏例子消失，怎样知道是谁修好的？</h2>
+<p>视频后段提出一个很接近评测工作的难题：更新 Skill 后，原有坏例子不再出现，能否说明更新有效？也可能流量变了、上游系统改了，或监控没再捕捉到。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1681" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:01]">[00:28:01]</a></p>
+<p>讲述者的复盘方向包括保留对照流量、维护历史回归集、检查调用与命中记录。这里还需加一条边界：日志时间上吻合只提供线索，不能单独证明因果。</p>
+<p>一份更容易检查的记录可以包含：旧版与新版、同一输入、实际命中的规则、可观察行为差异、评分依据，以及是否引入新失败。它帮助区分“方案整体变好”与“某条规则确实贡献了改进”。</p>
+<h2 id="ai">允许使用 AI，也要能负责决策</h2>
+<p>一次现场 AI 编程考核，要求完成订单状态机。复盘重点是先理解需求、拆模块、验证边界，再解释取舍。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1200" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:00]">[00:20:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1320" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:00]">[00:22:00]</a></p>
+<p>同样，模型显示的推理文字可以提供思路，但不能作为内部机制的忠实证据。复核时更应看输入输出、工具结果、代码、测试和可重复行为。</p>
+<p>没在生产环境做过的部分，可以明确说“尚未做过，下面是我的设计设想”，再说明如何验证。视频结尾也强调避免把没有的经历硬塞进项目。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=2041" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:34:01]">[00:34:01]</a></p>
+<h2 id="_6">迁移练习：准备一张能承受追问的案例卡</h2>
+<p>选一个真实做过的回答质量问题，用六栏整理：用户任务、失败证据、可能原因、实际改动、对照结果、剩余限制。</p>
+<p>再给自己连续问三次“为什么”。答不上来的地方标成待补，不必编造数值。最终这张卡既能指导下一轮实验，也能支持诚实、具体的项目表达。</p></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

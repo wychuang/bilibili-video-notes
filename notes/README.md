@@ -4,6 +4,8 @@
 
 公开目录只包含 Markdown 阅读副本与正文截图。原视频、完整逐字稿、候选帧、Cookie、分享追踪参数和本机路径没有上传。
 
+围绕搜索、评测与 Agent 学习，可直接打开 [专题课程](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/)。课程复用这里的 9 篇文章，并新增 42 篇；本目录的原有 21 篇保持独立。
+
 ## AI、Agent 与技术实践
 
 - [build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治](<AI技术投降派/build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的_幻觉式掌握_怎么治__BV12suS6rEA8/标准总结.md>) · AI技术投降派 · 标准

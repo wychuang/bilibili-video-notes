@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#2vibecodingbai">2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">推理主干</a></li>
+<li><a href="#prd">先把模糊目标变成可删改的 PRD</a></li>
+<li><a href="#_3">人的工作：做减法，决定“我到底要什么”</a></li>
+<li><a href="#_4">再补一层：让界面和交互变成明确规则</a></li>
+<li><a href="#_5">生成应用时，把“可用”写成验收条件</a></li>
+<li><a href="#_6">用一次真实操作验证生成结果</a></li>
+<li><a href="#_7">编码问题要与生成质量分开排查</a></li>
+<li><a href="#_8">边界、疑点与时效性</a></li>
+<li><a href="#_9">时间戳导航</a></li>
+<li><a href="#_10">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Qfg56sEfb" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>补充 · 既有学习稿</span></div><article data-lesson="BV1Qfg56sEfb"><h1 id="2vibecodingbai">2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】</h1>
+<blockquote>
+<p>上传者：英雄哪里出来<br>
+时长：03:04<br>
+链接：https://www.bilibili.com/video/BV1Qfg56sEfb/<br>
+BV号：BV1Qfg56sEfb<br>
+总结强度：standard<br>
+证据：本地逐字稿、字幕审计、8 张带时间码的候选画面。字幕整体可用，个别同音识别已按语境谨慎校正，如“点击”“增删改查”。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>我可以把 VibeCoding 从“直接让 AI 写一个项目”改成一条可控流程：先让 AI 扩写 PRD，再由我删减范围、补足视觉与交互规则，最后带着明确的真实数据、增删改查和存储要求生成可操作应用。</p>
+<h2 id="_2">推理主干</h2>
+<ol>
+<li>并行项目一多，项目管理工具的成本与功能缺口会放大。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:03]">[00:00:03]</a></li>
+<li>模糊想法先交给 AI 组织成 PRD，减少从零写需求的负担。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a></li>
+<li>AI 扩写后的内容必须由人做减法，因为取舍带有主观目标。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a></li>
+<li>功能需求无法自然推出理想界面，视觉风格和交互规则需要单列、写细。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a></li>
+<li>生成应用时要把数据真实性、完整操作、交互有效性、存储方式写成验收条件。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></li>
+<li>最后通过实际新增任务和列表呈现检查结果，再继续迭代。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a></li>
+</ol>
+<h2 id="prd">先把模糊目标变成可删改的 PRD</h2>
+<p>我不必一开始就给出完整需求。先说明大致要做什么，再在“办公任务”中选择本地电脑与文档能力，让 AI 产出项目管理系统的 PRD。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a> 这一步的价值在于，它会按关键词拆解需求、搭建文档结构，并逐模块填充内容。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a></p>
+<p>画面中可见 AI 的执行过程：它读取工作流文件后，创建飞书文档、获得文档 block ID，再按章节逐步填充；这让“生成 PRD”落在可检查的文档操作上。</p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_002_00-00-34.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_002_00-00-34.jpg" alt="图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。" loading="lazy"></a><figcaption>图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。</figcaption></figure>
+<p><em>图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。</em></p>
+<p>生成出的 PRD 往往很全，项目管理功能可覆盖仪表盘、甘特图、计划管理、需求管理、缺陷管理，以及数据汇总、延期提醒、模板复用、权限管理等。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a> 这些内容可以作为候选范围，不能自动视为最终范围。</p>
+<h2 id="_3">人的工作：做减法，决定“我到底要什么”</h2>
+<p>需求精简是流程中不可省略的一段。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=47" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:47]">[00:00:47]</a> AI 无法替我判断某个模块是否值得做：角色体系、权限或安全设计对团队产品可能重要，对个人自用工具却可能只是负担。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a></p>
+<p>我可以直接从 PRD 的大标题和模块结构入手，把不需要的章节删除。这样更容易保持产品边界清楚，也能让后面的应用生成少走偏路。</p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_003_00-00-57.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_003_00-00-57.jpg" alt="图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。" loading="lazy"></a><figcaption>图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。</figcaption></figure>
+<p><em>图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。</em></p>
+<p>这里的关键判断是：PRD 的完整度不等于项目的合适度。功能数量越多，后续生成、验证与维护的成本也越高；我应保留真正服务于当前使用场景的部分。</p>
+<h2 id="_4">再补一层：让界面和交互变成明确规则</h2>
+<p>功能性需求只回答“系统做什么”，并未充分回答“它长什么样、怎么反馈、怎么动”。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a> 因此我需要追加视觉风格和交互动画要求，写得越具体，结果越接近目标。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=76" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:16]">[00:01:16]</a></p>
+<p>画面中的提示内容把这层要求拆成可执行条目：深色基底、暖色主光、玻璃拟态面板、火焰光带背景、环形进度图等视觉元素；交互上则约束悬浮、切换、性能、按钮与表单反馈等状态。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=127" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:07]">[00:02:07]</a></p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_004_00-01-20.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_004_00-01-20.jpg" alt="图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。" loading="lazy"></a><figcaption>图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。</figcaption></figure>
+<p><em>图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。</em></p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_006_00-02-07.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_006_00-02-07.jpg" alt="图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。" loading="lazy"></a><figcaption>图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。</figcaption></figure>
+<p><em>图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。</em></p>
+<p>如果这一层缺失，生成结果会更接近默认界面。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=83" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:23]">[00:01:23]</a> 我应把视觉语言、页面层级、动效状态、操作反馈和性能边界一起写进文档，再据此生成应用。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=94" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:34]">[00:01:34]</a></p>
+<h2 id="_5">生成应用时，把“可用”写成验收条件</h2>
+<p>进入“应用生成”能力后，需求不能只停留在页面清单。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=111" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:51]">[00:01:51]</a> 我至少要明确四类条件：</p>
+<ul>
+<li>不要用假数据，或明确哪些阶段允许使用演示数据。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=121" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:01]">[00:02:01]</a></li>
+<li>要真正实现增删改查，数据不能只停留在静态展示。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=123" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:03]">[00:02:03]</a></li>
+<li>每个可见交互都要有效，按钮、弹窗、表单与筛选都应有真实反馈。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=125" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:05]">[00:02:05]</a></li>
+<li>指定数据如何存储，避免界面完成后数据无法留存。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=127" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:07]">[00:02:07]</a></li>
+</ul>
+<p>这些条件让 AI 的工作方向更明确，也把“炫酷页面”推进到“可操作应用”。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=132" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:12]">[00:02:12]</a></p>
+<h2 id="_6">用一次真实操作验证生成结果</h2>
+<p>初始界面即使没有数据，也可以立刻用新增任务来验证：填写负责人、开始与截止时间、任务名称，再保存。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a> 当保存受阻时，界面显示“优先级”为必填项；补全后才能继续，这种校验直接证明表单存在业务约束。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=150" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:30]">[00:02:30]</a></p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_007_00-02-30.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_007_00-02-30.jpg" alt="图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。" loading="lazy"></a><figcaption>图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。</figcaption></figure>
+<p><em>图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。</em></p>
+<p>最终的列表界面呈现任务名称、负责人、优先级、进度、状态、截止时间以及编辑和删除入口。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=156" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:36]">[00:02:36]</a> 这能用来核对“任务管理”是否真正落地，而非只生成了一个静态首页。</p>
+<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_008_00-02-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_008_00-02-53.jpg" alt="图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。" loading="lazy"></a><figcaption>图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。</figcaption></figure>
+<p><em>图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。</em></p>
+<h2 id="_7">编码问题要与生成质量分开排查</h2>
+<p>中文乱码不必先归因于模型输出。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=161" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:41]">[00:02:41]</a> 本地文件编码也会造成显示异常；素材中给出的排查方向是检查 GBK 与 UTF-8，并尝试转换编码。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=166" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:46]">[00:02:46]</a> 实际项目仍应结合编辑器、终端、文件保存编码和运行环境逐项确认。</p>
+<h2 id="_8">边界、疑点与时效性</h2>
+<ul>
+<li>这是一段约三分钟的流程演示，证据展示了 PRD、提示要求、表单和任务列表，未提供完整代码、数据库实现或端到端测试记录。</li>
+<li>画面中的成品功能与样式只能证明该录屏时的界面状态；跨刷新持久化、异常处理、权限安全与多人协作效果仍需自行验证。</li>
+<li>字幕中“全程只用到豆包”属于录制者的工具与流程选择。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=12" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:12]">[00:00:12]</a> 同样的思路可迁移到其他具备文档和应用生成能力的工具，具体入口与能力会随版本变化。</li>
+<li>录屏中的日期、任务数据和视觉效果可视作演示样例，不应直接当作真实项目数据。</li>
+</ul>
+<h2 id="_9">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> 并行开发为什么需要项目管理系统</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=8" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:08]">[00:00:08]</a> 现有工具的收费与功能缺口</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a> 用模糊想法让 AI 生成 PRD</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=32" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:32]">[00:00:32]</a> AI 创建飞书文档、拆解并填充需求</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a> PRD 过多时需要需求精简</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=55" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:55]">[00:00:55]</a> 用大标题快速做需求删减</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a> 功能需求之外还要描述界面</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=76" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:16]">[00:01:16]</a> 补充视觉风格与交互动画</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=94" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:34]">[00:01:34]</a> 带着规则自动生成应用</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a> 应用生成的四项关键约束</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=132" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:12]">[00:02:12]</a> 文档越清楚，生成方向越明确</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a> 新增一条任务验证表单</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=150" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:30]">[00:02:30]</a> 优先级必填的校验反馈</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=156" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:36]">[00:02:36]</a> 添加效果与数据后的成品</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=161" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:41]">[00:02:41]</a> 中文乱码的本地编码排查</li>
+</ul>
+<h2 id="_10">复习与行动清单</h2>
+<ul>
+<li>[ ] 先用一句话写清项目目标、使用者和最小功能范围。</li>
+<li>[ ] 让 AI 把粗略描述扩写成 PRD，再逐章删除不需要的模块。</li>
+<li>[ ] 单独补充视觉、交互、状态反馈和性能规则。</li>
+<li>[ ] 在生成指令中写明真实数据、增删改查、有效交互与存储方式。</li>
+<li>[ ] 用一条真实新增数据完成冒烟验证：创建、保存、展示、编辑或删除。</li>
+<li>[ ] 若中文显示异常，先检查文件与运行环境的 GBK、UTF-8 编码设置。</li>
+</ul></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

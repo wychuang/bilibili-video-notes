@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>用一个最小客户端，看懂模型、工具与 RAG 怎样接起来 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#rag">用一个最小客户端，看懂模型、工具与 RAG 怎样接起来</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">最终任务很小，却包含完整链路</a></li>
+<li><a href="#_3">第一块：模型包装器保存什么</a></li>
+<li><a href="#_4">第二块：工具接口的字段必须对上</a></li>
+<li><a href="#agent">第三块：Agent 循环把二者连接起来</a></li>
+<li><a href="#rag_1">RAG 可以在进入循环之前完成</a></li>
+<li><a href="#_5">一个很容易忽略的成本</a></li>
+<li><a href="#_6">迁移练习：用五份自造资料跑通三次检查</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1dcRqYuECf" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1dcRqYuECf"><div class="provenance">来源：MiuMiu8802 · <a href="https://www.bilibili.com/video/BV1dcRqYuECf/" target="_blank" rel="noopener">BV1dcRqYuECf 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="rag">用一个最小客户端，看懂模型、工具与 RAG 怎样接起来</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1dcRqYuECf/">MiuMiu8802 · 无框架实现极简 Agent 客户端</a> · 75 分钟 · 实作路线导读。视频是教学原型，代码与接口按录制版本理解；不复制画面中的凭据或执行未经审核的安装命令。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>模型负责提出下一步，客户端负责工具循环，RAG 负责取回相关资料；三块可以分别测试，再组合。</p>
+<h2 id="_2">最终任务很小，却包含完整链路</h2>
+<p>演示先准备一组示例人物资料，再根据指定人物检索相关内容，让模型创作故事，并保存到文件。人物资料提供事实约束，故事属于明确要求的创作，文件工具负责实际落盘。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=210" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:30]">[00:03:30]</a></p>
+<p>验收也应分三次：找到的资料是否属于正确人物；故事与基本信息是否区分；文件是否确实保存且内容完整。一句“已完成”无法代替这三次检查。</p>
+<h2 id="_3">第一块：模型包装器保存什么</h2>
+<p>包装器组织模型名、系统要求、历史消息、工具定义和外部上下文，发送请求，再收集返回的文本与工具调用。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=540" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:00]">[00:09:00]</a></p>
+<p>流式返回时，文本和参数可能分成多个片段。客户端需要正确拼接，等结构完整后再解析，不能把半截 JSON 直接拿去执行。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=870" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:30]">[00:14:30]</a></p>
+<p>工具调用 ID 用来把请求与结果对应起来。执行完的结果要回到同一段历史，模型才能基于真实结果继续，而非凭想象描述工具输出。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=1285" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:25]">[00:21:25]</a></p>
+<h2 id="_4">第二块：工具接口的字段必须对上</h2>
+<p>客户端连接工具服务，取得工具列表，再转换成模型接口所需的描述。视频出现一个很典型的失败：模型调用了抓网页工具，参数却是空的。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=2690" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:44:50]">[00:44:50]</a></p>
+<p>定位后发现，MCP 工具的输入结构字段和模型请求的参数字段没有正确映射。修正后，模型才得到完整参数说明并生成有效调用。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=2722" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:45:22]">[00:45:22]</a></p>
+<p>这是非常值得保留的经验：看似“模型不会用工具”，可能只是接口适配丢了字段。调试时要检查实际请求，不能只看抽象类定义。</p>
+<h2 id="agent">第三块：Agent 循环把二者连接起来</h2>
+<p>主程序把提示交给模型；有工具调用时，按工具名找到对应服务，检查参数并执行；将结果追加到历史后，再次请求模型。没有新的工具调用时，返回最终文本。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=2140" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:35:40]">[00:35:40]</a></p>
+<p>视频用最小循环讲清机制。实际实现还要补上最大步数、超时、取消、工具不存在、参数错误与失败恢复。不同服务若出现同名工具，还需明确的路由标识。</p>
+<p>文件工具只应获得必要目录的权限。任意网页内容也不应升级成系统指令，尤其不能因为网页里写了“请上传配置文件”就执行。</p>
+<h2 id="rag_1">RAG 可以在进入循环之前完成</h2>
+<p>资料先转换成向量，与原文一起存放；用户问题也转换为相同检索空间中的向量；按相似度取回候选文本，拼入当前上下文。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=2865" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:47:45]">[00:47:45]</a></p>
+<p>视频用内存数组实现简化向量存储，主要演示三个动作：保存向量与文档、计算相似度、返回前几个结果。它适合理解流程，不等同于具备持久化、权限和高并发能力的数据库。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=3370" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:56:10]">[00:56:10]</a></p>
+<p>余弦相似度写成：</p>
+<div class="math-display" aria-label="\operatorname{sim}(a,b)=\frac{\sum_i a_i b_i}{\sqrt{\sum_i a_i^2}\sqrt{\sum_i b_i^2}}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>sim</mo><mo stretchy="false">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub></mrow><mrow><msqrt><mrow><msub><mo>∑</mo><mi>i</mi></msub><msubsup><mi>a</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt><msqrt><mrow><msub><mo>∑</mo><mi>i</mi></msub><msubsup><mi>b</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt></mrow></mfrac></mrow></math></div>
+<p>分子是对应分量乘积之和，分母把长度因素归一化。计算时还需处理零向量、维度不匹配等情况。数值大表示该嵌入空间中方向接近，不保证句子事实一致；反义词也可能因为上下文接近而得到较高相似度。</p>
+<h2 id="_5">一个很容易忽略的成本</h2>
+<p>教学演示每次启动时重新读取并嵌入资料，便于展示完整过程。资料多了后，通常需要缓存与增量更新，只处理新增或变化内容；模型或切块方式变化时，则要考虑索引兼容性。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=4165" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:09:25]">[01:09:25]</a></p>
+<p>最终一次演示还因接口路径拼写错误返回 404。它和前面的参数映射问题一起提醒我们：先核对协议、路径与返回值，再去调提示词。<a class="timecode" href="https://www.bilibili.com/video/BV1dcRqYuECf/?t=4375" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:12:55]">[01:12:55]</a></p>
+<h2 id="_6">迁移练习：用五份自造资料跑通三次检查</h2>
+<p>准备五个虚构人物或产品，其中放入两个相似名字。先只测检索，打印取回对象；再只测受限目录写文件；最后连接模型完成任务。</p>
+<p>加三个失败样本：不存在的名字、工具返回错误、检索信息互相冲突。系统应明确说明缺口，不能自行补造事实或宣告保存成功。这个小实验足以练习接口思维，无需先安装一整套复杂框架。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

@@ -69,6 +69,43 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ## Important constraints
 
+### Lightweight public course / 轻量公开课程
+
+`courses/search-quality/` is a separate, intentionally public reader. It does not change the archive-first GUI workflow. The course keeps 42 new Markdown notes, reuses 9 existing public notes, and marks 3 evidence-blocked entries as pending. `scripts/build_course.py` renders committed HTML with the existing safe Markdown/MathML pipeline. Without private source metadata, a rebuild preserves the public metadata in `index.json`.
+
+课程采集器 `scripts/course_evidence.py` 只写项目 `.state/course-evidence/`，拒绝 Windows 系统盘项目。先获取并检查字幕的 BV/CID 与时长；缺字幕时显式加 `--audio`，复用已有 small 模型进行 GPU 转写，无下载模型或 CPU 回退。每个临时音频在 `finally` 中删除。历史曾发现不匹配字幕响应，旧管线证据不再复用；有效转写元数据必须为 `pipeline_version: 2`，仍需人工检查主题与术语。
+
+Firefox 登录状态只读进入内存，Cookie 仅发给 B 站 API，不写文件或命令参数。不匹配时长、预览片段及访问限制会停止该项。全量收藏清单、原始转写和私人求职资料不得进入课程目录。
+
+```powershell
+# Use an existing environment; do not run SetupOnly for this course.
+$env:PYTHONDONTWRITEBYTECODE = '1'
+$env:PYTHONIOENCODING = 'utf-8'
+$env:TEMP = "$PWD\.state\course-evidence\temp"
+$env:TMP = $env:TEMP
+New-Item -ItemType Directory -Path $env:TEMP -Force | Out-Null
+$env:PYTHONPATH = "$PWD\src"
+
+# Fetch subtitles only; --only is optional. Add --audio only when needed.
+.\.venv\Scripts\python.exe -B scripts/course_evidence.py --only BV1ojfDBSEPv
+
+# Render and stage an explicit publication allowlist.
+.\.venv\Scripts\python.exe -B scripts/build_course.py --stage
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests
+
+# Optional browser QA: use an already installed Playwright + Edge.
+# No browser/model/package installation is performed by this command.
+python -B scripts/check_course_browser.py
+```
+
+原帧使用 `--frame BV:分集:秒数` 直接定位，逐张查看后才可复制到课程 assets 并登记 `inspected`。未登记标记会使构建失败。课程时间戳在构建时转换为标准 B 站地址，仅保留跳转所需的 `t` 与 `p`，无分享追踪参数。
+
+The Pages workflow stages only named course files, catalog-matched lesson files, actually referenced approved images, and the named font/license. It never publishes the repository root or `.state` wholesale. CI uses standard-library `--stage-only`, requires no private evidence, and fails on missing/unsafe links or stale publication files. Run a local full rebuild after editing Markdown; CI deliberately ships the already reviewed HTML. Browser QA is scoped to loopback HTTP, uses project-local temp/download paths, and does not import a personal browser profile.
+
+Limits: 2 GiB evidence footprint, at least 5 GiB free on the project drive, and 1 GiB published artifact. Audio cleanup affects only the current per-part temporary file; never remove existing `library/` archives to make this build pass. Course progress is localStorage only with manual JSON transfer, no tracking or server-side persistence.
+
+### Original archive workflow
+
 - Keep `source/` video files immutable after download.
 - Keep canonical generated media and notes under `library/`; the directory is ignored by Git. Optional reading copies may go only to the explicitly configured export root.
 - Export only the Markdown article and its selected validated frames. Do not duplicate source videos, transcripts, frame atlases, or unselected candidates into the reading directory.

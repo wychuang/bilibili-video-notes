@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>多 Agent 的成本，藏在交接处 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">多 Agent 的成本，藏在交接处</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">从固定接力到主管分派</a></li>
+<li><a href="#_3">三类交接损失</a></li>
+<li><a href="#_4">四个可以迁移的工程设计</a></li>
+<li><a href="#_5">怎样读视频中的性能比较</a></li>
+<li><a href="#_6">迁移练习：让分工证明自己</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1ja95BKE6J" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1ja95BKE6J"><div class="provenance">来源：AI深度幻觉 · <a href="https://www.bilibili.com/video/BV1ja95BKE6J/" target="_blank" rel="noopener">BV1ja95BKE6J 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">多 Agent 的成本，藏在交接处</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1ja95BKE6J/">DeerFlow 2.0 架构解读</a> · 12 分钟 · 快读。项目功能持续变化，视频中的缺陷清单与基准数字仅作录制时主张。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>拆出多个 Agent 前，先证明任务可以独立完成、结果能够可靠合并，而且并行收益值得额外协调成本。</p>
+<h2 id="_2">从固定接力到主管分派</h2>
+<p>视频把早期流程描述为固定接力：协调、规划、研究、成稿依次完成。需求变化后，固定角色和交接顺序可能需要频繁调整。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=50" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:50]">[00:00:50]</a></p>
+<p>随后介绍主管式结构：主 Agent 掌握目标，根据需要派出临时子任务，再收回结果。这使分工可以跟着任务变化，主线状态集中管理。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:40]">[00:01:40]</a></p>
+<p>术语要注意：主管加子 Agent 也属于层级式多 Agent 设计。没有子 Agent 之间的自由交流，不会让整个系统自动变成只有一个 Agent；讨论时说清控制权、状态和通信方式更有价值。</p>
+<h2 id="_3">三类交接损失</h2>
+<p>第一是上下文丢失。子任务只收到局部提示，可能漏掉最终用户的重要约束。</p>
+<p>第二是产物不兼容。一个输出摘要，一个输出代码片段，合并者仍要重做结构与验证。</p>
+<p>第三是协调放大。多个任务重复查同一资料、互相等待，或基于不同版本的证据工作，增加成本却没有提升结果。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=205" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:25]">[00:03:25]</a></p>
+<p>因此“开更多 Agent”之前，应该先写清每个子任务的输入、交付格式、依赖和终止条件。</p>
+<h2 id="_4">四个可以迁移的工程设计</h2>
+<p>视频重点介绍中间件、运行核心与应用分离、任务环境路径隔离、渐进加载 Skill。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=375" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:15]">[00:06:15]</a></p>
+<p>它们分别对应四个问题：通用检查放在哪里；换界面时能否复用核心；文件操作能否被限制在任务范围；是否需要把所有技能全文同时放进上下文。</p>
+<p>官方项目资料也区分 Harness 与 App，并说明子任务、记忆和沙箱等能力。具体配置和持久化行为应以使用版本为准。<a href="https://github.com/bytedance/deer-flow">DeerFlow 项目说明</a> · <a href="https://github.com/bytedance/deer-flow/blob/main/backend/AGENTS.md">后端职责说明</a></p>
+<p>虚拟路径只是隔离设计的一部分。仅隐藏真实路径字符串，并不能建立安全边界；实际挂载、权限和网络策略仍须落实。</p>
+<h2 id="_5">怎样读视频中的性能比较</h2>
+<p>视频列举了不同架构的成功率、引用准确度和覆盖率，但未在本项目复现。小规模个人实验不能直接代表所有任务；引用准确与信息覆盖也要分别评价。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=255" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:15]">[00:04:15]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=520" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:40]">[00:08:40]</a></p>
+<p>同样，录制时提到“缺少恢复”“缺少限流”等问题，不宜长期当作项目现状。</p>
+<h2 id="_6">迁移练习：让分工证明自己</h2>
+<p>选同一批研究题，先让单 Agent 完成，再尝试主 Agent 加两个独立子任务。保持资料范围与质量标准一致，记录完成质量、延迟、调用量、重复劳动与合并错误。</p>
+<p>只有某类任务稳定受益，再为它保留并行分工。任务高度耦合、共享状态频繁变化时，可以继续采用更简单的组织方式。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>AI 抛硬币：一段逼真画面，究竟测到了什么？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#ai">AI 抛硬币：一段逼真画面，究竟测到了什么？</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">画面很像，统计规律未必一样</a></li>
+<li><a href="#_3">先规定怎样算一次有效试验</a></li>
+<li><a href="#_4">世界模型的启发与演示的边界</a></li>
+<li><a href="#_5">迁移练习：把一次演示改写成测试计划</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Wzjg65EM6" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1Wzjg65EM6"><div class="provenance">来源：影视飓风 · <a href="https://www.bilibili.com/video/BV1Wzjg65EM6/" target="_blank" rel="noopener">BV1Wzjg65EM6 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="ai">AI 抛硬币：一段逼真画面，究竟测到了什么？</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1Wzjg65EM6/">影视飓风｜在 AI 里抛硬币，概率是 50% 吗？</a>；全片约 10 分钟，包含商业合作与未来形态展望。这里把它作为实验设计与证据边界的练习材料。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>生成“抛硬币的视频”和运行“经过验证的公平随机实验”，对应两种不同任务，结果不能直接互相代替。</p>
+<h2 id="_2">画面很像，统计规律未必一样</h2>
+<p>视频开头用相同提示词生成多次抛硬币画面，报告某些模型明显偏向一面。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a></p>
+<p>它提出了一个有趣问题：生成器学到的图像与运动模式，是否保留了我们关心的概率性质？但仅凭片中展示，还不能完整复核模型版本、各组样本量、失效样本、抽样设置与判定规则。</p>
+<p>视频把偏差归因于训练素材。这个解释可以作为假设；要证明它，还需更多对照。提示词、起始图像、生成设置，以及人工挑选可辨认画面的过程，都可能影响结果。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></p>
+<h2 id="_3">先规定怎样算一次有效试验</h2>
+<p>下面是我为这个实验补充的验收表：</p>
+<ul>
+<li>明确“正面”是哪一面，避免各次理解不同。</li>
+<li>记录模型版本、提示词、种子与设置；没有种子控制时也如实注明。</li>
+<li>保留所有生成结果，模糊、消失、出现多枚硬币的情况单独计数。</li>
+<li>分别报告有效画面的正面比例和全体生成中的无效比例。</li>
+<li>换一种等价提示词再测试，观察结论是否稳定。</li>
+</ul>
+<p>若在相同条件下，把每次独立试验视作成功概率固定的二项试验，正面比例的估计是：</p>
+<div class="math-display" aria-label="\hat p = \frac{\text{正面次数}}{\text{有效试验次数}}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>p</mi><mo>^</mo></mover><mo>=</mo><mfrac><mrow><mtext>正面次数</mtext></mrow><mrow><mtext>有效试验次数</mtext></mrow></mfrac></mrow></math></div>
+<p>有限样本即使来自公平机制，也不必恰好一半正面。报告比例时还应考虑样本量与区间估计；独立性或判定规则不满足时，需要先处理实验设计。<a href="https://itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbici.htm">NIST：二项比例的区间估计</a></p>
+<h2 id="_4">世界模型的启发与演示的边界</h2>
+<p>后半段讨论预测动作之后的变化、可交互场景，以及使用多相机重建的动态影像。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:00]">[00:04:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=362" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:02]">[00:06:02]</a></p>
+<p>这些画面说明了不同的表示与交互方式。能移动视角，不能单独证明具有正确的动力学；多相机重建现成事件，也不同于预测未发生事件。视频中的未来展望应保留“可能”的语气。</p>
+<p>作为补充阅读，Ha 与 Schmidhuber 的 <a href="https://worldmodels.github.io/">World Models 原始研究</a>在特定强化学习环境中学习压缩表示与动态，并测试在模型内训练策略的做法。它提供的是明确实验范围内的结果，没有保证任意生成硬币都会公平。</p>
+<h2 id="_5">迁移练习：把一次演示改写成测试计划</h2>
+<p>不需要生成几百段视频。只写计划：我要验证什么性质、怎样判定、哪些结果算失败、需要保留什么证据、什么结果会推翻我的猜测。</p>
+<p>再把同一套问题用于 AI 搜索：“引用很多”究竟测的是数量、相关性，还是每条主张都获得支持？先把被测对象说清楚，后面的指标才有意义。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

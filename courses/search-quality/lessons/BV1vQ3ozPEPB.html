@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>从“看起来不错”到真正可靠：SFT、RLHF 与 DPO · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#sftrlhf-dpo">从“看起来不错”到真正可靠：SFT、RLHF 与 DPO</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">最重要的课堂实验，发生在评分之前</a></li>
+<li><a href="#sft">第一步：SFT 用示范告诉模型怎样回答</a></li>
+<li><a href="#_3">好教材也可能教会错误的习惯</a></li>
+<li><a href="#_4">安全数据也要覆盖容易误判的正常请求</a></li>
+<li><a href="#_5">第二步：偏好反馈让模型学习相对好坏</a></li>
+<li><a href="#ai">人类和 AI 裁判都需要校准</a></li>
+<li><a href="#_6">第三步：奖励越高，也要防止越走越偏</a></li>
+<li><a href="#dpo">DPO：直接用偏好对优化</a></li>
+<li><a href="#_7">迁移练习：做五对“有理由的选择”</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1vQ3ozPEPB" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1vQ3ozPEPB"><div class="provenance">来源：AI翻译君-vanch · <a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/" target="_blank" rel="noopener">BV1vQ3ozPEPB 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="sftrlhf-dpo">从“看起来不错”到真正可靠：SFT、RLHF 与 DPO</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/">AI翻译君-vanch · 斯坦福 CS336 第 15 讲</a> · 75 分钟 · 基于中文翻译字幕。原课为 <a href="https://cs336.stanford.edu/spring2025/">Stanford CS336 Spring 2025，Alignment — SFT/RLHF</a>。本篇覆盖本视频，不把下节课预告写成已讲内容。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>后训练把期望行为变成训练信号；信号若偏爱表面形式，模型也会学会讨好这种形式。</p>
+<h2 id="_2">最重要的课堂实验，发生在评分之前</h2>
+<p>老师给出成对回答，请学生在几分钟内选择更好的一个。之后再问：核查过所有事实吗？验证过计算吗？真正完成检查的人很少。较长的回答却更受欢迎，其中一些包含虚构内容。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3028" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:50:28]">[00:50:28]</a></p>
+<p>这正是质量评估的难点。整齐的分点、更多细节和自信的语气，容易让人产生“内容更好”的感觉。如果标注流程没有给足核查时间，这些表面特征就可能变成训练奖励。</p>
+<p>理解这一点，再看算法会清楚很多：算法只能优化我们交给它的信号，不能自动替我们定义“好”。</p>
+<h2 id="sft">第一步：SFT 用示范告诉模型怎样回答</h2>
+<p>监督微调提供“指令—理想回答”样本，让模型学习在这样的输入后生成这样的输出。它能帮助模型遵循指令、采用合适格式，并体现希望保留的行为。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=210" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:30]">[00:03:30]</a></p>
+<p>课堂比较了三种数据来源：<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=370" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:10]">[00:06:10]</a></p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>能带来什么</th>
+<th>要检查什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>既有 NLP 任务汇总，如 FLAN</td>
+<td>大量现成任务、明确目标</td>
+<td>题型与真实用户对话是否相符</td>
+</tr>
+<tr>
+<td>人工撰写，如 OpenAssistant</td>
+<td>丰富意图、详细回答、多样表达</td>
+<td>成本、质量差异、事实与引用</td>
+</tr>
+<tr>
+<td>模型合成，如 Alpaca</td>
+<td>便于扩大数量、快速形成格式</td>
+<td>同质化、错误传播、覆盖不足</td>
+</tr>
+</tbody>
+</table>
+<p>课上还让学生现场写示范回答。即使参与者积极、能力较强，写出详尽可靠的长答案仍很费力。这说明标注任务设计、时间预算和验收标准本身就是工作的一部分。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
+<h2 id="_3">好教材也可能教会错误的习惯</h2>
+<p>假设示范答案末尾都有参考文献。模型可能学到概念与真实文献的关联，也可能只学到“回答复杂问题时，结尾应该出现一个文献样式”。遇到不知道的知识，后一种习惯就可能导致编造引用。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:20]">[00:18:20]</a></p>
+<p>因此“文本准确、知识丰富”还不够，要关注目标模型能否从这些样本可靠学习。需要知道何时查资料、何时表达不确定，也需要检验新问题上的引用真实性。</p>
+<p>这里不能推出“SFT 学不到新知识”。课堂随后明确讨论了规模与数据混合：较大规模、多样化的训练能够传递知识，预训练、中期训练与指令微调的实际边界也可能模糊。应看具体训练过程，不能只看模型被命名为 base 还是 instruct。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2420" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:40:20]">[00:40:20]</a></p>
+<h2 id="_4">安全数据也要覆盖容易误判的正常请求</h2>
+<p>“如何杀死一个 Python 进程”包含看似危险的词，却是正常的编程问题。只训练拒绝危险词汇，会损伤有用性。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1547" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:47]">[00:25:47]</a></p>
+<p>评价安全行为时，需要同时考察该拒绝时是否拒绝、正常任务能否完成。把所有问题都拒绝掉可以降低某些风险指标，却不能满足产品目标。具体边界仍需结合上下文判断。</p>
+<h2 id="_5">第二步：偏好反馈让模型学习相对好坏</h2>
+<p>写出一份好答案和认出两份答案中哪份更好，是不同的任务。判断有时更容易，也可能表达出写作者自己难以直接写出来的偏好。RLHF 利用这种差异。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2520" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:42:00]">[00:42:00]</a></p>
+<p>经典流程包括：生成候选回答，收集比较结果，训练奖励模型，再优化语言模型，使其更倾向于获得高奖励的回答。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2775" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:46:15]">[00:46:15]</a></p>
+<p>一条偏好数据至少包含问题、两个回答和选择。若要让数据可解释，还应保留适用标准、判断理由、证据与不确定性。只记录“A 胜”，后面很难知道 A 赢在事实、覆盖、风格还是长度。</p>
+<h2 id="ai">人类和 AI 裁判都需要校准</h2>
+<p>课堂讨论了标注者背景、时间压力、格式偏好以及模型偏爱自身输出等问题。换成 AI 裁判可以降低部分成本，却不会自动消除偏差。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3190" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:53:10]">[00:53:10]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3760" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:02:40]">[01:02:40]</a></p>
+<p>可操作的检查包括：交换 A/B 的显示顺序；比较长短相近的答案；给裁判明确证据；抽样人工复核分歧；把事实正确性与表达偏好分开记录。后四项是本篇的评测迁移建议，具体取舍应根据任务验证。</p>
+<p>标注者群体的偏好与模型输出之间可能有关联，但课堂中的观察不能单独证明某个人群直接造成某种模型立场。</p>
+<h2 id="_6">第三步：奖励越高，也要防止越走越偏</h2>
+<p>把语言模型视为一个生成回答的策略，优化方向可以概括为“获得奖励，同时不要过度偏离参考策略”。省略额外的数据混合项后，可写成：<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3900" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:05:00]">[01:05:00]</a></p>
+<div class="math-display" aria-label="\max_{\pi}\;\mathbb{E}_{y\sim\pi(\cdot\mid x)}[r(x,y)]
+-\beta D_{\mathrm{KL}}\!\left(\pi(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\right)"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>max</mo><mrow><mi>π</mi></mrow></msub><mspace width="0.278em" /><msub><mi>𝔼</mi><mrow><mi>y</mi><mi>~</mi><mi>π</mi><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">[</mo><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>−</mo><mi>β</mi><msub><mi>D</mi><mrow><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></mrow></msub><mspace width="negativethinmathspace" /><mrow><mo stretchy="true" fence="true" form="prefix">(</mo><mi>π</mi><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mspace width="0.167em" /><mo fence="false" stretchy="false">‖</mo><mspace width="0.167em" /><msub><mi>π</mi><mrow><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="true" fence="true" form="postfix">)</mo></mrow></mrow></math></div>
+<p>第一项鼓励得到高奖励，第二项限制与参考模型的偏离程度。<span class="math-inline" aria-label="\beta"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 调节两者的取舍。KL 约束不保证事实正确；奖励模型若有漏洞，仍可能出现“评分变高，实际体验变差”。</p>
+<p>视频对 PPO 只作概念介绍：利用优势估计和限制更新幅度等设计来稳定优化，具体强化学习细节留给后续课。理解产品评测时，先抓住奖励来源和约束即可。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=4080" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:08:00]">[01:08:00]</a></p>
+<h2 id="dpo">DPO：直接用偏好对优化</h2>
+<p>标准 DPO 从带 KL 约束的奖励优化目标出发，把奖励与策略的关系重新参数化，转成偏好数据上的优化问题。这样可以省去单独拟合显式奖励模型及 PPO 训练循环。它仍然需要可靠的偏好对和参考策略，训练简化不等于评价标准可以省略。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=4278" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:11:18]">[01:11:18]</a></p>
+<p>推导与方法的原始说明见 <a href="https://arxiv.org/abs/2305.18290">DPO 论文</a>。本篇只保留主干：SFT 学习示范，偏好优化学习相对选择；两者都受数据内容与任务覆盖的约束。</p>
+<h2 id="_7">迁移练习：做五对“有理由的选择”</h2>
+<p>选五个真实学习问题，每题保留两个候选回答。每对都写：用户目标是什么；哪一处具体差异影响目标；用什么材料核查；最终选择与置信程度。</p>
+<p>允许“差不多”“各有优劣”“证据不足”。不要为了凑齐偏好标签强行选边。再找人或另一个模型复核分歧，记录标准是否需要修改。</p>
+<p>完成后，你得到的是一份可讨论的练习数据。它可以展示思考过程，但在实际验证之前，不能宣称已经改善模型表现。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

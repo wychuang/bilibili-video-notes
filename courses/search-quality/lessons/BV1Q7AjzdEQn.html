@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>第一版能运行，第二天还能交付吗 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">第一版能运行，第二天还能交付吗</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">技术选型，先服从维护条件</a></li>
+<li><a href="#_4">内容站的主流程，藏在页面后面</a></li>
+<li><a href="#_5">真正棘手的例子：新闻到底算不算重复</a></li>
+<li><a href="#_6">新闻与论文，等待的价值不同</a></li>
+<li><a href="#_7">给具体反馈，才更容易改出具体结果</a></li>
+<li><a href="#_8">失败要分等级</a></li>
+<li><a href="#_9">给模型留发挥空间，同时保留验收底线</a></li>
+<li><a href="#demo">迁移练习：把一个 demo 连续运行五次</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Q7AjzdEQn" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1Q7AjzdEQn"><div class="provenance">来源：李自然说 · <a href="https://www.bilibili.com/video/BV1Q7AjzdEQn/" target="_blank" rel="noopener">BV1Q7AjzdEQn 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">第一版能运行，第二天还能交付吗</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1Q7AjzdEQn/">李自然说 · Vibe Coding 实战复盘</a> · 27 分钟 · 标准学习稿。案例为作者的 AI 资讯与论文站，效果和难度倍数属于个人经验。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p>从原型走向产品，要把连续运行时的重复、失败、质量波动和维护成本一起设计进去。</p>
+<h2 id="_3">技术选型，先服从维护条件</h2>
+<p>作者的两个站都是个人信息项目，不希望每天运维，也不需要复杂交易或个性化系统，因此采用脚本生成静态页面的方案。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=175" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:55]">[00:02:55]</a></p>
+<p>中间产物尽量保留为可阅读的 Markdown，哪里出了问题，可以逐段打开检查。依赖少有利于降低一部分维护负担，但字体、页面生成等工作仍需自己落实；简单方案同样有工程成本。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=250" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:10]">[00:04:10]</a></p>
+<p>这里可学的是约束驱动的选择。换成实时协作或复杂账号产品，合适的架构也会变化。</p>
+<h2 id="_4">内容站的主流程，藏在页面后面</h2>
+<p>抓资料、筛选、确定选题、写作、审核、生成页面、发布，是连续链路。每一步的质量都会传到后面。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a></p>
+<p>作者把选题与写作分开：前者判断哪些材料值得组织成一个故事，后者专注表达，审核再检查结果。分工依据是任务职责，而非给多个模型取不同职位名。</p>
+<p>每一步都应有明确输入与验收标准。否则前一步丢掉的事实，后面再漂亮的文字也补不回来。</p>
+<h2 id="_5">真正棘手的例子：新闻到底算不算重复</h2>
+<p>同一事件今天由 A 网站报道，明天由 B 网站跟进。如果每天按页面去重，仍可能连续推送同一件事；如果一见相同主题就全部去掉，又会漏掉重要后续进展。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=800" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:20]">[00:13:20]</a></p>
+<p>需要区分网页重复、事件重复和事件更新。视频同时提到跨来源与跨日期去重，说明规则要跟内容含义联系起来，不能只比标题。</p>
+<p>这是搜索质量工作里很好的迁移题：一个结果“与之前类似”，究竟是冗余，还是提供了新的关键证据？必须根据用户任务判断。</p>
+<h2 id="_6">新闻与论文，等待的价值不同</h2>
+<p>资讯强调及时，作者采用较快发布；论文则等待几天，参考社区反馈再筛选。视频用 T+0 与 T+3 描述这种取舍。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=915" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:15:15]">[00:15:15]</a></p>
+<p>社区热度可以作为筛选信号，但也可能偏爱熟悉主题和热门团队，遗漏冷门的重要研究。这是本篇补充的边界：信号帮助排序，不等同于质量真值。</p>
+<p>同一条自动化流水线，换资料类型后就要重新思考抓取时机、筛选标准和写作方式。</p>
+<h2 id="_7">给具体反馈，才更容易改出具体结果</h2>
+<p>文章过长时，只说“简短一点”比较模糊。作者先用程序计算实际字数，再告诉写作环节目标范围和差额，必要时指出各部分应缩减多少。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=1040" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:20]">[00:17:20]</a></p>
+<p>这体现了一个实用原则：能测量的约束，交给程序测量；模型负责根据反馈修改。修改后还要再次检查，避免把“已经缩短”的自述当作结果。</p>
+<p>审核也应定位到模块。某一段不合格，只重写相关部分，可以减少成本与其他内容的意外变化。</p>
+<h2 id="_8">失败要分等级</h2>
+<p>配图生成失败，正文仍可能值得发布；关键事实未经验证，则应阻止交付。两种失败不能采用同样的处理方式。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=1105" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:25]">[00:18:25]</a></p>
+<p>视频还提到超时、重试、可读日志和防并发。对自动化产品，至少应明确：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>系统应做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可重试的临时失败</td>
+<td>在预算内有限重试，避免无限循环</td>
+</tr>
+<tr>
+<td>非关键功能失败</td>
+<td>降级并说明缺失，继续保留有效产物</td>
+</tr>
+<tr>
+<td>核心质量失败</td>
+<td>停止发布，保留原因与可恢复状态</td>
+</tr>
+<tr>
+<td>重复启动</td>
+<td>避免重复写入、覆盖或重复发送</td>
+</tr>
+</tbody>
+</table>
+<p>结构化输出失败也需要明确策略。容错解析可以处理有限的格式问题，但不能静默改掉数据含义；无法确定时应拒收并反馈。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=1200" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:00]">[00:20:00]</a></p>
+<h2 id="_9">给模型留发挥空间，同时保留验收底线</h2>
+<p>作者尝试让写作风格保持一定自由，由审核检查重复和质量。这样有机会利用更强模型的表达能力。<a class="timecode" href="https://www.bilibili.com/video/BV1Q7AjzdEQn/?t=1395" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:15]">[00:23:15]</a></p>
+<p>模型升级后仍要回归测试。新版本可能改善文风，也可能改变格式、成本与稳定性，不能直接假设系统会自动全面变好。</p>
+<h2 id="demo">迁移练习：把一个 demo 连续运行五次</h2>
+<p>选一个小任务，在输入重复、资料缺失、网络失败、产物不合格和正常输入这五种条件下运行。记录每次是否正确停止、降级或完成，有没有留下可恢复结果。</p>
+<p>最后写清哪些约束由程序保证，哪些依赖模型判断。这个清单能让项目复盘从“我用了什么工具”走向“我怎样保证交付”。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

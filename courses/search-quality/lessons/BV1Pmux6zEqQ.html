@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>不止于可验证奖励：面向开放式任务的 Rubric · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#rubric">不止于可验证奖励：面向开放式任务的 Rubric</a><ul>
+<li><a href="#_1">当模型认真勾完所有框，却给出了更差的答案</a></li>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">核心问题与推理主线</a></li>
+<li><a href="#rubric_1">一、为什么开放式任务需要 Rubric</a><ul>
+<li><a href="#1">1. 从唯一答案走向多维质量</a></li>
+<li><a href="#2">2. 从标准到分数：三种聚合方式</a></li>
+<li><a href="#3-rubric">3. Rubric 的四级构造谱系</a></li>
+</ul>
+</li>
+<li><a href="#rubric_2">二、好的 Rubric 必须先经得起自身评估</a><ul>
+<li><a href="#1_1">1. “看起来完整”远远不够</a></li>
+<li><a href="#2-rubric-rubric">2. 评测 Rubric 与训练 Rubric 有不同生命周期</a></li>
+<li><a href="#3-rubric-gap">3. “Rubric Gap”：模型会判断，却未必会定义标准</a></li>
+<li><a href="#4-rubricbench">4. RubricBench 如何建立人类参照</a></li>
+</ul>
+</li>
+<li><a href="#_4">三、从“给答案打分”到“组织整个智能体”</a><ul>
+<li><a href="#1_2">1. 长程任务真正缺少的是信用分配</a></li>
+<li><a href="#2_1">2. 先把轨迹切成有语义的阶段</a></li>
+<li><a href="#3-rubric_1">3. 睡眠与认知衰退：Rubric 如何改变搜索方向</a></li>
+<li><a href="#4-stage-structured-grpo">4. Stage-Structured GRPO：让标准跟随当前失败模式</a></li>
+<li><a href="#5">5. 反思元策略：参数更新之外的文本更新</a></li>
+</ul>
+</li>
+<li><a href="#rubric_3">四、高质量 Rubric 怎样构造</a><ul>
+<li><a href="#1_3">1. 从真实能力差距出发</a></li>
+<li><a href="#2_2">2. 自动生成要经历由粗到细的演化</a></li>
+</ul>
+</li>
+<li><a href="#rubric_4">五、Rubric 的七种用法：奖励只是起点</a><ul>
+<li><a href="#1_4">1. 直接作为奖励</a></li>
+<li><a href="#2-rollout">2. 引导 rollout 探索</a></li>
+<li><a href="#3-sft">3. 合成更贴近模型分布的 SFT 数据</a></li>
+<li><a href="#4-agent">4. 反向规划长程 Agent 轨迹</a></li>
+<li><a href="#5_1">5. 模拟用户反馈并训练多轮改进</a></li>
+<li><a href="#6-rubric-on-policy">6. Rubric 辅助的 On-Policy 自蒸馏</a></li>
+<li><a href="#7-ppo-critic">7. 为 PPO 的 Critic 提供结构化特权信息</a></li>
+</ul>
+</li>
+<li><a href="#rubric_5">六、四个案例揭示 Rubric 的真正边界</a><ul>
+<li><a href="#_5">案例一：安全约束不能只是普通加分项</a></li>
+<li><a href="#rollout">案例二：所有 rollout 都错时，相对差异仍有价值</a></li>
+<li><a href="#_6">案例三：有最终答案，不等于中间过程无需评估</a></li>
+<li><a href="#_7">案例四：标准越多，效果未必越好</a></li>
+</ul>
+</li>
+<li><a href="#panel">七、PANEL：共识、分歧与尚未解决的问题</a><ul>
+<li><a href="#1_5">1. 共识：区分度是贯穿评测与训练的核心</a></li>
+<li><a href="#2-rubric">2. 分歧：Rubric 应由谁生成</a></li>
+<li><a href="#3-rubric_2">3. 验证 Rubric 需要四层证据</a></li>
+<li><a href="#4">4. 最大风险：自洽却错误的共同演化</a></li>
+</ul>
+</li>
+<li><a href="#_8">八、边界、疑点与时效性</a></li>
+<li><a href="#_9">时间戳导航</a></li>
+<li><a href="#_10">复习与行动清单</a><ul>
+<li><a href="#_11">设计前</a></li>
+<li><a href="#criterion">编写单条 Criterion</a></li>
+<li><a href="#rubric_6">检查整套 Rubric</a></li>
+<li><a href="#_12">上线训练前</a></li>
+<li><a href="#_13">值得继续追问</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Pmux6zEqQ" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 既有学习稿</span></div><article data-lesson="BV1Pmux6zEqQ"><h1 id="rubric">不止于可验证奖励：面向开放式任务的 Rubric</h1>
+<blockquote>
+<p><strong>UP 主：</strong> NICE学术<br>
+<strong>合集时长：</strong> 02:59:02<br>
+<strong>视频 ID：</strong> BV1Pmux6zEqQ<br>
+<strong>来源：</strong> <a href="https://www.bilibili.com/video/BV1Pmux6zEqQ/">Bilibili 合集</a><br>
+<strong>总结强度：</strong> deep（深度）<br>
+<strong>证据：</strong> 六个分集的本地 <code>source.json</code>、连续文本、SRT、转写审计及时间戳画面；共 4,129 个 ASR 片段、72 张画面记录。转写由 faster-whisper-small 生成，少数英文术语、人名和模型名存在同音误识别，本文结合上下文与可见幻灯片谨慎校正。所有时间均为分集内时间。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>分集</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P01</td>
+<td>开场：为什么讨论 Rubric Reward Modeling</td>
+<td>01:57</td>
+</tr>
+<tr>
+<td>P02</td>
+<td>刘文涵：A Survey of Rubrics for Large Language Models</td>
+<td>38:49</td>
+</tr>
+<tr>
+<td>P03</td>
+<td>李高棠：面向开放式 Deep Research Agent 的 RubricEM</td>
+<td>38:39</td>
+</tr>
+<tr>
+<td>P04</td>
+<td>张启源：RubricBench 与人机 Rubric Gap</td>
+<td>34:34</td>
+</tr>
+<tr>
+<td>P05</td>
+<td>周阳：如何生成并有效使用高质量 Rubric</td>
+<td>33:02</td>
+</tr>
+<tr>
+<td>P06</td>
+<td>PANEL：标准、来源、验证与未来形态</td>
+<td>31:58</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">当模型认真勾完所有框，却给出了更差的答案</h2>
+<p>假设用户要求程序“处理所有情况”。模型可以照单全收，列出一套看似完整的实现；也可以诚实指出，“所有情况”本身不可穷尽，再给出边界清楚、能够实际落地的方案。RubricBench 中出现了一个反直觉现象：机器生成的标准往往奖励前一种回答，因为它“检查了更多框”；人类标准会先识别指令中的不合理前提，因而偏向后一种更诚实的回答。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1290&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:21:30]">[P04 00:21:30]</a></p>
+<p>这类错误被概括为 <strong>Value Inversion</strong>：清单越长、表面覆盖越完整，模型越容易奖励自信而失真的答案。问题已经从“模型会不会依据标准打分”推进到了更困难的一层——模型能否先提出真正值得检查的标准。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=971&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:16:11]">[P04 00:16:11]</a></p>
+<p>整场 Workshop 围绕这条问题链展开：开放式任务为什么需要 Rubric？怎样判断 Rubric 自身的质量？它如何进入训练过程？当 Rubric 和策略模型共同演化时，又该如何防止二者形成自洽却错误的闭环？</p>
+<h2 id="_2">一句话抓住核心</h2>
+<p><strong>Rubric 是把“什么叫好答案”展开成可检查、可诊断、可训练的自然语言接口；它的价值取决于能否抓住当前任务和当前模型真正有区分度的质量差异，并始终接受独立证据与外部目标的约束。</strong></p>
+<h2 id="_3">核心问题与推理主线</h2>
+<p>六个分集共同构成了一条连续的推理路径：</p>
+<ol>
+<li><strong>定义问题：</strong> 开放式任务没有唯一答案，单一总分无法解释质量差异。</li>
+<li><strong>构造问题：</strong> Rubric 可以直接生成、对比生成、迭代优化或在线演化，但每种方式都有成本和偏差。</li>
+<li><strong>评估问题：</strong> 会依据给定标准判断，不代表会自动提出高质量标准。</li>
+<li><strong>训练问题：</strong> 长程 Agent 需要把最终奖励拆到计划、研究、审查和回答等阶段。</li>
+<li><strong>工程问题：</strong> 高质量 Rubric 需要原子性、自包含、覆盖度、区分度和稳定性，并经真实回答验证。</li>
+<li><strong>治理问题：</strong> 自动演化需要外部原则、隐藏测试、独立评估与人工抽检，防止奖励系统与策略模型共同偏航。</li>
+</ol>
+<p>开场把问题凝结成一句话：答案已经无法只用对错来描述，我们需要定义、评估并优化带引号的“好答案”。四位报告人分别从综述、强化学习、基准评测和工程实践进入同一个问题。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=59&amp;p=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [P01 00:00:59]">[P01 00:00:59]</a></p>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p01_frame_008_00-01-52.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p01_frame_008_00-01-52.jpg" alt="图 01 · P01 · 00:01:52：开场页列出四位报告人及其互补主题：综述、RubricEM、RubricBench 与高质量 Rubric 的生成和使用。" loading="lazy"></a><figcaption>图 01 · P01 · 00:01:52：开场页列出四位报告人及其互补主题：综述、RubricEM、RubricBench 与高质量 Rubric 的生成和使用。</figcaption></figure>
+<p><em>图 01 · P01 · 00:01:52：开场页列出四位报告人及其互补主题：综述、RubricEM、RubricBench 与高质量 Rubric 的生成和使用。</em></p>
+<h2 id="rubric_1">一、为什么开放式任务需要 Rubric</h2>
+<h3 id="1">1. 从唯一答案走向多维质量</h3>
+<p>数学题、代码执行等任务常有明确结果，可以采用 exact match、测试用例或执行成功率。Deep Research、医疗问答、工具型 Agent、长报告等任务通常同时涉及：</p>
+<ul>
+<li>事实是否正确；</li>
+<li>证据是否充分；</li>
+<li>推理是否合理；</li>
+<li>输出是否安全；</li>
+<li>是否真正回应用户意图；</li>
+<li>形式是否专业；</li>
+<li>建议是否可执行。</li>
+</ul>
+<p>这些维度很难压缩成一个稳定、透明的标量奖励。刘文涵给出的定义是：<strong>Rubric 把隐含的答案偏好拆成可检查的 checklist，每项描述一个具体质量维度，并可带有权重。</strong><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=106&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:01:46]">[P02 00:01:46]</a></p>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p02_frame_009_00-01-37.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p02_frame_009_00-01-37.jpg" alt="图 02 · P02 · 00:01:37：综述报告用数学推理、医疗问答、代码生成、工具 Agent、视频理解等任务说明 Rubric 的跨任务适用性。" loading="lazy"></a><figcaption>图 02 · P02 · 00:01:37：综述报告用数学推理、医疗问答、代码生成、工具 Agent、视频理解等任务说明 Rubric 的跨任务适用性。</figcaption></figure>
+<p><em>图 02 · P02 · 00:01:37：综述报告用数学推理、医疗问答、代码生成、工具 Agent、视频理解等任务说明 Rubric 的跨任务适用性。</em></p>
+<p>Rubric 还要和三个邻近概念区分：</p>
+<ul>
+<li><strong>Rubric 与 LLM-as-a-Judge：</strong> 前者是评价标准，后者是执行评价的评估者。</li>
+<li><strong>Rubric 与 Reward Model：</strong> Reward Model 输出奖励；Rubric 使奖励的依据更透明、更容易诊断。</li>
+<li><strong>Rubric 与 RLVR：</strong> RLVR 适合结果可验证的任务；Rubric 更适合答案不唯一、质量维度复杂的任务，同时也能用于可验证任务的中间过程。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=409&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:06:49]">[P02 00:06:49]</a></li>
+</ul>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p02_frame_010_00-08-05.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p02_frame_010_00-08-05.jpg" alt="图 03 · P02 · 00:08:05：幻灯片明确区分了 Rubric、LLM-as-a-Judge、Reward Model 与 RLVR 的角色和适用范围。" loading="lazy"></a><figcaption>图 03 · P02 · 00:08:05：幻灯片明确区分了 Rubric、LLM-as-a-Judge、Reward Model 与 RLVR 的角色和适用范围。</figcaption></figure>
+<p><em>图 03 · P02 · 00:08:05：幻灯片明确区分了 Rubric、LLM-as-a-Judge、Reward Model 与 RLVR 的角色和适用范围。</em></p>
+<h3 id="2">2. 从标准到分数：三种聚合方式</h3>
+<p>给定若干条标准后，还要把逐项判断转成训练或评测可用的结果。综述归纳了三种方式：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=325&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:05:25]">[P02 00:05:25]</a></p>
+<table>
+<thead>
+<tr>
+<th>聚合方式</th>
+<th>做法</th>
+<th>适用条件</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均聚合</td>
+<td>各项等权平均</td>
+<td>各维度重要性接近</td>
+<td>关键约束被普通项目稀释</td>
+</tr>
+<tr>
+<td>加权聚合</td>
+<td>依据权重求和</td>
+<td>维度优先级明确</td>
+<td>静态权重无法适应任务与训练阶段</td>
+</tr>
+<tr>
+<td>隐式聚合</td>
+<td>把全部标准和答案交给模型综合判断</td>
+<td>希望降低调用次数</td>
+<td>逐项贡献难以解释，复现性较弱</td>
+</tr>
+</tbody>
+</table>
+<p>简单加权尤其容易掩盖项目之间的逻辑关系。医疗场景中的安全约束可能应当成为否决条件：一旦违反，其他项目得分再高也无法弥补。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1037&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:17:17]">[P02 00:17:17]</a> 因此，Rubric 不能总被理解为一组相互独立、线性相加的分数。</p>
+<h3 id="3-rubric">3. Rubric 的四级构造谱系</h3>
+<p>综述把构造方式组织成逐渐增强的四类：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=499&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:08:19]">[P02 00:08:19]</a></p>
+<ol>
+<li><strong>直接生成：</strong> 把问题、参考答案或背景证据交给专家或模型，一次生成标准。高效、易扩展，质量高度依赖提示词或专家水平。</li>
+<li><strong>对比生成：</strong> 加入高低质量回答，让模型从差异中提取标准。区分性更强，仍然缺少生成后的质量闭环。</li>
+<li><strong>迭代优化：</strong> 生成后用偏好判断准确率、原子性、覆盖率等指标反复修订。</li>
+<li><strong>在线演化：</strong> 根据当前策略模型的 rollout 和失败模式动态更新 Rubric。</li>
+</ol>
+<p>在线演化可以避免静态标准迅速过时，也带来新的代价：需要持续调用生成模型，会拖慢训练；Rubric 还可能与特定策略模型过度耦合，迁移到其他模型时失效。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=706&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:11:46]">[P02 00:11:46]</a></p>
+<h2 id="rubric_2">二、好的 Rubric 必须先经得起自身评估</h2>
+<h3 id="1_1">1. “看起来完整”远远不够</h3>
+<p>P02 提出了三类基础评估：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=830&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:13:50]">[P02 00:13:50]</a></p>
+<ul>
+<li>与专家标准的一致性或相似度；</li>
+<li>用于下游偏好判断时的准确率与区分度；</li>
+<li>对关键质量维度的覆盖率。</li>
+</ul>
+<p>P05 把这套原则进一步整理成三层六项检验：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=270&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:04:30]">[P05 00:04:30]</a></p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>检验项</th>
+<th>实际含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单条标准</td>
+<td>任务对齐且具体</td>
+<td>紧扣当前问题、受众、格式与关键风险</td>
+</tr>
+<tr>
+<td>单条标准</td>
+<td>自包含</td>
+<td>Judge 无需临时搜索或猜测外部事实</td>
+</tr>
+<tr>
+<td>单条标准</td>
+<td>原子且可直接判定</td>
+<td>一项检查一个清晰维度，并可指出证据</td>
+</tr>
+<tr>
+<td>整套标准</td>
+<td>覆盖完整且互不重复</td>
+<td>覆盖显式要求、隐含约束和失败模式</td>
+</tr>
+<tr>
+<td>整套标准</td>
+<td>有区分度且权重合理</td>
+<td>能区分相近回答，权重反映真实重要性</td>
+</tr>
+<tr>
+<td>评分验证</td>
+<td>跨 Judge 稳定且抵抗捷径</td>
+<td>改写措辞或更换模型后，判断仍较稳定</td>
+</tr>
+</tbody>
+</table>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p05_frame_034_00-06-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p05_frame_034_00-06-53.jpg" alt="图 04 · P05 · 00:06:53：周阳将好 Rubric 总结为三层六项检验，并强调单项可执行、整体覆盖充分、评分稳定可靠。" loading="lazy"></a><figcaption>图 04 · P05 · 00:06:53：周阳将好 Rubric 总结为三层六项检验，并强调单项可执行、整体覆盖充分、评分稳定可靠。</figcaption></figure>
+<p><em>图 04 · P05 · 00:06:53：周阳将好 Rubric 总结为三层六项检验，并强调单项可执行、整体覆盖充分、评分稳定可靠。</em></p>
+<p>“完整、正确、有帮助”之类的表述适用于几乎所有任务，因此很难告诉模型究竟要改什么。自包含则要求把判定所需事实写入标准：若要检查某个数字，就应给出目标数字，让 Judge 直接核验，避免依赖它的记忆或临时猜测。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=286&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:04:46]">[P05 00:04:46]</a></p>
+<p>原子性要求拆开混合条件。例如“结论准确、论证充分、表达清晰”包含三个维度；合并后，Judge 遇到部分满足时很难稳定打分。拆分之后，每个缺陷才能转化为清晰的训练信号。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=382&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:06:22]">[P05 00:06:22]</a></p>
+<h3 id="2-rubric-rubric">2. 评测 Rubric 与训练 Rubric 有不同生命周期</h3>
+<p>PANEL 给出了整场最重要的分歧之一：</p>
+<ul>
+<li><strong>用于 Benchmark 或长期评测时，</strong> Rubric 应追求全局覆盖，能够区分旧模型、当前模型和未来更强模型，还要深入用户意图与隐含质量要求。</li>
+<li><strong>用于 RL 时，</strong> Rubric 只需抓住当前策略的可学习差异；标准过难、所有 rollout 都得零分，同样无法产生梯度。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=363&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:06:03]">[P06 00:06:03]</a></li>
+</ul>
+<p>所以，深刻不等于可训练。某条标准即使触及任务最深层的要求，只要当前模型完全无法达到，它在这一阶段仍然缺乏训练价值。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=429&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:07:09]">[P06 00:07:09]</a></p>
+<p>训练 Rubric 很可能是消耗品。周阳指出，一套标准帮助当前模型补齐缺口之后，区分度便会降低；下一轮模型需要新的、更细的标准。用于 SFT 数据构造或长期评测的 Rubric 则更适合沉淀复用。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1856&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:30:56]">[P05 00:30:56]</a></p>
+<h3 id="3-rubric-gap">3. “Rubric Gap”：模型会判断，却未必会定义标准</h3>
+<p>RubricBench 的核心发现可以概括为 <strong>Reasoning Engine 与 Priority Engine 的分离</strong>：现代模型得到人类高质量 Rubric 后，判断能力相当不错；让它自行提出标准时，准确率出现显著下降。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=971&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:16:11]">[P04 00:16:11]</a></p>
+<p>报告所示结果中，自生成 Rubric 的偏好判断大约停留在五十多分，而人类标准把多种模型推到八十分以上。讲者据此判断，模型已经具备相当的判别推理能力，主要缺口集中在“自动发现有效评价维度”。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=894&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:14:54]">[P04 00:14:54]</a></p>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p04_frame_031_00-27-22.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p04_frame_031_00-27-22.jpg" alt="图 05 · P04 · 00:27:22：Rubric Gap 页面显示：自生成标准的偏好准确率约有 58% 的天花板，使用人类金标准后可跃升至约 85%。" loading="lazy"></a><figcaption>图 05 · P04 · 00:27:22：Rubric Gap 页面显示：自生成标准的偏好准确率约有 58% 的天花板，使用人类金标准后可跃升至约 85%。</figcaption></figure>
+<p><em>图 05 · P04 · 00:27:22：Rubric Gap 页面显示：自生成标准的偏好准确率约有 58% 的天花板，使用人类金标准后可跃升至约 85%。</em></p>
+<p>增加采样次数也没有自然解决问题。机器反复生成更多 Rubric，收益很小；让模型自行迭代改写，结果甚至可能下降。人类标准随着有效项目增多却能持续提升判断效果。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1044&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:17:24]">[P04 00:17:24]</a></p>
+<p>模型常把评价预算花在字数、格式、代码语法等显眼特征上，遗漏受众、真实意图、诚实性和不可满足约束。张启源把它称为注意力错置及认知层面的 misalignment。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1191&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:19:51]">[P04 00:19:51]</a></p>
+<h3 id="4-rubricbench">4. RubricBench 如何建立人类参照</h3>
+<p>RubricBench 覆盖 Chat、Instruction Following、Code、STEM 与 Safety 五类任务。它从已有偏好数据池中筛选高复杂度输入、具有挑战性的输出及真实推理失败，再进行双人标注和专家合并，最终得到 1,147 个样本。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=546&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:09:06]">[P04 00:09:06]</a></p>
+<p>标注者只依据指令写 Rubric，避免查看待比较的回答，以降低针对某个答案量身定制标准的风险。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=745&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:12:25]">[P04 00:12:25]</a></p>
+<p>这套方法仍把人类标准当作实用参照，并不意味着人类判断天然无偏。P02 已经提醒：Rubric 的写法、Judge 模型和领域专家本身都可能带来偏差。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1664&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:27:44]">[P02 00:27:44]</a></p>
+<h2 id="_4">三、从“给答案打分”到“组织整个智能体”</h2>
+<h3 id="1_2">1. 长程任务真正缺少的是信用分配</h3>
+<p>如果一个 Deep Research Agent 经历计划、搜索、工具调用、证据整理和长报告写作，最后只收到一个总分，系统只能知道整条轨迹有问题，却无法定位问题出现在哪一段。即使最终答案失败，前面的搜索方向也可能完全正确。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=218&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:03:38]">[P03 00:03:38]</a></p>
+<p>RubricEM 因此把 Rubric 定义为三类活动的共享接口：</p>
+<ul>
+<li>组织策略执行；</li>
+<li>承载 Judge 反馈；</li>
+<li>保存可复用经验。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=134&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:02:14]">[P03 00:02:14]</a></li>
+</ul>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p03_frame_018_00-08-03.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p03_frame_018_00-08-03.jpg" alt="图 06 · P03 · 00:08:03：RubricEM 总览图把结构化轨迹、阶段式 GRPO 与反思元策略连接成同一训练系统。" loading="lazy"></a><figcaption>图 06 · P03 · 00:08:03：RubricEM 总览图把结构化轨迹、阶段式 GRPO 与反思元策略连接成同一训练系统。</figcaption></figure>
+<p><em>图 06 · P03 · 00:08:03：RubricEM 总览图把结构化轨迹、阶段式 GRPO 与反思元策略连接成同一训练系统。</em></p>
+<h3 id="2_1">2. 先把轨迹切成有语义的阶段</h3>
+<p>RubricEM 让任务策略遵循四个阶段：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=701&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:11:41]">[P03 00:11:41]</a></p>
+<ol>
+<li><strong>Plan：</strong> 分析任务、显式需求和隐含限制，生成任务 Rubric 与研究计划。</li>
+<li><strong>Research：</strong> 调用搜索工具，判断结果是否真正推进任务；信息不足时继续搜索或更新计划。</li>
+<li><strong>Review：</strong> 回看证据覆盖情况，检查原始 Rubric 是否满足，并形成报告提纲。</li>
+<li><strong>Answer：</strong> 根据前面建立的标准与证据完成最终报告。</li>
+</ol>
+<p>这里的结构并非给文本加四个标签。每个阶段承担不同功能，从而为后续阶段评分和信用分配提供语义边界。</p>
+<h3 id="3-rubric_1">3. 睡眠与认知衰退：Rubric 如何改变搜索方向</h3>
+<p>报告中的问题是“睡眠模式如何影响老年人的认知衰退”。普通搜索容易找到“睡眠差与认知衰退同时出现”的相关性结论，却不足以回答因果关系。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=868&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:14:28]">[P03 00:14:28]</a></p>
+<p>Plan 阶段生成的 Rubric 会要求区分深度睡眠、睡眠时长等组成因素，讨论因果方向，并寻找机制证据和纵向研究。标准由此直接改变 Research 阶段的查询与证据选择。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=889&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:14:49]">[P03 00:14:49]</a></p>
+<p>如果计划和搜索都做对了，最终报告却漏掉关键机制，阶段式 Judge 可以只惩罚 Answer 阶段。传统 answer-only reward 会把负反馈广播到整条轨迹，连已经正确的计划与研究也一并压低。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1040&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:17:20]">[P03 00:17:20]</a></p>
+<h3 id="4-stage-structured-grpo">4. Stage-Structured GRPO：让标准跟随当前失败模式</h3>
+<p>训练初期，模型的差异可能是“有没有完成任务、有没有事实错误”；训练后期，大多数回答已经满足基础要求，区分点转向证据整合、推理深度和细微遗漏。固定标准很快会失去方差。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1110&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:18:30]">[P03 00:18:30]</a></p>
+<p>RubricEM 让 Judge 对当前策略生成的多条轨迹进行比较，产生 on-policy、stage-wise Rubric。这里的 on-policy 意味着：标准针对模型现在真正会犯的错误生成，而非在训练开始前永久写死。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1142&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:19:02]">[P03 00:19:02]</a></p>
+<p>哪些标准值得保留？其判断与 GRPO 的需求直接相关：如果一条 Rubric 能让不同 rollout 获得明显不同的分数，即分数标准差较高，它具有区分能力；若所有轨迹得分接近，它无法提供有效梯度。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1186&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:19:46]">[P03 00:19:46]</a></p>
+<h3 id="5">5. 反思元策略：参数更新之外的文本更新</h3>
+<p>一条轨迹结束后，还会留下可迁移经验：哪些搜索策略有效、哪些错误容易忽略、哪些标准对类似任务普遍有用。Reflection Meta-Policy 把这些经验总结成 retrospective Rubric，并按两项标准筛选：</p>
+<ul>
+<li>能否帮助同一问题的再次尝试；</li>
+<li>能否迁移到相似的新问题。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1327&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:22:07]">[P03 00:22:07]</a></li>
+</ul>
+<p>得分高的反思进入 Agent Rubric Bank。系统于是同时发生两种学习：</p>
+<ul>
+<li>通过策略梯度更新参数；</li>
+<li>通过 Rubric Bank 保存文本化经验。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1416&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:23:36]">[P03 00:23:36]</a></li>
+</ul>
+<p>Judge Rubric Buffer 保存“如何区分训练轨迹”，Agent Rubric Bank 保存“策略以后怎样做得更好”。两者服务对象不同，尽管都使用自然语言 Rubric 作为载体。</p>
+<p>报告中的实验以 Qwen3-8B 为基础模型；讲者称其在四个 Benchmark 上接近部分闭源搜索系统，并在较少训练步数下超过对比方法。消融实验显示，阶段式奖励、反思策略和经验复用均带来增益。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1484&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:24:44]">[P03 00:24:44]</a> 这些数字属于报告中的实验陈述，不能直接外推到其他模型、Judge 或任务分布。</p>
+<h2 id="rubric_3">四、高质量 Rubric 怎样构造</h2>
+<h3 id="1_3">1. 从真实能力差距出发</h3>
+<p>只让专家根据理想答案凭空写标准，容易得到专家想象中的失败模式，和当前模型真正会犯的错误并不一致。P05 建议准备两类回答：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=610&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:10:10]">[P05 00:10:10]</a></p>
+<ul>
+<li>当前待训练模型的回答，代表真实能力与失败模式；</li>
+<li>经人类确认更优的回答，代表目标方向。</li>
+</ul>
+<p>只有在人类能明确判断后者更好时，这个回答对才进入标注。标注者比较“好回答做到了什么、当前回答漏掉了什么”，由差异提炼 Rubric，再设置权重，并用更多回答检验能否稳定区分质量。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=676&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:11:16]">[P05 00:11:16]</a></p>
+<p>一个简短诗歌案例说明了粗标准的局限：只检查“是否与秋天有关、结构是否完整连贯”，普通答案也能轻易满分。高质量标准需要继续区分意象、表达和更细的完成质量。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=206&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:03:26]">[P05 00:03:26]</a></p>
+<h3 id="2_2">2. 自动生成要经历由粗到细的演化</h3>
+<p>一次提示词生成的 Rubric 往往表面完整，内部夹杂空泛、重复和无法判定的项目。RubricHub 采用的自动流程大致是：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=737&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:12:17]">[P05 00:12:17]</a></p>
+<ol>
+<li>整合任务数据，并结合任务原则生成初始标准；</li>
+<li>用不同模型分别生成，再聚合互补项目；</li>
+<li>用强回答挑战标准；</li>
+<li>如果强回答普遍满分，继续细化以增加区分度；</li>
+<li>检查一致性、饱和、长度偏置、格式偏置和模板捷径；</li>
+<li>通过验证后才进入训练。</li>
+</ol>
+<p>报告提到，较强 Judge 执行生成 Rubric 时得到约 0.9 的 F1 和约 0.74 的 Kappa，但讲者同时强调：这些数值只能证明 Judge 大体看懂了标准，不能证明标准本身适合训练。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=826&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:13:46]">[P05 00:13:46]</a></p>
+<p>PANEL 还给出一项工程警告：自动 Rubric 可能提升内部 Benchmark 分数，同时增加幻觉、降低事实性，最终无法上线。机器生成适合承担初步设计和补充，人类在当前工业实践中仍负责纠偏和质量把关。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=637&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:10:37]">[P06 00:10:37]</a></p>
+<h2 id="rubric_4">五、Rubric 的七种用法：奖励只是起点</h2>
+<h3 id="1_4">1. 直接作为奖励</h3>
+<p>最直接的方式是逐项打分、加权聚合，再用于 RL。这保留了各项诊断信息，但若最终仍压成一个总分，很多结构价值会再次丢失。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=891&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:14:51]">[P05 00:14:51]</a></p>
+<h3 id="2-rollout">2. 引导 rollout 探索</h3>
+<p>弱策略可能完全不知道高质量方向，采不到正向样本。可以让不同 rollout 看到不同子集的 Rubric：有的看到关键风险，有的看到执行步骤，有的看到较完整标准，以扩大探索多样性；最终仍用同一完整标准评分，保证可比较性。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=935&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:15:35]">[P05 00:15:35]</a></p>
+<p>随着策略变强，提示中的特权 Rubric 应逐步减少，避免模型形成依赖。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1008&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:16:48]">[P05 00:16:48]</a></p>
+<h3 id="3-sft">3. 合成更贴近模型分布的 SFT 数据</h3>
+<p>让人完整书写 Agent 的思考、工具调用和长轨迹，成本高、风格差异大。另一种流程是：</p>
+<blockquote>
+<p>问题与 Rubric → 模型生成候选 → 逐项评分 → 找出缺口 → 修复或重生成 → 得到 SFT 数据。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1082&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:18:02]">[P05 00:18:02]</a></p>
+</blockquote>
+<p>这样生成的回答更接近模型自身分布，也可能出现同源盲点与风格收缩，需要更换模型或提示方式打破模板化。</p>
+<h3 id="4-agent">4. 反向规划长程 Agent 轨迹</h3>
+<p>Deep Research 报告的最终要求可以反推所需证据，再反推搜索计划和工具路径。Rubric 在这里成为轨迹脚手架：它规定要搜集什么证据、何时检查覆盖、怎样组织报告。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1249&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:20:49]">[P05 00:20:49]</a></p>
+<p>人工标完整搜索路径几乎不可行，因为一次任务可能包含十几次甚至平均二十余次搜索，且有效路径不唯一。由最终标准反向构造轨迹更容易扩展。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1283&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:21:23]">[P05 00:21:23]</a></p>
+<h3 id="5_1">5. 模拟用户反馈并训练多轮改进</h3>
+<p>若第一轮回答漏掉预算约束，可以把未满足的 Rubric 改写成自然追问：“如果考虑预算，方案该怎么调整？”模型第二轮据此改进，再用同一套标准计算得分增量。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1353&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:22:33]">[P05 00:22:33]</a></p>
+<p>这种方法同时训练初次回答能力和接受反馈后的修订能力。</p>
+<h3 id="6-rubric-on-policy">6. Rubric 辅助的 On-Policy 自蒸馏</h3>
+<p>周阳提出一个尚未实证的设想：学生模型只看到原问题，教师侧额外看到完整 Rubric，从而产生更好的 token 分布，学生再向该分布靠近。由于样本来自学生当前策略，它比固定离线蒸馏更贴近 on-policy 分布。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1480&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:24:40]">[P05 00:24:40]</a></p>
+<p>风险在于特权上下文过强，教师和学生分布差距过大，反而难以学习。讲者明确说明这一用法仍处于构想阶段。</p>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p05_frame_039_00-26-09.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p05_frame_039_00-26-09.jpg" alt="图 07 · P05 · 00:26:09：On-Policy 自蒸馏设想以“Rubric 加可选参考证据”替代示范答案，为自教师提供特权信息。" loading="lazy"></a><figcaption>图 07 · P05 · 00:26:09：On-Policy 自蒸馏设想以“Rubric 加可选参考证据”替代示范答案，为自教师提供特权信息。</figcaption></figure>
+<p><em>图 07 · P05 · 00:26:09：On-Policy 自蒸馏设想以“Rubric 加可选参考证据”替代示范答案，为自教师提供特权信息。</em></p>
+<h3 id="7-ppo-critic">7. 为 PPO 的 Critic 提供结构化特权信息</h3>
+<p>Actor 正常回答问题；Critic 在价值估计时额外看到 Rubric、参考证据或反馈，以更早识别轨迹何处满足或违反关键要求。即使最终奖励只落在最后一个 token，较好的价值估计仍可改善长程信用分配。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1580&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:26:20]">[P05 00:26:20]</a></p>
+<p>这里同样存在信息泄漏：若把最终逐项得分直接告诉 Critic，它可能走捷径，价值预测失去意义。特权信息需要控制强度。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1680&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:28:00]">[P05 00:28:00]</a></p>
+<h2 id="rubric_5">六、四个案例揭示 Rubric 的真正边界</h2>
+<h3 id="_5">案例一：安全约束不能只是普通加分项</h3>
+<p>医疗回答的安全性一旦未满足，其他维度得分再高也无法弥补。Rubric 需要表达否决条件、依赖关系或层级结构，单纯线性加权会产生危险结果。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1061&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:17:41]">[P02 00:17:41]</a></p>
+<h3 id="rollout">案例二：所有 rollout 都错时，相对差异仍有价值</h3>
+<p>在极难任务中，结果奖励可能全为零，模型得不到梯度。Rubric 仍可区分“方向更合理”“证据更多”“错误较少”的轨迹，以相对差异提供训练信号。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=2263&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:37:43]">[P03 00:37:43]</a></p>
+<h3 id="_6">案例三：有最终答案，不等于中间过程无需评估</h3>
+<p>单轮数学题若有可靠结果验证器，Rubric 的增益可能有限。Coding Agent、SWE、开放式数学研究等任务即使最终结果可验证，中间仍包含文件查找、工具调用、假设选择和长程证明，阶段 Rubric 可以改善信用分配。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=2046&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:34:06]">[P03 00:34:06]</a></p>
+<h3 id="_7">案例四：标准越多，效果未必越好</h3>
+<p>机器生成更多表面标准可能导致 checklist bloat。模型因为“勾中更多项目”而奖励冗长、自信或格式漂亮的回答，诚实指出边界的答案反而吃亏。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1063&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:17:43]">[P04 00:17:43]</a></p>
+<p>这一点提醒我们：Rubric 的目标是捕捉重要质量差异，项目数量只是成本变量。</p>
+<h2 id="panel">七、PANEL：共识、分歧与尚未解决的问题</h2>
+<h3 id="1_5">1. 共识：区分度是贯穿评测与训练的核心</h3>
+<p>PANEL 将好 Rubric 归纳为几项共同要求：</p>
+<ul>
+<li>与具体任务及用户意图相关；</li>
+<li>自包含、原子、可判定；</li>
+<li>覆盖关键要求；</li>
+<li>在真实回答上有区分度；</li>
+<li>跨次运行、跨 Judge 较稳定；</li>
+<li>能抵抗长度、格式和关键词捷径；</li>
+<li>在长程任务中可定位到具体阶段。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=91&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:01:31]">[P06 00:01:31]</a></li>
+</ul>
+<figure><a href="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p06_frame_042_00-06-39.jpg" target="_blank" rel="noopener"><img src="../../../notes/NICE%E5%AD%A6%E6%9C%AF/%E4%B8%8D%E6%AD%A2%E4%BA%8E%E5%8F%AF%E9%AA%8C%E8%AF%81%E5%A5%96%E5%8A%B1%EF%BC%9A%E9%9D%A2%E5%90%91%E5%BC%80%E6%94%BE%E5%BC%8F%E4%BB%BB%E5%8A%A1%E7%9A%84%20Rubric__BV1Pmux6zEqQ_%E5%90%88%E9%9B%86/assets/deep/p06_frame_042_00-06-39.jpg" alt="图 08 · P06 · 00:06:39：PANEL 以多人讨论形式比较了评测 Rubric、训练 Rubric、人工标准与动态标准的差异。" loading="lazy"></a><figcaption>图 08 · P06 · 00:06:39：PANEL 以多人讨论形式比较了评测 Rubric、训练 Rubric、人工标准与动态标准的差异。</figcaption></figure>
+<p><em>图 08 · P06 · 00:06:39：PANEL 以多人讨论形式比较了评测 Rubric、训练 Rubric、人工标准与动态标准的差异。</em></p>
+<p>李高棠因时间冲突未参与实时 PANEL，其观点由主持人转述：高质量训练 Rubric 应与当前策略、当前阶段和当前失败模式共同演化，并为中间过程提供稠密信号。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=167&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:02:47]">[P06 00:02:47]</a></p>
+<h3 id="2-rubric">2. 分歧：Rubric 应由谁生成</h3>
+<p>当前实践更接近人机协作：</p>
+<ul>
+<li>人类定义高层原则、不可突破的安全边界和价值优先级；</li>
+<li>模型分析当前 rollout，提出细粒度、query-specific 或 domain-specific 标准；</li>
+<li>人类或独立系统负责过滤、合并和纠偏。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1020&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:17:00]">[P06 00:17:00]</a></li>
+</ul>
+<p>张启源进一步指出，人类标注者本身也会使用模型生成参考回答、寻找灵感并反复汇总。真正值得自动化的是这套协作流程，而非只替换最后的人工填写动作。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=925&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:15:25]">[P06 00:15:25]</a></p>
+<p>完全依赖人工无法支撑自提升与持续学习；完全依赖模型又容易得到模板化、浅层且迅速失去区分度的标准。自动化重点应放在生成候选、搜索反例、发现饱和、聚合分歧和请求人工裁决。</p>
+<h3 id="3-rubric_2">3. 验证 Rubric 需要四层证据</h3>
+<p>PANEL 综合出了四层验证方式：<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1073&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:17:53]">[P06 00:17:53]</a></p>
+<ol>
+<li><strong>语义有效性：</strong> 是否描述了任务真正重要的质量维度。</li>
+<li><strong>判别有效性：</strong> 是否能区分当前策略产生的不同 rollout，并定位到具体阶段。</li>
+<li><strong>执行一致性：</strong> 不同 Judge、不同措辞或重复运行时，评分是否稳定。</li>
+<li><strong>训练有效性：</strong> 用作训练信号后，能否在独立 Benchmark 或外部评价中带来提升。</li>
+</ol>
+<p>此外，Rubric 应在真实偏好对上验证，不能只凭“读起来合理”通过；还应更换不同家族的 Judge，检查是否对生成它的模型存在家族偏向。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1171&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:19:31]">[P06 00:19:31]</a></p>
+<h3 id="4">4. 最大风险：自洽却错误的共同演化</h3>
+<p>关于未来形态，讨论没有形成单一答案。有人期待 Rubric Model 与 Policy Model 一体化训练，让同一个模型生成标准、评价轨迹并提升自己；也有人强调评价与生成目标过度同源，会形成自洽却偏离真实目标的闭环。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1630&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:27:10]">[P06 00:27:10]</a></p>
+<p>主持人转述李高棠的警告：共同演化需要系统外部的固定约束，例如高层人类原则、不可被策略重写的任务目标、隐藏 Benchmark、独立评估模型和专家抽检。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1725&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:28:45]">[P06 00:28:45]</a></p>
+<p>这构成整场 Workshop 的最终边界：</p>
+<blockquote>
+<p>Rubric 可以持续演化，价值锚点不能完全交给被训练的系统自行改写。</p>
+</blockquote>
+<h2 id="_8">八、边界、疑点与时效性</h2>
+<ol>
+<li><strong>ASR 不确定性：</strong> 转写中 Rubric、Reward、GRPO、Judge、Policy 等术语存在多种误写；人名和模型名也有同音错误。本文优先采用分集标题、幻灯片可见文本和语义稳定的表述。</li>
+<li><strong>Benchmark 会过时：</strong> RubricBench 报告人明确表示，排行榜未包含最近一两个月出现的部分方法，适合用来理解研究问题，不能视为长期有效的模型排名。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=796&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:13:16]">[P04 00:13:16]</a></li>
+<li><strong>Judge 依赖尚未充分消除：</strong> RubricEM 默认使用较强 Judge。报告没有完成多种 Judge 的系统消融，讲者认为更强 Judge 通常更好，同时资源成本限制了验证范围。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1774&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:29:34]">[P03 00:29:34]</a></li>
+<li><strong>人类 Rubric 是参照，并非绝对真理：</strong> 专家之间存在价值判断与领域偏差。医疗、教育、法律、道德推理等领域尤其需要记录分歧和优先级。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1704&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:28:24]">[P02 00:28:24]</a></li>
+<li><strong>在线 Rubric 有耦合风险：</strong> 它更贴近当前模型，也更容易只适配某个模型家族，牺牲跨模型泛化。<a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=802&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:13:22]">[P02 00:13:22]</a></li>
+<li><strong>部分用法仍是设想：</strong> P05 的 Rubric 辅助 On-Policy 自蒸馏被明确标记为尚未实践，不能与已完成实验的方案等量看待。</li>
+<li><strong>时间背景：</strong> 开场画面标注 Workshop 日期为 2026-08-02，B 站记录上传日期为 2026-08-07。模型、论文与排行榜陈述反映该场分享时的状态。</li>
+</ol>
+<h2 id="_9">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=18&amp;p=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [P01 00:00:18]">[P01 00:00:18]</a> Workshop 的主题：从可验证奖励走向开放式任务 Rubric</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=59&amp;p=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [P01 00:00:59]">[P01 00:00:59]</a> “好答案”不再只有对错，需要被定义、评估和优化</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=106&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:01:46]">[P02 00:01:46]</a> 开放式任务为何让传统评测与训练信号失效</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=291&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:04:51]">[P02 00:04:51]</a> Rubric 的 checklist 定义与权重</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=409&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:06:49]">[P02 00:06:49]</a> Rubric、Judge、Reward Model 与 RLVR 的区别</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=499&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:08:19]">[P02 00:08:19]</a> 四类 Rubric 构造方法</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=830&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:13:50]">[P02 00:13:50]</a> 如何评估 Rubric 本身</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1037&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:17:17]">[P02 00:17:17]</a> 线性加权的局限与安全否决条件</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1588&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:26:28]">[P02 00:26:28]</a> Reward Hacking、偏差、泛化、个性化与安全</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=134&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:02:14]">[P03 00:02:14]</a> Rubric 作为策略、反馈与记忆的共享接口</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=363&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:06:03]">[P03 00:06:03]</a> RubricEM 的三个模块</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=701&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:11:41]">[P03 00:11:41]</a> Plan、Research、Review、Answer 四阶段</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=868&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:14:28]">[P03 00:14:28]</a> 睡眠与认知衰退案例</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=944&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:15:44]">[P03 00:15:44]</a> Stage-Structured GRPO</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1142&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:19:02]">[P03 00:19:02]</a> On-policy Rubric 如何跟随失败模式演化</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1247&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:20:47]">[P03 00:20:47]</a> Reflection Meta-Policy 与经验复用</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1934&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:32:14]">[P03 00:32:14]</a> 长程任务的核心问题：Credit Assignment</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=2046&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:34:06]">[P03 00:34:06]</a> 结果可验证任务中 Rubric 仍可能有价值</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=395&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:06:35]">[P04 00:06:35]</a> 为什么需要专门评估 Rubric 的 Benchmark</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=626&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:10:26]">[P04 00:10:26]</a> RubricBench 构造流程</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=856&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:14:16]">[P04 00:14:16]</a> 自生成 Rubric 与人类 Rubric 的效果差距</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1044&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:17:24]">[P04 00:17:24]</a> 增加生成数量为何没有自然弥合差距</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1290&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:21:30]">[P04 00:21:30]</a> “处理所有情况”与 Value Inversion</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1542&amp;p=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [P04 00:25:42]">[P04 00:25:42]</a> 垂域训练中人工参与的阶段性作用</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=270&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:04:30]">[P05 00:04:30]</a> 高质量 Rubric 的六项检验</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=549&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:09:09]">[P05 00:09:09]</a> 人工构造 Rubric 的对比式流程</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=737&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:12:17]">[P05 00:12:17]</a> 自动 Rubric 的由粗到细演化</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=935&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:15:35]">[P05 00:15:35]</a> Rubric 引导 rollout 探索</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1082&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:18:02]">[P05 00:18:02]</a> 用 Rubric 合成 SFT 数据</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1249&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:20:49]">[P05 00:20:49]</a> 用最终要求反向规划 Agent 轨迹</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1353&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:22:33]">[P05 00:22:33]</a> 用 Rubric 模拟用户追问</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1480&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:24:40]">[P05 00:24:40]</a> On-Policy 自蒸馏设想</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1580&amp;p=5" target="_blank" rel="noopener" aria-label="在 B 站打开 [P05 00:26:20]">[P05 00:26:20]</a> Rubric 辅助 PPO Critic 的价值估计</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=91&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:01:31]">[P06 00:01:31]</a> PANEL：好 Rubric 的共同标准</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=637&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:10:37]">[P06 00:10:37]</a> 人工 Rubric 与自动 Rubric 的现实取舍</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1073&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:17:53]">[P06 00:17:53]</a> Rubric 的三层验证，加上下游训练验证</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1299&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:21:39]">[P06 00:21:39]</a> 单模型自提升与蒸馏范式之争</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Pmux6zEqQ/?t=1725&amp;p=6" target="_blank" rel="noopener" aria-label="在 B 站打开 [P06 00:28:45]">[P06 00:28:45]</a> 共同演化中的错误闭环及外部约束</li>
+</ul>
+<h2 id="_10">复习与行动清单</h2>
+<h3 id="_11">设计前</h3>
+<ul>
+<li>[ ] 先明确 Rubric 用于长期评测、当前阶段 RL、数据构造，还是 Agent 过程监督。</li>
+<li>[ ] 写清用户、任务、受众、交付形式和不可突破的约束。</li>
+<li>[ ] 收集当前模型的真实失败回答，以及经人工确认的更优回答。</li>
+<li>[ ] 决定哪些项目是加分项、权重项、依赖项或否决项。</li>
+</ul>
+<h3 id="criterion">编写单条 Criterion</h3>
+<ul>
+<li>[ ] 是否针对当前任务，避免“正确、完整、有帮助”这类空泛描述？</li>
+<li>[ ] 是否把判定所需事实写在标准或证据中？</li>
+<li>[ ] 是否只检查一个主要维度？</li>
+<li>[ ] Judge 能否直接给出满足与否及对应证据？</li>
+<li>[ ] 正向要求和负向禁区是否都足够具体？</li>
+</ul>
+<h3 id="rubric_6">检查整套 Rubric</h3>
+<ul>
+<li>[ ] 是否覆盖显式要求、隐含意图、关键风险和常见失败模式？</li>
+<li>[ ] 是否存在重复计分或相互矛盾的项目？</li>
+<li>[ ] 权重是否反映真实优先级？</li>
+<li>[ ] 强回答是否普遍满分，导致标准饱和？</li>
+<li>[ ] 极难标准是否让所有 rollout 都得零分？</li>
+<li>[ ] 是否过度关注长度、格式、模板和关键词？</li>
+</ul>
+<h3 id="_12">上线训练前</h3>
+<ul>
+<li>[ ] 在真实偏好对上测试区分准确率。</li>
+<li>[ ] 更换不同 Judge，检查评分稳定性和模型家族偏向。</li>
+<li>[ ] 用措辞改写测试敏感性。</li>
+<li>[ ] 用强回答、诚实拒绝、格式漂亮但事实错误的回答进行对抗测试。</li>
+<li>[ ] 检查 Rubric 改善的是独立外部指标，还是只提高内部 Benchmark 分数。</li>
+<li>[ ] 为在线演化保留隐藏测试、独立评估模型和人工抽检。</li>
+<li>[ ] 当区分度衰减时更新训练 Rubric，同时保留不可被策略自行改写的高层目标。</li>
+</ul>
+<h3 id="_13">值得继续追问</h3>
+<ol>
+<li>如何把人类的“品味、优先级和隐含意图”转化为可规模化学习的标准？</li>
+<li>Rubric Model 与 Policy Model 应共享多少参数、数据和记忆？</li>
+<li>如何检测二者已经进入自洽却错误的共同演化？</li>
+<li>怎样在不泄漏最终答案的前提下，为 Critic 提供足够的结构化特权信息？</li>
+<li>哪些 Rubric 应作为一次性课程，哪些应沉淀为长期 Benchmark 或 Agent Memory？</li>
+<li>当所有候选都失败时，怎样保证相对差异反映真正进步，而非更隐蔽的 Reward Hacking？</li>
+</ol></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

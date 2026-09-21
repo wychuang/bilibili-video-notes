@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>指标一起变好，就能说改动有效吗？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">指标一起变好，就能说改动有效吗？</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">第一个陷阱：共同原因藏在后面</a></li>
+<li><a href="#_4">第二个陷阱：样本已经被筛过一遍</a></li>
+<li><a href="#_5">预测、解释和干预，验收方式不同</a></li>
+<li><a href="#10">迁移练习：审一条“提升 10%”的结论</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1gZz8BYE3r" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1gZz8BYE3r"><div class="provenance">来源：漫士沉思录 · <a href="https://www.bilibili.com/video/BV1gZz8BYE3r/" target="_blank" rel="noopener">BV1gZz8BYE3r 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">指标一起变好，就能说改动有效吗？</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1gZz8BYE3r/">漫士沉思录｜看完这个视频，你会质疑所有的因果关系</a>；全片约 16 分钟。前半讲因果图，后半介绍商业模型与案例。后半的领先性、性能数字和应用效果未在本笔记中独立复现。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p>两个指标一起变化，可能只是受同一个因素影响；要判断改动有没有用，还得排查其他解释。</p>
+<h2 id="_3">第一个陷阱：共同原因藏在后面</h2>
+<p>视频用冰淇淋销量和游泳事故的例子解释共同原因：天气变热，可能同时增加购买和游泳活动。观察到两件事相关，不能直接得出限制冰淇淋就能减少事故。<a class="timecode" href="https://www.bilibili.com/video/BV1gZz8BYE3r/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1gZz8BYE3r/?t=122" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:02]">[00:02:02]</a></p>
+<p>换成本课程的补充例子：长回答得到更高评分，是否说明把回答加长就能改善质量？也可能是复杂问题获得了更充分的解释；也可能评分人偏好长文本；还可能长回答使用了不同模型。长度与评分之间，藏着未被控制的条件。</p>
+<p>因果图可以先把这些假设画出来：</p>
+<table>
+<thead>
+<tr>
+<th>简单结构</th>
+<th>直观含义</th>
+<th>检查时的提醒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A ← B → C，共同原因</td>
+<td>B 同时影响 A 与 C</td>
+<td>观察到 A、C 相关，不足以证明直接因果</td>
+</tr>
+<tr>
+<td>A → B → C，链条</td>
+<td>A 的影响经过 B 传递</td>
+<td>控制中间环节，可能挡住想研究的总效应</td>
+</tr>
+<tr>
+<td>A → C ← B，共同结果</td>
+<td>两个因素都影响入选条件 C</td>
+<td>只看特定 C 的样本，可能引入额外关联</td>
+</tr>
+</tbody>
+</table>
+<p>这是对视频三种结构的整理。条件独立结论依赖图中的假设与路径；现实还存在额外路径时，不能机械套用。可查 <a href="https://web.cs.ucla.edu/~kaoru/primer-complete-2019.pdf">Pearl 等人的因果推断入门，第 2 章</a>。</p>
+<h2 id="_4">第二个陷阱：样本已经被筛过一遍</h2>
+<p>视频在共同结果结构中说明：我们看见的样本，可能已经按某种结果被挑选。<a class="timecode" href="https://www.bilibili.com/video/BV1gZz8BYE3r/?t=363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:03]">[00:06:03]</a></p>
+<p>一个评测里的补充例子是，只分析“用户投诉过的回答”。假设事实错误和语气冒犯都可能引发投诉，那么这批样本无法代表全部回答。某类问题占比下降，也可能只是另一类投诉增加了。</p>
+<p>因此，报告除了给比例，还要交代样本从哪里来、什么条件会被排除，以及有没有只观察到幸存者。</p>
+<h2 id="_5">预测、解释和干预，验收方式不同</h2>
+<p>预测回答“出现这些条件时，结果通常怎样”；干预则问“主动改变某个条件，会带来什么变化”。视频后半将这一差别与模型应用联系起来。<a class="timecode" href="https://www.bilibili.com/video/BV1gZz8BYE3r/?t=482" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:02]">[00:08:02]</a></p>
+<p>对其商业案例，需要额外保留边界：预测误差下降、注意力落在某些变量上，都不足以单独证明模型找到了真实因果机制。还需检查数据划分、基线、干预证据、混杂因素与适用场景。视频里的图示和宣传数字可以成为待核查主张，无法代替完整证据。</p>
+<p>同样，共同结果结构也不保证一定出现负相关，方向与强度取决于具体机制。这类简化科普适合建立警觉，进一步判断要回到明确的假设。</p>
+<h2 id="10">迁移练习：审一条“提升 10%”的结论</h2>
+<p>假设有人说“新增引用卡片后，回答满意度提高了”。先写出三种其他解释：用户构成改变、模型版本更新、问卷回收人群不同。</p>
+<p>再设计一个更公平的比较：保持问题集和模型一致，随机分配展示版本，预先规定评分标准，同时检查阅读时间与错误识别率。实际能否随机实验，要看产品条件。</p>
+<p>最后把结论改成证据允许的强度：哪些变化已经观察到，哪些因果解释仍待验证。能够克制结论，正是评测判断的一部分。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>给 Agent 一个工作间，也给它一道边界 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">给 Agent 一个工作间，也给它一道边界</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">从“说错”到“做错”，损失会变化</a></li>
+<li><a href="#_3">四块能力，要分别验收</a></li>
+<li><a href="#_4">快照恢复有清楚的边界</a></li>
+<li><a href="#_5">不同隔离技术，不应混成一种魔法</a></li>
+<li><a href="#_6">迁移练习：给一个任务画权限边界</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1JsEc6DEdt" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1JsEc6DEdt"><div class="provenance">来源：AI大模型元元 · <a href="https://www.bilibili.com/video/BV1JsEc6DEdt/" target="_blank" rel="noopener">BV1JsEc6DEdt 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">给 Agent 一个工作间，也给它一道边界</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1JsEc6DEdt/">AI大模型元元 · AI Agent 的沙盒是什么</a> · 17 分钟 · 批判性快读。原视频有较多绝对化描述，本篇将可用框架与未证实的宣传判断分开。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>让 Agent 操作文件与网络时，需要隔离环境、限制权限、控制资源，并保留能追溯的执行记录。</p>
+<h2 id="_2">从“说错”到“做错”，损失会变化</h2>
+<p>聊天模型给出错误建议，人还有机会识别。Agent 若获得文件写入、代码执行与联网能力，错误就可能直接变成文件损坏、信息外传或持续的调用费用。<a class="timecode" href="https://www.bilibili.com/video/BV1JsEc6DEdt/?t=10" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:10]">[00:00:10]</a></p>
+<p>因此不能只在提示词里写“请注意安全”。系统要实际限制它能看见什么、能修改什么、能访问哪些外部服务，以及最多运行多久。</p>
+<h2 id="_3">四块能力，要分别验收</h2>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>一个具体问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>隔离</td>
+<td>任务能否访问工作目录之外的私人文件？</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>读文件与发送文件是否需要不同权限？</td>
+</tr>
+<tr>
+<td>资源限制</td>
+<td>死循环时能否停止，并控制 CPU、内存和调用次数？</td>
+</tr>
+<tr>
+<td>状态与记录</td>
+<td>哪次工具调用改了什么，能恢复到哪里？</td>
+</tr>
+</tbody>
+</table>
+<p>这是视频后半段架构的实用提炼。不同产品可能把这些职责放在不同组件里，不能因为名字叫“沙箱”就推定四项齐全。<a class="timecode" href="https://www.bilibili.com/video/BV1JsEc6DEdt/?t=510" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:30]">[00:08:30]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1JsEc6DEdt/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
+<h2 id="_4">快照恢复有清楚的边界</h2>
+<p>视频用“时光机”比喻回滚。对本地文件或进程状态，这有直观帮助；已经发出的邮件、已经提交的支付、外部系统收到的数据，却不会随本地快照自动撤回。</p>
+<p>因此有外部影响的动作仍要在执行前确认，并设计幂等、防重复提交和补偿流程。日志也需要脱敏，不能为了便于排查就长期保存全部机密输入。</p>
+<h2 id="_5">不同隔离技术，不应混成一种魔法</h2>
+<p>原视频把 Firecracker、gVisor 等技术放进同一条叙事，但它们的机制不同：Firecracker 面向轻量微虚拟机；gVisor 提供用户态应用内核式隔离。它们都要结合配置、权限和更新来评估，不能用“彻底防逃逸”概括安全保证。<a href="https://firecracker-microvm.github.io/">Firecracker 官方说明</a> · <a href="https://gvisor.dev/docs/architecture_guide/intro/">gVisor 架构说明</a></p>
+<p>视频里的“所有环境毫秒级回滚”“风险归零”“没有沙箱就无法合规”等说法缺少适用条件，本文不采用。法规结论需要具体法域和场景核对，不能从产品讲解直接推出。<a class="timecode" href="https://www.bilibili.com/video/BV1JsEc6DEdt/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1JsEc6DEdt/?t=770" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:50]">[00:12:50]</a></p>
+<h2 id="_6">迁移练习：给一个任务画权限边界</h2>
+<p>以“读取三份报告并生成摘要”为例，明确输入目录只读、输出目录可写、是否允许联网、最大运行时间、哪些操作必须确认。</p>
+<p>再设计三个无害测试：尝试读一个未授权的测试目录；模拟网络失败；让任务超过预算。记录系统是否清楚说明被拦截的原因。所有测试都在专用样本环境中完成，避免拿真实私人文件做试验。</p>
+<p>这条视频适合帮助列出问题。真正选择隔离方案时，应继续查对应实现的威胁模型与限制。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

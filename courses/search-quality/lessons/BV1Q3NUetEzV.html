@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>找到“长得像”的句子，为什么仍然答错？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">找到“长得像”的句子，为什么仍然答错？</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#_3">推理主干</a></li>
+<li><a href="#1">1. “像”至少有几种不同意思</a></li>
+<li><a href="#2">2. 相似度高，仍然可能找错人</a></li>
+<li><a href="#3">3. 加上重排、图谱，问题会自动消失吗？</a></li>
+<li><a href="#4">4. 回到数据，先把关系分清楚</a></li>
+<li><a href="#_4">边界、疑点与时效性</a></li>
+<li><a href="#_5">时间戳导航</a></li>
+<li><a href="#_6">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1Q3NUetEzV" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1Q3NUetEzV"><div class="provenance">来源：果粒奶优有果粒 · <a href="https://www.bilibili.com/video/BV1Q3NUetEzV/" target="_blank" rel="noopener">BV1Q3NUetEzV 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">找到“长得像”的句子，为什么仍然答错？</h1>
+<blockquote>
+<p>原视频：Embedding 正在摧毁你的 RAG？？ · 果粒奶优有果粒 · 约 26 分钟。本文保留案例，并单独检查其中推论的边界。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p><strong>向量距离可以帮我缩小搜索范围，但距离近的材料，未必包含当前问题需要的那条事实。</strong></p>
+<h2 id="_3">推理主干</h2>
+<p>问题要求特定事实 → 检索器按某种相似性排序 → 相近概念混入 → 生成模型拿着偏掉的证据回答 → 我需要回到业务里的“相关”究竟指什么。</p>
+<p>想象我要查某位国王的母亲。找到一篇同名国王的传记，看上去比找到一张陌生的家谱更“相关”；但真正能回答问题的，可能恰好是家谱里的那一行。这个区别决定了检索系统能否交付正确答案。</p>
+<h2 id="1">1. “像”至少有几种不同意思</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=28" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:28]">[00:00:28]</a> embedding 把文本编码成数值向量。它的用途是让计算机可以比较文本之间的关系；它不会自动替我定义业务问题里的正确答案。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=227" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:47]">[00:03:47]</a> 原视频用 king、queen、ruler 做对照：国王与王后在语境中经常一起出现，都属于皇室角色，所以它们可能获得较高的相似度。可是当任务要求找一个可以指代国王的词时，ruler 这种“统治者”的表达可能更有用。</p>
+<figure><a href="../assets/frames/BV1Q3NUetEzV-00240.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1Q3NUetEzV-00240.jpg" alt="画面并排展示 king 与 queen、ruler 的分数及完整句子的比较；这些数字属于这次示例。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=240&amp;p=1" target="_blank" rel="noopener">[00:04:00]</a> 画面并排展示 king 与 queen、ruler 的分数及完整句子的比较；这些数字属于这次示例。</figcaption></figure>
+<p>这里容易混淆两件事：共同出现、属于同一话题，能够产生相近的表示；满足特定问题的条件，还需要检查身份、关系和限定词。原视频口述及自动字幕里的个别英文释义不准确，ruler 在这个语境下应理解为“统治者”。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=377" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:17]">[00:06:17]</a> 之后的例子把问题拆成四类：对象是什么、发生在何时、位于何处、采取什么动作。猫与狗都属于常见宠物，但猫的属性问题可能更需要猫科动物的资料；两个数字外形接近的年份，也可能指向完全不同的时期。</p>
+<p>我应当问的具体问题是：<strong>当前检索器是否保住了任务真正敏感的差异？</strong> 对维修手册来说，这可能是零件型号；对政策问答来说，是适用地区和生效日期；对人物查询来说，是同名消歧。后面这些属于迁移例子。</p>
+<h2 id="2">2. 相似度高，仍然可能找错人</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=587" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:47]">[00:09:47]</a> 原视频引用了一个阿方索二世与阿方索七世的回答混淆案例，并比较名字和关系词变化后的相似度。</p>
+<p>这个案例值得记住的部分是：问题中的实体身份很关键。把“谁的母亲”里的“谁”弄错，剩下的语言再流畅也无法补救。</p>
+<p>但仅凭输出错误，无法反推出模型训练集中究竟包含了谁、遗漏了谁。原视频对训练语料的解释属于推测，没有展示可以验证内部训练数据的证据。公开学习笔记应把“观察到混淆”与“已经知道内部原因”分开。</p>
+<p>同样，某两个短语的向量得分，也不能直接当作事实正确率。要评价检索器，需要准备真实问题、相关文档标注，并统计它在整组任务上的表现。</p>
+<h2 id="3">3. 加上重排、图谱，问题会自动消失吗？</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=783" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:03]">[00:13:03]</a> 后半段依次讨论重排、知识图谱、混合检索和长上下文。可迁移的问题意识是：多加一个组件，需要检查它是否真的修复了当前错误。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=992" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:32]">[00:16:32]</a> 原视频引用不同研究的分数，表达对一些方案表现的怀疑。这里必须保留一个边界：不同论文的任务、数据集、模型和指标未必可比。某项测试得分较低，无法独立证明重排或图谱整体无效。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 复杂组合还会带来延迟。我的优化目标至少有两项：用户拿到的答案是否更可靠，以及等待和资源成本是否值得。堆叠组件如果没有消融实验，就很难知道改善来自哪里。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1260" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:00]">[00:21:00]</a> 长上下文可以让模型读更多内容，但“放得进去”与“能稳定找对并利用”是两个需要分别测试的能力。读入更多材料，也会增加无关信息和冲突证据的处理负担。</p>
+<h2 id="4">4. 回到数据，先把关系分清楚</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:43]">[00:22:43]</a> 最后的建议是先结合业务缩小范围，再做向量匹配。<a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1381" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:01]">[00:23:01]</a> 用到的关系包括同义、上下位、整体与部分。</p>
+<figure><a href="../assets/frames/BV1Q3NUetEzV-01400.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1Q3NUetEzV-01400.jpg" alt="关系表列出同义、上下位、整体与部分，提醒我先确定任务所需的语义关系。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1400&amp;p=1" target="_blank" rel="noopener">[00:23:20]</a> 关系表列出同义、上下位、整体与部分，提醒我先确定任务所需的语义关系。</figcaption></figure>
+<p>这些关系对应不同的检索需求：</p>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>直观例子</th>
+<th>要检查什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同义或别名</td>
+<td>剃须刀、刮胡刀</td>
+<td>换一种说法，能否找到同一对象</td>
+</tr>
+<tr>
+<td>上下位</td>
+<td>动物与狗</td>
+<td>广义知识是否适用于具体对象</td>
+</tr>
+<tr>
+<td>整体与部分</td>
+<td>汽车与方向盘</td>
+<td>问部件时，能否定位到相关章节</td>
+</tr>
+<tr>
+<td>身份与条件</td>
+<td>人名、型号、日期</td>
+<td>看似相近的对象是否被混为一谈</td>
+</tr>
+</tbody>
+</table>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1477" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:37]">[00:24:37]</a> 维修手册的例子提醒我：最值得构造的评测样本，往往就在实际业务的常见说法和容易混淆的对象里。</p>
+<h2 id="_4">边界、疑点与时效性</h2>
+<p>本篇依据自动字幕重构；模型名、论文表格数字应回到画面核对。文章没有复现原视频实验，也不接受标题隐含的“embedding 导致所有 RAG 失败”这一泛化结论。</p>
+<p>补充核对：GraphRAG 官方将其描述为利用图结构和社区摘要支持检索与综合的方法。比较时应对齐具体查询任务，不能由某个任务的单项分数宣布所有场景的优劣。<a href="https://microsoft.github.io/graphrag/">GraphRAG 官方说明</a></p>
+<h2 id="_5">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=28" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:28]">[00:00:28]</a> embedding 的直觉。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=227" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:47]">[00:03:47]</a> 皇室相关性与指代关系。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=377" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:17]">[00:06:17]</a> 对象、时间、地点、动作四类差异。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=587" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:47]">[00:09:47]</a> 人物身份混淆。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=783" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:03]">[00:13:03]</a> 逐项审视增强组件。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 准确性与延迟的代价。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:43]">[00:22:43]</a> 用领域关系约束搜索。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1477" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:37]">[00:24:37]</a> 维修手册中的同义表达。</li>
+</ul>
+<h2 id="_6">复习与行动清单</h2>
+<p>迁移练习：用公开、无个人信息的产品说明书，写三对问题：别名相同、型号相近、部件与整机。为每题指定一段真正能回答它的材料，再观察“最像的段落”是否等于“有用的证据”。</p>
+<p>能够解释一条失败，并指出缺少哪个约束，比背诵检索组件名称更有价值。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

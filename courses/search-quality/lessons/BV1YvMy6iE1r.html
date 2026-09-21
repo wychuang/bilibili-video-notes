@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>评测最难的部分：先说清什么才算帮到人 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">评测最难的部分：先说清什么才算帮到人</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#1">1. “匹配”里藏着产品判断</a></li>
+<li><a href="#2">2. 容易答的题，不一定最值得测</a></li>
+<li><a href="#3">3. 最后的话说错了，原因可能在更早的地方</a></li>
+<li><a href="#_3">迁移练习：亲手写一张小评测卡</a></li>
+<li><a href="#_4">时间戳导航</a></li>
+<li><a href="#_5">复习与行动清单</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1YvMy6iE1r" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1YvMy6iE1r"><div class="provenance">来源：林木聊AI · <a href="https://www.bilibili.com/video/BV1YvMy6iE1r/" target="_blank" rel="noopener">BV1YvMy6iE1r 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">评测最难的部分：先说清什么才算帮到人</h1>
+<blockquote>
+<p>原视频：被 AI 产品当作 dirtywork，实际很重要的工作 · 林木聊AI · 4 分 28 秒。证据：本地 GPU 自动转写。片尾课程推广不进入学习主线。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p><strong>评测连接用户理解与系统改进：先定义有价值的结果，再选有区分度的问题，最后沿处理链路定位错误。</strong></p>
+<h2 id="1">1. “匹配”里藏着产品判断</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=26" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:26]">[00:00:26]</a> 一个求职推荐产品面对学财务、做过财务实习的学生。只按履历相似度推荐财务岗位，看起来很合理；如果他希望转向产品，并且具备一定条件，一味推同类岗位就可能没有回应真正目标。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a> 另一个取舍是：某岗位表面上高度匹配，但竞争激烈；另一岗位匹配度稍低，用户却有明显的差异化优势。怎样推荐，需要说明采用了什么标准和风险偏好。</p>
+<p>因此，评价“推荐得好不好”前，至少要区分：能否胜任、是否愿意、现实约束、机会和不确定性。不能把一个模糊的“匹配度”同时当作这些维度的答案。</p>
+<p>补充边界：没有招聘结果数据时，不应把估计包装成精确的录用概率。可以解释为什么值得尝试，并保留需要核实的条件。</p>
+<h2 id="2">2. 容易答的题，不一定最值得测</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=95" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:35]">[00:01:35]</a> 客服评测常出现“怎么退款”“怎么修改地址”等规整问题。真实用户却可能说：“昨天买的东西不想要了，好像已经发货，现在能取消吗？”<a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></p>
+<p>后者需要识别订单、检查物流状态、读取规则，再决定下一步。只覆盖标准问法，可能让一个无法完成实际任务的系统拿到漂亮分数。</p>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a> 还有低频但高损失的错误：重复退款、错误赔付、跨用户泄露信息。它们未必贡献很多平均分，却可能直接决定产品是否可上线。</p>
+<p>我可以把问题集分成三组：常见任务、容易混淆的边界、必须避免的严重失败。再补充各组的抽样方式与数量，避免用少量特别挑选的案例代表全部用户。</p>
+<h2 id="3">3. 最后的话说错了，原因可能在更早的地方</h2>
+<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=182" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:02]">[00:03:02]</a> 销售助手给出错误建议，可能是意图分类错、客户资料不全、检索到过期资料、商机阶段判断错，或者工具未执行成功。</p>
+<p>如果错误主要集中在老客户，一个可测试的假设是历史沟通记录没有完整取回；如果退款任务经常失败，应检查参数和执行结果。先让错误分布产生假设，再检验相应节点。<a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a></p>
+<p>这条路径可以写成：</p>
+
+<code class="language-text">看到坏回答
+→ 按用户情境和任务类型分组
+→ 提出具体失败假设
+→ 查看对应节点的输入与输出
+→ 做一个最小改动
+→ 用原问题和新问题共同复测
+</code>
+<h2 id="_3">迁移练习：亲手写一张小评测卡</h2>
+<p>使用虚构用户和公开材料，避免把真实求职资料放进公开样本。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>要填写的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务</td>
+<td>用户最终要做出的动作或决定</td>
+</tr>
+<tr>
+<td>前提</td>
+<td>已知条件、限制、仍需追问之处</td>
+</tr>
+<tr>
+<td>必须满足</td>
+<td>三条可以观察的结果标准</td>
+</tr>
+<tr>
+<td>严重错误</td>
+<td>一条出现就不能通过的失败</td>
+</tr>
+<tr>
+<td>证据</td>
+<td>原回答中的具体句子或工具记录</td>
+</tr>
+<tr>
+<td>修复假设</td>
+<td>指向哪个节点，如何验证</td>
+</tr>
+</tbody>
+</table>
+<p>不要在看到两份答案之后才临时改标准来支持自己喜欢的那份。可以修订标准，但要记录版本，并回头检查旧样本是否需要重评。</p>
+<h2 id="_4">时间戳导航</h2>
+<ul>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=17" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:17]">[00:00:17]</a> 标准体现产品的价值判断。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=26" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:26]">[00:00:26]</a> 求职推荐中的转向意愿。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a> 匹配、竞争与差异化优势。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=95" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:35]">[00:01:35]</a> 测试题的价值并不相同。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a> 真实退款任务的多步条件。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a> 低频高损失边界。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=182" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:02]">[00:03:02]</a> 错误可以发生在多个节点。</li>
+<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a> 从错误分布产生可检验假设。</li>
+</ul>
+<h2 id="_5">复习与行动清单</h2>
+<p>读完后，我应能回答：一个回答让我“不满意”，具体是哪项任务标准没有满足？什么证据支持这个判断？做什么实验可以区分两个可能的原因？</p>
+<p>这三个问题说清楚，就已经从主观打分迈向了可执行的评测。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>极简 Agent：少几个内置功能，会得到什么 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#agent">极简 Agent：少几个内置功能，会得到什么</a><ul>
+<li><a href="#_1">一句话抓住核心</a></li>
+<li><a href="#_2">先看一个宝可梦查询</a></li>
+<li><a href="#_3">最小工具箱仍然很有力量</a></li>
+<li><a href="#_4">会话树能回到过去，但不会替文件回滚</a></li>
+<li><a href="#skill">Skill 和扩展，分别解决什么</a></li>
+<li><a href="#_5">迁移练习：删掉一个功能再判断</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1aW3V6WEsT" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1aW3V6WEsT"><div class="provenance">来源：肖恩君Sean · <a href="https://www.bilibili.com/video/BV1aW3V6WEsT/" target="_blank" rel="noopener">BV1aW3V6WEsT 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">极简 Agent：少几个内置功能，会得到什么</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1aW3V6WEsT/">肖恩君Sean · Pi Agent 极简 Harness 系统设计</a> · 23 分钟 · 快读。功能与目录按录制版本理解。</p>
+</blockquote>
+<h2 id="_1">一句话抓住核心</h2>
+<p>把执行循环做小，把可变能力放到扩展里，可以降低理解与组合成本；安全责任仍要有人承担。</p>
+<h2 id="_2">先看一个宝可梦查询</h2>
+<p>视频让外层助手把编码任务交给 Pi，生成一个查询宝可梦资料的脚本。外层负责委派，Pi 负责具体编码，再把结果交回。这个例子说明，编码 Agent 可以作为另一个系统中的一个能力被调用。<a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=85" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:25]">[00:01:25]</a></p>
+<p>Pi 的几个入口服务于不同使用方式：终端交互适合人直接操作；单次命令适合脚本调用；结构化事件输出方便其他程序观察过程。事件输出能展示可见执行信息，不能据此断言已经获得模型全部内部推理。<a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=162" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:42]">[00:02:42]</a></p>
+<h2 id="_3">最小工具箱仍然很有力量</h2>
+<p>读取、写入、编辑和 shell 命令，构成演示中的核心工具。模型据上下文决定是否调用工具，执行结果再回到循环。<a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a></p>
+<p>工具数量少，不等于权限小。shell 可以启动其他程序、读取文件和联网；缺少内置审批弹窗时，宿主系统尤其需要限制目录、网络与凭据范围。演示中的简洁体验不应直接复制成对真实电脑的无限授权。</p>
+<h2 id="_4">会话树能回到过去，但不会替文件回滚</h2>
+<p>演示从先前某条对话分叉，继续追问另一只宝可梦。会话树有助于比较不同思路，也便于恢复讨论上下文。<a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=625" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:25]">[00:10:25]</a></p>
+<p>需要分清：对话分叉与文件版本管理是两个机制。回到旧消息不代表已经撤销磁盘上的修改。做实际编码试验时，仍要保存工作区版本或使用隔离副本。</p>
+<h2 id="skill">Skill 和扩展，分别解决什么</h2>
+<p>视频先写一个查询图鉴的 Skill，说明要获取哪些属性以及怎样操作；再用 TypeScript 扩展定义属性克制计算工具。询问如何击败某只宝可梦时，系统可以调用明确的计算逻辑。<a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=878" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:38]">[00:14:38]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1aW3V6WEsT/?t=1010" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:50]">[00:16:50]</a></p>
+<p>Skill 更接近可复用的操作说明，扩展可以注册执行能力与程序逻辑。两者还能打包分发。这样，基础运行时不必预装每个人都未必需要的功能。</p>
+<p>代价是组合与维护工作转移到了使用者：包是否可信、接口能否兼容、升级是否破坏原有任务，都需要验证。下载热度不能替代检查。</p>
+<h2 id="_5">迁移练习：删掉一个功能再判断</h2>
+<p>为一个简单文档整理 Agent 列出所有能力，圈出完成任务必需的三个。把其他能力暂时关闭，在相同样本上比较成功率、操作步骤与错误类型。</p>
+<p>如果关闭某项能力没有损失，就获得了简化依据；若质量下降，记录具体缺失了什么。用任务证据决定复杂度，比凭“极简”或“全能”的口号更容易做出稳妥选择。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>

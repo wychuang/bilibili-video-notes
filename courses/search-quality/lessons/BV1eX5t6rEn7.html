@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
+<title>接入知识之前，先选一条最短的路 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
+<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<ul>
+<li><a href="#_1">接入知识之前，先选一条最短的路</a><ul>
+<li><a href="#_2">一句话抓住核心</a></li>
+<li><a href="#ai">同样是“给 AI 一点资料”，其实有五种任务</a></li>
+<li><a href="#_3">精确的东西，先尝试精确地找</a></li>
+<li><a href="#rag">用上 RAG 后，别只盯着向量模型</a></li>
+<li><a href="#_4">评测和整理数据，要先于架构竞赛</a></li>
+<li><a href="#_5">迁移练习：给三个问题分路由</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<button class="done" data-done="BV1eX5t6rEn7" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1eX5t6rEn7"><div class="provenance">来源：blackstone_99 · <a href="https://www.bilibili.com/video/BV1eX5t6rEn7/" target="_blank" rel="noopener">BV1eX5t6rEn7 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">接入知识之前，先选一条最短的路</h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV1eX5t6rEn7/">blackstone_99 · RAG 五条路线对比</a> · 11 分钟 · 自动转写。录制中的价格、产品能力与行业判断具有时效性。</p>
+</blockquote>
+<h2 id="_2">一句话抓住核心</h2>
+<p>先弄清数据长什么样、问题需要怎样查、用户能等多久，再选择检索架构。</p>
+<h2 id="ai">同样是“给 AI 一点资料”，其实有五种任务</h2>
+<p>假设我要让 AI 回答公司制度问题。只有十页稳定的制度，和每天变化的百万条业务记录，需要的系统会完全不同。视频先用两个问题划分场景：资料是否能放进上下文？查询需要精确匹配，还是模糊的语义理解？<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=55" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:55]">[00:00:55]</a></p>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>适合尝试的情况</th>
+<th>最先检查的代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>长上下文与缓存</td>
+<td>资料量可控，经常重复使用</td>
+<td>实际 token 数、缓存命中、长文本遗漏</td>
+</tr>
+<tr>
+<td>检索增强生成</td>
+<td>大量文档中寻找相关段落</td>
+<td>解析、切块、召回、排序、引用是否可靠</td>
+</tr>
+<tr>
+<td>Agent 自主检索</td>
+<td>要反复查找并追踪线索</td>
+<td>调用次数、延迟、停止条件</td>
+</tr>
+<tr>
+<td>SQL 或业务 API</td>
+<td>数据已经是结构化表格或业务记录</td>
+<td>字段含义、查询正确性、权限</td>
+</tr>
+<tr>
+<td>深度研究流程</td>
+<td>一个问题需要多来源、多步骤调查</td>
+<td>预算、等待时间、来源质量</td>
+</tr>
+</tbody>
+</table>
+<p>“几百份文档”只是视频中的粗略说法。十页文档和千页文档不能按同一个份数计算；能放下也不代表能稳定读对。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a></p>
+<h2 id="_3">精确的东西，先尝试精确地找</h2>
+<p>函数名、错误码、配置键通常有确定写法。关键词搜索找到定义，继续读调用方，可能比把每个文件向量化更直接。反过来，用户说“我总觉得这里不安全”，没有准确术语，语义检索就更有价值。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=102" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:42]">[00:01:42]</a></p>
+<p>代码检索还常常需要多跳：找到函数，看它调用谁，再检查配置。Agent 可以根据前一次结果决定下一步。这个循环也会积累调用成本，需要步数上限和可解释的终止条件。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=283" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:43]">[00:04:43]</a></p>
+<p>对于数据库中的订单总额，优先考虑查询数据库。把数值表格切成文本，再靠语义相似度凑出统计结果，会多出不少出错机会。查询仍需校验，尤其要限制修改、删除及敏感字段访问。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=373" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:13]">[00:06:13]</a></p>
+<h2 id="rag">用上 RAG 后，别只盯着向量模型</h2>
+<p>视频把混合检索、重排序、给片段补足上下文列为可尝试的升级：关键词召回保住专有名词，语义召回覆盖不同说法；重排序进一步比较问题与候选内容；片段上下文帮助识别“这个数值究竟属于哪一年、哪家公司”。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=204" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:24]">[00:03:24]</a></p>
+<p>这些方法都要通过同一套测试来判断。视频中的“提升十倍”“降低到三分之一”等概括缺少本地任务的完整实验条件，不能直接作为自己的预期收益。</p>
+<h2 id="_4">评测和整理数据，要先于架构竞赛</h2>
+<p>一张表被切碎、过期制度排在最新制度前面、某个字段单位丢失，都可能让复杂系统给出错误回答。换更强模型未必能补回丢失的信息。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=468" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:48]">[00:07:48]</a></p>
+<p>先收集一批实际问题，记下应该找到哪份资料、哪些条件必须保留、什么时候应该说明证据不足。每次改动后重跑。模型说得流畅，只说明它能组织语言，资料是否找全仍要另外检查。</p>
+<h2 id="_5">迁移练习：给三个问题分路由</h2>
+<p>分别考虑“这份合同的违约条款是什么”“上月各地区订单总额是多少”“两个竞争产品未来半年可能怎么发展”。为每题写出最轻的可行路线、需要的证据和停止条件。</p>
+<p>最后加一个约束：如果只能等五秒，方案怎样变化？如果允许等五分钟，又多了哪些值得做的检查？这些约束比跟随架构热词更接近产品决策。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
