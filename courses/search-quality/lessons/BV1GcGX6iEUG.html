@@ -1,41 +1,302 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>用知识地图学习：让追问有去处，也让自己回得来 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用知识地图学习：深入一个问题，也能回到原来的位置 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">用知识地图学习：深入一个问题，也能回到原来的位置</h1>
+    <div class="meta"><span>天基大王</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1GcGX6iEUG/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">用知识地图学习：让追问有去处，也让自己回得来</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">先确定学到哪里，再生成地图</a></li>
-<li><a href="#_4">追问术语时，不要把主问题冲走</a></li>
-<li><a href="#_5">同一个主题，可以按不同维度拆分</a></li>
-<li><a href="#_6">能读懂每个词，还需要一次独立检验</a></li>
-<li><a href="#_7">迁移练习：只画五个节点</a></li>
+<li><a href="#_1">用知识地图学习：深入一个问题，也能回到原来的位置</a><ul>
+<li><a href="#_2">先说明要学什么，以及为什么要学</a></li>
+<li><a href="#_3">一张地图，先帮我们知道各个问题在哪里</a></li>
+<li><a href="#_4">点开卡片，讲解就围绕这个问题展开</a></li>
+<li><a href="#_5">遇到陌生术语，先在原地把它弄清楚</a></li>
+<li><a href="#_6">地图上的卡片，怎样带我们回到以前的对话</a></li>
+<li><a href="#_7">同一个知识点，为什么可以拆出几张不同的地图</a></li>
+<li><a href="#_8">学过之后还能找到，知识才容易再次用起来</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间导航</a></li>
+<li><a href="#_11">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1GcGX6iEUG" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1GcGX6iEUG"><div class="provenance">来源：天基大王 · <a href="https://www.bilibili.com/video/BV1GcGX6iEUG/" target="_blank" rel="noopener">BV1GcGX6iEUG 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">用知识地图学习：让追问有去处，也让自己回得来</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1GcGX6iEUG.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><button class="done" data-done="BV1GcGX6iEUG" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1GcGX6iEUG-00340.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1GcGX6iEUG&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1GcGX6iEUG/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1GcGX6iEUG"><h1>用知识地图学习：深入一个问题，也能回到原来的位置</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1GcGX6iEUG/">天基大王｜我是如何用 AI 高效学习跟调研陌生领域的？</a>；全片约 11 分钟，是自制学习系统的产品演示。界面、接口额度与响应效果按录制版本理解。</p>
+<p>来源：我是如何用 ai 高效学习跟调研陌生领域的？｜UP 主：天基大王｜时长：11 分 22 秒｜<a href="https://www.bilibili.com/video/BV1GcGX6iEUG/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>知识地图帮我看清学习位置，局部追问帮我理解难点；两者配合，可以减少在长聊天中迷路的成本。</p>
-<h2 id="_3">先确定学到哪里，再生成地图</h2>
-<p>演示从两个问题开始：要学什么，为什么学。系统再询问已有基础和目标深度，据此生成主卡片与细分节点。<a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:01]">[00:00:01]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></p>
-<p>这一步值得保留。只想知道 RAG 能解决什么问题，与要独立实现一个检索系统，所需路径明显不同。若不说明目标，生成的知识树很容易既庞大又缺少重点。</p>
-<p>地图是一份可修订的假设。补充判断是：先检查它是否遗漏先修知识、是否塞进不必要的分支，以及顺序是否适合当前任务，无需把 AI 给出的目录当成标准答案。</p>
-<h2 id="_4">追问术语时，不要把主问题冲走</h2>
-<p>视频的一个具体交互是划词解释：阅读一段说明时，局部打开术语解释，还能继续追问，而主对话留在原处。学完一个节点，又能通过地图回到对应聊天。<a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=243" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:03]">[00:04:03]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=362" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:02]">[00:06:02]</a></p>
-<p>它解决了很真实的阅读障碍：原本想理解检索，结果追问向量、距离、维度，十轮以后忘记了最初的问题。主线与支线分开展示，可以让深入学习更容易收回来。</p>
-<h2 id="_5">同一个主题，可以按不同维度拆分</h2>
-<p>演示后半用工作流程、典型场景、核心组件等方式细分知识点，并展示卡片检索。<a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1GcGX6iEUG/?t=601" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:01]">[00:10:01]</a></p>
-<p>例如“RAG”按步骤拆，可以得到解析、切分、索引、检索和生成；按失败类型拆，则关注漏检、错引、信息过期与无依据回答。前一种帮助实现，后一种帮助评测。</p>
-<p>同时保留多种视角很有用，但每次学习可以只展开与当前问题有关的一种，避免树越长、决策成本越高。</p>
-<h2 id="_6">能读懂每个词，还需要一次独立检验</h2>
-<p>视频把消除陌生术语视作学完节点的重要标志。这里补一道检验：关闭解释后，能否自己举例、区分相近概念，并解决一个稍有变化的问题？</p>
-<p>联网搜索和完整知识树提供材料，不会自动保证回答正确。涉及技术细节时，关键解释仍应链接原始文档或研究，并保留不确定的部分。</p>
-<h2 id="_7">迁移练习：只画五个节点</h2>
-<p>用“如何判断一次检索失败”为根节点，最多画五个分支。每个节点只放一个问题、一条可靠来源和一个小测试。</p>
-<p>读完后，把自己能独立解释的节点标记完成。需要反复看答案的节点留着下次练习。地图的价值在于支持行动，节点数量无需成为成绩。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>用 AI 学一个陌生领域时，常会遇到一种很细碎的困难。刚刚读懂几句话，里面又出现一个不熟悉的名词；追问这个名词，回答里再冒出两个新的名词。几轮以后，聊天越来越长，最初的问题已经被推到很上面。我们确实一直在学习，却开始不确定现在学到哪里，刚才为什么会走到这个问题，接下来又该回到哪一段。</p>
+<p>天基大王制作的学习系统，主要想减少这种来回寻找和选择的负担。它把讲解放在左边，把知识地图放在右边。地图显示正在学习的主题及其分支，局部解释则允许我们暂时钻进一个陌生概念，理解后再返回原来的段落。学习的内容仍然需要自己理解，但“接下来去哪里”“刚才那段在哪里”有了可见的支持。<button type="button" class="timecode" data-seconds="1">[00:00:01]</button></p>
+<h2 id="_2">先说明要学什么，以及为什么要学</h2>
+<p>这套系统从学习目的开始。例子里的目标是了解 RAG，并将它用于改进知识管理系统：除了辅助学习，还希望以后能够更快找到已经学习过的知识。RAG 是检索增强生成，可以先理解为，回答问题之前先从资料中寻找相关内容，再让模型结合找到的材料组织回答。对于一个保存了很多学习记录的系统，这条思路与“以后怎样找回内容”有直接关系。<button type="button" class="timecode" data-seconds="69">[00:01:09]</button></p>
+<p>不过，“学习 RAG”仍然太宽。只想了解它能解决什么问题，与准备自己实现一个可用系统，所需内容和深度不同。所以系统会先问要学什么、目的是什么，再通过问卷了解已有基础和希望深入的程度。回答这些问题，相当于给接下来的讲解提供起点和终点：哪些东西可以从已有知识接过去，哪些步骤必须从基础解释。<button type="button" class="timecode" data-seconds="116">[00:01:56]</button></p>
+<p>比如，已经使用过 LangChain 的人，可能对用程序串接模型与工具有一定经验；只听过 RAG 名字的人，则需要先看清资料、检索和回答之间的关系。问卷不必把人准确划进某个固定等级，它的作用是避免所有人一上来都收到同样庞大的目录。学习目的越具体，知识地图才越容易围绕眼前的问题组织。<button type="button" class="timecode" data-seconds="150">[00:02:30]</button></p>
+<h2 id="_3">一张地图，先帮我们知道各个问题在哪里</h2>
+<p>确认目标和基础以后，系统先提出几张主知识卡片。用户可以查看这些主题是否需要学习，确认后再让系统细分。于是，一个大主题逐渐展开成几个相互连接的部分。界面中可以看到“RAG 的定义与动机”“RAG 基本工作流程”等卡片：前者解释为什么需要它，后者帮助理解它怎样运行。每张卡片对应一个可以继续进入的学习问题。<button type="button" class="timecode" data-seconds="182">[00:03:02]</button></p>
+<p>这种安排比一段很长的目录多了一层持续定位的作用。读着左侧讲解时，右侧仍然能看到当前主题位于哪里。暂时深入某个小问题，也不必靠记忆保存全部上级关系。等小问题解决后，可以回到上一级继续阅读。地图因此承担了一部分原本需要读者在脑中维持的上下文。</p>
+<p>知识地图也需要允许修改。AI 根据目标生成的拆分，是一种学习安排，不能保证它已经包含所有必要前提，更不能保证顺序对每个人都合适。真正读起来之后，才可能发现某个基础需要提前补，或者某个分支与眼前目标关系不大。地图清楚地呈现出来，正好方便发现这些问题，并逐渐调整学习范围。<button type="button" class="timecode" data-seconds="231">[00:03:51]</button></p>
+<h2 id="_4">点开卡片，讲解就围绕这个问题展开</h2>
+<p>选择一个知识点以后，系统会把该卡片的内容、预先设计的讲解要求和相应对话背景送给 AI。左侧开始解释这个主题，右侧仍保留当前位置。例如进入“RAG 的定义与动机”，就可以从为什么要接入外部资料开始，再逐渐走到检索与生成的关系。读者不需要每次自己重新描述整个学习计划。<button type="button" class="timecode" data-seconds="243">[00:04:03]</button></p>
+<p>系统还接入了 AnySearch，用于查找相关材料。搜索的作用，是给讲解提供可以继续阅读的信息来源；材料是否适合当前技术问题，仍需看来源本身和实际内容。某段回答附带论文或报告，并不会自动保证每一句解释都正确。尤其在学习技术时，文档里的具体定义与实现条件，仍然需要与正在讨论的问题对应。</p>
+<p>天基大王希望讲解能够利用已有对话背景，所以为系统设计了较长的提示要求，也接受了较慢的响应。这反映了一种产品选择：与其每次都只按当前卡片标题泛泛介绍，他更希望讲解接得上自己的学习目标。不过，提示更长并不自动带来更好答案；实际是否连贯，仍要看学习时收到的具体内容。<button type="button" class="timecode" data-seconds="270">[00:04:30]</button></p>
+<h2 id="_5">遇到陌生术语，先在原地把它弄清楚</h2>
+<p>局部划词解释，是这套系统很重要的交互。阅读一段说明时，选中不懂的词，就在附近打开一个小窗口，解释它在当前语境中的含义。主对话不必因此继续往下滚出很多轮。我们可以保留正在读的段落，暂时把注意力转向这个词，理解后再接回原句。<button type="button" class="timecode" data-seconds="311">[00:05:11]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1GcGX6iEUG-00340.jpg" data-caption="“LCEL 表达式”的解释浮在正文附近，右侧仍保留 RAG 卡片；查一个术语时，原来的阅读位置没有消失。">
+    <img src="../assets/frames/BV1GcGX6iEUG-00340.jpg" loading="lazy" alt="视频截图 01，00:05:40：“LCEL 表达式”的解释浮在正文附近，右侧仍保留 RAG 卡片；查一个术语时，原来的阅读位置没有消失。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="340.000">图 01 · 00:05:40</button><span>“LCEL 表达式”的解释浮在正文附近，右侧仍保留 RAG 卡片；查一个术语时，原来的阅读位置没有消失。</span></figcaption>
+</figure>
+<p>画面中的 LCEL 表达式就是一个例子。它出现在 LangChain 如何把若干处理步骤连接起来的说明里。读者若不知道这个词，可以直接在当前段落旁查阅，而不需要另开一个完全失去背景的聊天。局部解释还支持继续追问：如果解释里又出现陌生概念，就在这一层继续深入。这样，补基础与阅读主问题可以交替进行。</p>
+<p>这种交互解决的是一个很实际的注意力问题。普通聊天也能回答这些追问，但追问越多，最初的段落离当前页面越远。我们需要一边理解新概念，一边记住自己为何来问它。把支线留在局部窗口里之后，返回的路径变得明显，读者能够把更多精力用在关系本身，而少花一些精力恢复阅读位置。<button type="button" class="timecode" data-seconds="342">[00:05:42]</button></p>
+<p>天基大王把一段话中不再有陌生知识点，作为自己判断这一段已经理解的重要信号。这个信号对阅读很有用：至少不会再被某个词卡住。不过，“每个词都看懂”与“能够独立解释整段关系”还有距离。读懂局部解释之后，仍然需要看这些部分怎样共同回答原来的问题；涉及操作的知识，还要通过实际使用理解细节。系统可以帮助解除卡点，理解本身不会被一个完成标记替代。</p>
+<h2 id="_6">地图上的卡片，怎样带我们回到以前的对话</h2>
+<p>学完一个节点以后，地图还承担回访入口的作用。点击卡片上的“深入”等入口，可以定位到左侧对应的对话。假如几天后再次需要理解 RAG 的检索过程，我们可以先在图中找到那个主题，再回到当时展开的解释。这样，学习记录不只按聊天发生的时间排列，也可以按知识主题进入。<button type="button" class="timecode" data-seconds="371">[00:06:11]</button></p>
+<p>这个功能与划词解释互相配合。划词解释帮助我们在阅读当下不丢失位置，卡片定位帮助我们在后续使用时找回位置。前一个问题发生在一段讲解内部，后一个问题发生在整个学习记录里。两种导航处理了不同尺度的迷路，因而不必把所有需求都交给聊天列表中的滚动与搜索。</p>
+<h2 id="_7">同一个知识点，为什么可以拆出几张不同的地图</h2>
+<p>学习地图长出来以后，还有一个决定需要作出：什么时候继续拆，按照什么角度拆。以“RAG 基本工作流程”为例，我们可以按步骤理解，先问资料怎样进入系统，再问怎样找到相关内容，最后问怎样组织回答。也可以按典型场景理解，分别看知识问答、报告摘要、代码库查询等任务里，检索和生成怎样配合。两个拆法都围绕 RAG，却在回答不同问题。<button type="button" class="timecode" data-seconds="494">[00:08:14]</button></p>
+<p>天基大王此前自己画思维导图时，经常需要停下来决定采用哪一种拆分方式。为减少这部分负担，他让系统提供拆分角度，用户选定后，再由 AI 扩展对应的子节点。已有节点不必只按唯一方式展开；某个主题足够重要时，还可以再从另一个角度继续看。<button type="button" class="timecode" data-seconds="528">[00:08:48]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1GcGX6iEUG-00651.jpg" data-caption="“RAG 基本工作流程”下展开了典型场景分支，旁边可见代码库查询、多轮记忆等卡片；左侧保留了选择拆分角度的对话。">
+    <img src="../assets/frames/BV1GcGX6iEUG-00651.jpg" loading="lazy" alt="视频截图 02，00:10:51：“RAG 基本工作流程”下展开了典型场景分支，旁边可见代码库查询、多轮记忆等卡片；左侧保留了选择拆分角度的对话。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="651.000">图 02 · 00:10:51</button><span>“RAG 基本工作流程”下展开了典型场景分支，旁边可见代码库查询、多轮记忆等卡片；左侧保留了选择拆分角度的对话。</span></figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>拆分角度</th>
+<th>它帮助我们理解什么</th>
+<th>适合在怎样的问题下使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按工作步骤</td>
+<td>从输入到结果经过哪些操作。</td>
+<td>想把整个过程顺着走一遍。</td>
+</tr>
+<tr>
+<td>按典型场景</td>
+<td>同一种方法怎样用于不同任务。</td>
+<td>想知道它与自己的需求有什么关系。</td>
+</tr>
+<tr>
+<td>按核心组件</td>
+<td>哪些部件分别承担什么职责。</td>
+<td>想进一步理解系统由什么组成。</td>
+</tr>
+<tr>
+<td>按技术路线</td>
+<td>同一个环节有哪些不同做法。</td>
+<td>已经理解基本过程，准备比较选择。</td>
+</tr>
+</tbody>
+</table>
+<p>这里不需要马上掌握全部分支。每增加一个视角，都应帮助当前问题变得更清楚。如果现在只是想知道知识问答如何使用自己的文档，先沿着这个场景往下读就有意义；等需要理解系统怎样实现，再转向核心组件。不同视角可以共存，但每一次学习依然可以有一条明确的路径。<button type="button" class="timecode" data-seconds="559">[00:09:19]</button></p>
+<p>这也说明，知识树的大小不等于理解的深度。系统能够快速生成许多卡片，读者却仍然需要时间把其中的关系接起来。生成节点减少了整理负担，不能替代阅读和思考。地图最有用的时候，是让我们看得见自己在解决哪个问题，并且知道已经理解的部分与尚未理解的部分怎样相连。</p>
+<h2 id="_8">学过之后还能找到，知识才容易再次用起来</h2>
+<p>系统最后还有一个卡片检索入口。输入关键词以后，AI 根据各张卡片的简要摘要寻找相关内容，再返回相应卡片。这里搜索的对象是已经组织过的学习记录。对于积累较多主题的人，仅靠记住它位于哪一棵树、哪一层分支会越来越困难，检索就为地图补上了另一条进入路径。<button type="button" class="timecode" data-seconds="640">[00:10:40]</button></p>
+<p>这套安排可以串成一个完整过程：先根据目标建立初步地图，进入一个节点阅读，遇到陌生词时局部追问，必要时继续拆分，之后再通过卡片或关键词找回。AI 帮助组织材料、建议下一步，也帮助定位过去内容；学习者仍然负责感受哪里没懂、判断解释是否成立，以及是否还需要深入。把这些环节放在一起，学习过程就更容易保持连续。</p>
+<h2 id="_9">总结提炼</h2>
+<p>学习目标和已有基础决定地图应展开到哪里。先说明要学什么、为什么学，能够减少泛泛目录带来的负担。</p>
+<p>左侧讲解、右侧地图和局部划词解释分别处理阅读、定位与补基础。它们共同帮助读者深入一个问题之后，仍然找得到返回的路径。</p>
+<p>同一主题可以按步骤、场景、组件或技术路线拆分。选择当前需要的角度，比一次展开最多节点更有帮助；学过的内容还可以通过卡片检索再次进入。</p>
+<h2 id="_10">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="1">[00:00:01]</button> 问题导向与知识地图。</li>
+<li><button type="button" class="timecode" data-seconds="69">[00:01:09]</button> 为知识管理系统学习 RAG。</li>
+<li><button type="button" class="timecode" data-seconds="116">[00:01:56]</button> 明确学习目的、基础和深度。</li>
+<li><button type="button" class="timecode" data-seconds="182">[00:03:02]</button> 确认主卡片并生成地图。</li>
+<li><button type="button" class="timecode" data-seconds="243">[00:04:03]</button> 点击卡片，围绕一个主题展开讲解。</li>
+<li><button type="button" class="timecode" data-seconds="311">[00:05:11]</button> 划词解释与局部继续追问。</li>
+<li><button type="button" class="timecode" data-seconds="371">[00:06:11]</button> 从地图返回对应对话。</li>
+<li><button type="button" class="timecode" data-seconds="494">[00:08:14]</button> 什么时候、按什么角度拆分知识点。</li>
+<li><button type="button" class="timecode" data-seconds="559">[00:09:19]</button> 按场景与核心组件继续展开。</li>
+<li><button type="button" class="timecode" data-seconds="640">[00:10:40]</button> 根据摘要检索学过的卡片。</li>
+</ul>
+<h2 id="_11">回看时的三个问题</h2>
+<p>为什么同样是学习 RAG，准备理解概念的人和准备实现系统的人，需要不同的地图？</p>
+<p>局部划词解释与卡片定位，各自帮助解决哪一种“找不到原来位置”的困难？</p>
+<p>如果一棵知识树已经非常大，你怎样判断接下来值得进入的是哪一个分支？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "mmexport1779893775844", "duration": "11:22", "src": "", "poster": "../assets/frames/BV1GcGX6iEUG-00340.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,90 +1,357 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>从“看起来不错”到真正可靠：SFT、RLHF 与 DPO · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>怎样让模型既听得懂要求，也值得相信：从 SFT 到 RLHF、DPO · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="sft-rlhfdpo">怎样让模型既听得懂要求，也值得相信：从 SFT 到 RLHF、DPO</h1>
+    <div class="meta"><span>AI翻译君-vanch</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#sftrlhf-dpo">从“看起来不错”到真正可靠：SFT、RLHF 与 DPO</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">最重要的课堂实验，发生在评分之前</a></li>
-<li><a href="#sft">第一步：SFT 用示范告诉模型怎样回答</a></li>
-<li><a href="#_3">好教材也可能教会错误的习惯</a></li>
-<li><a href="#_4">安全数据也要覆盖容易误判的正常请求</a></li>
-<li><a href="#_5">第二步：偏好反馈让模型学习相对好坏</a></li>
-<li><a href="#ai">人类和 AI 裁判都需要校准</a></li>
-<li><a href="#_6">第三步：奖励越高，也要防止越走越偏</a></li>
-<li><a href="#dpo">DPO：直接用偏好对优化</a></li>
-<li><a href="#_7">迁移练习：做五对“有理由的选择”</a></li>
+<li><a href="#sft-rlhfdpo">怎样让模型既听得懂要求，也值得相信：从 SFT 到 RLHF、DPO</a><ul>
+<li><a href="#sft">先教模型照着示范做：SFT 的基本过程</a></li>
+<li><a href="#_1">三种数据来源，会教出不同的回应习惯</a></li>
+<li><a href="#_2">现场写一份好答案，为什么比看起来困难</a></li>
+<li><a href="#_3">一份真实、准确的答案，也可能教出错误的泛化</a></li>
+<li><a href="#sft_1">SFT 能否学新知识？需要看规模和数据怎么安排</a></li>
+<li><a href="#_4">安全训练要学会区分情境，避免只认危险词</a></li>
+<li><a href="#_5">写答案与选答案，是两种不同能力</a></li>
+<li><a href="#rlhf">RLHF 怎样把人的比较，变成可使用的奖励</a></li>
+<li><a href="#_6">成对比较更省事，但核实依然很费力</a></li>
+<li><a href="#ai">换成 AI 裁判，会改变成本，也会带来新的偏差</a></li>
+<li><a href="#_7">奖励越高越好，为什么还要限制模型偏离</a></li>
+<li><a href="#_8">奖励分数怎样从两两比较中学出来</a></li>
+<li><a href="#ppo">PPO 在做什么：让尝试过的好回答更容易再出现</a></li>
+<li><a href="#dpo">DPO：把奖励与策略的关系，直接写进偏好训练</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间戳导航</a></li>
+<li><a href="#_11">复习时，把这三个例子接起来</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1vQ3ozPEPB" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1vQ3ozPEPB"><div class="provenance">来源：AI翻译君-vanch · <a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/" target="_blank" rel="noopener">BV1vQ3ozPEPB 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="sftrlhf-dpo">从“看起来不错”到真正可靠：SFT、RLHF 与 DPO</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1vQ3ozPEPB.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><button class="done" data-done="BV1vQ3ozPEPB" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1vQ3ozPEPB-01845.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1vQ3ozPEPB&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1vQ3ozPEPB"><h1>怎样让模型既听得懂要求，也值得相信：从 SFT 到 RLHF、DPO</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/">AI翻译君-vanch · 斯坦福 CS336 第 15 讲</a> · 75 分钟 · 基于中文翻译字幕。原课为 <a href="https://cs336.stanford.edu/spring2025/">Stanford CS336 Spring 2025，Alignment — SFT/RLHF</a>。本篇覆盖本视频，不把下节课预告写成已讲内容。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1vQ3ozPEPB/">AI翻译君-vanch｜斯坦福 CS336 第 15 讲：SFT 与 RLHF</a> · 1 小时 14 分 51 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>后训练把期望行为变成训练信号；信号若偏爱表面形式，模型也会学会讨好这种形式。</p>
-<h2 id="_2">最重要的课堂实验，发生在评分之前</h2>
-<p>老师给出成对回答，请学生在几分钟内选择更好的一个。之后再问：核查过所有事实吗？验证过计算吗？真正完成检查的人很少。较长的回答却更受欢迎，其中一些包含虚构内容。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3028" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:50:28]">[00:50:28]</a></p>
-<p>这正是质量评估的难点。整齐的分点、更多细节和自信的语气，容易让人产生“内容更好”的感觉。如果标注流程没有给足核查时间，这些表面特征就可能变成训练奖励。</p>
-<p>理解这一点，再看算法会清楚很多：算法只能优化我们交给它的信号，不能自动替我们定义“好”。</p>
-<h2 id="sft">第一步：SFT 用示范告诉模型怎样回答</h2>
-<p>监督微调提供“指令—理想回答”样本，让模型学习在这样的输入后生成这样的输出。它能帮助模型遵循指令、采用合适格式，并体现希望保留的行为。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=210" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:30]">[00:03:30]</a></p>
-<p>课堂比较了三种数据来源：<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=370" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:10]">[00:06:10]</a></p>
+<p>给模型一个复杂要求：把几组信息画成图，使用指定的配色与布局，还要遵守若干相互关联的条件。今天我们很容易把它能写出绘图代码当成理所当然。但一个能够流畅续写文字的预训练模型，并不天然就会稳定遵守这些要求。预训练让它从大量资料中学到广泛的规律与能力，接下来还要让它在面对用户时，以我们希望的方式使用这些能力。<button type="button" class="timecode" data-seconds="97">[00:01:37]</button></p>
+<p>这一步涉及后训练，也涉及这里所说的“对齐”：让模型的行为更符合人的任务要求与使用规范。除了完成任务，我们还希望它在不知道时不要编造，在不适合提供帮助的情境下妥善拒绝，同时不误伤正常请求。把这些要求写进一句提示词容易，要让模型在大量新情境里持续做到，就需要数据、训练方法和评价标准共同配合。<button type="button" class="timecode" data-seconds="160">[00:02:40]</button></p>
+<p>先沿着一个实际过程往下看。我们可以请人写出好回答，让模型学习；也可以让模型先生成几份回答，请人判断哪份更好，再利用这些比较调整模型。前一条路是监督微调，后一条路通向人类反馈强化学习与直接偏好优化。它们最重要的区别，是我们交给训练过程的信号分别是什么。</p>
+<h2 id="sft">先教模型照着示范做：SFT 的基本过程</h2>
+<p>SFT 是 Supervised Fine-Tuning，监督微调。我们准备“输入指令—期望回答”的样本，让模型提高生成这些示范回答的可能性。对模型而言，一份回答仍然是一串 token，也就是分词后用于处理文字的单位。训练会比较它在各位置的预测与示范内容，通过更新参数减少差距。<button type="button" class="timecode" data-seconds="282">[00:04:42]</button></p>
+<p>想象数据里有一条“请为这封邮件写主题”，后面接一个合适的邮件主题；另一条要求总结文章，后面接一份准确摘要。模型会从这些样本学习怎样识别要求、怎样回应，以及采用什么输出形式。数据也可能包含多轮对话，让它看到后续提问如何依赖前面的交流。这个过程的直接性很有吸引力：把想要的行为展示出来，然后训练模型模仿。</p>
+<p>但是，第一步就遇到难题：示范从哪里来？我们需要的远不止一个模板。真实用户可能提问、比较、追问、要求改写，也可能同时提出好几个限制。若训练数据只覆盖少数固定题型，模型学到的助手行为也容易受限。不同的数据收集方式，会让我们得到相当不同的一批任务和回答。<button type="button" class="timecode" data-seconds="319">[00:05:19]</button></p>
+<h2 id="_1">三种数据来源，会教出不同的回应习惯</h2>
+<p>FLAN 采用的一条路径，是汇总已经存在的自然语言处理任务，再把它们写成指令形式。比如给一段新闻，让模型从几个类别中判断主题；给一封邮件，让模型生成主题；给一条餐厅数据库记录，让模型写成自然语言介绍。原来各自独立的任务，被整理到一个较大的指令集合里。<button type="button" class="timecode" data-seconds="417">[00:06:57]</button></p>
+<p>这类数据的优势很直观：已经有大量输入和目标输出，可以覆盖许多操作。但它的形态也带着原任务的痕迹。分类问题可能只要回答一个词，数据库描述任务可能只要生成一句话，而普通聊天中，用户常常希望得到解释，甚至继续追问。任务种类多，与对话体验自然，是两个需要分别检查的条件。<button type="button" class="timecode" data-seconds="502">[00:08:22]</button></p>
+<p>Alpaca 的早期做法，是从一小批人工编写的种子指令出发，让语言模型生成更多指令及回答。相较于传统分类任务，这些输入更像人会直接发给聊天助手的问题，回答也更常是完整自然语言。不过，合成过程可能带来新的限制：指令较短、类型较集中，回答形式也容易继承生成模型的习惯。扩大条数以后，仍要检查有没有真正扩大任务覆盖。<button type="button" class="timecode" data-seconds="623">[00:10:23]</button></p>
+<p>OpenAssistant 则包含人工参与编写的对话与回答。这里能看到更复杂的问题、详细解释，有些回答还附上参考资料。它体现了人工创作的价值，也体现了成本：写出一份有根据、结构清楚、细节充分的回答，需要时间和能力，无法只用“请给一个高质量答案”就稳定获得。<button type="button" class="timecode" data-seconds="690">[00:11:30]</button></p>
 <table>
 <thead>
 <tr>
-<th>来源</th>
-<th>能带来什么</th>
-<th>要检查什么</th>
+<th>数据来源</th>
+<th>容易获得的内容</th>
+<th>特别需要留意的差别</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>既有 NLP 任务汇总，如 FLAN</td>
-<td>大量现成任务、明确目标</td>
-<td>题型与真实用户对话是否相符</td>
-</tr>
-<tr>
-<td>人工撰写，如 OpenAssistant</td>
-<td>丰富意图、详细回答、多样表达</td>
-<td>成本、质量差异、事实与引用</td>
+<td>汇总现有任务，如 FLAN</td>
+<td>大量已经定义清楚的输入与目标</td>
+<td>基准题型与真实对话之间的距离</td>
 </tr>
 <tr>
 <td>模型合成，如 Alpaca</td>
-<td>便于扩大数量、快速形成格式</td>
-<td>同质化、错误传播、覆盖不足</td>
+<td>能较快扩展的指令和自然语言回答</td>
+<td>指令覆盖、错误传播、表达同质化</td>
+</tr>
+<tr>
+<td>人工编写，如 OpenAssistant</td>
+<td>复杂问题、细致解释、人的具体判断</td>
+<td>写作成本、质量差异和核实难度</td>
 </tr>
 </tbody>
 </table>
-<p>课上还让学生现场写示范回答。即使参与者积极、能力较强，写出详尽可靠的长答案仍很费力。这说明标注任务设计、时间预算和验收标准本身就是工作的一部分。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
-<h2 id="_3">好教材也可能教会错误的习惯</h2>
-<p>假设示范答案末尾都有参考文献。模型可能学到概念与真实文献的关联，也可能只学到“回答复杂问题时，结尾应该出现一个文献样式”。遇到不知道的知识，后一种习惯就可能导致编造引用。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:20]">[00:18:20]</a></p>
-<p>因此“文本准确、知识丰富”还不够，要关注目标模型能否从这些样本可靠学习。需要知道何时查资料、何时表达不确定，也需要检验新问题上的引用真实性。</p>
-<p>这里不能推出“SFT 学不到新知识”。课堂随后明确讨论了规模与数据混合：较大规模、多样化的训练能够传递知识，预训练、中期训练与指令微调的实际边界也可能模糊。应看具体训练过程，不能只看模型被命名为 base 还是 instruct。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2420" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:40:20]">[00:40:20]</a></p>
-<h2 id="_4">安全数据也要覆盖容易误判的正常请求</h2>
-<p>“如何杀死一个 Python 进程”包含看似危险的词，却是正常的编程问题。只训练拒绝危险词汇，会损伤有用性。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=1547" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:47]">[00:25:47]</a></p>
-<p>评价安全行为时，需要同时考察该拒绝时是否拒绝、正常任务能否完成。把所有问题都拒绝掉可以降低某些风险指标，却不能满足产品目标。具体边界仍需结合上下文判断。</p>
-<h2 id="_5">第二步：偏好反馈让模型学习相对好坏</h2>
-<p>写出一份好答案和认出两份答案中哪份更好，是不同的任务。判断有时更容易，也可能表达出写作者自己难以直接写出来的偏好。RLHF 利用这种差异。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2520" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:42:00]">[00:42:00]</a></p>
-<p>经典流程包括：生成候选回答，收集比较结果，训练奖励模型，再优化语言模型，使其更倾向于获得高奖励的回答。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=2775" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:46:15]">[00:46:15]</a></p>
-<p>一条偏好数据至少包含问题、两个回答和选择。若要让数据可解释，还应保留适用标准、判断理由、证据与不确定性。只记录“A 胜”，后面很难知道 A 赢在事实、覆盖、风格还是长度。</p>
-<h2 id="ai">人类和 AI 裁判都需要校准</h2>
-<p>课堂讨论了标注者背景、时间压力、格式偏好以及模型偏爱自身输出等问题。换成 AI 裁判可以降低部分成本，却不会自动消除偏差。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3190" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:53:10]">[00:53:10]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3760" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:02:40]">[01:02:40]</a></p>
-<p>可操作的检查包括：交换 A/B 的显示顺序；比较长短相近的答案；给裁判明确证据；抽样人工复核分歧；把事实正确性与表达偏好分开记录。后四项是本篇的评测迁移建议，具体取舍应根据任务验证。</p>
-<p>标注者群体的偏好与模型输出之间可能有关联，但课堂中的观察不能单独证明某个人群直接造成某种模型立场。</p>
-<h2 id="_6">第三步：奖励越高，也要防止越走越偏</h2>
-<p>把语言模型视为一个生成回答的策略，优化方向可以概括为“获得奖励，同时不要过度偏离参考策略”。省略额外的数据混合项后，可写成：<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=3900" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:05:00]">[01:05:00]</a></p>
+<p>没有哪一种来源只带来好处。数据的收集方式，会影响问题长度、答案长度、用词、知识范围和表现出来的行为。选择数据时，应该逐条看看模型到底会接触什么，不能只凭数据集名字和总条数判断它是否适合自己的任务。</p>
+<h2 id="_2">现场写一份好答案，为什么比看起来困难</h2>
+<p>课堂上的第一个练习，让学生用有限时间写一份指令回答。参与者本身很有动力，也有一定知识背景，但提交结果仍然包含简短回答、风格差异很大的内容，甚至与任务无关的句子。还有些特别完整的长回答，看起来明显借助了聊天模型。<button type="button" class="timecode" data-seconds="720">[00:12:00]</button></p>
+<p>这个练习把一个常被忽略的条件摆到了面前：写出值得模型学习的示范，本身就是一项工作。即使你知道问题的答案，也要花时间组织结构、补齐条件、检查事实，让陌生读者能够跟上。时间太短时，人更容易给结论，省去解释；如果任务鼓励“看起来专业”，又可能出现华丽但无助理解的表达。<button type="button" class="timecode" data-seconds="814">[00:13:34]</button></p>
+<p>因此，人工数据的质量与任务设计、时间安排、报酬和审核方式都有关系。使用模型生成或辅助修改，可以减轻一部分写作负担，但不能省掉判断生成内容是否合用的环节。数据收集的困难会直接影响模型：我们提供什么样的示范，它就可能学会什么样的回应习惯。<button type="button" class="timecode" data-seconds="854">[00:14:14]</button></p>
+<p>长度也是这种习惯的一部分。不同数据集的输入和回答长度相差很大，模型会受到影响。一些人类评价和模型评价又偏爱较长、分点较整齐的回答，于是训练可能把“更长、更像完整答案”当作一种优势。这里要检查的是长度是否真的服务理解：完整解释当然需要篇幅，但多几段未经核实的信息，也可能只让答案显得丰富。<button type="button" class="timecode" data-seconds="962">[00:16:02]</button></p>
+<p>所以评价时需要不止一种角度。聊天偏好比较可以反映用户愿不愿意读，知识或任务基准可以检查某些具体能力。两者都重要，单靠其中一项，就可能遗漏另一个方向的问题。一个回答阅读感受很好，却包含错误事实；另一个正确但难懂，也同样没有完全达到助手的目标。<button type="button" class="timecode" data-seconds="1054">[00:17:34]</button></p>
+<h2 id="_3">一份真实、准确的答案，也可能教出错误的泛化</h2>
+<p>来看买方垄断这个例子。示范回答准确解释一个经济学概念，并在末尾列出相关参考文献。模型学习这条样本时，可能获得两种不同规律。第一种是“这个概念与这份真实文献有关”；第二种是“回答复杂概念以后，应当在末尾放一个参考文献”。第一种关系涉及具体知识，第二种只涉及输出形式。<button type="button" class="timecode" data-seconds="1108">[00:18:28]</button></p>
+<p>当模型遇到另一个自己不熟悉的概念时，第二种规律可能更容易延续。它知道此处应该出现像参考文献的东西，却不知道真实的书名、作者或出处，于是生成一段外形像引用的文本。结果看起来比没有引用更完整，内容却可能是虚构的。训练数据里的引用本来没有错，错误来自模型在新情境里采用了不可靠的模式。<button type="button" class="timecode" data-seconds="1149">[00:19:09]</button></p>
+<p>为什么监督训练会允许这种情况？训练直接比较生成的 token 与示范 token。假如示范在某个位置包含引用，模型完全停下来不写，无法匹配那一段；它写出一段类似格式，至少可能学会部分结构。仅靠模仿目标文本，并不会自动让模型区分“我确实知道这条引用”和“我只是知道这里通常应该有引用”。<button type="button" class="timecode" data-seconds="1295">[00:21:35]</button></p>
+<p>这也引出课堂中的反问：引用本身是有用的，能否给模型查询工具，让它先查再引用？这个方向合理。问题在于，训练任务是否真的教了查找与核实，模型是否能够可靠获得相应事实。如果仍然只要求它直接生成参考文献，工具的存在并不会自动改变训练信号。我们需要把想让模型采取的实际行为放进任务设计里。<button type="button" class="timecode" data-seconds="1242">[00:20:42]</button></p>
+<p>同样的区别也出现在表情符号问题中。大量示范在结尾放表情，模型很容易学会“结尾要有表情”；至于表情与当前语境是否恰当对应，是更细的规律，需要足够合适的数据来支持。格式容易模仿，语境中的正确关系需要额外学习。引用例子之所以更严重，是因为错误格式背后会变成虚假的知识承诺。<button type="button" class="timecode" data-seconds="2347">[00:39:07]</button></p>
+<h2 id="sft_1">SFT 能否学新知识？需要看规模和数据怎么安排</h2>
+<p>从引用问题不能推出“SFT 只能改风格，不能学知识”。只要训练规模与数据多样性足够，指令数据也能够传递新知识。难点在于，小规模指令微调通常很难稳定教会大量原先没有的事实，同时还要确保模型在不知道的地方表达不确定。模型原有能力、材料内容与训练量之间，需要有合适的匹配。<button type="button" class="timecode" data-seconds="1410">[00:23:30]</button> <button type="button" class="timecode" data-seconds="2443">[00:40:43]</button></p>
+<p>这也解释了为什么预训练和后训练之间的界限逐渐模糊。一个常见思路是，在预训练后段加入高质量、问答或指令相关的数据，随后再做较短的专门微调。中间这部分常被称为 midtraining，中期训练。它仍然处理文本序列，但数据组成开始更贴近希望模型掌握的任务。<button type="button" class="timecode" data-seconds="1708">[00:28:28]</button></p>
+<p>MiniCPM 的两阶段示例很好理解。前一阶段主要混合网页、代码等预训练资料；后一阶段保留部分原有数据，同时增加知识、问答和指令相关材料。数据并没有在某一天突然从“全部预训练”变成“全部指令”，几个来源可以在同一阶段共同出现。<button type="button" class="timecode" data-seconds="1794">[00:29:54]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vQ3ozPEPB-01845.jpg" data-caption="右侧阶段保留部分预训练资料，同时加入更多问答、知识与指令相关数据，展示了训练阶段之间的过渡。">
+    <img src="../assets/frames/BV1vQ3ozPEPB-01845.jpg" loading="lazy" alt="视频截图 01，00:30:45：右侧阶段保留部分预训练资料，同时加入更多问答、知识与指令相关数据，展示了训练阶段之间的过渡。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1845.000">图 01 · 00:30:45</button><span>右侧阶段保留部分预训练资料，同时加入更多问答、知识与指令相关数据，展示了训练阶段之间的过渡。</span></figcaption>
+</figure>
+<p>把较大规模的任务数据放进这个过程，有助于更充分地利用材料，同时需要考虑避免遗忘原有能力。所谓灾难性遗忘，是模型为了适应新任务而明显损害此前已经具备的能力。但数据混合不会自动解决编造引用的问题：模型是否掌握具体事实、训练是否鼓励在缺乏依据时硬答，仍然需要单独处理。<button type="button" class="timecode" data-seconds="1999">[00:33:19]</button></p>
+<p>因此，看到一个模型被命名为 base，也不能仅凭名称断定它从未接触指令或问答数据。了解模型经历了什么训练，需要看实际的数据混合与阶段说明。对于没有公开的部分，只能保留未知，不能把简短标签当成完整训练历史。<button type="button" class="timecode" data-seconds="1899">[00:31:39]</button></p>
+<h2 id="_4">安全训练要学会区分情境，避免只认危险词</h2>
+<p>除了完成一般任务，还需要专门展示安全行为。只教模型回答普通知识问题，并不会自然覆盖什么时候应该拒绝。适量、经过设计的安全样本，能够明显改变行为，但评价不能只看拒绝次数。拒绝真正有害的请求，与保留正常帮助能力，应同时成立。<button type="button" class="timecode" data-seconds="1473">[00:24:33]</button></p>
+<p>“如何杀死一个 Python 进程”就是一个直观例子。在编程里，这句话通常指结束正在运行的程序，是正常技术问题。只抓住“杀死”这个词，模型就可能把它误判为危险请求。这样的过度拒绝虽然看上去很谨慎，却没有理解用户在做什么。<button type="button" class="timecode" data-seconds="1542">[00:25:42]</button></p>
+<p>反过来，有害目的也未必包含显眼的危险词。安全判断因此需要结合对象、上下文和预期用途。训练数据要让模型接触这类区别，评测也要同时覆盖应该拒绝与应该正常回答的情况。仅把拒绝率提高，不能单独代表安全能力提高。</p>
+<h2 id="_5">写答案与选答案，是两种不同能力</h2>
+<p>到这里，我们一直在准备示范，让模型模仿一个已有答案。另一条路是先让模型生成，再对生成结果作评价。这样，标注者不用从空白开始写一篇理想回答，只需要比较几份已有回答，说明哪一份更符合要求。这个过程可以利用人的判断能力，同时减少部分创作负担。<button type="button" class="timecode" data-seconds="2511">[00:41:51]</button></p>
+<p>课堂讨论过一项摘要研究：一些撰写摘要的人，在比较时反而更喜欢模型生成的版本。有人解释，自己写作时觉得必须使用较华丽的词语，读到更顺畅的模型摘要后才发现，那种表达更符合自己的阅读偏好。能认出一份好答案，与能独立写出同样好的答案，确实可能存在差距。<button type="button" class="timecode" data-seconds="2684">[00:44:44]</button></p>
+<p>这就是偏好反馈的一个动机。我们可以让人选择同一问题下的回答 A 或 B，再让训练过程利用这种相对好坏关系。这里的反馈仍然有主观性，也可能包含错误，但它能够表达“我更愿意接受哪一种结果”，无需把所有偏好先写成一份唯一标准答案。</p>
+<p>从建模角度看，目标也发生了变化。监督微调主要提高示范文本出现的可能性；强化学习把模型看作一个生成策略，希望它产生能获得更高奖励的回答。策略这个词可以先理解为：面对给定输入，模型会以怎样的概率生成不同输出。<button type="button" class="timecode" data-seconds="2532">[00:42:12]</button></p>
+<h2 id="rlhf">RLHF 怎样把人的比较，变成可使用的奖励</h2>
+<p>经典 RLHF 流程包含三个相关环节。先通过监督微调得到能够合理回应的模型；再收集同一问题下多个回答之间的偏好，用这些比较训练奖励模型；最后，让语言模型继续生成回答，利用奖励模型的评分来调整语言模型。奖励模型是一个学出来的评价器，它尝试预测哪些结果更符合标注偏好。<button type="button" class="timecode" data-seconds="2798">[00:46:38]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vQ3ozPEPB-02810.jpg" data-caption="左侧用示范训练助手，中间用回答比较训练奖励模型，右侧再用奖励模型指导助手的更新。">
+    <img src="../assets/frames/BV1vQ3ozPEPB-02810.jpg" loading="lazy" alt="视频截图 02，00:46:50：左侧用示范训练助手，中间用回答比较训练奖励模型，右侧再用奖励模型指导助手的更新。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="2810.000">图 02 · 00:46:50</button><span>左侧用示范训练助手，中间用回答比较训练奖励模型，右侧再用奖励模型指导助手的更新。</span></figcaption>
+</figure>
+<p>一条偏好数据可以包含一个问题、两份回答和选择结果。奖励模型为每个回答给出一个分数，训练时希望被选中的回答相对得分更高。等它能够在更多回答上作评价，就不必为语言模型每次新生成的内容都立即请人打分，从而使后续优化更容易扩大规模。<button type="button" class="timecode" data-seconds="2827">[00:47:07]</button></p>
+<p>但这个替代也带来了责任转移。奖励模型学到的是有限标注所体现的规律，无法保证每次评分都代表真实质量。若人类比较时偏爱长度或格式，奖励模型可能把这些特征继续当成好答案的信号。后续语言模型越努力提高奖励，越可能重复这些受到鼓励的行为。</p>
+<p>因此，标注指南需要把“好”展开。InstructGPT 的例子包含有用、真实和无害：回答用户真正的问题，表达清楚，缺少信息时澄清，不编造事实，同时避免造成伤害。例如用户说 football，不同地区可能理解成不同运动，助手需要留意背景。三个词看起来简洁，落实到具体问题时却会有许多细节和取舍。<button type="button" class="timecode" data-seconds="2897">[00:48:17]</button></p>
+<h2 id="_6">成对比较更省事，但核实依然很费力</h2>
+<p>第二个课堂练习要求学生在几分钟内比较回答。之后再问：有没有核实所有事实？有没有检查计算？能够真正完成这些工作的参与者很少。较长的答案仍然获得了不少选择，而一些较短版本恰恰是删去虚构内容之后得到的。<button type="button" class="timecode" data-seconds="3054">[00:50:54]</button></p>
+<p>这让“看起来内容更多”的问题变得具体。较长答案提供更多细节、语气完整，读者容易认为它更用心；但是，每增加一条事实，也增加一项需要检查的内容。要认真判断，就得把长回答拆成若干主张，逐项查它们是否成立。只给很短时间，标注者很难完成全部核实，只能依赖容易观察的特征。<button type="button" class="timecode" data-seconds="3106">[00:51:46]</button></p>
+<p>所以，判断通常比独立生成容易，却仍可能很难。数学题需要重新计算，知识回答需要查证，安全问题需要理解情境。任务时间、标注者的专业能力与报酬安排，都影响比较结果的质量。让人对着两个窗口点一下，看起来是简单操作，背后要求的认知工作可能相当多。<button type="button" class="timecode" data-seconds="3168">[00:52:48]</button></p>
+<p>这里也不能把课堂现象推成“人都喜欢错误的长答案”。比较发生在有限时间和具体材料下，它揭示的是一种容易出现的偏差。长文章若把事实、条件和解释讲完整，会真正降低理解负担；问题出在把长度本身当成质量证明，跳过了内容检查。</p>
+<h2 id="ai">换成 AI 裁判，会改变成本，也会带来新的偏差</h2>
+<p>高质量人工标注难以大量收集，推动了 AI 反馈的使用。一个较强模型可以比较候选回答，给出选择，或者按多个标准评分。一些研究与开放模型项目观察到，这样得到的反馈可以与人类判断较接近，同时成本更低；但这种接近依赖任务、模型与标注标准，不能当成对所有领域的保证。<button type="button" class="timecode" data-seconds="3412">[00:56:52]</button></p>
+<p>AI 评价器也可能偏爱较长回答，或者更喜欢与自身输出风格接近的文本。把生成与评价都交给模型，不会自动消除原先的偏差。尤其在模型评价自己的回答时，需要留意它是否把熟悉的写法误当成更好的内容。<button type="button" class="timecode" data-seconds="3546">[00:59:06]</button> <button type="button" class="timecode" data-seconds="3802">[01:03:22]</button></p>
+<p>人工标注同样受背景与动机影响。有的标注者更注重事实，有的更关注格式。关于不同人群偏好与模型立场的观察，可以提醒我们检查代表性，但观察到相关性，仍不足以把具体立场归因到某个群体。重要的是知道反馈来自谁、他们接受了什么指导、在什么条件下作判断。<button type="button" class="timecode" data-seconds="3310">[00:55:10]</button></p>
+<p>还有一个问题：能否给评价者参考资料或已知答案，降低核实负担？这样做确实可能有帮助。对答案清楚的数学或代码任务，可以进一步使用可验证结果；开放式回答则往往有多种合理表达，还可能包含参考答案未提到的新事实。参考资料能支持评价，仍然不能把所有判断都化为一次简单匹配。<button type="button" class="timecode" data-seconds="3688">[01:01:28]</button></p>
+<h2 id="_7">奖励越高越好，为什么还要限制模型偏离</h2>
+<p>有了奖励模型，我们希望语言模型更容易产生高分回答。但如果只追求这个评分，模型可能利用评价器的弱点，逐渐远离原先合理的语言与助手行为。所以，经典目标还加入一个限制：提高奖励的同时，不要过度偏离参考模型。参考模型通常是开始这一轮优化前的模型。<button type="button" class="timecode" data-seconds="3925">[01:05:25]</button></p>
+<p>把输入记为 <span class="math-inline" aria-label="x"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span>，回答记为 <span class="math-inline" aria-label="y"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>y</mi></mrow></math></span>，当前生成策略记为 <span class="math-inline" aria-label="\pi"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>π</mi></mrow></math></span>，参考策略记为 <span class="math-inline" aria-label="\pi_{\mathrm{ref}}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>π</mi><mrow><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></mrow></msub></mrow></math></span>。在一个给定输入下，可以用下面的简化目标表示这种取舍：</p>
 <div class="math-display" aria-label="\max_{\pi}\;\mathbb{E}_{y\sim\pi(\cdot\mid x)}[r(x,y)]
 -\beta D_{\mathrm{KL}}\!\left(\pi(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\right)"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>max</mo><mrow><mi>π</mi></mrow></msub><mspace width="0.278em" /><msub><mi>𝔼</mi><mrow><mi>y</mi><mi>~</mi><mi>π</mi><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">[</mo><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>−</mo><mi>β</mi><msub><mi>D</mi><mrow><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></mrow></msub><mspace width="negativethinmathspace" /><mrow><mo stretchy="true" fence="true" form="prefix">(</mo><mi>π</mi><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mspace width="0.167em" /><mo fence="false" stretchy="false">‖</mo><mspace width="0.167em" /><msub><mi>π</mi><mrow><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mo>·</mo><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="true" fence="true" form="postfix">)</mo></mrow></mrow></math></div>
-<p>第一项鼓励得到高奖励，第二项限制与参考模型的偏离程度。<span class="math-inline" aria-label="\beta"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 调节两者的取舍。KL 约束不保证事实正确；奖励模型若有漏洞，仍可能出现“评分变高，实际体验变差”。</p>
-<p>视频对 PPO 只作概念介绍：利用优势估计和限制更新幅度等设计来稳定优化，具体强化学习细节留给后续课。理解产品评测时，先抓住奖励来源和约束即可。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=4080" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:08:00]">[01:08:00]</a></p>
-<h2 id="dpo">DPO：直接用偏好对优化</h2>
-<p>标准 DPO 从带 KL 约束的奖励优化目标出发，把奖励与策略的关系重新参数化，转成偏好数据上的优化问题。这样可以省去单独拟合显式奖励模型及 PPO 训练循环。它仍然需要可靠的偏好对和参考策略，训练简化不等于评价标准可以省略。<a class="timecode" href="https://www.bilibili.com/video/BV1vQ3ozPEPB/?t=4278" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:11:18]">[01:11:18]</a></p>
-<p>推导与方法的原始说明见 <a href="https://arxiv.org/abs/2305.18290">DPO 论文</a>。本篇只保留主干：SFT 学习示范，偏好优化学习相对选择；两者都受数据内容与任务覆盖的约束。</p>
-<h2 id="_7">迁移练习：做五对“有理由的选择”</h2>
-<p>选五个真实学习问题，每题保留两个候选回答。每对都写：用户目标是什么；哪一处具体差异影响目标；用什么材料核查；最终选择与置信程度。</p>
-<p>允许“差不多”“各有优劣”“证据不足”。不要为了凑齐偏好标签强行选边。再找人或另一个模型复核分歧，记录标准是否需要修改。</p>
-<p>完成后，你得到的是一份可讨论的练习数据。它可以展示思考过程，但在实际验证之前，不能宣称已经改善模型表现。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>第一项表示按照当前模型生成回答时，平均能得到多少奖励。第二项衡量当前模型与参考模型的生成分布相差多大，并把这种偏离作为代价。<span class="math-inline" aria-label="D_{\mathrm{KL}}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>D</mi><mrow><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></mrow></msub></mrow></math></span> 叫 KL 散度，可以先理解为一种比较分布差异的量；<span class="math-inline" aria-label="\beta"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 决定对偏离的约束有多强。<button type="button" class="timecode" data-seconds="3962">[01:06:02]</button></p>
+<p>这里的约束不等于真实性保证。参考模型可能本来就会犯错，奖励模型也可能误判。它主要防止优化在提高分数时变化过猛。InstructGPT 的完整目标还包含继续利用预训练数据的项，用来兼顾原有能力；上式先保留奖励与参考约束这条主线，方便理解后面的算法。</p>
+<h2 id="_8">奖励分数怎样从两两比较中学出来</h2>
+<p>标注者通常没有给每份回答一个绝对真实的质量分数，只告诉我们 A 比 B 更好。Bradley–Terry 模型提供了一种把分数差与偏好概率联系起来的方式：A 的潜在分数越高于 B，A 被选择的概率越大。<button type="button" class="timecode" data-seconds="3997">[01:06:37]</button></p>
+<div class="math-display" aria-label="P(A\succ B\mid x)=\sigma\!\left(r(x,A)-r(x,B)\right)"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mo>≻</mo><mi>B</mi><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>σ</mi><mspace width="negativethinmathspace" /><mrow><mo stretchy="true" fence="true" form="prefix">(</mo><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>A</mi><mo stretchy="false">)</mo><mo>−</mo><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>B</mi><mo stretchy="false">)</mo><mo stretchy="true" fence="true" form="postfix">)</mo></mrow></mrow></math></div>
+<p>这里的 <span class="math-inline" aria-label="\sigma"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>σ</mi></mrow></math></span> 把任意大小的分数差转成 0 到 1 之间的概率。如果两个分数相同，选择概率为一半；A 的分数明显较高，就更可能选择 A。这个模型允许相同回答对在不同人那里出现不同选择，因此偏好不必被当成没有噪声的确定规则。</p>
+<p>训练奖励模型，就是调整它给出的分数，使已经收集到的偏好比较更容易出现。这个分数是为了拟合比较而学出来的，不能把它直接读成事实正确率。一个高分回答，只说明评价模型较偏好它，真实质量仍需要结合评价器的能力和偏差来看。</p>
+<h2 id="ppo">PPO 在做什么：让尝试过的好回答更容易再出现</h2>
+<p>策略梯度的基本直觉是，模型先生成回答，再依据奖励调整生成倾向。一个回答带来更好的结果，就提高相应行为的可能性；结果较差，就降低这种倾向。真正实现时会使用梯度，也就是参数朝哪个方向改变能够改善目标的信号。<button type="button" class="timecode" data-seconds="4092">[01:08:12]</button></p>
+<p>为了让更新更稳定，常常不会直接使用原始奖励，而会考虑优势：某次结果比一个基准好多少。减去合适的基准，有助于减少奖励波动带来的影响。模型随后变化了，但我们可能还想多次利用此前采样的回答，这就需要处理“数据由旧策略生成，参数已更新”的差别。<button type="button" class="timecode" data-seconds="4158">[01:09:18]</button></p>
+<p>PPO，近端策略优化，通过概率比及裁剪等设计限制更新过猛。概率比比较同一个输出在新旧策略下有多大可能出现；裁剪则限制某些过大的变化继续带来优化收益。实现涉及采样、评分、优势估计和多次更新，系统复杂度较高。理解这里时，先抓住它在协调“利用已有尝试”和“不要一步走太远”即可。<button type="button" class="timecode" data-seconds="4194">[01:09:54]</button></p>
+<h2 id="dpo">DPO：把奖励与策略的关系，直接写进偏好训练</h2>
+<p>如果我们已经有了成对偏好，能否省掉先训练独立奖励模型、再运行复杂强化学习循环的步骤？一种朴素做法是只学习被选中的回答，但它没有充分使用“这份为什么相对另一份更好”的信息。DPO 的关键在于，从带 KL 约束的奖励目标出发，推导出奖励与最优策略之间的关系，再利用这层关系直接优化偏好对。<button type="button" class="timecode" data-seconds="4279">[01:11:19]</button></p>
+<p>在不受具体神经网络形式限制的理论条件下，最优策略会以参考分布为基础，提高高奖励回答的权重。反过来，可以用当前策略相对于参考策略的概率变化，表示一个隐含奖励。同一个问题下比较两个回答时，一些与回答无关的项会抵消，剩下的量就能放进前面的偏好概率模型。<button type="button" class="timecode" data-seconds="4348">[01:12:28]</button></p>
+<p>因此，DPO 的训练可以直接比较：相对于参考模型，当前模型对被选中回答提高了多少倾向，对未被选中回答又提高了多少倾向。优化希望前者获得更有利的相对变化。这里依然包含参考模型，不能简化成无条件提高好答案概率、任意压低坏答案概率就完全等价。<button type="button" class="timecode" data-seconds="4412">[01:13:32]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vQ3ozPEPB-04430.jpg" data-caption="上方把奖励写成当前策略与参考策略的概率比，下方将两个回答的相对变化代入偏好损失。">
+    <img src="../assets/frames/BV1vQ3ozPEPB-04430.jpg" loading="lazy" alt="视频截图 03，01:13:50：上方把奖励写成当前策略与参考策略的概率比，下方将两个回答的相对变化代入偏好损失。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="4430.000">图 03 · 01:13:50</button><span>上方把奖励写成当前策略与参考策略的概率比，下方将两个回答的相对变化代入偏好损失。</span></figcaption>
+</figure>
+<p>DPO 的工程吸引力是，标准离线训练可以直接使用已经准备好的偏好对，不需要在每次训练更新中重新采样回答，也无需单独拟合一个显式奖励模型。关于这一步的原始方法说明，可参见 <a href="https://arxiv.org/abs/2305.18290">DPO 论文</a>。流程简化以后，数据中的偏见、错误选择与覆盖不足仍然存在，算法无法替我们重新定义什么叫好回答。</p>
+<h2 id="_9">总结提炼</h2>
+<p>SFT 用示范教模型怎样回应，RLHF 利用比较训练奖励，再让模型朝高奖励行为调整，DPO 则把偏好比较直接用于策略优化。三条路径都围绕同一个困难：怎样把人的要求变成模型可以学习、又不容易误解的信号。</p>
+<p>贯穿整节课的例子提醒我们，模型会学习数据里容易抓住的规律。参考文献可能被学成格式，较长回答可能被当成优质，安全词汇可能被误当成拒绝依据。要让结果真正可靠，就需要区分表面形式与它本来应该表达的关系，再用合适的数据和评价方式检查模型有没有学到这层关系。</p>
+<h2 id="_10">时间戳导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="282">[00:04:42]</button> 监督微调的目标与示范数据。</li>
+<li><button type="button" class="timecode" data-seconds="417">[00:06:57]</button> FLAN、Alpaca、OpenAssistant 三种数据来源。</li>
+<li><button type="button" class="timecode" data-seconds="720">[00:12:00]</button> 现场写答案为什么很难。</li>
+<li><button type="button" class="timecode" data-seconds="1108">[00:18:28]</button> 真实引用与引用格式，可能教出两种规律。</li>
+<li><button type="button" class="timecode" data-seconds="1542">[00:25:42]</button> Python 进程例子与过度拒绝。</li>
+<li><button type="button" class="timecode" data-seconds="1708">[00:28:28]</button> 中期训练与数据混合。</li>
+<li><button type="button" class="timecode" data-seconds="2511">[00:41:51]</button> 从模仿示范转向偏好与奖励。</li>
+<li><button type="button" class="timecode" data-seconds="2798">[00:46:38]</button> RLHF 数据流程。</li>
+<li><button type="button" class="timecode" data-seconds="3054">[00:50:54]</button> 成对评价中的事实核查与长度偏差。</li>
+<li><button type="button" class="timecode" data-seconds="3925">[01:05:25]</button> 奖励目标、KL 约束和偏好模型。</li>
+<li><button type="button" class="timecode" data-seconds="4092">[01:08:12]</button> PPO 的基本直觉。</li>
+<li><button type="button" class="timecode" data-seconds="4279">[01:11:19]</button> DPO 如何简化偏好训练。</li>
+</ul>
+<h2 id="_11">复习时，把这三个例子接起来</h2>
+<p>先想引用：模型输出了参考文献，为什么还不能说它学会了引用？再想课堂比较：人选择了一份更长的答案，为什么还不能说这份答案事实更准确？最后想 Python 进程：模型拒绝了带有危险词的请求，为什么还不能说它正确理解了安全边界？</p>
+<p>三个例子都要求我们检查行为背后的关系是否成立。理解了这一点，再回头看数据、奖励和算法，就能分清哪些问题可以通过训练方式改善，哪些问题仍然需要重新设计示范与评价标准。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【斯坦福】从零开始的训练大模型-15| 对齐 -对齐技术 - 监督式微调/人类反馈强化学习| 2025年春季", "duration": "74:51", "src": "", "poster": "../assets/frames/BV1vQ3ozPEPB-01845.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

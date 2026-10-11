@@ -4,312 +4,604 @@
     "module": "map",
     "priority": "核心",
     "reason": "区分模型、检索、工具、上下文和运行框架，建立后续归因的地图。",
-    "title": "AI 出了问题，先找到它在哪一层",
+    "title": "从一句“我想去云南旅行”，看懂模型、Agent 和它周围的工具",
     "ready": true,
     "reused": false,
     "uploader": "御豪同学",
     "duration_seconds": 2886,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "v6",
+        "duration_seconds": 2886
+      }
+    ]
   },
   {
     "bvid": "BV1ojfDBSEPv",
     "module": "map",
     "priority": "补充",
     "reason": "用另一组具体例子辨清相邻概念，检查自己能否讲清区别。",
-    "title": "遇到新名词，先问它替谁做了哪一步",
+    "title": "从一次问答开始，看懂 Agent、RAG、MCP 和 Skill",
     "ready": true,
     "reused": false,
     "uploader": "飞天闪客",
     "duration_seconds": 886,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【闪客】名词诈骗！一口气拆穿Skill/MCP/RAG/Agent/OpenClaw底层逻辑",
+        "duration_seconds": 886
+      }
+    ]
   },
   {
     "bvid": "BV1Q3NUetEzV",
     "module": "search",
     "priority": "核心",
     "reason": "检查向量相似度与任务相关性之间的差距。",
-    "title": "找到“长得像”的句子，为什么仍然答错？",
+    "title": "找到意思相近的句子，为什么仍然答错？",
     "ready": true,
     "reused": false,
     "uploader": "果粒奶优有果粒",
     "duration_seconds": 1554,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Embedding正在摧毁你的RAG？？",
+        "duration_seconds": 1554
+      }
+    ]
   },
   {
     "bvid": "BV1nR376UENq",
     "module": "search",
     "priority": "核心",
     "reason": "理解检索反馈循环及其成本与终止条件。",
-    "title": "让 RAG 反复调参：循环之前，先把尺子做好",
+    "title": "让 RAG 自己试参数：先看它怎样找论文，再看它怎样改进",
     "ready": true,
     "reused": false,
     "uploader": "果粒奶优有果粒",
     "duration_seconds": 917,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Loop RAG ：让你的RAG也loop起来，打造自进化的RAG系统",
+        "duration_seconds": 917
+      }
+    ]
   },
   {
     "bvid": "BV1eX5t6rEn7",
     "module": "search",
     "priority": "核心",
     "reason": "比较不同知识获取路线，避免把所有问题套进同一架构。",
-    "title": "接入知识之前，先选一条最短的路",
+    "title": "给 AI 接上资料，先弄清它需要怎样找答案",
     "ready": true,
     "reused": false,
     "uploader": "blackstone_99",
     "duration_seconds": 663,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "output-final",
+        "duration_seconds": 663
+      }
+    ]
   },
   {
     "bvid": "BV12nRzYPEiK",
     "module": "search",
     "priority": "核心",
     "reason": "认识结构化查询与文本检索的适用边界。",
-    "title": "统计学生人数，为什么该把计算交给数据库？",
+    "title": "统计学生人数，为什么该把查询交给数据库？",
     "ready": true,
     "reused": false,
     "uploader": "code秘密花园",
     "duration_seconds": 1517,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "MCP + 数据库，一种提高结构化数据检索精度的新方式",
+        "duration_seconds": 1517
+      }
+    ]
   },
   {
     "bvid": "BV1YaGA6wE24",
     "module": "search",
     "priority": "补充",
     "reason": "练习追问准确率的分母、测试集和改进归因；标题指标需核对。",
-    "title": "面对“准确率提升 25 个点”，先追问什么？",
+    "title": "RAG 回答不准，先看资料有没有找到，再看答案有没有照着写",
     "ready": true,
     "reused": false,
     "uploader": "AI大模型-阿水",
     "duration_seconds": 345,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "面试官问：RAG准确率怎么从60%提升到85%",
+        "duration_seconds": 345
+      }
+    ]
   },
   {
     "bvid": "BV1i5H5ejE5r",
     "module": "search",
     "priority": "补充",
     "reason": "用技术栈案例连接检索流程，工具版本以录制时为准。",
-    "title": "RAG 落地要同时管三件事",
+    "title": "一套 RAG 怎样分工：先管理资料，再回答问题，最后检查效果",
     "ready": true,
     "reused": false,
     "uploader": "西瓜讲大模型",
     "duration_seconds": 382,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "落地RAG的技术栈推荐",
+        "duration_seconds": 382
+      }
+    ]
   },
   {
     "bvid": "BV1vr421K7od",
     "module": "search",
     "priority": "拓展",
     "reason": "把资料解析、检索排序、引用核查与用户下一步行动连起来。",
-    "title": "找到、答对、帮上忙：RAG 的三道关",
+    "title": "RAG 怎样从“找到资料”走到有依据的图文回答",
     "ready": true,
     "reused": false,
     "uploader": "Google中国",
     "duration_seconds": 1989,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "超越 RAG：基于 Gemini 和向量搜索的生成式推荐",
+        "duration_seconds": 1989
+      }
+    ]
   },
   {
     "bvid": "BV1Pmux6zEqQ",
     "module": "evaluate",
     "priority": "核心",
     "reason": "复用完整 Rubric 合集，理解开放任务的评价标准与奖励。",
-    "title": "不止于可验证奖励：面向开放式任务的 Rubric",
+    "title": "开放任务怎样评分：从 Rubric 到能够学习的研究助手",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "NICE学术",
+    "duration_seconds": 10742.316,
+    "parts": 6,
+    "pages": [
+      {
+        "part": 1,
+        "title": "开场",
+        "duration_seconds": 117.609
+      },
+      {
+        "part": 2,
+        "title": "刘文涵 | A Survey of Rubrics for Large Language Models",
+        "duration_seconds": 2329.569
+      },
+      {
+        "part": 3,
+        "title": "李高棠 | Towards Training Open-Ended Deep Research Agents Beyond Verifiable Rewards",
+        "duration_seconds": 2319.566
+      },
+      {
+        "part": 4,
+        "title": "张启源 | RubricBench: Aligning Model-Generated Rubrics with Human Standards",
+        "duration_seconds": 2074.172
+      },
+      {
+        "part": 5,
+        "title": "周阳 | How to Generate and Effectively Use High-Quality Rubrics",
+        "duration_seconds": 1982.8
+      },
+      {
+        "part": 6,
+        "title": "PANEL",
+        "duration_seconds": 1918.6
+      }
+    ]
   },
   {
     "bvid": "BV1Hwgj6GEok",
     "module": "evaluate",
     "priority": "核心",
     "reason": "复用品味与后训练笔记，把偏好转成可表达的判断标准。",
-    "title": "后训练：如何保持你的独特品味",
+    "title": "后训练怎样把产品判断，变成模型持续采用的做法？",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "皮皮蟹勇闯天涯",
+    "duration_seconds": 1708.059,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "260812-后训练：如何保持你的独特品味",
+        "duration_seconds": 1708.059
+      }
+    ]
   },
   {
     "bvid": "BV1MRMnz1EGW",
     "module": "evaluate",
     "priority": "核心",
     "reason": "理解数据格式、样本构造与数据质量检查。",
-    "title": "高质量数据集：先判断样本值不值得学",
+    "title": "微调数据怎么准备，才能让模型学到我们真正需要的能力？",
     "ready": true,
     "reused": false,
     "uploader": "code秘密花园",
     "duration_seconds": 1477,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "LLaMA Factory 微调教程：如何构建高质量数据集？",
+        "duration_seconds": 1477
+      }
+    ]
   },
   {
     "bvid": "BV1GN3Z6LE73",
     "module": "evaluate",
     "priority": "核心",
     "reason": "建立后训练的直觉；性能宣传与机制解释分开看。",
-    "title": "后训练入门：示范、比较与反馈",
+    "title": "模型已经学过很多知识，为什么还需要后训练？",
     "ready": true,
     "reused": false,
     "uploader": "林禾Link",
     "duration_seconds": 613,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "正式版性能暴涨，Deepseek究竟做了什么？模型后训练又是什么？",
+        "duration_seconds": 613
+      }
+    ]
   },
   {
     "bvid": "BV1vQ3ozPEPB",
     "module": "evaluate",
     "priority": "拓展",
     "reason": "补齐监督微调与偏好优化的原理，供需要技术深度时查阅。",
-    "title": "从“看起来不错”到真正可靠：SFT、RLHF 与 DPO",
+    "title": "怎样让模型既听得懂要求，也值得相信：从 SFT 到 RLHF、DPO",
     "ready": true,
     "reused": false,
     "uploader": "AI翻译君-vanch",
     "duration_seconds": 4491,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【斯坦福】从零开始的训练大模型-15| 对齐 -对齐技术 - 监督式微调/人类反馈强化学习| 2025年春季",
+        "duration_seconds": 4491
+      }
+    ]
   },
   {
     "bvid": "BV1PedUBSEGC",
     "module": "evaluate",
     "priority": "拓展",
     "reason": "理解教师与学生共同生成训练数据的研究思路及适用条件。",
-    "title": "好答案不一定是好教材：让教师与学生共同造数据",
+    "title": "强模型会解题，为什么它写的教材未必适合小模型？",
     "ready": true,
     "reused": false,
     "uploader": "aopstudio",
     "duration_seconds": 1378,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "上海人工智能实验室新论文讲解——如何更好地蒸馏推理模型？让教师模型和学生模型合作生成SFT数据",
+        "duration_seconds": 1378
+      }
+    ]
   },
   {
     "bvid": "BV18Uu36rEbu",
     "module": "agent",
     "priority": "核心",
     "reason": "把 Agent 失败落到可观察的循环、工具和上下文管理。",
-    "title": "Agent 真正在做什么：沿执行轨迹看运行框架",
+    "title": "看懂 Agent Harness：从“读一下 README”到一次完整的执行循环",
     "ready": true,
     "reused": false,
     "uploader": "清华大学计算机系科协",
     "duration_seconds": 2924,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "harness",
+        "duration_seconds": 2924
+      }
+    ]
   },
   {
     "bvid": "BV1aW3V6WEsT",
     "module": "agent",
     "priority": "补充",
     "reason": "通过极简框架辨认运行层的必要职责。",
-    "title": "极简 Agent：少几个内置功能，会得到什么",
+    "title": "Pi Agent 的极简设计：一个编码循环，怎样接上自己的能力",
     "ready": true,
     "reused": false,
     "uploader": "肖恩君Sean",
     "duration_seconds": 1350,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "一口气学会Pi Agent极简Harness系统设计",
+        "duration_seconds": 1350
+      }
+    ]
   },
   {
     "bvid": "BV1VPT2zQE2p",
     "module": "agent",
     "priority": "核心",
     "reason": "把工具调用质量拆成可测试的行为。",
-    "title": "工具调用要测两次：选对了吗，执行对了吗？",
+    "title": "工具调用怎样变可靠：让模型知道选什么，也让程序接得住",
     "ready": true,
     "reused": false,
     "uploader": "费曼学徒冬瓜",
     "duration_seconds": 438,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "从4个方面，速通15个Agent工具调用技巧",
+        "duration_seconds": 438
+      }
+    ]
   },
   {
     "bvid": "BV1JsEc6DEdt",
     "module": "agent",
     "priority": "补充",
     "reason": "理解沙箱、权限边界和执行安全如何影响产品质量。",
-    "title": "给 Agent 一个工作间，也给它一道边界",
+    "title": "Agent 的沙箱：让一次错误停在可承受的范围里",
     "ready": true,
     "reused": false,
     "uploader": "AI大模型元元",
     "duration_seconds": 1043,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AI Agent的沙盒是什么？17分钟讲清楚！",
+        "duration_seconds": 1043
+      }
+    ]
   },
   {
     "bvid": "BV1Vegf6nEag",
     "module": "agent",
     "priority": "拓展",
     "reason": "系统了解记忆的写入、检索、更新及失效风险；逐集标注覆盖。",
-    "title": "记得住、找得回、用得对：Agent 记忆与系统评测",
+    "title": "让 Agent 接着昨天的事继续做：记忆系统与多步骤应用",
     "ready": true,
     "reused": false,
     "uploader": "吴恩达Agents",
     "duration_seconds": 12750,
-    "parts": 18
+    "parts": 18,
+    "pages": [
+      {
+        "part": 1,
+        "title": "0-Introduction 介绍",
+        "duration_seconds": 163
+      },
+      {
+        "part": 2,
+        "title": "1-为什么AI智能体需要记忆",
+        "duration_seconds": 1093
+      },
+      {
+        "part": 3,
+        "title": "2-构建记忆管理器",
+        "duration_seconds": 1379
+      },
+      {
+        "part": 4,
+        "title": "3-用语义记忆扩展AI智能体工具调用",
+        "duration_seconds": 1043
+      },
+      {
+        "part": 5,
+        "title": "4-记忆操作：提取、整合与自更新",
+        "duration_seconds": 1398
+      },
+      {
+        "part": 6,
+        "title": "5-记忆感知智能体",
+        "duration_seconds": 1235
+      },
+      {
+        "part": 7,
+        "title": "6-Conclusion 结论",
+        "duration_seconds": 79
+      },
+      {
+        "part": 8,
+        "title": "0-Introduction介绍",
+        "duration_seconds": 141
+      },
+      {
+        "part": 9,
+        "title": "1-语言模型、聊天格式和tokens",
+        "duration_seconds": 1171
+      },
+      {
+        "part": 10,
+        "title": "2-Classification分类",
+        "duration_seconds": 253
+      },
+      {
+        "part": 11,
+        "title": "3-Moderation适度",
+        "duration_seconds": 523
+      },
+      {
+        "part": 12,
+        "title": "4-思维链推理",
+        "duration_seconds": 612
+      },
+      {
+        "part": 13,
+        "title": "5-Chaining Prompts链接提示",
+        "duration_seconds": 1169
+      },
+      {
+        "part": 14,
+        "title": "6-Check Outputs检查输出",
+        "duration_seconds": 383
+      },
+      {
+        "part": 15,
+        "title": "7-Evaluation评估",
+        "duration_seconds": 327
+      },
+      {
+        "part": 16,
+        "title": "8-EvaluationPartI评估第一部分",
+        "duration_seconds": 1145
+      },
+      {
+        "part": 17,
+        "title": "9-Evaluation Part ll评估第二部分",
+        "duration_seconds": 568
+      },
+      {
+        "part": 18,
+        "title": "10-Summary总结",
+        "duration_seconds": 68
+      }
+    ]
   },
   {
     "bvid": "BV1ja95BKE6J",
     "module": "agent",
     "priority": "补充",
     "reason": "比较单 Agent 与多 Agent 的工程取舍，不把热度当效果。",
-    "title": "多 Agent 的成本，藏在交接处",
+    "title": "DeerFlow 2.0：任务交给一个主管，复杂工作怎样分出去",
     "ready": true,
     "reused": false,
     "uploader": "AI深度幻觉",
     "duration_seconds": 692,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "字节DeerFlow2.0拆解：5万星背后，单Agent为什么打败了多Agent",
+        "duration_seconds": 692
+      }
+    ]
   },
   {
     "bvid": "BV1dcRqYuECf",
     "module": "agent",
     "priority": "拓展",
     "reason": "从最小实现观察模型、检索和工具接口如何衔接。",
-    "title": "用一个最小客户端，看懂模型、工具与 RAG 怎样接起来",
+    "title": "从一次真实任务看懂：模型、MCP 工具与 RAG 怎样接起来",
     "ready": true,
     "reused": false,
     "uploader": "MiuMiu8802",
     "duration_seconds": 4485,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "LLM+MCP+RAG实战-从0无框架实现极简Agent客户端 OpenAI/智能体/大模型/AI/DeepSeek",
+        "duration_seconds": 4485
+      }
+    ]
   },
   {
     "bvid": "BV1Rz4iz1Exz",
     "module": "agent",
     "priority": "补充",
     "reason": "理解基础设施和最终用户体验之间的关系。",
-    "title": "Agent 的能力，长在整套基础设施上",
+    "title": "Agent Infra：模型想做一件事，谁让它真正发生",
     "ready": true,
     "reused": false,
     "uploader": "秋芝2046",
     "duration_seconds": 1383,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Agent Infra到底是什么？【AI基建】",
+        "duration_seconds": 1383
+      }
+    ]
   },
   {
     "bvid": "BV1WCCnYjEy4",
     "module": "product",
     "priority": "核心",
     "reason": "用具体研究任务分析深度搜索的输出与交互，界面按录制版本理解。",
-    "title": "深度研究怎么验收：从一份漂亮报告往回查",
+    "title": "让 AI 帮忙研究一个问题：五个 Deep Research 案例怎样逐步深入",
     "ready": true,
     "reused": false,
     "uploader": "howie和小能熊",
     "duration_seconds": 2992,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Google Deep Research，学习与研究利器，彻底颠覆主题研究这件事：详细上手教程，5 个深度案例，全面场景介绍，10 倍提升大脑信息处理带宽",
+        "duration_seconds": 2992
+      }
+    ]
   },
   {
     "bvid": "BV1RY7L62Ea1",
     "module": "product",
     "priority": "补充",
     "reason": "把需求、交互和原型串成可验证的项目叙事。",
-    "title": "厨房里的一米距离，怎样变成产品设计",
+    "title": "厨房里的一米距离，怎样变成一个 AI 产品",
     "ready": true,
     "reused": false,
     "uploader": "设计师贾冲",
     "duration_seconds": 805,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "6月30号-最终定稿",
+        "duration_seconds": 805
+      }
+    ]
   },
   {
     "bvid": "BV1YvMy6iE1r",
     "module": "evaluate",
     "priority": "核心",
     "reason": "用真实任务定义评价标准，选择高价值案例，沿链路定位失败。",
-    "title": "评测最难的部分：先说清什么才算帮到人",
+    "title": "AI 的回答到底好不好？从推荐岗位和取消订单讲起",
     "ready": true,
     "reused": false,
     "uploader": "林木聊AI",
     "duration_seconds": 268,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "被AI产品当作dirtywork，实际很重要的工作",
+        "duration_seconds": 268
+      }
+    ]
   },
   {
     "bvid": "BV1RywNeNEry",
@@ -321,103 +613,176 @@
     "reused": false,
     "uploader": "老邓工业设计分享",
     "duration_seconds": 1113,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "我们为什么要做产品分析？怎么做？",
+        "duration_seconds": 1113
+      }
+    ]
   },
   {
     "bvid": "BV1SM411d7Kp",
     "module": "product",
     "priority": "补充",
     "reason": "对照早期 AIGC 产品观点，区分长期方法和历史判断。",
-    "title": "早期 AIGC 产品课：把技术能力接到行业验收上",
+    "title": "从生成一张图，到做成一个产品：AIGC 产品经理要理解什么",
     "ready": true,
     "reused": false,
     "uploader": "北歌AIGC",
     "duration_seconds": 3152,
-    "parts": 3
+    "parts": 3,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AIGC行业科普",
+        "duration_seconds": 1758
+      },
+      {
+        "part": 2,
+        "title": "AIGC产品经理与传统产品经理的异同",
+        "duration_seconds": 801
+      },
+      {
+        "part": 3,
+        "title": "AIGC的学习路径",
+        "duration_seconds": 593
+      }
+    ]
   },
   {
     "bvid": "BV1Q7AjzdEQn",
     "module": "product",
     "priority": "核心",
     "reason": "识别原型走向真实可用产品时的缺口。",
-    "title": "第一版能运行，第二天还能交付吗",
+    "title": "第一版能运行，第二天还能交付吗：两个 AI 内容站的产品复盘",
     "ready": true,
     "reused": false,
     "uploader": "李自然说",
     "duration_seconds": 1622,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Vibe Coding实战复盘：做玩具容易，做产品难",
+        "duration_seconds": 1622
+      }
+    ]
   },
   {
     "bvid": "BV1DAqWYUECX",
     "module": "product",
     "priority": "拓展",
     "reason": "观察对话、画布和产物之间的交互关系。",
-    "title": "对话负责商量，工作区负责交付",
+    "title": "对话负责商量，工作区负责修改：AI 产品为什么走向同一种界面",
     "ready": true,
     "reused": false,
     "uploader": "左右横眺",
     "duration_seconds": 776,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AI产品形态交汇的背后：Artifacts, Canvas, Cursor...【趋势总结1】",
+        "duration_seconds": 776
+      }
+    ]
   },
   {
     "bvid": "BV16V6iY3EJj",
     "module": "product",
     "priority": "拓展",
     "reason": "理解 GUI、API 与人机协作的边界。",
-    "title": "Agent 要动手：先选接口，再设计失手之后怎么办",
+    "title": "让 AI 真正操作软件：API、屏幕与人的位置",
     "ready": true,
     "reused": false,
     "uploader": "左右横眺",
     "duration_seconds": 1168,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Agent：从GUI与API的螺旋，走向新的人机交互【趋势总结2】",
+        "duration_seconds": 1168
+      }
+    ]
   },
   {
     "bvid": "BV1fGtFzHEUd",
     "module": "product",
     "priority": "补充",
     "reason": "从办公任务观察上手成本、产物质量和产品入口。",
-    "title": "办公 AI 好不好用，看文件能不能接着干活",
+    "title": "办公 AI 怎样帮上忙：从改一份文档，到一起打磨课件",
     "ready": true,
     "reused": false,
     "uploader": "Topbook",
     "duration_seconds": 358,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "第一个符合国人体质的办公 Agent 用起来咋样：不逼用户学AI，反教AI用产品。",
+        "duration_seconds": 358
+      }
+    ]
   },
   {
     "bvid": "BV1s43z67Ezv",
     "module": "product",
     "priority": "核心",
     "reason": "复用信息层级与感知差异的设计方法，迁移到回答呈现。",
-    "title": "Satori Graphics｜学高阶设计思维，看这一部就够了",
+    "title": "设计怎样被人理解：从第一眼看到什么，到离开后记住什么",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "63号炼金工坊",
+    "duration_seconds": 607.573,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Satori Graphics｜学高阶设计思维，看这一部就够了",
+        "duration_seconds": 607.573
+      }
+    ]
   },
   {
     "bvid": "BV15LKH6PETX",
     "module": "product",
     "priority": "补充",
     "reason": "复用留白与信息分组案例，改善学习稿与回答的阅读负担。",
-    "title": "这才是UI设计该有的“呼吸感”",
+    "title": "UI 的“呼吸感”在哪里：沿着六个界面看空间、主次和状态",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "UXUI良制品",
+    "duration_seconds": 97.221,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "这才是UI设计该有的“呼吸感”",
+        "duration_seconds": 97.221
+      }
+    ]
   },
   {
     "bvid": "BV1bLMX6HE7b",
     "module": "product",
     "priority": "补充",
     "reason": "复用设计与 AI 协作案例，练习明确质量标准。",
-    "title": "【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？",
+    "title": "同一个 Skill，怎样做出更好的作品：内容、设计规则与具体反馈",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "飞书",
+    "duration_seconds": 1396.4,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？",
+        "duration_seconds": 1396.4
+      }
+    ]
   },
   {
     "bvid": "BV1pC4y1P7dR",
@@ -429,151 +794,242 @@
     "reused": false,
     "uploader": "钞能力毛毛",
     "duration_seconds": 2488,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【40分钟干货】我的「有效搜索」方法论——如何用公开渠道挖掘隐藏信息",
+        "duration_seconds": 2488
+      }
+    ]
   },
   {
     "bvid": "BV1pF411f7yD",
     "module": "research",
     "priority": "核心",
     "reason": "用快速调研方法把陌生问题转成证据清单。",
-    "title": "快速调研：每找到一条信息，就把问题问得更准",
+    "title": "快速调研怎样开始：带着问题找资料，再让资料长出新问题",
     "ready": true,
     "reused": false,
     "uploader": "老蒋巨靠谱",
     "duration_seconds": 1314,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "面试必备！每个人都应该掌握的快速调研法",
+        "duration_seconds": 1314
+      }
+    ]
   },
   {
     "bvid": "BV1XXk7YUEsS",
     "module": "research",
     "priority": "补充",
     "reason": "对照调研方法的后续版本，提炼可复用步骤。",
-    "title": "AI 辅助调研：读得更快，还要知道哪句话值得相信",
+    "title": "AI 怎样加入调研：读懂长材料，沿着问题继续追问",
     "ready": true,
     "reused": false,
     "uploader": "老蒋巨靠谱",
     "duration_seconds": 1155,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "每个人都应该掌握的快速调研法2.0！",
+        "duration_seconds": 1155
+      }
+    ]
   },
   {
     "bvid": "BV1xr6GB5EnH",
     "module": "research",
     "priority": "补充",
     "reason": "主动选择信息源，减少二手信息和营销噪声。",
-    "title": "信息源分三层：知道发生了什么，找到原物，再借助讲解",
+    "title": "面对看不完的 AI 消息，我们究竟该从哪里学",
     "ready": true,
     "reused": false,
     "uploader": "小天fotos",
     "duration_seconds": 432,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "聊一下AI时代怎么选取信息源",
+        "duration_seconds": 432
+      }
+    ]
   },
   {
     "bvid": "BV11JNn6mESN",
     "module": "research",
     "priority": "补充",
     "reason": "建立低负担的一手信息获取习惯。",
-    "title": "日常 AI 学习：把消息收集压缩，把实践时间留下",
+    "title": "AI 消息、播客和长教程，怎样放进日常学习",
     "ready": true,
     "reused": false,
     "uploader": "chocpink_AI版",
     "duration_seconds": 303,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "如何获得一手AI资讯？AI产品经理的3个学习路经：AI新闻自动推送、播客、Youtube【B站AI创造公开赛】",
+        "duration_seconds": 303
+      }
+    ]
   },
   {
     "bvid": "BV1gZz8BYE3r",
     "module": "research",
     "priority": "拓展",
     "reason": "补充因果推理，避免把相关性或一次效果当成有效改进。",
-    "title": "指标一起变好，就能说改动有效吗？",
+    "title": "两件事总一起发生，为什么还不能说一件导致了另一件",
     "ready": true,
     "reused": false,
     "uploader": "漫士沉思录",
     "duration_seconds": 974,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【漫士】看完这个视频，你会质疑所有的因果关系",
+        "duration_seconds": 974
+      }
+    ]
   },
   {
     "bvid": "BV1Wzjg65EM6",
     "module": "research",
     "priority": "补充",
     "reason": "用直观实验练习区分语言输出、随机机制与测试设计。",
-    "title": "AI 抛硬币：一段逼真画面，究竟测到了什么？",
+    "title": "AI 抛出的硬币，为什么未必一半朝上、一半朝下",
     "ready": true,
     "reused": false,
     "uploader": "影视飓风",
     "duration_seconds": 617,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "2026-06-18_世界模型_3840x2160_V02_Bilibili",
+        "duration_seconds": 617
+      }
+    ]
   },
   {
     "bvid": "BV1sWDFBeERQ",
     "module": "research",
     "priority": "补充",
     "reason": "把调研与真实决策相连，辨认必要的信息缺口。",
-    "title": "大决定之前，先做一个便宜、真实的小验证",
+    "title": "大决定之前，先弄清自己准备走进怎样的生活",
     "ready": true,
     "reused": false,
     "uploader": "像素范",
     "duration_seconds": 1420,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "人生重大误区：不调研就决策。",
+        "duration_seconds": 1420
+      }
+    ]
   },
   {
     "bvid": "BV1GcGX6iEUG",
     "module": "research",
     "priority": "补充",
     "reason": "研究用 AI 学习陌生领域的方法与验证成本。",
-    "title": "用知识地图学习：让追问有去处，也让自己回得来",
+    "title": "用知识地图学习：深入一个问题，也能回到原来的位置",
     "ready": true,
     "reused": false,
     "uploader": "天基大王",
     "duration_seconds": 682,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "mmexport1779893775844",
+        "duration_seconds": 682
+      }
+    ]
   },
   {
     "bvid": "BV12suS6rEA8",
     "module": "learn",
     "priority": "核心",
     "reason": "复用 build-to-learn，防止做完产物却无法独立解释。",
-    "title": "build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治",
+    "title": "AI 把程序写出来以后，我们怎样确认自己真的学会了",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "AI技术投降派",
+    "duration_seconds": 889.024,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的\"幻觉式掌握\"怎么治",
+        "duration_seconds": 889.024
+      }
+    ]
   },
   {
     "bvid": "BV1AfSYBdEPp",
     "module": "learn",
     "priority": "补充",
     "reason": "从自学经验中提炼练习与反馈方式。",
-    "title": "学习断了一天，下一次该从哪里开始？",
+    "title": "学习中断以后，怎样重新开始？",
     "ready": true,
     "reused": false,
     "uploader": "吴阳Leonard",
     "duration_seconds": 1147,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "自学9年血泪教训：比努力更重要的是努力的方法",
+        "duration_seconds": 1147
+      }
+    ]
   },
   {
     "bvid": "BV1KXLq64E8V",
     "module": "learn",
     "priority": "补充",
     "reason": "练习保留自己的问题意识与判断。",
-    "title": "有效思考：从自己的问题出发，也让证据进得来",
+    "title": "想了很多以后，怎样对自己的生活多懂一点？",
     "ready": true,
     "reused": false,
     "uploader": "RainnyAn言言",
     "duration_seconds": 1222,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AI时代，如何进行有效思考？",
+        "duration_seconds": 1222
+      }
+    ]
   },
   {
     "bvid": "BV177mqBpEqW",
     "module": "learn",
     "priority": "补充",
     "reason": "提炼可操作的学习循环，避免只收藏不练习。",
-    "title": "学习与应试，各自需要一张验收单",
+    "title": "学懂一件事，与在考试里做好，分别需要关注什么",
     "ready": true,
     "reused": false,
     "uploader": "清华皓同学",
     "duration_seconds": 564,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "求学20年，清华博士生学习认知的精华都在这条视频",
+        "duration_seconds": 564
+      }
+    ]
   },
   {
     "bvid": "BV1h8DYBzErB",
@@ -585,66 +1041,108 @@
     "reused": false,
     "uploader": "课代表立正",
     "duration_seconds": 2113,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "OpenAI增长工程师：如何押注职业方向；如何增长产品；怎样讲好自己的经历，拿到入场劵？",
+        "duration_seconds": 2113
+      }
+    ]
   },
   {
     "bvid": "BV1hubZ6WEfU",
     "module": "learn",
     "priority": "补充",
     "reason": "把真实面试复盘用作自查，不把个人经历当统一招聘标准。",
-    "title": "Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证”",
+    "title": "Agent 面试为什么会一路问到数据库、消息队列和效果验证？",
     "ready": true,
     "reused": false,
     "uploader": "假如今天可以躺平",
     "duration_seconds": 2172,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "我的AI Agent面试复盘。纯是个人的分享和总结，未必准确，期待大家交流指正哈哈哈哈！",
+        "duration_seconds": 2172
+      }
+    ]
   },
   {
     "bvid": "BV1ST421k7LP",
     "module": "learn",
     "priority": "补充",
     "reason": "通过面试对比观察表达与信息匹配。",
-    "title": "同一道面试题，为什么有人更快说到重点？",
+    "title": "同一道面试题，怎样从“我做过”讲到“我想清楚了”？",
     "ready": true,
     "reused": false,
     "uploader": "-LKs-",
     "duration_seconds": 2277,
-    "parts": 1
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "实战对比丨一个视频告诉你面试最大的信息差！",
+        "duration_seconds": 2277
+      }
+    ]
   },
   {
     "bvid": "BV15cg96BERq",
     "module": "learn",
     "priority": "补充",
     "reason": "复用技术实习准备方法，挑选与产品策略方向相通的部分。",
-    "title": "带你从“第一性原理”速通大厂技术岗实习！",
+    "title": "想找后端实习，怎样把零散学习接成一条路？",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "花绿青ovo",
+    "duration_seconds": 2384.768,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "带你从“第一性原理”速通大厂技术岗实习！",
+        "duration_seconds": 2384.768
+      }
+    ]
   },
   {
     "bvid": "BV1Qfg56sEfb",
     "module": "learn",
     "priority": "补充",
     "reason": "复用轻量项目管理案例，保持任务与验收标准可见。",
-    "title": "2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】",
+    "title": "用 AI 做项目管理工具：把想法、界面和真实操作接起来",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "英雄哪里出来",
+    "duration_seconds": 184.877,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "2分钟VibeCoding项目管理系统(建议收藏) | 文档见评论区【B站AI创造公开赛】",
+        "duration_seconds": 184.877
+      }
+    ]
   },
   {
     "bvid": "BV1XnuH66EzS",
     "module": "agent",
     "priority": "拓展",
     "reason": "复用长访谈，了解自进化与反馈循环的研究背景。",
-    "title": "对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】",
+    "title": "AI 怎样参与下一代 AI 的研究：从研究助手到递归自我改进",
     "ready": true,
     "reused": true,
-    "uploader": "",
-    "duration_seconds": null,
-    "parts": 1
+    "uploader": "晚点聊LateTalk",
+    "duration_seconds": 5067.882,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】",
+        "duration_seconds": 5067.882
+      }
+    ]
   }
 ]

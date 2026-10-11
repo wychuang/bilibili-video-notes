@@ -1,63 +1,276 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>信息源分三层：知道发生了什么，找到原物，再借助讲解 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>面对看不完的 AI 消息，我们究竟该从哪里学 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">面对看不完的 AI 消息，我们究竟该从哪里学</h1>
+    <div class="meta"><span>小天fotos</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1xr6GB5EnH/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">信息源分三层：知道发生了什么，找到原物，再借助讲解</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">收藏越来越多，可能是选择标准还没定</a></li>
-<li><a href="#newssourcecontent">News、Source、Content，各自解决一个问题</a></li>
-<li><a href="#_4">身份与流量都需要拆开看</a></li>
-<li><a href="#_5">迁移练习：给收藏做一轮减负</a></li>
+<li><a href="#ai">面对看不完的 AI 消息，我们究竟该从哪里学</a><ul>
+<li><a href="#_1">给学习留一个较大的目标，也留一个眼前的用途</a></li>
+<li><a href="#_2">消息、原始材料、讲解内容，分别回答不同的问题</a></li>
+<li><a href="#_3">真正学习时，三个入口会来回使用</a></li>
+<li><a href="#_4">内容为什么容易让人着急，又该怎样使用它</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">时间导航</a></li>
+<li><a href="#_7">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1xr6GB5EnH" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1xr6GB5EnH"><div class="provenance">来源：小天fotos · <a href="https://www.bilibili.com/video/BV1xr6GB5EnH/" target="_blank" rel="noopener">BV1xr6GB5EnH 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">信息源分三层：知道发生了什么，找到原物，再借助讲解</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1xr6GB5EnH.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><button class="done" data-done="BV1xr6GB5EnH" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1xr6GB5EnH-00255.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1xr6GB5EnH&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1xr6GB5EnH/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1xr6GB5EnH"><h1>面对看不完的 AI 消息，我们究竟该从哪里学</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1xr6GB5EnH/">小天 fotos｜聊一下 AI 时代怎么选取信息源</a>；全片约 7 分钟。以下保留信息筛选方法，个人训练经历和行业预测仅作为讲述者经验。</p>
+<p>来源：聊一下 AI 时代怎么选取信息源｜UP 主：小天 fotos｜时长：7 分 12 秒｜<a href="https://www.bilibili.com/video/BV1xr6GB5EnH/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>先确定自己要完成什么，再让新闻负责发现、原始材料负责核查、讲解内容负责帮助理解。</p>
-<h2 id="_3">收藏越来越多，可能是选择标准还没定</h2>
-<p>一个新模型发布，接着出现测评、教程和“又变天了”的讨论。我能一口气收藏几十条，真正使用时却说不清哪条帮助了我的任务。</p>
-<p>视频首先提出定位问题：希望自己在 AI 中参与到什么程度？讲述者用“创业创新”和“帮助孩子学习”说明，同一份知识可以有不同的实际落点。<a class="timecode" href="https://www.bilibili.com/video/BV1xr6GB5EnH/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1xr6GB5EnH/?t=60" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:00]">[00:01:00]</a></p>
-<p>这是一种个人筛选办法，不意味着每条内容都必须立即赚钱。对本课程，判断标准可以更小：它能否帮我理解一个错误、设计一个测试，或完成一次清楚的解释？</p>
-<h2 id="newssourcecontent">News、Source、Content，各自解决一个问题</h2>
-<p>视频把信息分成三层。<a class="timecode" href="https://www.bilibili.com/video/BV1xr6GB5EnH/?t=182" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:02]">[00:03:02]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1xr6GB5EnH/?t=241" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:01]">[00:04:01]</a></p>
+<p>今天一个新模型，明天一个新工具，后天又有人说工作方式已经完全改变。我们原本只是想了解一下，刷完却多了好几件“必须赶快学”的事。收藏越来越多，心里也越来越着急：好像每条消息都重要，放过哪一条都有可能落后。可真要坐下来做自己的事情，又很难说清刚才那些消息到底能帮上什么忙。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<p>这种着急常被称为 FOMO，也就是担心错过。面对不断更新的 AI 话题，单纯提高阅读速度很难解除这种压力。只要没有决定自己想参与到什么程度，任何新进展都可能看起来与自己有关。我们需要先回答一个更靠近自己的问题：我了解这些东西，是想用它完成什么？确定了这一点，才有办法判断一条信息值得读多深，哪些内容暂时知道名字就够了。<button type="button" class="timecode" data-seconds="38">[00:00:38]</button></p>
+<h2 id="_1">给学习留一个较大的目标，也留一个眼前的用途</h2>
+<p>小天 fotos 有工程背景，也有创业经历。他给自己的上限设想，是借助 AI 做出有创新的产品，寻找新的商业机会。这个目标很大，未必每次探索都能走到那里，所以他还给学习保留了一个更小、更具体的用途：即使最后没有形成生意，学到的能力也可以用来制作工具，帮助孩子学习。这样，一次探索没有成功变成产品，并不等于此前的投入全部失去了意义。<button type="button" class="timecode" data-seconds="50">[00:00:50]</button></p>
+<p>这两个目标决定了他如何看待热点。DeepSeek R1 发布后，他也曾有很强的紧迫感，但接下来做的事情逐渐具体起来：了解强化学习，阅读相关材料，尝试一个自己能够承担的小规模训练案例。这里的强化学习，可以先理解为让模型在尝试之后得到反馈，再据此调整行为的一类学习方法。真正动手时，读懂原理、准备运行环境、理解训练结果，都比转发一条“模型变强了”的消息更费时间。这些困难也让一个模糊的热点变成了可以学习的问题。<button type="button" class="timecode" data-seconds="121">[00:02:01]</button></p>
+<p>需要分清这次个人实践的范围：小规模尝试能够帮助他理解训练过程，并不代表完整复现了一个大型模型，也不能据此推出相同的成本或能力。他的收获在于，强化学习逐渐进入了自己考虑产品的方式。了解 Manus 一类产品的工作思路之后，再看到相似的新工具，他也更容易判断哪些变化值得继续研究。过去学习的内容开始帮助他筛选下一批信息，学习便有了连续性。<button type="button" class="timecode" data-seconds="144">[00:02:24]</button></p>
+<p>对我们来说，有用的部分是这种选择标准。一个长期目标告诉你值得往哪里深入，一个具体用途让你知道眼前的知识可以用在哪里。如果当前最想做的是理解 AI 产品，就需要关注它怎样工作、用户为什么需要它；如果只是想改善日常工作，就可以围绕实际任务挑工具。两种参与方式所需的材料不同，没有必要用同一张追热点清单要求所有人。</p>
+<h2 id="_2">消息、原始材料、讲解内容，分别回答不同的问题</h2>
+<p>接下来可以把接触到的信息分成三个部分：News、Source 和 Content。三个英文词先不用背，想清楚它们各自能帮我们做什么就好。一条消息告诉你发生了什么；原始材料让你接触真正发布出来的东西；讲解内容则帮助你读懂其中不熟悉的部分。同一个话题可能同时需要这三类信息，但阅读目的会随着阶段发生变化。<button type="button" class="timecode" data-seconds="194">[00:03:14]</button></p>
+<p>例如，你先在社交平台看到某个模型发布，这条消息让你知道有了一项新变化。等你想了解它为何受到关注，就需要寻找发布团队的介绍、研究论文、代码或模型文件。继续往下读，碰到不理解的训练方法，再找一篇讲解来补上知识。这样，阅读有一个正在解决的问题，不必把有关这个模型的所有评论都收进来。</p>
 <table>
 <thead>
 <tr>
-<th>层次</th>
-<th>主要用途</th>
-<th>看完之后的下一步</th>
+<th>信息类型</th>
+<th>它主要帮助我们回答什么</th>
+<th>阅读到什么程度比较合适</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>News，消息</td>
-<td>知道有什么新变化</td>
-<td>判断与当前任务是否有关</td>
+<td>消息 News</td>
+<td>新出现了什么，它大致有什么用？</td>
+<td>能判断与自己的目标是否有关。</td>
 </tr>
 <tr>
-<td>Source，原始材料</td>
-<td>接触论文、代码、模型或真实产品</td>
-<td>核对能力、条件与限制</td>
+<td>原始材料 Source</td>
+<td>实际发布了什么，具体怎样使用或研究？</td>
+<td>根据自己的问题查看论文、代码、模型或产品。</td>
 </tr>
 <tr>
-<td>Content，解释材料</td>
-<td>帮助消化难点和理解背景</td>
-<td>回到原始材料验证关键理解</td>
+<td>讲解内容 Content</td>
+<td>原始材料里读不懂的地方是什么意思？</td>
+<td>补足当前缺少的理解，再继续自己的探索。</td>
 </tr>
 </tbody>
 </table>
-<p>视频中，论文、代码仓库和模型发布页分别提供原理、实现与实操入口。二次讲解则用于解决读不懂的部分。三者可以协作，无需把“只看一手材料”变成新的负担。</p>
-<h2 id="_4">身份与流量都需要拆开看</h2>
-<p>视频提醒，内容创作受传播激励影响，热点可能比扎实的方法更容易吸引注意。<a class="timecode" href="https://www.bilibili.com/video/BV1xr6GB5EnH/?t=302" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:02]">[00:05:02]</a></p>
-<p>同时，创始人、投资人、研究者和官方团队也各有立场。以下是补充判断：身份适合帮助理解视角，证据仍要逐条看。一次即兴访谈也可能包含记忆偏差和利益相关，官方演示也可能只展示成功样本。</p>
-<p>最省力的做法，是对关键结论追问：原始依据在哪里？哪些条件没说？这个结果能在我的任务里重现吗？不必审计每条闲聊，但别让未经核查的热点决定重要工作。</p>
-<h2 id="_5">迁移练习：给收藏做一轮减负</h2>
-<p>从收藏里选三条与当前任务有关的内容，各标上“消息、原始材料、解释”。如果三条都在转述同一项发布，再补一个原始来源就够了。</p>
-<p>最后写一句“我准备据此做什么”。没有下一步也没关系，标为兴趣阅读，暂时移出核心学习路线。这样既保留好奇心，也给真正要练习的内容留出空间。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>小天 fotos 使用最多的是 GitHub，其次是 Hugging Face 等模型平台，论文则按需要阅读。这个顺序与他的工程背景有关：代码和可以运行的东西更容易进入他的工作。GitHub 仓库可能提供实现、运行说明和训练框架；模型平台可以提供模型文件及使用信息；论文通常更集中地说明研究问题、方法与实验。它们给出的内容各有侧重，不能因为都围绕同一个名字，就认为读过其中一种便了解了全部。<button type="button" class="timecode" data-seconds="218">[00:03:38]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1xr6GB5EnH-00255.jpg" data-caption="GitHub、模型平台与论文分别提供不同入口；选择哪一个，要看我们正在寻找实现、可用模型还是研究解释。">
+    <img src="../assets/frames/BV1xr6GB5EnH-00255.jpg" loading="lazy" alt="视频截图 01，00:04:15：GitHub、模型平台与论文分别提供不同入口；选择哪一个，要看我们正在寻找实现、可用模型还是研究解释。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="255.000">图 01 · 00:04:15</button><span>GitHub、模型平台与论文分别提供不同入口；选择哪一个，要看我们正在寻找实现、可用模型还是研究解释。</span></figcaption>
+</figure>
+<p>这里的“原始材料”也需要看具体对象。一个代码仓库可能是发布团队自己的实现，也可能是其他人的复现。两者都可能有学习价值，但回答“原团队究竟做了什么”时，不能把复现者的选择直接算到原团队身上。Product Hunt 一类产品发现平台，则更适合作为寻找产品的入口；需要了解产品本身时，还要继续进入相应的产品页面。知道入口能提供什么，就不容易把入口当成最终答案。</p>
+<h2 id="_3">真正学习时，三个入口会来回使用</h2>
+<p>强化学习的个人实践可以把这种关系串起来。小天 fotos 先尝试从论文理解方法，再到 GitHub 寻找别人如何复现、怎样组织训练，以及训练框架如何使用。之后，他会接触模型平台上的模型，尝试把自己理解的过程运行起来。碰到论文或代码里读不懂的地方，再借助讲解材料补课。论文、代码、模型和教程在同一个学习过程中相互接上。<button type="button" class="timecode" data-seconds="256">[00:04:16]</button></p>
+<p>假如只停留在消息层面，我们可能记住了“这个模型用了强化学习”，却仍不知道训练时哪些东西发生了变化。只看讲解也有另一种困难：讲解为了让人容易理解，会选择重点、省略条件，有时还会带入解释者自己的判断。当我们需要亲自运行或者认真比较方法时，被省略的细节又会变得重要。因此，讲解帮助我们跨过阅读门槛，原始材料则让问题继续落到具体对象上。</p>
+<p>这也解释了为什么无需把“只读一手材料”变成新的负担。刚进入一个领域时，论文里可能每隔几行就有一个不认识的概念，直接从头硬读未必有效。先借助合适的讲解建立基本认识，再回去看原始材料，完全可以成为正常的学习路径。关键在于知道自己此刻缺少什么：是尚未发现某项进展，还是已经知道它存在，却没有理解它的工作方式。<button type="button" class="timecode" data-seconds="274">[00:04:34]</button></p>
+<h2 id="_4">内容为什么容易让人着急，又该怎样使用它</h2>
+<p>讲解内容降低了学习门槛，同时也处在争取注意力的环境里。一个标题如果让人觉得“再不看就跟不上了”，更可能获得点击；一个能引起兴奋、担忧或争论的说法，也容易传播。小天 fotos 提到自己的创作体验：认真展开的方法内容，未必比模型评测更容易获得观看。这是他对自己创作经历的观察，说明传播效果与学习价值可能出现差别，不能据此认定所有热门内容都没有价值。<button type="button" class="timecode" data-seconds="294">[00:04:54]</button></p>
+<p>对读者而言，可以把这层关系放回最初的目标。内容激起了兴趣之后，继续问一句：它究竟帮助我理解了哪个问题？如果读完以后只剩“又有大事发生了”的紧迫感，却无法说清新能力是什么、与自己的事情有什么关系，那么当前得到的主要仍是消息。我们可以保留这个消息，等它与具体任务发生联系时再深入，无需立即把它变成新的学习负担。<button type="button" class="timecode" data-seconds="348">[00:05:48]</button></p>
+<p>小天 fotos 也喜欢听创始人、投资人和开发者的长访谈。这类内容有时能够保留做事时的理由、犹豫和背景，比一句浓缩的结论更容易让人理解事情如何发生。不过，个人讲述仍然带着立场和经历，访谈形式本身不会保证判断正确。我们可以从中学习对方怎样观察问题，同时保留对具体判断的疑问。<button type="button" class="timecode" data-seconds="371">[00:06:11]</button></p>
+<p>最终，信息选择可以回到一个很朴素的顺序：先有自己关心的事情，借消息发现有关的新变化，走进对应的产品或研究材料，再用讲解补上不理解的部分。这个顺序允许我们错过很多与眼前目标无关的内容。只要留下来的材料能够相互连接，帮助我们完成一次真正的理解或使用，就已经比不断扩大收藏更接近学习的目的。<button type="button" class="timecode" data-seconds="403">[00:06:43]</button></p>
+<h2 id="_5">总结提炼</h2>
+<p>先确定自己希望怎样参与 AI，再决定哪些信息值得投入时间。长期目标提供方向，眼前用途让学习的价值更加具体。</p>
+<p>消息负责发现变化，原始材料提供实际研究或使用的对象，讲解帮助理解难点。它们可以反复配合，不需要规定所有人只能从同一种入口开始。</p>
+<p>内容受传播激励影响，热度与学习价值可能不同。读完后能说清自己解决了哪个问题，是判断这次阅读有没有帮助的一个实际依据。</p>
+<h2 id="_6">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="0">[00:00:00]</button> 新工具与担心错过的压力。</li>
+<li><button type="button" class="timecode" data-seconds="38">[00:00:38]</button> 先确定自己的参与程度。</li>
+<li><button type="button" class="timecode" data-seconds="50">[00:00:50]</button> 创业目标与具体学习用途。</li>
+<li><button type="button" class="timecode" data-seconds="121">[00:02:01]</button> 从模型消息走向强化学习实践。</li>
+<li><button type="button" class="timecode" data-seconds="194">[00:03:14]</button> 消息、原始材料与讲解内容。</li>
+<li><button type="button" class="timecode" data-seconds="256">[00:04:16]</button> 论文、代码、模型怎样接起来。</li>
+<li><button type="button" class="timecode" data-seconds="294">[00:04:54]</button> 内容创作与传播激励。</li>
+<li><button type="button" class="timecode" data-seconds="403">[00:06:43]</button> 让信息选择回到自己的目标。</li>
+</ul>
+<h2 id="_7">回看时的三个问题</h2>
+<p>同样是一条新模型发布消息，想做研究、想开发产品和想改善日常工作的人，接下来各自需要寻找什么？</p>
+<p>如果你已经看懂一篇通俗讲解，却仍然无法运行相应方法，接下来缺少的可能是哪类材料？</p>
+<p>一条内容让你很着急，却没有帮助你理解具体问题时，你是否需要立即继续追下去？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "聊一下AI时代怎么选取信息源", "duration": "07:12", "src": "", "poster": "../assets/frames/BV1xr6GB5EnH-00255.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

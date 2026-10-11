@@ -1,61 +1,315 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>Agent 要动手：先选接口，再设计失手之后怎么办 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>让 AI 真正操作软件：API、屏幕与人的位置 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai-api">让 AI 真正操作软件：API、屏幕与人的位置</h1>
+    <div class="meta"><span>左右横眺</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV16V6iY3EJj/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#agent">Agent 要动手：先选接口，再设计失手之后怎么办</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">一次“调用工具”，到底是谁在执行？</a></li>
-<li><a href="#_3">能拿到结构化信息，就别只猜屏幕</a></li>
-<li><a href="#_4">真正拉开体验差距的，是出错之后</a></li>
-<li><a href="#_5">迁移练习：给一个动作写验收标准</a></li>
+<li><a href="#ai-api">让 AI 真正操作软件：API、屏幕与人的位置</a><ul>
+<li><a href="#ai">一条路：软件把能做的事情明确告诉 AI</a></li>
+<li><a href="#ai_1">另一条路：让 AI 看屏幕，像我们一样操作</a></li>
+<li><a href="#_1">两种方式各自依赖什么</a></li>
+<li><a href="#_2">为什么手机上的问题更明显</a></li>
+<li><a href="#_3">自动化已经积累的经验，仍然有用</a></li>
+<li><a href="#_4">“接下来做什么”与“点在哪里”，是两种能力</a></li>
+<li><a href="#_5">软件之间的入口在变，人仍然需要一个清楚的界面</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV16V6iY3EJj" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV16V6iY3EJj"><div class="provenance">来源：左右横眺 · <a href="https://www.bilibili.com/video/BV16V6iY3EJj/" target="_blank" rel="noopener">BV16V6iY3EJj 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 要动手：先选接口，再设计失手之后怎么办</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV16V6iY3EJj.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV16V6iY3EJj" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV16V6iY3EJj-00206.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV16V6iY3EJj&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV16V6iY3EJj/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV16V6iY3EJj"><h1>让 AI 真正操作软件：API、屏幕与人的位置</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV16V6iY3EJj/">左右横眺｜关于 Agent、GUI 与 API 的产品讨论</a>；全片约 19 分钟。产品演示与预测具有录制时间背景，本文保留能迁移的分析方法。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV16V6iY3EJj/">Agent：从 GUI 与 API 的螺旋，走向新的人机交互【趋势总结2】</a><br>
+UP 主：左右横眺 · 时长：19 分 28 秒 · 阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>Agent 完成任务，需要把模型的意图变成受约束、可观察、可恢复的操作；会点击按钮只是其中一环。</p>
-<h2 id="_2">一次“调用工具”，到底是谁在执行？</h2>
-<p>我说“查一下订单”。模型可以生成一个结构化请求：调用查单函数，参数是某个订单号。真正读取数据库、检查权限、返回结果的是宿主程序。模型提出动作，运行程序执行动作，二者需要分开理解。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=105" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:45]">[00:01:45]</a></p>
-<p>另一条路线是操作界面：观察截图或页面结构，再点击、输入、滚动。它接近人使用电脑的过程，能够接触很多没有专用接口的任务。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a></p>
-<p>这两条路线各有成本。结构化接口通常更容易验证参数和结果，但覆盖范围由接口决定；界面操作能利用现有软件，却容易受到弹窗、布局变化和识别错误影响。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=400" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:40]">[00:06:40]</a> <a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=620" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:20]">[00:10:20]</a></p>
-<h2 id="_3">能拿到结构化信息，就别只猜屏幕</h2>
-<p>视频提到一种务实方向：把 API、页面结构与视觉观察结合起来。界面元素能提供明确的文字或标识时，可以利用这些信息；确实依赖画面的任务，再观察图像。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=570" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:30]">[00:09:30]</a> <a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:20]">[00:11:20]</a></p>
-<p>例如查找报表，可以通过稳定接口获取列表，再让用户在界面里确认下载对象。无需为了显得“像人在操作”，把一个可靠调用拆成十几次鼠标点击。</p>
-<p>操作方式也不改变权限边界。GUI 只能在用户已有、明确授予的访问范围内行动；登录、验证码、支付确认与平台限制依然需要被尊重。这里是对执行边界的补充说明。</p>
-<h2 id="_4">真正拉开体验差距的，是出错之后</h2>
-<p>视频借用 RPA 的经验提醒：自动化要考虑日志、可靠性、隐私以及异常处理。<a class="timecode" href="https://www.bilibili.com/video/BV16V6iY3EJj/?t=735" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:15]">[00:12:15]</a></p>
-<p>把这句话落成三个测试就很具体：</p>
+<p>假如你想把一张供应商表格里的资料填进网页表单，聊天助手可以告诉你怎么做，甚至帮你整理好每个字段。但只要填写这一步仍然由你完成，你就还需要在窗口之间切换，寻找对应资料，再逐项复制。我们进一步希望它能读懂任务，找到资料，打开表单，实际完成填写。到了这里，AI 就需要接触软件里的对象和操作，单靠回答一段话已经不够了。</p>
+<p>这种能够围绕目标采取行动的助手，通常被称为 Agent。它的具体范围很广，这里先把问题收窄到一件事：让 AI 代替人完成电脑或手机上的软件操作。我们沿着 2024 年几种代表性尝试来理解这件事，重点看操作是怎样发生的，以及人怎样知道操作是否符合自己的意图。<button type="button" class="timecode" data-seconds="25">[00:00:25]</button></p>
+<h2 id="ai">一条路：软件把能做的事情明确告诉 AI</h2>
+<p>先看比较容易控制的情况。软件已经提供了查询、创建或修改某项内容的函数，每个函数都规定了需要哪些参数。我们把函数的说明交给模型，模型根据用户的要求选择一个函数，再写出相应参数。这种能力通常叫 Function Calling，即函数调用。<button type="button" class="timecode" data-seconds="109">[00:01:49]</button></p>
+<p>“调用”容易让人误以为模型自己进入了软件内部。实际发生的过程需要分开看：模型输出一个调用请求，外围程序接到请求后，检查参数与权限，真正执行函数，然后把结果交回模型。模型再根据返回结果回答用户，或者继续选择下一步操作。模型负责决定要做什么，程序负责把获准的动作执行下去。</p>
+<p>API，也就是应用程序编程接口，可以理解为软件留给其他程序使用的一组明确入口。通过入口，我们按照规定的格式提交请求，得到相应结果。入口稳定、功能合适时，程序不必先找到屏幕上的按钮，也不必关心按钮今天换成了什么颜色。它直接按照约定访问那项功能。</p>
+<p>这种方法的限制也很直观。模型只能选择已经提供给它的工具；某个软件没有开放所需接口，或者接口只允许读取、不允许修改，模型就无法仅凭理解用户意图完成操作。即使接口存在，开发者仍要处理接入、登录授权、参数转换以及接口变化。软件越多，各自约定的差别越大，维护工作就越多。<button type="button" class="timecode" data-seconds="173">[00:02:53]</button></p>
+<h2 id="ai_1">另一条路：让 AI 看屏幕，像我们一样操作</h2>
+<p>我们使用陌生软件时，通常不需要先问开发者要一个 API。我们看到菜单，读出按钮文字，试着点击，再根据新的页面判断下一步。图形用户界面，也就是 GUI，已经替人提供了大量可操作的入口。于是另一条思路很自然：让模型也理解这些画面，通过鼠标、键盘或触屏完成操作。</p>
+<p>2024 年展示的 Anthropic Computer Use 就采用了这类方式。助手读取屏幕截图，判断当前状态，再发出移动指针、点击或输入文字等动作。执行程序完成动作后，提供新的截图，助手继续判断。它需要反复经历“看见当前状态—选择动作—执行—再看”的过程，才能逐步接近目标。<button type="button" class="timecode" data-seconds="186">[00:03:06]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV16V6iY3EJj-00206.jpg" data-caption="中间是待查询的供应商表格，右侧是要填写的表单，左侧保留助手的观察与操作记录。">
+    <img src="../assets/frames/BV16V6iY3EJj-00206.jpg" loading="lazy" alt="视频截图 01，00:03:26：中间是待查询的供应商表格，右侧是要填写的表单，左侧保留助手的观察与操作记录。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="206.000">图 01 · 00:03:26</button><span>中间是待查询的供应商表格，右侧是要填写的表单，左侧保留助手的观察与操作记录。</span></figcaption>
+</figure>
+<p>看这张画面就容易理解它与普通问答的差别。任务跨越了资料表格与网页表单两个对象，助手既要找对供应商，又要把对应信息放进正确字段。左侧记录让人看见它正在判断什么；右侧实际表单则让人检查它最终改了什么。给出填写建议和完成填写，是两个不同的结果。</p>
+<p>早期这种操作方式仍然比较缓慢，也容易出错。截图只记录某个时刻的画面，截图之间可能发生弹窗、页面跳转或加载变化。如果助手仍根据旧画面点击，就可能点到错误位置。一次点击没有成功，还需要重新观察，再判断是等待、重试，还是换一种做法。这里说的是当时产品展示暴露出的困难，不能直接用来评价此后所有版本的能力。<button type="button" class="timecode" data-seconds="217">[00:03:37]</button></p>
+<p>手机也存在类似尝试。助手可以在已有应用中搜索商品、查看信息或填写内容。桌面侧还有把操作安排到虚拟副屏的思路：让助手使用另一块工作区域，减少它与人争用同一个鼠标和当前窗口的情况。这些尝试都在回答同一个体验问题——我们希望把工作交出去，又不希望自己的设备因此一直被占住。<button type="button" class="timecode" data-seconds="260">[00:04:20]</button></p>
+<h2 id="_1">两种方式各自依赖什么</h2>
+<p>API 与 GUI 经常被放在一起比较，因为它们都能把用户的要求变成软件操作。但它们依赖的东西不同：API 依赖软件提供并维护明确的程序入口，GUI 依赖助手正确理解当前界面并操作它。</p>
 <table>
 <thead>
 <tr>
-<th>测试情境</th>
-<th>我需要看见的行为</th>
+<th>比较的问题</th>
+<th>通过 API 操作</th>
+<th>通过 GUI 操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>查订单接口返回 404</td>
-<td>解释未找到，核对对象，不编造订单状态</td>
+<td>怎样找到功能</td>
+<td>读取工具或接口说明</td>
+<td>观察页面、识别控件与布局</td>
 </tr>
 <tr>
-<td>点击前出现了新弹窗</td>
-<td>重新观察页面，不沿用失效坐标继续点</td>
+<td>怎样表达动作</td>
+<td>提交规定格式的参数</td>
+<td>点击、输入、滚动等界面动作</td>
 </tr>
 <tr>
-<td>提交后网络中断</td>
-<td>先查是否已经成功，避免重复下单或发送</td>
+<td>主要覆盖范围</td>
+<td>已经开放且获准使用的接口</td>
+<td>已经能访问、能操作的界面</td>
+</tr>
+<tr>
+<td>常见困难</td>
+<td>接口缺失、权限或约定变化</td>
+<td>弹窗、位置变化、状态判断错误</td>
+</tr>
+<tr>
+<td>怎样确认进展</td>
+<td>检查接口返回值与任务结果</td>
+<td>重新观察界面与任务结果</td>
 </tr>
 </tbody>
 </table>
-<p>以上是迁移测试，视频没有提供这三项的实测数据。它们帮助我把“Agent 不稳定”拆成可以复现的问题。</p>
-<p>对会发消息、改文件、花钱的动作，还应有适当确认、最小权限和可追溯记录。失败后能否恢复原状，需要按具体工具设计，不能仅靠一句提示词保证。</p>
-<h2 id="_5">迁移练习：给一个动作写验收标准</h2>
-<p>挑选一个低风险任务，例如“从公开网页找出三篇相关文章，存成草稿”。写出允许访问的范围、完成产物、失败信号和停止条件。</p>
-<p>验收时统计任务是否完成、引用是否正确、是否越权、是否出现重复操作。点击次数和思考长度只作为过程信息，不能直接充当完成质量。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>有些软件同时提供两种入口，具体任务也可能在两种入口之间切换。例如，适合结构化处理的查询可以通过接口完成；某些尚未接入的界面操作，可以由视觉控制补充。选择方式时，需要看哪些信息容易准确取得，哪些动作容易可靠完成，无需坚持所有事情都由鼠标点击，也无需假定所有软件都具备完整 API。<button type="button" class="timecode" data-seconds="414">[00:06:54]</button> <button type="button" class="timecode" data-seconds="692">[00:11:32]</button></p>
+<p>接口调用也并不天然代表成功。请求返回了“已接收”，与用户要的事情已经完成，可能还有距离。同样，屏幕上按钮被点亮，也不能单独证明任务完成。两条路线最终都要回到用户的目标：资料是否找对、内容是否放到正确位置、预期变化是否实际发生。</p>
+<h2 id="_2">为什么手机上的问题更明显</h2>
+<p>电脑上，我们还可以编写并执行代码，读写获准访问的文件，把许多已有工具接起来。早期 AutoGPT 之类的项目尝试让模型不断规划、调用工具、读取反馈，再选择下一步；Open Interpreter 则让自然语言需求经过代码，转化成电脑上的具体操作。这些项目的共同价值，是在模型与可执行的工具之间搭起连接。<button type="button" class="timecode" data-seconds="440">[00:07:20]</button></p>
+<p>手机环境通常更受应用权限和系统限制影响。数据与功能分散在不同应用中，第三方程序能直接访问多少，取决于系统与应用开放了什么。即使助手知道用户想做什么，也可能缺少合适入口。语言理解能力和操作权限因此是两件需要分别解决的事。<button type="button" class="timecode" data-seconds="505">[00:08:25]</button></p>
+<p>Apple 的 App Intents 提供了一个接口侧的例子：应用开发者把特定动作和相关数据表达成系统能够理解的形式，使这些能力可以被 Siri、快捷指令等系统功能发现和使用。这样，应用的某些操作不必每次都由用户打开界面逐步完成。可用范围仍然取决于开发者提供了哪些动作，以及用户允许怎样使用它们。<button type="button" class="timecode" data-seconds="541">[00:09:01]</button>（<a href="https://developer.apple.com/documentation/AppIntents">App Intents 官方说明</a>）</p>
+<p>GUI 控制利用了应用已经面向人提供的界面，因此可能覆盖一部分尚未通过接口接入的任务。不过，看得见一个页面，不等于获得了页面背后的所有权限。登录、授权、支付确认和平台限制仍然存在。让助手代为点击，并不会自动改变这些边界。<button type="button" class="timecode" data-seconds="568">[00:09:28]</button></p>
+<h2 id="_3">自动化已经积累的经验，仍然有用</h2>
+<p>在大语言模型流行之前，人们已经用 IFTTT、Zapier、快捷指令和 RPA 等工具连接软件、自动执行工作。RPA 常被译为机器人流程自动化，其中不少任务也会操作已有界面。过去的流程往往需要人更明确地规定触发条件和动作顺序；引入语言模型后，系统有机会理解更灵活的要求，并根据情境作出一些选择。<button type="button" class="timecode" data-seconds="739">[00:12:19]</button></p>
+<p>这种灵活性并没有消除自动化原有的工程问题。用户仍然需要知道系统做过什么、保存了哪些信息、在哪一步遇到了困难。只看到一句“任务完成”，却无法确认文件改在什么位置，就很难放心继续使用。操作记录、结果展示以及必要时由人接手，都直接影响这种信任。</p>
+<p>异常处理尤其重要。页面可能变了，网络可能慢了，工具可能没有返回预期结果。如果系统只擅长沿着一次成功演示的路径向前走，遇到变化就停住，它能承担的实际工作仍然有限。因此，成熟自动化系统在可靠性、隐私、状态管理和恢复方面的经验，依然值得借鉴。<button type="button" class="timecode" data-seconds="771">[00:12:51]</button></p>
+<p>同时，过多提示也会增加负担。一个助手每走一步都要求用户解释和确认，就很难真正减轻工作。需要区分哪些操作已经获得明确授权，哪些变化会影响钱、数据或外部关系，值得暂停确认。让人保留控制与减少无谓打断，需要一起设计。</p>
+<h2 id="_4">“接下来做什么”与“点在哪里”，是两种能力</h2>
+<p>GUI 任务中存在一个容易被忽略的分工。助手先要决定接下来应该搜索资料、填写字段还是提交表单；等动作确定后，还要在当前画面上找到正确控件。这两个问题相关，却可能以不同方式出错：计划合理但点错了位置，或者按钮找得很准但整个行动方向不对。<button type="button" class="timecode" data-seconds="829">[00:13:49]</button></p>
+<p>AutoGLM 的研究把规划与具体界面定位分开处理。规划侧需要灵活安排动作，并在失败后调整；界面定位侧需要准确地把动作对应到画面上的对象。研究还讨论了通过在线任务与反馈改善能力，让系统逐步应对更困难的操作情境。这个思路特别重视错误恢复，因为现实任务里总会出现与预想不同的状态。（<a href="https://arxiv.org/abs/2411.00820">AutoGLM 论文</a>）</p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV16V6iY3EJj-00872.jpg" data-caption="两条研究方向分别讨论规划与界面定位的分离，以及通过在线任务训练改善错误恢复。">
+    <img src="../assets/frames/BV16V6iY3EJj-00872.jpg" loading="lazy" alt="视频截图 02，00:14:32：两条研究方向分别讨论规划与界面定位的分离，以及通过在线任务训练改善错误恢复。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="872.000">图 02 · 00:14:32</button><span>两条研究方向分别讨论规划与界面定位的分离，以及通过在线任务训练改善错误恢复。</span></figcaption>
+</figure>
+<p>为什么软件操作适合探索这样的训练？其中一部分任务具有比较明确的结果：表单是否填写完、目标页面是否打开、指定内容是否保存。系统可以把实际结果作为反馈。不过，能验证某些操作是否完成，并不意味着所有用户意图都有简单的判定规则。搜索到一个商品很容易检查，商品是否真正适合用户，还可能需要更多条件。</p>
+<p>我们因此需要同时看行动能力和任务判断。把按钮点得更准确，能够减少执行错误；理解目标、选择合理步骤、检查最终结果，则决定这些动作有没有帮到用户。把不同错误分清楚，才容易知道下一步需要改进哪一部分。</p>
+<h2 id="_5">软件之间的入口在变，人仍然需要一个清楚的界面</h2>
+<p>如果助手能够跨应用完成任务，用户开始工作的方式就可能变化。过去，我们先决定打开哪个应用，再在应用里寻找功能；现在，用户可能先告诉助手自己要完成什么，由助手选择需要使用的应用。应用还在提供功能，但它与用户之间多了一层可以安排动作的助手。<button type="button" class="timecode" data-seconds="883">[00:14:43]</button></p>
+<p>这也是左右横眺在当时讨论行业竞争的出发点。操作系统拥有设备与权限管理方面的优势，模型公司拥有模型能力，应用公司熟悉具体业务，创业团队则可能从特定需求切入。谁能更好地帮助用户完成任务，会影响用户习惯从哪里开始。这是一种产品与商业上的分析，不能据此确定任何公司的最终优势。</p>
+<p>即使助手承担了更多操作，也不代表人只需要面对一串文字日志。我们比较多个对象、观察整体进展、挑选方案时，图形界面依然很有帮助。助手可以负责搜索、整理与重复填写，人通过清楚的界面看到候选项、选择结果，并理解哪些内容已经改变。<button type="button" class="timecode" data-seconds="1015">[00:16:55]</button></p>
+<p>因此，新的人机交互会涉及双向适应。一方面，助手学习使用现有界面；另一方面，软件也可以把状态、对象和可执行动作表达得更清楚，方便人与助手共同使用。未来的设备形态可能继续变化，眼镜等设备也可能成为入口，但用户表达意图、查看结果和保留控制的需要仍然存在。<button type="button" class="timecode" data-seconds="1090">[00:18:10]</button></p>
+<h2 id="_6">总结提炼</h2>
+<p>让 AI 操作软件，需要连接三个环节：理解用户要完成的事，选择并执行允许的动作，观察结果后继续判断。单独一次函数调用或鼠标点击，都只是这个过程的一部分。</p>
+<p>API 提供明确的程序入口，GUI 利用已经存在的图形界面。前者受接口覆盖与授权范围影响，后者需要应对画面和状态变化；实际系统可以把两者结合起来。评价时应关注任务是否完成，以及人是否能够理解、确认和控制相关变化。</p>
+<p>模型带来的灵活判断，与自动化积累的可靠执行经验，可以相互补充。越希望把工作交给助手，越需要把结果展示、错误恢复和人的接手方式做好。</p>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="109">[00:01:49]</button> 函数调用怎样连接模型与软件。</li>
+<li><button type="button" class="timecode" data-seconds="186">[00:03:06]</button> 通过截图、鼠标和键盘操作界面。</li>
+<li><button type="button" class="timecode" data-seconds="260">[00:04:20]</button> 电脑与手机上的不同尝试。</li>
+<li><button type="button" class="timecode" data-seconds="414">[00:06:54]</button> API 和 GUI 两条路线的差别。</li>
+<li><button type="button" class="timecode" data-seconds="505">[00:08:25]</button> 手机环境中的接口和权限。</li>
+<li><button type="button" class="timecode" data-seconds="692">[00:11:32]</button> 两种操作方式怎样互相补充。</li>
+<li><button type="button" class="timecode" data-seconds="739">[00:12:19]</button> 已有自动化工具的经验。</li>
+<li><button type="button" class="timecode" data-seconds="829">[00:13:49]</button> 规划、界面定位与错误恢复。</li>
+<li><button type="button" class="timecode" data-seconds="883">[00:14:43]</button> 助手可能怎样改变软件入口。</li>
+<li><button type="button" class="timecode" data-seconds="1015">[00:16:55]</button> 人为什么仍然需要图形界面。</li>
+</ul>
+<h2 id="_8">回看时的三个问题</h2>
+<p>在供应商资料填表的任务中，模型选择动作、程序执行动作和用户检查结果，分别发生在什么地方？</p>
+<p>如果页面临时出现了弹窗，通过 GUI 操作的助手为什么需要重新观察？通过 API 操作是否也可能遇到需要重新判断的情况？</p>
+<p>当助手已经能够完成大部分重复操作时，哪些信息仍然值得清楚地展示给人？这些信息怎样帮助人确认结果、发现错误或接手任务？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Agent：从GUI与API的螺旋，走向新的人机交互【趋势总结2】", "duration": "19:28", "src": "", "poster": "../assets/frames/BV16V6iY3EJj-00206.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,68 +1,359 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>让 RAG 反复调参：循环之前，先把尺子做好 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>让 RAG 自己试参数：先看它怎样找论文，再看它怎样改进 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="rag">让 RAG 自己试参数：先看它怎样找论文，再看它怎样改进</h1>
+    <div class="meta"><span>果粒奶优有果粒</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1nR376UENq/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#rag">让 RAG 反复调参：循环之前，先把尺子做好</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">推理主干</a></li>
-<li><a href="#_3">先准备三个条件</a></li>
-<li><a href="#_4">调参用过的问题，不能再扮演最后的考试</a></li>
-<li><a href="#_5">哪些变化需要重新建索引？</a></li>
-<li><a href="#_6">优化器需要看到什么？</a></li>
-<li><a href="#_7">补充判断：把优化与归因分开</a></li>
-<li><a href="#_8">时间戳导航</a></li>
-<li><a href="#_9">复习与行动清单</a></li>
+<li><a href="#rag">让 RAG 自己试参数：先看它怎样找论文，再看它怎样改进</a><ul>
+<li><a href="#_1">先把一次查论文的过程看清楚</a></li>
+<li><a href="#_2">所谓调参，就是改变这些具体选择</a></li>
+<li><a href="#_3">要知道找得对不对，需要一份有答案的题目</a></li>
+<li><a href="#_4">改一次设置，不必每次都重做整座论文库</a></li>
+<li><a href="#_5">混合检索与重排，各自在哪里起作用</a></li>
+<li><a href="#_6">把结果交回模型，再决定下一次试什么</a></li>
+<li><a href="#_7">看一次真正的循环：多取几段以后，仍然没达标</a></li>
+<li><a href="#_8">再运行一次，为什么没有沿着同一条路走</a></li>
+<li><a href="#_9">总结提炼</a><ul>
+<li><a href="#_10">一句话抓住核心</a></li>
+<li><a href="#_11">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_12">时间戳导航</a></li>
+<li><a href="#_13">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1nR376UENq" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1nR376UENq"><div class="provenance">来源：果粒奶优有果粒 · <a href="https://www.bilibili.com/video/BV1nR376UENq/" target="_blank" rel="noopener">BV1nR376UENq 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="rag">让 RAG 反复调参：循环之前，先把尺子做好</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1nR376UENq.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><button class="done" data-done="BV1nR376UENq" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1nR376UENq-00203.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1nR376UENq&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1nR376UENq/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1nR376UENq"><h1>让 RAG 自己试参数：先看它怎样找论文，再看它怎样改进</h1>
 <blockquote>
-<p>原视频：Loop RAG · 果粒奶优有果粒 · 约 15 分钟。演示数字属于这次小规模实验，未在此复现。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1nR376UENq/">果粒奶优有果粒｜Loop RAG：让你的 RAG 也 loop 起来，打造自进化的 RAG 系统</a> · 15 分 17 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p><strong>把候选配置交给模型建议、把效果交给固定评测集验证，才能形成一个可检查的调参循环。</strong></p>
-<h2 id="_2">推理主干</h2>
-<p>定义参数空间 → 固定语料和验证问题 → 运行检索 → 计算指标 → 把结果反馈给优化器 → 达到预算或目标后停止 → 在留出问题上复测。</p>
-<p>“自动变好”听上去很诱人，但循环中的模型主要负责提出下一组配置。什么叫好，仍由数据、指标和实验纪律决定。</p>
-<h2 id="_3">先准备三个条件</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 这份演示要求我了解基本 RAG 流程、准备自己的测试问题，并定义评估函数和停止条件。缺少这些，反复运行只会产生更多配置。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=115" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:55]">[00:01:55]</a> 参数空间包括文档切片长度、相邻切片重叠、embedding 模型、重排模型、候选数量，以及是否使用 BM25。先列出允许的取值，可以阻止优化器建议根本无法执行的组合。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=193" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:13]">[00:03:13]</a> 演示同时使用最大轮数和指标阈值作为停止条件。最大轮数限制成本；目标阈值表达期望。两者都达到不了时，也要停下来报告结果，不能无限试到满意为止。</p>
-<figure><a href="../assets/frames/BV1nR376UENq-00203.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1nR376UENq-00203.jpg" alt="代码显示参数候选、FINAL_K=5、目标召回率 0.95 和 MAX_ROUNDS=10，停止条件是显式配置。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=203&amp;p=1" target="_blank" rel="noopener">[00:03:23]</a> 代码显示参数候选、FINAL_K=5、目标召回率 0.95 和 MAX_ROUNDS=10，停止条件是显式配置。</figcaption></figure>
-<h2 id="_4">调参用过的问题，不能再扮演最后的考试</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=207" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:27]">[00:03:27]</a> 例子从 SciFact 相关数据组织语料和查询：约 200 篇文档，50 个用于搜索配置的问题，另外留出 20 个问题检验泛化。这里应按其在流程中的用途理解这些集合，不能仅凭变量叫 train 就把它理解成模型参数训练。</p>
-<p>为什么分开？我如果每次都看同一批问题的分数，下一次决策会逐渐适应这批问题的特点。分数升高可能只是“越来越会答这份卷子”。留出集提供一次更独立的检查。</p>
-<p>这 20 个问题规模很小，仍不足以证明广泛业务效果。它的教学价值在于把调参反馈与最终检验分开。</p>
-<h2 id="_5">哪些变化需要重新建索引？</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=314" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:14]">[00:05:14]</a> 文档内容、切片长度、重叠和 embedding 变化，会影响入库的表示。重排开关或最后取多少条，则通常发生在检索阶段。</p>
-<p>因此，可以按影响索引的配置缓存索引，避免每试一组参数就把整个文档库重做一遍。这也是一个直接的成本控制方法。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=561" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:21]">[00:09:21]</a> 混合检索把 BM25 与向量检索的结果融合。演示使用 RRF，利用各自排名整合候选，绕开两路原始分数尺度不同的问题。</p>
-<p>补充直觉：两个老师评分标准不同，我先参考“各自把谁排在前面”，比直接把一个人的 0.8 与另一个人的 12.3 相加更容易解释。具体融合方案仍需要测试。</p>
-<h2 id="_6">优化器需要看到什么？</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=687" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:27]">[00:11:27]</a> 给模型的信息包括目标、允许的参数范围、当前配置、该配置的结果，以及已有历史。反馈不足时，它只能泛泛猜测下一步。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=641" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:41]">[00:10:41]</a> 演示还区分了候选片段和最终文档：同一篇论文可能贡献多个片段，最后评估会合并文档身份。这个细节会改变指标含义，汇报时必须说明。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=759" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:39]">[00:12:39]</a> 第一轮结果示例约为 0.85；增加候选数量后约为 0.944，再加入重排后约为 0.96。<a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=797" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:17]">[00:13:17]</a> 另一轮更复杂的配置获得更高的内部结果。</p>
-<figure><a href="../assets/frames/BV1nR376UENq-00793.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1nR376UENq-00793.jpg" alt="三轮表格同时保留配置、候选召回和最终 recall@5；增加候选后的两列分数并不相同。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=793&amp;p=1" target="_blank" rel="noopener">[00:13:13]</a> 三轮表格同时保留配置、候选召回和最终 recall@5；增加候选后的两列分数并不相同。</figcaption></figure>
-<p>我不能据此直接宣布后一组更好：它可能更慢、更贵，也可能更适应调参集。<a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=860" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:20]">[00:14:20]</a> 原视频最后回到真实数据分布和留出测试，并展示约 0.958 的留出结果。</p>
-<h2 id="_7">补充判断：把优化与归因分开</h2>
-<p>为了尽快找到可用配置，同时改变多个参数可能合理；为了证明某个组件贡献了多少，需要另外做控制变量或消融实验。这两个目的不应混在一次分数提升里。</p>
-<p>如果只优化召回率，也要检查答案忠实度、引用和时延有没有退步。找回更多材料，有时会把更多噪声交给生成模型。</p>
-<h2 id="_8">时间戳导航</h2>
+<p>假如我们收集了一批论文，想让 AI 帮忙回答与这些论文有关的问题。我们当然希望它使用论文里的材料，可一有问题就把所有论文全文交过去，通常很费事，也没有必要。更常见的安排是先在论文库里查找，找到可能包含答案的内容，再交给模型组织回答。这个过程叫检索增强生成，英文缩写是 RAG。<button type="button" class="timecode" data-seconds="9">[00:00:09]</button></p>
+<p>但“先找资料”这一步也会出错。库里明明有需要的论文，系统却可能没找到；即使找到几段有关的文字，也可能把更关键的内容排在后面。这时我们就想改进查找方式。把论文切得长一点还是短一点，每次多找几段还是少找几段，要不要在初次查找后再仔细排序，都会影响结果。Loop RAG 讨论的事情，就是把“试一套设置、检查效果、再试另一套”连续做起来，让模型参与提出下一轮要尝试的设置。</p>
+<h2 id="_1">先把一次查论文的过程看清楚</h2>
+<p>论文很长，系统通常先把全文分成较短的片段。一篇论文可能分出几十段，每段都保留它来自哪篇论文的信息。这样，后面即使只找回其中一段，也能知道这段属于哪篇论文。每段多长，叫切分大小，代码中常写成 <code>chunk_size</code>；chunk 在这里就是文本片段。把论文分段，是后面查找和调参的起点。<button type="button" class="timecode" data-seconds="53">[00:00:53]</button> <button type="button" class="timecode" data-seconds="115">[00:01:55]</button></p>
+<p>切好以后，一种常见做法是用 embedding 模型，把每个片段转换成一组数字。这组数字叫向量，用来表达文字的某些语义特征。用户提出问题时，也把问题转换成相应的向量，再比较它与哪些片段比较接近。系统依据比较结果，先取回若干个片段。你可以暂时把这一步理解为：让问题和资料进入一种能计算接近程度的表示方式，再据此寻找相关内容。向量接近能够提供线索，却还不保证这段文字一定含有所需答案。</p>
+<p>取回片段后，还可以增加一次重排，英文是 rerank。重排模型同时看问题和候选内容，再判断哪些候选更适合排到前面。初次检索负责从大量资料中缩小范围，重排则在已经取得的范围里进一步挑选。等需要的内容选好，后续才可以交给生成模型组织回答。今天这个实验主要检查前面的资料检索是否做得更好，因此后面看到的分数，都要先放回“找论文”这件事来理解。</p>
+<h2 id="_2">所谓调参，就是改变这些具体选择</h2>
+<p>先看论文怎样分段。如果切得很短，一个观点的条件可能留在前一段，结论却落在后一段。查找时只取到其中一段，就容易缺少理解所需的信息。一种处理办法，是让相邻片段重复保留一部分内容，叫重叠，英文是 overlap，代码中写成 <code>chunk_overlap</code>。这样，靠近切分位置的文字能同时出现在前后两个片段中。片段长度和重叠量，改变的都是系统最初准备了哪些材料。<button type="button" class="timecode" data-seconds="115">[00:01:55]</button></p>
+<p>再看每次取回多少内容。假如按接近程度排好后，先取前三个候选片段，这里的数量就是 3。常见写法是 top k，在这次代码里对应参数 <code>k</code>。把它从 3 改到 8，系统就有机会把原先排在第四到第八位的片段也纳入后续处理。不过，取回的内容更多，后续要阅读和处理的材料也更多。若这些材料最终还要送给生成模型，就需要考虑模型这一次能容纳多长的输入，以及材料里是否混入太多无关内容。<button type="button" class="timecode" data-seconds="160">[00:02:40]</button></p>
+<p>模型和检索方法也可以更换。有的 embedding 模型对某种语言或领域更适合，有的重排模型对手头问题表现更好，我们可以把可用选项事先列出来。除了比较向量，还可以按问题与文档的词语匹配情况查找，BM25 就是一种常用的词语匹配排序方法。把词语检索与向量检索结合使用，叫混合检索。它使两种查找方式都能提供候选，随后再把结果合并。<button type="button" class="timecode" data-seconds="123">[00:02:03]</button> <button type="button" class="timecode" data-seconds="178">[00:02:58]</button></p>
+<p>这些可选项合在一起，就是搜索空间，也可以直白地理解成“这次允许尝试的设置清单”。程序里只有已经准备好的模型和功能，下一轮才有办法真正运行。因此我们先规定片段大小、重叠量、可用模型、候选数量等允许取什么值，再让负责提建议的模型从中选择。某一轮选定的完整组合，就叫这一轮的配置。<button type="button" class="timecode" data-seconds="100">[00:01:40]</button></p>
+<p>这次实验从一组很简单的配置开始：片段大小为 50，重叠量为 0，每次取 3 个候选片段，暂时不启用重排和混合检索。这个起点提供了可比较的第一份结果。后面改了设置以后，我们就能回来看：改的是哪一步，和这份初始结果相比发生了什么变化。<button type="button" class="timecode" data-seconds="183">[00:03:03]</button></p>
+<h2 id="_3">要知道找得对不对，需要一份有答案的题目</h2>
+<p>只有论文库还不够。系统找回一篇论文时，我们需要有办法判断这篇论文是不是当前问题需要的资料。为此，要准备三类东西：一批论文、一组问题，以及每个问题应该对应哪些论文的记录。问题与正确论文的对应记录叫 ground truth，可以先理解成检索评测所用的参考答案。这样，程序才有依据比较“应该找到什么”和“实际上找到了什么”。<button type="button" class="timecode" data-seconds="207">[00:03:27]</button> <button type="button" class="timecode" data-seconds="241">[00:04:01]</button></p>
+<p>这次实验从 SciFact 科学事实数据集中组织资料，库里放了 200 篇论文，用 50 个问题反复尝试不同配置，另留 20 个问题作最后的独立测试。这里的三个数量说的是不同对象。200 篇是系统要从中查找的资料，50 个和 20 个则是拿来提问、检查查找效果的问题。代码中的 <code>TRAIN_QUERIES</code> 记录那 50 个问题的数量；虽然名字里有 train，这次用它们做的是比较和选择检索配置，没有重新训练语言模型。<button type="button" class="timecode" data-seconds="211">[00:03:31]</button> <button type="button" class="timecode" data-seconds="297">[00:04:57]</button></p>
+<p>为什么还要留下 20 个问题？因为前面每试一轮，都会看到那 50 个问题的结果，再依据结果决定下一轮怎样调整。试得越多，选出的配置就越可能适合这一小组题。我们想知道它遇到没有参与挑选的问题时是否仍然有效，就需要暂时把另一组题放在一边。等配置确定，再用留下的问题测试。这就是留出测试；它增加了一次独立检查，但这 20 个问题也只能代表这次小规模实验的观察范围。<button type="button" class="timecode" data-seconds="218">[00:03:38]</button></p>
+<p>本次主要看召回率，也就是 recall。它关心的是：本来应该找回的相关资料，实际上找回了多少。举一个仅用于解释计算的例子：某道问题有两篇相关论文，最终结果中找到了其中一篇，那么这道问题的召回率就是一半。即使结果列表还列着另外几篇无关论文，也不能把那些论文算进“找回的相关资料”里。</p>
+<div class="math-display" aria-label="\text{召回率}=\frac{1}{2}=0.5"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>召回率</mtext><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mo>=</mo><mn>0.5</mn></mrow></math></div>
+<p>这次代码把最终结果的评估范围设为前 5 篇，写作 <code>recall@5</code>，目标值为 0.95。它还规定最多尝试 10 轮：达到目标可以停，到了轮数上限也要结束。若只规定“继续改善”，就没有明确的结束位置。目标分数和轮数限制，都要在开始循环前安排好。<button type="button" class="timecode" data-seconds="193">[00:03:13]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1nR376UENq-00203.jpg" data-caption="代码把参数候选、初始配置、FINAL_K=5、目标值 0.95 和最多 10 轮写在一起；底部还分别列出 50 个调参问题、20 个留出问题和 200 篇语料。">
+    <img src="../assets/frames/BV1nR376UENq-00203.jpg" loading="lazy" alt="视频截图 01，00:03:23：代码把参数候选、初始配置、FINAL_K=5、目标值 0.95 和最多 10 轮写在一起；底部还分别列出 50 个调参问题、20 个留出问题和 200 篇语料。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="203.000">图 01 · 00:03:23</button><span>代码把参数候选、初始配置、FINAL_K=5、目标值 0.95 和最多 10 轮写在一起；底部还分别列出 50 个调参问题、20 个留出问题和 200 篇语料。</span></figcaption>
+</figure>
+<p>召回率让我们知道资料找回来没有，却还没有检查模型最后怎样使用这些资料。资料可能已经找到，回答时仍被忽略或误读。所以，检索召回率提高是一项具体进展，最终回答是否准确还需要另行检查。先保留这一区别，后面看到 0.96 一类数字，就不会把它直接当成整个问答产品的准确率。</p>
+<h2 id="_4">改一次设置，不必每次都重做整座论文库</h2>
+<p>论文经过分段、生成向量和存储之后，系统得到了一套用于查找的索引。索引可以理解为提前整理好的检索数据，它让我们不必每收到一个问题都从全文整理工作重新开始。循环调参时，一个重要问题是：哪种修改会让这些已经整理好的东西失效？<button type="button" class="timecode" data-seconds="314">[00:05:14]</button></p>
+<p>想想片段大小从 50 改成另一数值时，会发生什么。原文的切分位置改变了，片段里的文字也跟着改变，旧片段的向量自然就不能直接代表新片段。修改重叠量也会产生类似变化。换一个 embedding 模型，则改变了文字被表示成向量的方式；更换论文内容，也需要重新处理相应资料。这几项变化会影响入库的数据，需要按新条件准备相应索引。<button type="button" class="timecode" data-seconds="326">[00:05:26]</button></p>
+<p>但如果论文、切分方式和 embedding 都没变，只把每次取回的数量从 3 改成 8，库里的片段依然是原来那些，向量也依然可用。启用重排，同样主要影响取得候选之后怎样排序。于是程序可以按决定索引的那些条件保存和复用索引，只有相关条件变化时再建立新的。这种复用减少的是重复准备资料的工作，并没有省去每轮必要的检索和评分。<button type="button" class="timecode" data-seconds="354">[00:05:54]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1nR376UENq-00360.jpg" data-caption="从上往下看：论文、切分大小、重叠量与 embedding 共同决定索引的标识。左路取回已保存的索引，右路重新分段和建立检索数据，两路最后回到查询步骤。">
+    <img src="../assets/frames/BV1nR376UENq-00360.jpg" loading="lazy" alt="视频截图 02，00:06:00：从上往下看：论文、切分大小、重叠量与 embedding 共同决定索引的标识。左路取回已保存的索引，右路重新分段和建立检索数据，两路最后回到查询步骤。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="360.000">图 02 · 00:06:00</button><span>从上往下看：论文、切分大小、重叠量与 embedding 共同决定索引的标识。左路取回已保存的索引，右路重新分段和建立检索数据，两路最后回到查询步骤。</span></figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>这次修改什么</th>
+<th>改变的是哪一部分</th>
+<th>已保存的向量索引还能直接用吗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>论文内容、<code>chunk_size</code> 或 <code>chunk_overlap</code></td>
+<td>入库的文本片段</td>
+<td>需要按新内容或新切分方式准备相应索引</td>
+</tr>
+<tr>
+<td>embedding 模型</td>
+<td>片段怎样变成向量</td>
+<td>需要用所选模型重新生成向量</td>
+</tr>
+<tr>
+<td><code>k</code>，例如从 3 改到 8</td>
+<td>查询时取回多少候选</td>
+<td>可以复用，原有片段和向量没有改变</td>
+</tr>
+<tr>
+<td>是否启用重排</td>
+<td>候选取得后怎样排序</td>
+<td>可以复用，重排处理的是已经取回的候选</td>
+</tr>
+</tbody>
+</table>
+<p>所以，模型建议“多取几段”和建议“把每段切长一点”，会带来不同的工作量。前一个修改可以继续在同一套片段里查找；后一个修改先改变了片段本身，程序得准备好新索引，再进行比较。索引标识让程序能分清这两类情况。</p>
+<p>程序还为检索准备了较大的候选范围，方便后续根据配置取出需要的数量。可以假设，后面最多需要 100 个候选，就先让前面的查找步骤准备 200 个，再从中选取。这个假设说明的是候选范围与后续需求的关系；前面实际设置的数量菜单仍是 3、5、8、10、20。两种情况下，准备的范围都要容得下后面打算选取的数量。中间准备了多少候选，也不能直接当成最后得到的论文篇数。<button type="button" class="timecode" data-seconds="472">[00:07:52]</button></p>
+<h2 id="_5">混合检索与重排，各自在哪里起作用</h2>
+<p>索引准备好后，查询就可以按当前配置执行。只启用向量检索时，系统依据向量的接近程度找到候选。如果同时启用 BM25，还会得到一份按词语匹配情况排序的结果。现在有两份排序，需要决定怎样合在一起。它们的原始分数采用不同计算方式，直接相加并没有自然一致的含义；这套实现采用按各自名次进行融合的办法，通常称为 RRF。<button type="button" class="timecode" data-seconds="521">[00:08:41]</button> <button type="button" class="timecode" data-seconds="561">[00:09:21]</button></p>
+<p>按名次融合的直觉是，先看一段资料在每条检索路线中排得有多靠前，再综合这些名次。这样，某条路线找得好的内容，就有机会进入合并后的候选。如果当前配置还启用了重排模型，接下来再让重排模型比较问题和候选内容，调整顺序。混合检索给候选来源增加了一条路线，重排则继续处理已有候选。分清这两步，看到“同时开启 hybrid 和 rerank”时，就能知道究竟增加了哪些操作。<button type="button" class="timecode" data-seconds="567">[00:09:27]</button> <button type="button" class="timecode" data-seconds="580">[00:09:40]</button></p>
+<p>这里还有一个容易被略过的数量区别。一次检索取得 8 个片段，这 8 段可能分别来自 8 篇论文，也可能有好几段来自同一篇论文。程序会把属于同一篇论文的片段合并到论文身份上，再检查最终论文结果。因此，候选片段数和最终涉及的论文数不能直接画等号；候选阶段的分数与最终 <code>recall@5</code>，也要各自看清。<button type="button" class="timecode" data-seconds="641">[00:10:41]</button></p>
+<p>举一个计数示例：8 段内容里，5 段出自论文 A，3 段出自论文 B。候选确实有 8 段，但它们只涉及两篇论文。假如问题需要的是另一篇论文 C，重复取到更多 A、B 的片段，也没有增加对 C 的覆盖。这就是为什么看片段数量时，还要继续问它们来自哪些论文。等会儿的结果表同时列出候选召回和最终召回，我们需要分别查看，不能只凭其中一列就判断整个目标已经达到。</p>
+<h2 id="_6">把结果交回模型，再决定下一次试什么</h2>
+<p>现在，运行一套配置、检索论文、计算分数这些步骤都已具备。我们可以手工挑下一套配置，也可以把允许的组合逐一试完。在这套循环里，选择工作交给大模型：告诉它我们想达到什么目标，这一轮用了什么设置，测出了什么结果，以及下一轮允许改哪些选项。如果已经尝试过多轮，还把历史配置与结果一起提供给它。<button type="button" class="timecode" data-seconds="596">[00:09:56]</button> <button type="button" class="timecode" data-seconds="684">[00:11:24]</button></p>
+<p>模型根据这些输入，提出下一组配置。程序检查并运行新配置，用同一组调参问题再次检索、评分，然后把新结果交回模型。如此继续，直到达到目标或用完轮数。这就是这里的 loop，意思是循环。模型负责提出建议，检索程序实际执行建议，评估程序负责计算结果；三件事接起来，下一轮才能利用上一轮的反馈。<button type="button" class="timecode" data-seconds="691">[00:11:31]</button> <button type="button" class="timecode" data-seconds="737">[00:12:17]</button></p>
+<p>这一点也让“自进化”的含义具体了。这个系统会利用已得到的分数继续尝试配置，人不必每一轮都亲自选参数。但论文、参考答案、可以选择的设置和停止条件，仍需提前准备。模型提出的建议值不值得采用，最终还得看程序跑出的结果，不能因为建议附带一段很有道理的解释，就直接把它算作改进。</p>
+<h2 id="_7">看一次真正的循环：多取几段以后，仍然没达标</h2>
+<p>先看第一组运行记录。初始配置每次取 3 个候选，不重排，最终 <code>recall@5</code> 约为 0.852，离目标 0.95 还有距离。模型建议先把候选数量增加到 8，其他设置保持不变。第二轮跑完，候选召回已经到了约 0.963，但最终 <code>recall@5</code> 只有约 0.944。最终目标仍未达到，程序因此继续尝试。<button type="button" class="timecode" data-seconds="759">[00:12:39]</button></p>
+<p>第三轮保留 8 个候选，并开启重排。这一次最终 <code>recall@5</code> 达到约 0.963，超过 0.95，循环停止。比较三轮结果，第二轮达标的是候选召回，第三轮才让最终结果也超过目标值。<button type="button" class="timecode" data-seconds="769">[00:12:49]</button> <button type="button" class="timecode" data-seconds="784">[00:13:04]</button></p>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>与上一轮相比改了什么</th>
+<th>候选召回</th>
+<th>最终 recall@5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一轮</td>
+<td>初始配置：<code>k=3</code>，不重排</td>
+<td>0.8519</td>
+<td>0.8519</td>
+</tr>
+<tr>
+<td>第二轮</td>
+<td>把 <code>k</code> 改为 8</td>
+<td>0.9630</td>
+<td>0.9444</td>
+</tr>
+<tr>
+<td>第三轮</td>
+<td>仍为 <code>k=8</code>，增加重排</td>
+<td>0.9630</td>
+<td>0.9630</td>
+</tr>
+</tbody>
+</table>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1nR376UENq-00793.jpg" data-caption="三轮记录中，第二轮候选召回为 0.9630，但最终 recall@5 为 0.9444；第三轮启用重排后，最终列达到 0.9630。">
+    <img src="../assets/frames/BV1nR376UENq-00793.jpg" loading="lazy" alt="视频截图 03，00:13:13：三轮记录中，第二轮候选召回为 0.9630，但最终 recall@5 为 0.9444；第三轮启用重排后，最终列达到 0.9630。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="793.000">图 03 · 00:13:13</button><span>三轮记录中，第二轮候选召回为 0.9630，但最终 recall@5 为 0.9444；第三轮启用重排后，最终列达到 0.9630。</span></figcaption>
+</figure>
+<p>这三轮实验的最终指标从 0.8519 提高到了 0.9630，系统在超过目标值以后停止。汇总分数让我们看见整体效果的变化；若想知道具体哪一道问题在第二轮遗漏、第三轮找回，还要查看那道问题的候选与排序。某一批论文上的提升，也不能保证别的论文库开启重排后会达到同样的分数。</p>
+<h2 id="_8">再运行一次，为什么没有沿着同一条路走</h2>
+<p>第二次运行仍从约 0.85 的起点开始，模型给出的调整却不一样。有的轮次同时增加候选数量和重叠量，后来又加入重排与混合检索，经过多次尝试，最后展示了约 0.981 的结果。第一组运行恰好比较接近逐项修改，第二组则有多项一起变化；程序没有要求模型每轮只能改一个参数。<button type="button" class="timecode" data-seconds="797">[00:13:17]</button></p>
+<p>同时改几个参数，可以帮助寻找一套效果好的组合。但如果此时追问“到底是哪一个改动贡献了多少提升”，这组结果就不容易回答了。举例说，候选变多、片段有了重叠、重排也开启，三件事一起改变后分数提高，我们只能先确认这套组合的观察结果，不能把全部提升都归到其中一项。寻找可用配置与查明单项贡献，对比较条件有不同要求。</p>
+<p>调参结束后，还要用那 20 个留出问题检查选定的配置。调参时反复看的是同一组题，高分配置可能很适合这批题，却未必在新问题上继续领先。最后的一次留出测试得到约 0.958，达到设定目标。这项结果说明，被测试的配置在这组新问题上仍然达标；面对别的领域和不同问法时能否保持效果，还需要相应的测试。<button type="button" class="timecode" data-seconds="860">[00:14:20]</button> <button type="button" class="timecode" data-seconds="886">[00:14:46]</button></p>
+<p>最后还有一个实际提醒：如果我们了解资料属于哪个领域、问题通常怎样表达，以及库里有什么特殊内容，可以把这些背景写进给模型的说明，帮助它提出更有针对性的尝试。即便如此，也仍然需要真实问题与参考答案来检查。Loop 帮我们把尝试和反馈接续起来，效果能否延续到自己的资料上，还要在自己的任务中测量。<button type="button" class="timecode" data-seconds="872">[00:14:32]</button></p>
+<h2 id="_9">总结提炼</h2>
+<h3 id="_10">一句话抓住核心</h3>
+<p>让 RAG 循环改进，需要把“提出新设置、真正运行、依据参考答案评分”接起来，并保留一组没有参加调参的问题，检查选出的设置是否仍然有效。</p>
+<h3 id="_11">推理主干</h3>
+<p>先把论文变成可检索的材料，理解切分、候选数量和重排各改动哪一步。再准备论文、问题与对应答案，规定允许尝试的设置和停止条件。循环运行后，同时查看候选结果与最终论文结果；选好配置，再做留出测试。</p>
+<h2 id="_12">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 数据、指标、停止条件。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=115" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:55]">[00:01:55]</a> 配置搜索空间。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=207" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:27]">[00:03:27]</a> 调参与留出集。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=314" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:14]">[00:05:14]</a> 哪些变化影响索引。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=561" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:21]">[00:09:21]</a> 混合检索与融合。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=641" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:41]">[00:10:41]</a> 片段与文档层的指标口径。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=687" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:27]">[00:11:27]</a> 优化器输入。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=759" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:39]">[00:12:39]</a> 观察多轮结果。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1nR376UENq/?t=860" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:20]">[00:14:20]</a> 用实际任务做最终判断。</li>
+<li><button type="button" class="timecode" data-seconds="115">[00:01:55]</button> 片段大小、重叠与模型选择。</li>
+<li><button type="button" class="timecode" data-seconds="160">[00:02:40]</button> 每次取回多少候选内容。</li>
+<li><button type="button" class="timecode" data-seconds="193">[00:03:13]</button> 目标分数与停止轮数。</li>
+<li><button type="button" class="timecode" data-seconds="207">[00:03:27]</button> 200 篇论文、50 个调参问题和 20 个留出问题。</li>
+<li><button type="button" class="timecode" data-seconds="314">[00:05:14]</button> 哪些修改需要重建索引。</li>
+<li><button type="button" class="timecode" data-seconds="561">[00:09:21]</button> 混合检索怎样合并两份结果。</li>
+<li><button type="button" class="timecode" data-seconds="641">[00:10:41]</button> 候选片段与最终论文的区别。</li>
+<li><button type="button" class="timecode" data-seconds="684">[00:11:24]</button> 给优化模型提供哪些信息。</li>
+<li><button type="button" class="timecode" data-seconds="759">[00:12:39]</button> 第一组循环的三轮结果。</li>
+<li><button type="button" class="timecode" data-seconds="797">[00:13:17]</button> 第二次运行中的多项调整。</li>
+<li><button type="button" class="timecode" data-seconds="886">[00:14:46]</button> 留出测试。</li>
 </ul>
-<h2 id="_9">复习与行动清单</h2>
-<p>迁移练习：先不用自动优化器，手工比较三组配置。记录问题集版本、候选数、召回结果、最终答案是否有证据、耗时。能解释为什么选中一组，再考虑让模型提建议。</p>
-<p>自查：如果有人问“提升到底来自哪里”，我能展示比较条件，还是只能给出一个总分？</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_13">复习与行动清单</h2>
+<p>先看上面的三轮表，不必安装工具。第二轮的候选召回已经超过 0.95，为什么程序还继续运行？试着用自己的话说出正在检查的最终目标，然后指出表里对应的那一列。如果能说清这个差别，就已经避开了阅读实验结果时一个很常见的混淆。</p>
+<p>再想两个具体修改：把 <code>k</code> 从 3 改到 8，以及更换 embedding 模型。哪个修改会改变库里已经存好的向量，哪个主要改变查询时取回多少内容？解释时回到“论文怎样分段、怎样变成向量、怎样被找到”的过程即可。这个补充练习用于检验理解，不要求先亲手搭起整套系统。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Loop RAG ：让你的RAG也loop起来，打造自进化的RAG系统", "duration": "15:17", "src": "", "poster": "../assets/frames/BV1nR376UENq-00203.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

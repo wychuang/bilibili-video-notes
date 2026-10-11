@@ -1,53 +1,316 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证” · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent 面试为什么会一路问到数据库、消息队列和效果验证？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="agent">Agent 面试为什么会一路问到数据库、消息队列和效果验证？</h1>
+    <div class="meta"><span>假如今天可以躺平</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1hubZ6WEfU/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#agent">Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证”</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">从业务链路开始，技术词才有位置</a></li>
-<li><a href="#_3">连续追问一：为什么这样切文档、选数据库？</a></li>
-<li><a href="#agent_1">连续追问二：为什么需要多个 Agent？</a></li>
-<li><a href="#_4">连续追问三：模型拿不准时，系统怎么办？</a></li>
-<li><a href="#_5">最值得练的一问：坏例子消失，怎样知道是谁修好的？</a></li>
-<li><a href="#ai">允许使用 AI，也要能负责决策</a></li>
-<li><a href="#_6">迁移练习：准备一张能承受追问的案例卡</a></li>
+<li><a href="#agent">Agent 面试为什么会一路问到数据库、消息队列和效果验证？</a><ul>
+<li><a href="#_1">先让一项任务完整地走完：客户端为什么变慢了？</a></li>
+<li><a href="#_2">路径要写死到什么程度，模型又能自行决定什么？</a></li>
+<li><a href="#_3">技术手册怎样切开，才不会把问题和答案分开？</a></li>
+<li><a href="#_4">为什么这个阶段只需要一个轻量的向量库？</a></li>
+<li><a href="#agent_1">Agent 接入业务以后，消息为什么也成了面试题？</a></li>
+<li><a href="#_5">“卖得最好”到底在查什么？</a></li>
+<li><a href="#ai">四十多分钟的 AI 编程考核，人在负责什么？</a></li>
+<li><a href="#_6">一句“调用工具”，省略了多少需要负责的事情？</a></li>
+<li><a href="#_7">错误案例消失了，怎样知道哪项改动有效？</a></li>
+<li><a href="#_8">总结提炼：顺着项目，准备能够继续解释的内容</a></li>
+<li><a href="#_9">时间导航与复习</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1hubZ6WEfU" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1hubZ6WEfU"><div class="provenance">来源：假如今天可以躺平 · <a href="https://www.bilibili.com/video/BV1hubZ6WEfU/" target="_blank" rel="noopener">BV1hubZ6WEfU 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 面试复盘：把每个“我用了”补成“为什么、怎样验证”</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1hubZ6WEfU.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><button class="done" data-done="BV1hubZ6WEfU" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1hubZ6WEfU-00458.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1hubZ6WEfU&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1hubZ6WEfU/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1hubZ6WEfU"><h1>Agent 面试为什么会一路问到数据库、消息队列和效果验证？</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1hubZ6WEfU/">假如今天可以躺平｜我的 AI Agent 面试复盘</a>；全片约 36 分钟。主要涉及研发与 AI 应用工程面试，为讲述者个人回忆和事后思考，不能视作任何公司的统一题库或当前招聘标准。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1hubZ6WEfU/">我的 AI Agent 面试复盘</a> · 假如今天可以躺平 · 约 36 分钟 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>一个项目能被追问下去，靠的是具体约束、选型理由、失败处理和效果证据，而不只是一串框架名。</p>
-<h2 id="_2">从业务链路开始，技术词才有位置</h2>
-<p>视频的一道场景题是分析客户端性能变化：先取得不同阶段的指标，发现退化位置，再逐层检查，最后输出解释和报告。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=242" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:02]">[00:04:02]</a></p>
-<p>讲述者复盘后将确定的数据查询与聚合，和模型帮助选择路径、组织解释的部分分开。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=361" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:01]">[00:06:01]</a> 对搜索评测，这个区分同样重要：哪些是确定事实，哪些是判断，哪些只是待验证的原因假设？</p>
-<p>如果数值计算错误，先检查查询、口径与程序；如果解释跳跃，再检查证据选择与推断。全部归结为“模型不够聪明”，会错过可修复的环节。</p>
-<h2 id="_3">连续追问一：为什么这样切文档、选数据库？</h2>
-<p>车辆技术手册有车型、故障码、现象和处理步骤。机械按固定长度切开，可能把现象与办法分到两块。视频因此讨论先按结构拆分，过长部分再切，并保留必要元信息。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=602" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:02]">[00:10:02]</a></p>
-<p>数据库选型也回到规模与约束：原型里的少量手册、低并发，与多租户、持续更新、高可用需求，不必使用同一套方案。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
-<p>可复用的回答顺序是：当前任务是什么，有哪些约束，比较过什么，为什么先选这一项，以及什么变化会让我换方案。</p>
-<h2 id="agent_1">连续追问二：为什么需要多个 Agent？</h2>
-<p>固定流程和动态决策可以组合：关键业务节点明确控制，局部检索或工具选择保留灵活性。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=482" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:02]">[00:08:02]</a></p>
-<p>拆成多个角色时，需要交代独立职责、上下文、工具权限和协调成本。仅仅把三个顺序步骤分别命名为 Agent，不能证明复杂度有价值。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=965" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:05]">[00:16:05]</a></p>
-<p>后续还会问状态里存什么、谁更新、失败后从哪里恢复，以及重复消息是否造成重复副作用。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=842" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:02]">[00:14:02]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a> 这些内容让流程图中的箭头有了实际含义。</p>
-<h2 id="_4">连续追问三：模型拿不准时，系统怎么办？</h2>
-<p>Text-to-SQL 的例子很直接：“卖得最好”指销量、销售额还是利润？如果业务口径不明确，贸然生成一段 SQL 可能得到精确但答非所问的数字。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1140" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:00]">[00:19:00]</a></p>
-<p>对应需要澄清、字段说明、表关系、权限与结果校验。视频另讨论脚本沙箱、读写区分、高风险动作确认和超时停止。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1448" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:08]">[00:24:08]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1561" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:26:01]">[00:26:01]</a></p>
-<p>这些是设计检查方向，不是仅靠提示词就能得到的保证。对质量分析，可以把每次失败明确落在“理解、取数、执行、解释或交付”的位置，再保留对应证据。</p>
-<h2 id="_5">最值得练的一问：坏例子消失，怎样知道是谁修好的？</h2>
-<p>视频后段提出一个很接近评测工作的难题：更新 Skill 后，原有坏例子不再出现，能否说明更新有效？也可能流量变了、上游系统改了，或监控没再捕捉到。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1681" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:01]">[00:28:01]</a></p>
-<p>讲述者的复盘方向包括保留对照流量、维护历史回归集、检查调用与命中记录。这里还需加一条边界：日志时间上吻合只提供线索，不能单独证明因果。</p>
-<p>一份更容易检查的记录可以包含：旧版与新版、同一输入、实际命中的规则、可观察行为差异、评分依据，以及是否引入新失败。它帮助区分“方案整体变好”与“某条规则确实贡献了改进”。</p>
-<h2 id="ai">允许使用 AI，也要能负责决策</h2>
-<p>一次现场 AI 编程考核，要求完成订单状态机。复盘重点是先理解需求、拆模块、验证边界，再解释取舍。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1200" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:00]">[00:20:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=1320" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:00]">[00:22:00]</a></p>
-<p>同样，模型显示的推理文字可以提供思路，但不能作为内部机制的忠实证据。复核时更应看输入输出、工具结果、代码、测试和可重复行为。</p>
-<p>没在生产环境做过的部分，可以明确说“尚未做过，下面是我的设计设想”，再说明如何验证。视频结尾也强调避免把没有的经历硬塞进项目。<a class="timecode" href="https://www.bilibili.com/video/BV1hubZ6WEfU/?t=2041" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:34:01]">[00:34:01]</a></p>
-<h2 id="_6">迁移练习：准备一张能承受追问的案例卡</h2>
-<p>选一个真实做过的回答质量问题，用六栏整理：用户任务、失败证据、可能原因、实际改动、对照结果、剩余限制。</p>
-<p>再给自己连续问三次“为什么”。答不上来的地方标成待补，不必编造数值。最终这张卡既能指导下一轮实验，也能支持诚实、具体的项目表达。</p></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>简历里有一个车辆故障诊断项目：用户输入故障码，系统查技术手册，再由模型分析可能的故障原因。为了介绍实现，我们很容易列出几个名字：用了 LangGraph，接了 RAG，还安排了多个 Agent。可面试官接下来只要问一句“为什么需要多个 Agent”，介绍就可能停住。项目做过，代码也能运行，却还没有把某个设计和它解决的具体问题联系起来。</p>
+<p>这份面试复盘围绕的，正是这些联系。不同面试从车辆诊断、客户端性能、数据库查询和订单状态机进入，最后都追问系统在真实条件下怎样运转。下面保留几场面试的主要问题，以及求职者事后形成的理解。这些是个人经历和回顾，不能当作相关公司的统一题库，也不能用来保证其他岗位会采用相同考核方式。<button type="button" class="timecode" data-seconds="19">[00:00:19]</button> <button type="button" class="timecode" data-seconds="142">[00:02:22]</button></p>
+<h2 id="_1">先让一项任务完整地走完：客户端为什么变慢了？</h2>
+<p>在小红书的一场面试中，问题先从前端性能工作问起，随后进入一个具体场景：应用启动到用户看见首屏，中间分成多个阶段，每个阶段都有记录耗时的数据。工程师平时通过 SQL 查询这些数据，比较不同日期或版本。如果网络阶段变慢，就继续查网络相关指标；如果图片加载变慢，就继续检查图片这一部分。题目希望把这种分析工作交给 Agent。<button type="button" class="timecode" data-seconds="216">[00:03:36]</button></p>
+<p>理解这个题目，可以跟着工程师原来的工作走一遍。首先需要取得正确的数据，知道比较的是哪两个版本、什么时间范围。接着找出变化比较明显的阶段，再根据阶段选择更细的查询。得到细分结果以后，还需要结合业务背景解释哪些原因值得检查，最后形成一份让人能够继续处理的报告。每一步都依赖前一步提供的内容，不能只把所有数字交给模型，让它自由写一篇分析。</p>
+<p>求职者最初提出了取数、异常检测、选择问题阶段和生成归因报告的安排。面试官随后加上一个限制：报表数字必须精确，而且现有查询接口相对固定。这个条件会直接改变设计。既然 SQL 和计算逻辑已经可以确定，就可以把它们写成可测试的查询或脚本；模型需要不同维度时，调用对应接口并填写参数。模型再根据返回结果选择后续分析方向、组织解释。<button type="button" class="timecode" data-seconds="284">[00:04:44]</button> <button type="button" class="timecode" data-seconds="406">[00:06:46]</button></p>
+<p>这样分工，才能分别检查两类问题。报告说耗时增加了多少，可以沿着查询和计算追溯；报告说某种变化可能由网络因素引起，则需要检查这个判断使用了哪些信息。固定程序也会写错，查询口径也可能不合适，所以程序输出仍需测试。模型生成的原因解释则应该保留为有待证实的分析，不能因为语言完整就当成已查明的原因。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1hubZ6WEfU-00458.jpg" data-caption="查询与聚合计算单独处理，模型负责理解上下文和选择分析路径；数字与原因解释因而能够分别检查。">
+    <img src="../assets/frames/BV1hubZ6WEfU-00458.jpg" loading="lazy" alt="视频截图 01，00:07:38：查询与聚合计算单独处理，模型负责理解上下文和选择分析路径；数字与原因解释因而能够分别检查。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="458.000">图 01 · 00:07:38</button><span>查询与聚合计算单独处理，模型负责理解上下文和选择分析路径；数字与原因解释因而能够分别检查。</span></figcaption>
+</figure>
+<p>这个系统甚至可以没有聊天框。它可以按计划读取昨天的数据，发现某一阶段退化，继续检查并给工程师发送报告。聊天只是一种交互入口，任务如何被触发、需要哪些信息、何时完成，同样值得设计。对面试题来说，说明这条完整工作过程，比单独解释“Agent 是什么”更接近业务问题。<button type="button" class="timecode" data-seconds="362">[00:06:02]</button></p>
+<h2 id="_2">路径要写死到什么程度，模型又能自行决定什么？</h2>
+<p>第二轮继续问：多个 Agent 串起来，是否只是提前编排好的逻辑链？如果所有任务都按 A、B、C 的顺序运行，每一步做什么也已经确定，那我们首先拥有的是一条工作流程。把步骤改名，并不会自动增加自主能力。此时需要解释，模型在哪一步需要根据新信息做出不同选择。<button type="button" class="timecode" data-seconds="490">[00:08:10]</button></p>
+<p>完全固定的流程容易检查，因为可能的路径比较清楚；它遇到未预料的情况时，也可能不够灵活。完全交给模型规划，则会增加另一组风险：它可能反复查询同一件事，绕开必要检查，或者消耗过多调用次数。两端之间有许多可选安排。求职者倾向保留业务上的关键限制，让模型在局部选择工具、检索方向和分析路径，再把选择结果交回流程处理。</p>
+<p>仍以性能分析为例，查询哪些时间范围、哪些数据可以访问，可以由程序限制；在发现图片加载耗时上升后，先查看哪个相关指标，可以留给模型判断。这样描述，读者才能看清“动态”具体发生在哪里。我们也有了可以继续追问的对象：如果模型一直找不到原因，何时停止？如果下一次查询越过权限范围，谁来拒绝？灵活性越大，需要说明的边界通常也越多。<button type="button" class="timecode" data-seconds="516">[00:08:36]</button></p>
+<p>“为什么要多 Agent”是同一个问题的延伸。不同阶段如果确实需要不同工具、不同上下文，或者承担可以独立检查的职责，拆分角色可能有帮助。但这些理由仍然需要和更简单的实现比较。几个普通函数或一条固定流程已经足够时，多加角色会增加交接、调试和调用成本。面试里值得说明的是，某次拆分究竟减少了什么困难，又引入了什么代价。<button type="button" class="timecode" data-seconds="965">[00:16:05]</button></p>
+<h2 id="_3">技术手册怎样切开，才不会把问题和答案分开？</h2>
+<p>在阿里的面试中，追问从 RAG 开始。RAG 可以先理解为：回答问题前，先从资料里找到相关内容，再让模型结合资料作答。车辆故障诊断的资料来自技术手册，所以检索质量首先受手册怎样整理影响。面试官问的“文档怎么切片”，实际是在问，系统拿给模型阅读的每一小块资料，是否保留了足够的意思。<button type="button" class="timecode" data-seconds="594">[00:09:54]</button></p>
+<p>技术手册往往有车型、故障码、故障现象和处理办法等结构。如果每隔固定长度切一刀，故障现象可能在上一块，处理步骤却在下一块。检索恰好找到现象那一块，模型仍然拿不到处理方法。即便每一块都转换成向量——一组用于比较语义相近程度的数字——这种转换也不会自动把已经丢失的上下文补回来。</p>
+<p>求职者因此讨论先按标题和章节划分，再处理过长章节的办法。对于太长的内容，可以继续切成有一定重叠的小段，让相邻段落保留一点共同内容；同时保存车型、故障码和所属章节等元信息。元信息就是附在正文旁边、说明这段内容属于哪里的资料。这样，检索和回答时更容易知道一段处理步骤适用于什么车辆和问题。<button type="button" class="timecode" data-seconds="620">[00:10:20]</button></p>
+<p>这个回答没有提供一个对所有文档都合适的长度。它给出的理由来自手册本身：结构清楚，就尽量利用结构；章节太长，再补充长度控制。换成聊天记录、表格或代码，原来的划分方式可能需要改变。面试官继续问“为什么”，就是希望看到这种从材料条件走到设计选择的关系。</p>
+<h2 id="_4">为什么这个阶段只需要一个轻量的向量库？</h2>
+<p>切好资料以后，要把资料向量存起来并完成相似检索，于是自然会问数据库选型。复盘里的原型只处理几十份技术手册、成千上万段切片，供内部低频使用，需要快速修改。这样的条件下，先采用轻量方案，有机会减少部署和维护工作。这里的“轻量”说明的是当前负担较小，并不代表永远不需要扩展。<button type="button" class="timecode" data-seconds="675">[00:11:15]</button></p>
+<p>如果之后要让多个客户独立使用，持续更新大量文档，处理更高并发，还要保证服务在部分机器出故障时继续运行，选择依据就会改变。多租户、更新方式、并发和可用性，分别对应不同需求。一个完整回答需要说清眼下有哪些需求，哪些尚未出现，以及观察到什么变化时会重新评估。背出数据库优缺点，可以帮助比较；把比较放回自己的数据量和使用方式，才能解释这次选择。</p>
+<p>随后还有状态与存储的问题。LangGraph 中的 state，可以理解为任务执行到当前时刻需要保留的信息。在车辆诊断里，它可能包括用户输入、车辆信息、故障码和已有检索结果。某个节点读取这些信息完成分析，再把新的结果写回，后续节点才知道接下来基于什么继续工作。说清这些具体内容，比只说“使用状态机”更能让人理解系统。<button type="button" class="timecode" data-seconds="815">[00:13:35]</button></p>
+<p>任务执行中断后，内存里的信息可能丢失，因此还要讨论保存位置和恢复方式。LangGraph 使用 checkpointer 保存一次执行线程的状态快照；需要跨重启恢复时，也要选择能够持久保存的实现，内存实现本身不满足这一条件。有关这些概念可参见 <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph 的持久化说明</a>。不过，状态存下来只解决了部分问题，已经执行过的外部操作是否会重复，仍然需要另外处理。<button type="button" class="timecode" data-seconds="908">[00:15:08]</button></p>
+<h2 id="agent_1">Agent 接入业务以后，消息为什么也成了面试题？</h2>
+<p>追问随后转向 Kafka：高峰期消息为什么堆积，消费速度为什么跟不上，CPU、网络和其他依赖有没有成为限制。Kafka 可以把持续到来的事件保存起来，让负责处理事件的程序逐步读取；读取并处理消息的程序通常称为消费者。Agent 如果由这些事件触发，就同样会遇到处理速度落后于到达速度的问题。模型调用变慢、工具接口拥堵、消费者本身计算繁忙，都可能使后续事件等待更久。<button type="button" class="timecode" data-seconds="1039">[00:17:19]</button></p>
+<p>因此，看到队列变长，不能直接断定多加几个消费者就能解决。我们还需要看看任务分布在哪里、消费者花时间等待什么、真正耗时的是哪一个环节。Kafka 把一个主题的消息分到多条有序记录里，每条称为一个分区。在传统消费者组的分配方式下，同一分区在同一组内交给一个消费者处理，消费者数量增加也受到分区安排影响。关于这一关系以及消息处理语义，可参见 <a href="https://kafka.apache.org/40/design/design/">Kafka 的设计说明</a>。面试里的追问，希望候选人能沿着实际处理过程缩小问题范围。</p>
+<p>消息重复也是同样具体的困难。程序已经完成一个外部操作，但还没记录自己处理到了哪里就退出了；重新启动后，可能再次收到那条消息。如果这条消息会改变订单或资金状态，重复处理就可能产生重复副作用。因此需要考虑幂等性：同一请求即使再次到来，也不能把本该发生一次的业务动作又做一遍。消息系统的保证有适用范围，不能直接推导出所有外部调用都只会发生一次。<button type="button" class="timecode" data-seconds="1080">[00:18:00]</button> <button type="button" class="timecode" data-seconds="1483">[00:24:43]</button></p>
+<p>求职者在字节相关面试中，又遇到了消费者组、分区、重平衡、offset 提交、缓存和并发等问题。它们和 Agent 的联系由此很清楚：模型只是整个软件的一部分，事件怎样进入、任务怎样保存、失败怎样重试，都决定了最后的业务结果。学习模型和框架以后，原有的软件工程基础仍然有实际用处。</p>
+<h2 id="_5">“卖得最好”到底在查什么？</h2>
+<p>Text-to-SQL 的任务，是让用户用自然语言提出问题，再由系统生成 SQL 查询数据库。一个看起来很简单的请求是：“帮我查一下卖得最好的几个商品。”但“最好”可以指卖出的数量，也可以指销售金额。两种查询都可能返回格式正确的数字，排名却不同。系统在没有确认含义时直接选择一个口径，就可能非常精确地回答了另一个问题。<button type="button" class="timecode" data-seconds="1117">[00:18:37]</button></p>
+<p>这时，澄清本身就是任务的一部分。系统可以先问用户关心销量还是销售额，再继续查询。让模型自报一个很高的信心分数，并不能替代对业务含义的确认。特别是会改变结果的重要歧义，应该有明确的处理方式。相同道理也适用于何时拒绝请求：用户要求访问没有权限的数据时，系统应当在执行层限制访问，不能仅靠模型愿意遵守一句提示词。<button type="button" class="timecode" data-seconds="1154">[00:19:14]</button></p>
+<p>含义确定以后，模型还需要知道数据库有哪些表、字段表示什么、表之间怎样关联。schema 是数据库结构的说明，metadata 则可以包含字段解释等辅助信息。把相关结构和业务口径提供给模型，才能减少它凭名称猜测的空间；对重要指标，还需要检查查询结果和预期口径是否一致。多表查询写得出来，与这次查询确实回答了用户问题，是两个需要分别确认的结果。<button type="button" class="timecode" data-seconds="1186">[00:19:46]</button></p>
+<h2 id="ai">四十多分钟的 AI 编程考核，人在负责什么？</h2>
+<p>复盘里还有一次允许使用 AI 的现场编程，题目是设计一个可扩展、线程安全、逻辑清楚的订单状态机。状态机规定订单有哪些状态，以及收到某种事件后，可以从哪个状态转到哪个状态。线程安全则要求多个执行过程同时操作时，也不能把这些规则破坏。题目给出背景、功能和限制，候选人需要在有限时间里把它们变成实际设计。<button type="button" class="timecode" data-seconds="1272">[00:21:12]</button></p>
+<p>求职者后来向面试官了解，对方在意如何使用 AI。他将自己的角色理解为负责设计与检查的人，将 AI 当成帮助实现局部内容的开发者。按照这个理解，第一步是先读懂条件，形成初步结构；接着拆出能够分别讨论和验证的部分，再请 AI 帮助编写。每完成一部分，都要读代码、运行测试，检查边界情况。这样，候选人才能解释某个结果为什么符合题目要求。</p>
+<p>这也解释了为什么只把整道题交给 AI，会使后续追问变得困难。模型选了一种状态表示方式，面试官问它与另一种表示方式各有什么代价；如果候选人从未考虑这一选择，就难以说明改变需求以后会怎样。使用 AI 并不自动消除设计工作，它让我们能够更快得到一个实现，但还需要判断这个实现是否合适。<button type="button" class="timecode" data-seconds="1364">[00:22:44]</button></p>
+<p>这场考核的重点，不能推广为所有编程面试已经改变的统一趋势。它至少提供了一个明确的准备方向：对于自己实际使用 AI 完成的代码，能够说明输入条件、主要决策、测试结果和未解决的问题。模型提供的解释可以帮助思考，代码运行和可复现的测试则提供更直接的检查依据。</p>
+<h2 id="_6">一句“调用工具”，省略了多少需要负责的事情？</h2>
+<p>另一次追问认为，项目听起来很简单：输入进来，Agent 判断，调用工具，输出结果。这个概括并没有错，但省略了调用之前和之后的条件。谁能使用这个工具？读取资料和修改资料是否拥有相同权限？参数格式正确以后，参数内容是否仍然可能越权？高风险动作是否需要确认？这些问题会决定一条看起来很短的调用能否安全进入真实业务。<button type="button" class="timecode" data-seconds="1512">[00:25:12]</button></p>
+<p>如果工具允许执行模型生成的 Python，问题还会继续。代码在哪里运行，能访问哪些文件和网络，最多使用多少时间与资源，超时以后怎样停止？沙箱的作用，是把执行放到受限制的环境里，减少对其他系统的影响。限制需要由程序和运行环境实际执行，不能把“请勿访问未授权文件”写在提示词里就视为已经隔离。<button type="button" class="timecode" data-seconds="1561">[00:26:01]</button></p>
+<p>一张流程图可以只画输入、模型、工具和输出，但介绍真实项目时，我们需要把最重要的限制补回来。模型如何决定下一步，和系统如何控制这一步的后果，都属于设计。求职者由这些追问意识到，服务化、存储、网络、监控和故障恢复并没有从 AI 工程里消失。</p>
+<h2 id="_7">错误案例消失了，怎样知道哪项改动有效？</h2>
+<p>最后一组面试问题涉及 Skill。这里可以把 Skill 理解为供 Agent 使用的一组任务知识和操作指导，工具则负责实际执行某项能力。复盘谈到 Skill 怎样选择、更新和管理版本，随后追问效果：上线一版新方案，看到结果变好，能否说明其中某个 Skill 确实起了作用？<button type="button" class="timecode" data-seconds="1681">[00:28:01]</button></p>
+<p>这个问题难在，整体结果可以受很多变化影响。新 Skill 上线以后，原先的错误案例不再出现，可能是规则发挥了作用，也可能是来了不同类型的请求，或者上游系统同时修复了问题。只看错误数量下降，还无法知道哪种解释成立。甚至连“消失”也要具体看：是同类请求继续到来并被正确处理，还是这类请求暂时没有出现？<button type="button" class="timecode" data-seconds="1748">[00:29:08]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1hubZ6WEfU-01797.jpg" data-caption="追问从方案整体有效，进一步问到 Skill 的贡献，以及错误案例消失以后怎样继续验证。">
+    <img src="../assets/frames/BV1hubZ6WEfU-01797.jpg" loading="lazy" alt="视频截图 02，00:29:57：追问从方案整体有效，进一步问到 Skill 的贡献，以及错误案例消失以后怎样继续验证。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1797.000">图 02 · 00:29:57</button><span>追问从方案整体有效，进一步问到 Skill 的贡献，以及错误案例消失以后怎样继续验证。</span></figcaption>
+</figure>
+<p>求职者在事后提出几种思路。保留一部分不使用新 Skill 的对照流量，可以比较相近条件下两种处理的差异；维护历史错误的回归测试集，可以让旧问题再次进入系统，看看新旧版本分别怎样回答；记录 Skill 是否被调用、相关指导是否在执行中起作用，则有助于检查变化发生在哪里。这些办法各自提供一部分信息，需要根据任务条件组合使用。<button type="button" class="timecode" data-seconds="1785">[00:29:45]</button></p>
+<p>其中，回归测试比较容易理解：过去有一道题经常答错，我们把这道题留下来，修改后再跑一次。它能说明系统对这道保留的问题是否改善，但不能独自保证未来所有问题都改善。对照流量更接近日常使用，仍需考虑分组方式、样本量和观察时间。日志可以告诉我们新 Skill 是否参与了某次处理，但“调用以后恰好答对”也不能单独证明因果。把每种观察能说明什么讲清楚，评价才不会超出材料本身。</p>
+<p>面试官还问，五段调用了不同 Skill 和工具的成功会话，怎样合成一个 Skill 的优化方向。这里首先要分清成功发生在什么条件下：是哪条指导有帮助，工具结果是否相同，几段会话是否解决同一类困难。五次成功经过可以提供线索，但不能仅凭它们都成功，就把所有操作合并成一条普遍规则。优化对象越明确，后续越容易设计比较和回归检查。<button type="button" class="timecode" data-seconds="1804">[00:30:04]</button></p>
+<h2 id="_8">总结提炼：顺着项目，准备能够继续解释的内容</h2>
+<p>这些经历共同指向一种准备方式：把自己做过的任务，从输入一直讲到结果，再检查中间每一个重要选择是否有理由。实际做过的内容和设计设想也要分开。没有在生产环境实践过，可以说明目前的理解、需要确认的条件和计划怎样验证；把尚未做过的事情写成已有经验，会让后续追问越来越难回答。<button type="button" class="timecode" data-seconds="2031">[00:33:51]</button></p>
+<table>
+<thead>
+<tr>
+<th>面试追问</th>
+<th>需要展开的具体关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>为什么这样切文档？</td>
+<td>手册结构怎样影响资料是否完整，切分怎样保留适用条件</td>
+</tr>
+<tr>
+<td>为什么选这个数据库？</td>
+<td>当前规模和使用方式需要什么，什么变化会触发重新选择</td>
+</tr>
+<tr>
+<td>为什么要多个 Agent？</td>
+<td>不同职责、上下文和工具怎样拆分，增加的协调成本是否值得</td>
+</tr>
+<tr>
+<td>任务失败后怎么办？</td>
+<td>状态保存到哪里，哪些操作可能重试，怎样避免重复副作用</td>
+</tr>
+<tr>
+<td>允许 AI 写代码时，你做了什么？</td>
+<td>怎样理解限制、作出选择、拆分任务和检查结果</td>
+</tr>
+<tr>
+<td>错误减少，能证明更新有效吗？</td>
+<td>是否处理同类请求，有何对照，回归与日志各自支持什么判断</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">时间导航与复习</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="216">[00:03:36]</button> 客户端性能分析：取数、计算和原因解释怎样分工。</li>
+<li><button type="button" class="timecode" data-seconds="490">[00:08:10]</button> 固定流程和局部动态选择的关系。</li>
+<li><button type="button" class="timecode" data-seconds="594">[00:09:54]</button> 从技术手册切分，追问到数据库和状态管理。</li>
+<li><button type="button" class="timecode" data-seconds="1039">[00:17:19]</button> 消息堆积、重复消费和后端基础。</li>
+<li><button type="button" class="timecode" data-seconds="1117">[00:18:37]</button> Text-to-SQL 怎样处理“卖得最好”的歧义。</li>
+<li><button type="button" class="timecode" data-seconds="1272">[00:21:12]</button> 允许使用 AI 的订单状态机考核。</li>
+<li><button type="button" class="timecode" data-seconds="1512">[00:25:12]</button> 权限、沙箱和真实工具调用的限制。</li>
+<li><button type="button" class="timecode" data-seconds="1681">[00:28:01]</button> Skill 更新以后，怎样区分整体改善和具体贡献。</li>
+</ul>
+<p>回看自己的项目时，可以从一个确实做过的选择开始：当时有哪些条件，为什么这样决定，结果怎样，条件变化以后是否仍然合适？只要能把这一个选择讲完整，面试里的一串技术名称就开始有了可讨论的内容。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "我的AI Agent面试复盘。纯是个人的分享和总结，未必准确，期待大家交流指正哈哈哈哈！", "duration": "36:12", "src": "", "poster": "../assets/frames/BV1hubZ6WEfU-00458.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

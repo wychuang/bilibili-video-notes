@@ -1,44 +1,308 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>大决定之前，先做一个便宜、真实的小验证 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大决定之前，先弄清自己准备走进怎样的生活 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">大决定之前，先弄清自己准备走进怎样的生活</h1>
+    <div class="meta"><span>像素范</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1sWDFBeERQ/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">大决定之前，先做一个便宜、真实的小验证</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">两个故事，都卡在没有核对过的前提</a></li>
-<li><a href="#_4">把一句建议拆成可以验证的主张</a></li>
-<li><a href="#_5">不必为调研制造新的风险</a></li>
-<li><a href="#_6">迁移练习：一页决策核查单</a></li>
+<li><a href="#_1">大决定之前，先弄清自己准备走进怎样的生活</a><ul>
+<li><a href="#_2">第一位求职者：想通过读研补技能，实际培养方向却不同</a></li>
+<li><a href="#_3">一边担心不会，一边同时准备太多条路</a></li>
+<li><a href="#_4">“问过别人”还需要继续问：那个人知道的是哪一部分</a></li>
+<li><a href="#_5">“先看一批，再决定”的启发，不能变成固定花钱比例</a><ul>
+<li><a href="#_6">投递和面试可以帮助了解需求，信息仍要真实</a></li>
+</ul>
+</li>
+<li><a href="#_7">第二位求职者：学历门槛与课程难度，原来是两个问题</a></li>
+<li><a href="#_8">一个公司员工的意见，能够代表多大范围</a></li>
+<li><a href="#_9">培训同样需要了解结果，推广者也应放进判断里</a></li>
+<li><a href="#_10">总结提炼</a></li>
+<li><a href="#_11">时间导航</a></li>
+<li><a href="#_12">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1sWDFBeERQ" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1sWDFBeERQ"><div class="provenance">来源：像素范 · <a href="https://www.bilibili.com/video/BV1sWDFBeERQ/" target="_blank" rel="noopener">BV1sWDFBeERQ 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">大决定之前，先做一个便宜、真实的小验证</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1sWDFBeERQ.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><button class="done" data-done="BV1sWDFBeERQ" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1sWDFBeERQ&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1sWDFBeERQ/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1sWDFBeERQ"><h1>大决定之前，先弄清自己准备走进怎样的生活</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1sWDFBeERQ/">像素范｜人生重大误区：不调研就决策</a>；全片约 24 分钟，为求职与教育选择连麦。原视频语言强烈，并包含培训推广；本文不沿用其中的羞辱表达、收入推算或确定性职业承诺。</p>
+<p>来源：人生重大误区：不调研就决策。｜UP 主：像素范｜时长：23 分 40 秒｜<a href="https://www.bilibili.com/video/BV1sWDFBeERQ/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>在投入大笔时间和费用之前，先验证最关键的假设：这个选择真的通向我想要的结果吗？</p>
-<h2 id="_3">两个故事，都卡在没有核对过的前提</h2>
-<p>第一位连麦者读完研究生后寻找工作，发现自己的训练与岗位要求有差距，又在多种求职和考试方向之间摇摆。对话将注意力拉回实际岗位：工作每天做什么，需要哪些能力，自己缺哪一部分。<a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=51" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:51]">[00:00:51]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:00]">[00:04:00]</a></p>
-<p>第二位连麦者因学历顾虑选择海外学习，实际入学后才发现课程难度与自己的基础不匹配；此前对招聘限制的理解又主要来自少数人的意见。<a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=840" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:00]">[00:14:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=964" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:04]">[00:16:04]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a></p>
-<p>从这两个个案能提炼的是核查方法。它们不足以推断读研、留学或某个行业普遍不值得，也不能替别人做退学决定。</p>
-<h2 id="_4">把一句建议拆成可以验证的主张</h2>
-<p>“这个方向好就业”太宽。可以继续问：哪个城市、哪类公司、什么岗位、怎样的基础、近期有哪些真实招聘？</p>
-<p>“这个课能帮我转行”也需要拆开：教什么，学完能独立完成什么，展示的作品如何验证，学员结果是否具有代表性，费用与退出条件是什么？视频也建议接触真实从业者和学员。<a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=481" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:01]">[00:08:01]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a></p>
-<p>补充一个边界：某人没有在朋友圈发入职动态，不能证明课程有问题；少数成功案例也无法保证整体效果。直接询问并核实，尊重对方隐私，比从缺席的帖子里推断可靠。</p>
-<h2 id="_5">不必为调研制造新的风险</h2>
-<p>视频提出过虚构学历或技能去试探招聘的做法。<a class="timecode" href="https://www.bilibili.com/video/BV1sWDFBeERQ/?t=601" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:01]">[00:10:01]</a> 本课程不采用。更合适的替代是：拿真实背景咨询招聘者、参加公开招聘说明、分析岗位要求、请从业者评阅作品，或用真实经历进行模拟面试。</p>
-<p>同样，原视频套用“秘书问题”推出固定调研比例，只能作为比喻。现实职业选择通常有不同的机会顺序、成本、可撤回性和信息条件，不能据此规定一定花掉多少预算。</p>
-<h2 id="_6">迁移练习：一页决策核查单</h2>
-<p>选一个近期决定，例如“是否花一个月补某项技能”。写下：</p>
-<ol>
-<li>我希望它帮助完成的具体任务。</li>
-<li>支持这个选择的三条证据，以及各自的局限。</li>
-<li>最可能让我判断错误的一个假设。</li>
-<li>能在两小时内完成的小验证，例如尝试一道真实任务。</li>
-<li>什么时候继续、调整或暂停。</li>
-</ol>
-<p>验证结果不理想，只说明路线需要修订。把未知提前发现，已经减少了一部分成本；无需把它解释成对个人价值的否定。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>已经为一个方向付出了几年，走到需要找工作的时候，却发现自己还说不清能做什么。这时，面前出现一个机会，哪怕待遇和预期相差很远，也可能让人想赶快抓住。毕竟，继续等待令人焦虑，重新学习又好像意味着此前的路走错了。我们很容易在这样的时刻，把“尽快结束不确定”当成最重要的事，却暂时顾不上理解这个机会究竟通向哪里。</p>
+<p>两位求职者的经历，把这个困难呈现得很具体。一位读完研究生，正在考虑是否接受一家小公司的岗位；另一位为了改善学历条件前往海外读书，入学后才发现课程与自己的基础差距很大。两人都已经投入了时间和费用，现在面临下一步选择。理解他们的处境，需要沿着最初的想法往回看：当时希望改变什么，依据哪些信息作出决定，哪些关键条件直到进入之后才被发现。</p>
+<h2 id="_2">第一位求职者：想通过读研补技能，实际培养方向却不同</h2>
+<p>第一位连麦者的本科与地理信息相关，研究生读的是农业工程与信息技术方向。他原先希望通过读研提升代码能力，以便毕业后更容易就业。实际进入之后，发现导师的工作并不侧重自己想练习的方向。于是，学历向前走了一步，想获得的就业技能却没有自然跟着补齐。这是他个人培养经历与求职目标之间的错位，不能从一个个案推出读研对所有人都没有价值。<button type="button" class="timecode" data-seconds="51">[00:00:51]</button></p>
+<p>问题就在“通过读研提升代码能力”这句话里。它把一种教育经历和一种能力联系起来，但中间还有很多条件：具体项目做什么，导师怎样安排研究，学生要写什么程序，有多少机会独立完成任务。如果没有了解这些条件，学校和专业名称便可能替代了对实际学习内容的认识。等毕业后需要拿出能力时，才发现原先期待的训练并没有充分发生。<button type="button" class="timecode" data-seconds="95">[00:01:35]</button></p>
+<p>当时，他在成都接触了一家小型卫星公司，岗位公开的薪资范围是每月 5,000 至 10,000 元。他担心进不去，自己报出的期望较低，约为 5,000 至 6,000 元。这个数字在对话里引起了强烈反应，但判断岗位是否值得接受，还需要知道工作内容、成长机会、生活成本和其他可获得的选择。学历本身不会自动对应一个固定工资，单凭这个报价也无法算出此前教育投入的全部得失。<button type="button" class="timecode" data-seconds="121">[00:02:01]</button></p>
+<p>他还提出了一个现实限制：腿部有伤，不适合长时间站立，希望寻找偏文职的工作。接下来需要做的，是把身体条件要求和职业能力要求分开看。某项身体限制可能排除一些岗位，却不自动把剩下的选择缩小成一个。运营、设计、开发、产品等工作可能具有不同的工作方式；具体哪些适合，还要看岗位日常活动和个人能力，不能只凭“文职”两个字确认。<button type="button" class="timecode" data-seconds="179">[00:02:59]</button></p>
+<h2 id="_3">一边担心不会，一边同时准备太多条路</h2>
+<p>这位求职者最担忧的是，自己没有这些岗位所需的技能。主持人提醒他，刚进入工作的人也往往需要学习，暂时不会并不能直接证明永远不能做。这个提醒把注意力从学历标签转向了可补足的差距：目标岗位需要完成什么任务，我已经能完成哪部分，还有哪部分要练习。问题具体以后，学习就有机会接上真实工作。<button type="button" class="timecode" data-seconds="205">[00:03:25]</button></p>
+<p>但他的时间并没有全部投入同一条路。他同时考虑考公、考银行，也尝试学习数据分析。每条路似乎都不能放掉，实际精力却被分散了。家里认为银行是一个好方向，这种判断又增加了他的犹豫。此时需要了解的，至少包括银行里的具体岗位、工作内容、招聘条件，以及家人形成这种印象所依据的经历。一个行业过去给人的感觉，不能替代今天某个岗位的具体情况。<button type="button" class="timecode" data-seconds="306">[00:05:06]</button></p>
+<p>他提到跨境电商的产品开发或运营岗位，看到招聘要求里有 Excel、SQL 等数据处理能力，于是开始学习这些工具。这个出发点已经比笼统地“学点技能”更具体：招聘方列出的要求，能够帮助他发现需要准备什么。不过，工具名称仍需继续展开。会使用 Excel，究竟是整理数据、制作报表，还是分析经营问题？SQL 要支持哪些查询？把能力放回工作任务里，才能知道练习应做到什么程度。<button type="button" class="timecode" data-seconds="371">[00:06:11]</button></p>
+<p>主持人对 AI 替代部分操作的判断非常乐观，也提到了用 AI 帮助理解面试问题。我们可以把 AI 作为学习和练习的辅助，但招聘要求是否仍然需要相关能力，要以实际岗位为准。工作中能够生成一个查询，与能够判断查询有没有取错数据，是不同层次的要求。面试时也应遵守规则，真实说明自己的技能与工具使用，不能把不会的能力冒充成已经掌握。<button type="button" class="timecode" data-seconds="385">[00:06:25]</button></p>
+<h2 id="_4">“问过别人”还需要继续问：那个人知道的是哪一部分</h2>
+<p>讨论银行选择时，主持人建议与实际从业者交流，甚至愿意付出一定咨询成本，了解对方一天到底做什么。这里有一个重要的变化：从“银行好不好”转成“这个岗位的实际生活是什么样”。工作时间怎样安排，任务是什么，压力来自哪里，收入结构和晋升路径怎样变化，这些问题更容易得到具体回答。具体回答又能与自己的条件比较。<button type="button" class="timecode" data-seconds="463">[00:07:43]</button></p>
+<p>咨询的价值取决于得到的信息，费用高并不保证答案可靠。一个人在银行工作，也可能只熟悉某个地区、部门和岗位。我们需要知道他说的是自己的经历，还是对整个行业的推测。重大选择通常也值得从几个不同位置了解情况：有人熟悉招聘筛选，有人熟悉日常工作，有人知道刚入行时最容易遇到的困难。这些信息相互补充，能够减少把一个人的有限视野当成全貌的风险。</p>
+<p>主持人用很高的收入假设，估算几年的机会成本，意在强调时间也有价值。机会成本可以这样理解：选择一条路，会使我们暂时无法投入另一些事情。不过，被放弃的那条路未必一定成功，更不能直接把某个假设工资乘上几年，认定当事人已经损失了同样多的钱。真正值得保留的问题是，接下来还要投入什么，以及有没有成本更低、能更早帮助判断的办法。<button type="button" class="timecode" data-seconds="499">[00:08:19]</button></p>
+<h2 id="_5">“先看一批，再决定”的启发，不能变成固定花钱比例</h2>
+<p>秘书问题被用来解释，为什么不必看到第一个机会就立刻答应。它考虑的是一种顺序选择：候选人依次出现，前面看过的人帮助我们建立比较标准，之后再寻找超出已有标准的人。这个想法容易理解。没有接触过几种机会时，我们连“好”“一般”“不适合”大概是什么样都不知道，第一次出现的选择就会显得格外有分量。<button type="button" class="timecode" data-seconds="573">[00:09:33]</button></p>
+<p>不过，经典秘书问题有特定条件，包括候选总数已知、出现顺序随机、拒绝后不能回头、目标是选中整体最优者等。在这组条件下，大样本时先观察约 37% 的候选人有理论依据；这个比例指候选人数量，并不能换成“任何人生决定都应花掉 30% 的预算做调研”。现实职业选择可能可以回访，也可能需要兼顾收入、地点、健康和兴趣，未必存在一个统一的最优排序。<a href="https://www.math.ucla.edu/~tom/Stopping/sr2.pdf">Ferguson 的最优停止教材第 2 章</a>讨论了这一模型及其不同版本。</p>
+<p>我们可以保留一个较朴素的启发：在承担较大投入之前，留出理解选项的时间。具体花多少，要看选择的代价、可撤回程度和目前缺少的信息。如果只是决定要不要试学一个周末，了解少量内容可能已经够用；如果准备投入几年和大量费用，就有理由认真弄清课程、工作和自己的条件。但数学模型并没有替每个人给出一个固定的咨询预算。</p>
+<h3 id="_6">投递和面试可以帮助了解需求，信息仍要真实</h3>
+<p>主持人曾建议通过虚构已经获得的学历或技能来测试招聘反应。这个做法会向招聘者提供不真实信息，也可能损害求职信誉，不能作为调研方法采用。想了解某段教育经历是否有帮助，可以拿真实背景咨询招聘人员，询问相关资格会影响哪些筛选环节，查看相似背景者的求职经历，或者参加公开的招聘交流。需要测试能力时，也可以通过真实作品、练习任务和模拟面试获得反馈。<button type="button" class="timecode" data-seconds="689">[00:11:29]</button></p>
+<p>第一位求职者最后又问，一个月能不能把技能学到足够就业。这个问题很自然，但仅说“学到五六成”无法判断，因为五六成没有对应明确任务。更有用的是去看岗位会问哪些问题，需要独立完成什么，再回来检查自己做得怎样。一次具体任务里卡住的位置，比一个笼统的学习百分比更能帮助安排下一周要学什么。<button type="button" class="timecode" data-seconds="776">[00:12:56]</button></p>
+<h2 id="_7">第二位求职者：学历门槛与课程难度，原来是两个问题</h2>
+<p>第二位连麦者原先学习动漫游戏相关专业，接触过 3ds Max、Maya 等工具。他在求职时感到一些游戏公司不接受专科学历，因此希望通过海外本科改善自己的条件。他选择的课程又转向了 AI 相关方向，计划投入的总费用约为 30 万元。这里同时发生了两个变化：提升学历层次，以及进入一个不同的学习领域。前一个愿望很明确，后一个变化却带来了新的能力要求。<button type="button" class="timecode" data-seconds="829">[00:13:49]</button></p>
+<p>入学之后，他发现课程包含微积分和深度学习，需要相应的数学基础。他自述此前数学一直比较薄弱，尝试从函数补起，依然感到吃力。原先把课程理解为较容易完成的学历通道，实际进去后面对的却是需要持续理解的理工科内容。课程名称里的“AI”说明不了一个人是否已经准备好学习，也不能替代对具体教学内容、考核方式和先修要求的了解。<button type="button" class="timecode" data-seconds="942">[00:15:42]</button></p>
+<p>他因此开始考虑退学。这个想法与眼前的困难有关，但是否退学还涉及剩余费用、已投入成本、可以得到的学习支持，以及其他教育和就业选择。一次连麦不足以替他把这些条件查清。我们能够从这段经历里看见的是，课程难度本来就应该在入学前认真了解；一旦发现不匹配，下一次决定仍然需要调研，不能因为后悔就把另一个未经了解的方向立刻当成唯一出路。<button type="button" class="timecode" data-seconds="964">[00:16:04]</button></p>
+<p>主持人随后问起国内的其他学历路径。当事人担忧用人单位只接受全日制本科，所以没有深入了解相关选择。这个担忧可能对某些岗位成立，但他尚未确认哪些岗位确实这样要求、其他岗位怎样筛选。不能仅凭一种学历形式的名称推断它对所有岗位都有用，也不能直接认定完全没有帮助。要解决的依然是具体公司的具体门槛。<button type="button" class="timecode" data-seconds="1000">[00:16:40]</button></p>
+<h2 id="_8">一个公司员工的意见，能够代表多大范围</h2>
+<p>这位连麦者确实向认识的业内人士询问过，对方表示一些大公司通常不招专科学生。这样的回答可能反映对方了解的招聘情况，却还没有回答所有与选择相关的问题：他说的是哪个岗位、哪个地区、哪一年的招聘？是否直接参与筛选？作品和经验能否改变某些条件？小公司或不同类型的团队又怎样处理？把这一句话直接扩展成“整个行业都没有入口”，范围就扩大了。<button type="button" class="timecode" data-seconds="1073">[00:17:53]</button></p>
+<p>他又提到一位同专业同学，一直练习原画、参加过培训，已经进入一家大公司的最后一轮面试。这个例子使他震动，因为它与此前“学历把路完全挡住”的认识不同。但最后一轮面试并不等于已经录用，一位同学的路径也未必适合所有人。它的价值在于提示还有条件需要进一步了解：对方准备了什么作品，投的是什么岗位，经历了怎样的筛选，自己的情况与其有何差异。<button type="button" class="timecode" data-seconds="1104">[00:18:24]</button></p>
+<p>两个例子放在一起，我们会发现调研很少靠一个人的一句话结束。一个否定意见可能让人过早放弃，一个成功故事也可能让人过早投入。继续追问具体条件，可以让意见变成能够比较的信息。尤其是课程、招聘和个人能力这几个环节，任何一个发生变化，最后的结果都可能不同。</p>
+<table>
+<thead>
+<tr>
+<th>原先的判断</th>
+<th>还需要了解的具体条件</th>
+<th>条件不清时容易发生什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读研能补代码能力。</td>
+<td>实际研究内容、导师方向、独立编程机会。</td>
+<td>获得了学历，却没有得到期待的训练。</td>
+</tr>
+<tr>
+<td>银行是稳定的好工作。</td>
+<td>具体部门、岗位任务、招聘要求和工作体验。</td>
+<td>用对行业的旧印象替代当前岗位情况。</td>
+</tr>
+<tr>
+<td>海外本科能解决就业门槛。</td>
+<td>目标岗位接受哪些学历，课程是否能完成。</td>
+<td>花费已经发生，门槛和学习困难仍然存在。</td>
+</tr>
+<tr>
+<td>一位业内人士说没有机会。</td>
+<td>对方了解哪些公司、岗位和筛选环节。</td>
+<td>把有限范围的经验当作整个行业的结论。</td>
+</tr>
+<tr>
+<td>同学进入最后一轮，说明这条路可行。</td>
+<td>作品、准备过程、岗位差异与最终结果。</td>
+<td>看到了终点附近的消息，忽略此前的条件。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">培训同样需要了解结果，推广者也应放进判断里</h2>
+<p>讨论到转行时，主持人推荐了自己的培训，这使他同时处于提供职业意见和销售课程的位置。理解后续建议，需要保留这层利益关系。培训可以成为学习方式之一，但“这个方向值得考虑”与“应该购买这门课”仍需分别判断。课程是否适合自己，要看内容、基础要求、实际教学和可以确认的结果。<button type="button" class="timecode" data-seconds="1155">[00:19:15]</button></p>
+<p>他提出去接触在读学员，等他们毕业后了解就业情况。直接听实际参与者讲经历，确实比只看招生宣传更接近课程体验。不过，不能用“朋友圈是否发了入职消息”来判定课程好坏。有人不公开职业变化，也有人只展示顺利的部分。更有意义的是在对方愿意交流的前提下，了解他入学前会什么、实际学到了什么、求职用了多久、找到了怎样的岗位，以及仍有哪些困难。<button type="button" class="timecode" data-seconds="1182">[00:19:42]</button></p>
+<p>少数学员的成功也无法自动代表全部人。如果一门课程主要展示原本就有基础的学员，对初学者的参考价值就需要另外判断。反过来，一位学员暂时没有找到工作，也未必能说明教学没有帮助。我们需要理解课程在结果中发挥了哪部分作用，以及个人基础、作品质量、求职范围等因素怎样共同影响结果。这样的交流应尊重对方隐私，也不需要以高额红包作为获取信息的前提。</p>
+<p>主持人更看好 AI 相关岗位，也鼓励从非头部公司积累项目经验。这是他当时的方向判断，不能据此保证 AI 岗位都没有学历门槛，或者经验最终一定能够覆盖学历条件。较小团队可能更重视能否完成眼前任务，另一些公司可能保留严格筛选。需要继续了解的是实际招聘要求、岗位稳定性和可以积累的经验，而无须把行业名称当成新的保证。<button type="button" class="timecode" data-seconds="1334">[00:22:14]</button></p>
+<p>两位求职者的困难没有在一次对话里被全部解决，但我们已经能看见下一步为何需要更具体。与其只问一个方向好不好，可以继续问自己准备进入怎样的课程、每天怎样的工作，以及支撑选择的判断还有哪部分没有确认。调研不会消除全部不确定，却能让一些重要的问题在投入之前被看见。发现原先的想法需要调整，也只是获得了新信息，不必把它变成对自己价值的否定。</p>
+<h2 id="_10">总结提炼</h2>
+<p>教育名称、行业印象和别人一句评价，往往省略了决定结果的条件。理解实际课程、工作任务和自己的基础，才能判断一条路是否通向想要的生活。</p>
+<p>调研需要有具体问题，也需要区分信息的适用范围。业内人士、招聘者和学员各自知道不同部分；单个否定意见和单个成功故事，都值得继续追问条件。</p>
+<p>时间和费用值得认真对待，但不能把假设收入算成确定损失，也不能机械套用固定调研比例。真实咨询、作品与任务反馈，可以帮助理解差距，无须虚构经历。</p>
+<h2 id="_11">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="51">[00:00:51]</button> 读研目的与实际培养方向的差别。</li>
+<li><button type="button" class="timecode" data-seconds="121">[00:02:01]</button> 小公司岗位与求职报价。</li>
+<li><button type="button" class="timecode" data-seconds="179">[00:02:59]</button> 身体条件和岗位选择。</li>
+<li><button type="button" class="timecode" data-seconds="306">[00:05:06]</button> 同时准备考试与技能学习。</li>
+<li><button type="button" class="timecode" data-seconds="371">[00:06:11]</button> 从招聘要求寻找具体任务。</li>
+<li><button type="button" class="timecode" data-seconds="463">[00:07:43]</button> 与从业者了解真实工作。</li>
+<li><button type="button" class="timecode" data-seconds="573">[00:09:33]</button> 秘书问题与提前比较选项。</li>
+<li><button type="button" class="timecode" data-seconds="776">[00:12:56]</button> 一个月能学到什么，怎样获得反馈。</li>
+<li><button type="button" class="timecode" data-seconds="829">[00:13:49]</button> 为改善学历条件选择海外课程。</li>
+<li><button type="button" class="timecode" data-seconds="942">[00:15:42]</button> 数学基础与实际课程难度。</li>
+<li><button type="button" class="timecode" data-seconds="1073">[00:17:53]</button> 一位业内人士意见的范围。</li>
+<li><button type="button" class="timecode" data-seconds="1104">[00:18:24]</button> 同学求职经历带来的新信息。</li>
+<li><button type="button" class="timecode" data-seconds="1155">[00:19:15]</button> 培训推荐与利益关系。</li>
+<li><button type="button" class="timecode" data-seconds="1334">[00:22:14]</button> 行业方向建议与真实招聘条件。</li>
+</ul>
+<h2 id="_12">回看时的三个问题</h2>
+<p>第一位求职者希望通过读研获得什么？他需要提前了解哪些内容，才能判断培养过程是否支持这个目标？</p>
+<p>第二位求职者同时改变了学历层次与学习领域，这两个变化各自需要确认什么？</p>
+<p>如果一位从业者说某条路走不通，另一位同学又在这条路上进展顺利，你会先问清哪些具体条件？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "人生重大误区：不调研就决策。", "duration": "23:40", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

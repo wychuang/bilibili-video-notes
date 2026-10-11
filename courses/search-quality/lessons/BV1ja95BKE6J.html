@@ -1,44 +1,289 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>多 Agent 的成本，藏在交接处 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DeerFlow 2.0：任务交给一个主管，复杂工作怎样分出去 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="deerflow-20">DeerFlow 2.0：任务交给一个主管，复杂工作怎样分出去</h1>
+    <div class="meta"><span>AI深度幻觉</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1ja95BKE6J/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#agent">多 Agent 的成本，藏在交接处</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">从固定接力到主管分派</a></li>
-<li><a href="#_3">三类交接损失</a></li>
-<li><a href="#_4">四个可以迁移的工程设计</a></li>
-<li><a href="#_5">怎样读视频中的性能比较</a></li>
-<li><a href="#_6">迁移练习：让分工证明自己</a></li>
+<li><a href="#deerflow-20">DeerFlow 2.0：任务交给一个主管，复杂工作怎样分出去</a><ul>
+<li><a href="#_1">先看一个任务怎样被执行</a></li>
+<li><a href="#_2">固定接力和临时分派，分别把困难放在哪里</a></li>
+<li><a href="#_3">中间件：把运行约束放在实际执行的地方</a></li>
+<li><a href="#_4">把执行核心和用户入口分开</a></li>
+<li><a href="#_5">虚拟路径与按需加载技能，各自解决什么问题</a></li>
+<li><a href="#_6">架构值得学习，长期运行还要看恢复能力</a></li>
+<li><a href="#_7">总结提炼</a></li>
+<li><a href="#_8">时间导航</a></li>
+<li><a href="#_9">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1ja95BKE6J" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1ja95BKE6J"><div class="provenance">来源：AI深度幻觉 · <a href="https://www.bilibili.com/video/BV1ja95BKE6J/" target="_blank" rel="noopener">BV1ja95BKE6J 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">多 Agent 的成本，藏在交接处</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1ja95BKE6J.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><button class="done" data-done="BV1ja95BKE6J" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1ja95BKE6J-00451.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1ja95BKE6J&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1ja95BKE6J/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1ja95BKE6J"><h1>DeerFlow 2.0：任务交给一个主管，复杂工作怎样分出去</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1ja95BKE6J/">DeerFlow 2.0 架构解读</a> · 12 分钟 · 快读。项目功能持续变化，视频中的缺陷清单与基准数字仅作录制时主张。</p>
+<p>来源：字节DeerFlow2.0拆解：5万星背后，单Agent为什么打败了多Agent<br>
+UP 主：AI深度幻觉 · 11 分 32 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1ja95BKE6J/</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>拆出多个 Agent 前，先证明任务可以独立完成、结果能够可靠合并，而且并行收益值得额外协调成本。</p>
-<h2 id="_2">从固定接力到主管分派</h2>
-<p>视频把早期流程描述为固定接力：协调、规划、研究、成稿依次完成。需求变化后，固定角色和交接顺序可能需要频繁调整。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=50" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:50]">[00:00:50]</a></p>
-<p>随后介绍主管式结构：主 Agent 掌握目标，根据需要派出临时子任务，再收回结果。这使分工可以跟着任务变化，主线状态集中管理。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:40]">[00:01:40]</a></p>
-<p>术语要注意：主管加子 Agent 也属于层级式多 Agent 设计。没有子 Agent 之间的自由交流，不会让整个系统自动变成只有一个 Agent；讨论时说清控制权、状态和通信方式更有价值。</p>
-<h2 id="_3">三类交接损失</h2>
-<p>第一是上下文丢失。子任务只收到局部提示，可能漏掉最终用户的重要约束。</p>
-<p>第二是产物不兼容。一个输出摘要，一个输出代码片段，合并者仍要重做结构与验证。</p>
-<p>第三是协调放大。多个任务重复查同一资料、互相等待，或基于不同版本的证据工作，增加成本却没有提升结果。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=205" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:25]">[00:03:25]</a></p>
-<p>因此“开更多 Agent”之前，应该先写清每个子任务的输入、交付格式、依赖和终止条件。</p>
-<h2 id="_4">四个可以迁移的工程设计</h2>
-<p>视频重点介绍中间件、运行核心与应用分离、任务环境路径隔离、渐进加载 Skill。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=375" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:15]">[00:06:15]</a></p>
-<p>它们分别对应四个问题：通用检查放在哪里；换界面时能否复用核心；文件操作能否被限制在任务范围；是否需要把所有技能全文同时放进上下文。</p>
-<p>官方项目资料也区分 Harness 与 App，并说明子任务、记忆和沙箱等能力。具体配置和持久化行为应以使用版本为准。<a href="https://github.com/bytedance/deer-flow">DeerFlow 项目说明</a> · <a href="https://github.com/bytedance/deer-flow/blob/main/backend/AGENTS.md">后端职责说明</a></p>
-<p>虚拟路径只是隔离设计的一部分。仅隐藏真实路径字符串，并不能建立安全边界；实际挂载、权限和网络策略仍须落实。</p>
-<h2 id="_5">怎样读视频中的性能比较</h2>
-<p>视频列举了不同架构的成功率、引用准确度和覆盖率，但未在本项目复现。小规模个人实验不能直接代表所有任务；引用准确与信息覆盖也要分别评价。<a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=255" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:15]">[00:04:15]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1ja95BKE6J/?t=520" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:40]">[00:08:40]</a></p>
-<p>同样，录制时提到“缺少恢复”“缺少限流”等问题，不宜长期当作项目现状。</p>
-<h2 id="_6">迁移练习：让分工证明自己</h2>
-<p>选同一批研究题，先让单 Agent 完成，再尝试主 Agent 加两个独立子任务。保持资料范围与质量标准一致，记录完成质量、延迟、调用量、重复劳动与合并错误。</p>
-<p>只有某类任务稳定受益，再为它保留并行分工。任务高度耦合、共享状态频繁变化时，可以继续采用更简单的组织方式。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>我们想让一个助手完成资料研究，最容易想到的组织方式，是模仿一个有明确分工的小团队：协调者接收需求，规划者列出步骤，研究者查资料，最后交给另一个角色写报告。每个角色负责一段，看起来清楚，也方便单独改进。但如果用户突然要的是一个仪表盘，或者一条数据处理流程，原先为“查资料并写报告”安排的接力顺序，就未必适用了。</p>
+<p>DeerFlow 从早期研究流程到 2.0 的变化，可以沿着这个问题理解：系统怎样既保留必要分工，又能根据任务改变工作方式？架构重点转向一个掌握整体任务的主 Agent，它按需要调用工具，也能临时派出子任务，完成后再收回结果。主线由同一个负责人保持，分出去的工作则随当前需要变化。<button type="button" class="timecode" data-seconds="67">[00:01:07]</button></p>
+<h2 id="_1">先看一个任务怎样被执行</h2>
+<p>Agent 可以理解为一个能够反复观察、决定和行动的模型系统。模型根据当前问题与已经获得的信息，决定下一步调用什么工具；程序执行工具，把结果交回；模型再看结果，决定继续行动还是回答用户。这个循环需要管理工具、状态和运行环境。围绕模型搭建这些支持设施，常用 Harness 这个词来描述。</p>
+<p>框架通常提供可组合的部件，开发者决定怎样连接；运行环境则承担实际执行时需要的设施，例如文件操作环境、任务状态、记忆和子任务管理。两者的边界可以重叠，因此不必把名称当成严格分类。对 DeerFlow 2.0，更值得关心的是，哪些工作已经由它负责，哪些仍需要应用开发者安排。<button type="button" class="timecode" data-seconds="22">[00:00:22]</button></p>
+<p>在主管式结构中，用户的目标先交给 lead agent，也就是主 Agent。遇到适合拆开的工作时，主 Agent 通过 task 工具派出子任务。子 Agent 拥有自己的推理和工具调用循环，也管理本次子任务的局部状态；完成工作后，把结果交给主 Agent。主 Agent 再结合其他信息判断下一步，最终对整体任务负责。<button type="button" class="timecode" data-seconds="130">[00:02:10]</button></p>
+<p>这里有三个组织特点。子 Agent 的工作由主 Agent 发起，它们之间不自由互相派活；子任务围绕当前需要建立，完成后结束；整体决策仍由主 Agent 掌握。我们可以把它理解为一个主管临时找几位承包者完成不同工作，承包者各自交付，主管负责检查这些交付能否接成最后的结果。<button type="button" class="timecode" data-seconds="156">[00:02:36]</button></p>
+<p>有子 Agent，就已经包含多个独立执行者，所以“一个主管加临时子 Agent”仍可以归入层级式多 Agent 系统。把它说成“单 Agent”，通常是在强调只有一条主决策线。区分这个用法很重要，否则读到标题时容易误以为系统完全没有子 Agent。真正需要比较的是谁控制流程、谁保存状态、结果怎样交接，以及各执行者能否独立采取行动。</p>
+<h2 id="_2">固定接力和临时分派，分别把困难放在哪里</h2>
+<p>早期固定流程的优势是路径明确。研究任务总要经过规划、检索、成稿，就可以围绕这条路径安排每个角色。困难出现在任务形态变化以后：如果用户需要运行代码生成图表，或者要在查资料途中反复试验，就需要修改预先规定的节点和交接关系。角色名字还在，职责和顺序却可能不断变化，系统维护者要为这些变化付出成本。<button type="button" class="timecode" data-seconds="80">[00:01:20]</button></p>
+<p>主管式结构把部分流程选择交给主 Agent。它可以先使用工具做一小段工作，确认需要后再拆任务，也可以收到子任务结果后继续追问。这样更灵活，但并没有消除协调责任。主 Agent 仍然要把任务说清楚，决定哪些上下文应该传给子 Agent，并检查返回结果是否真的完成了要求。如果主管自己误解目标，临时分派也会沿着同样的错误方向进行。</p>
+<table>
+<thead>
+<tr>
+<th>组织方式</th>
+<th>谁决定工作顺序</th>
+<th>需要特别处理的困难</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定角色流水线</td>
+<td>预先设计的节点和连接</td>
+<td>新任务不符合旧流程时，需要修改交接关系</td>
+</tr>
+<tr>
+<td>主 Agent 加临时子任务</td>
+<td>主 Agent 根据进展决定</td>
+<td>子任务输入是否充分，结果能否可靠合并</td>
+</tr>
+<tr>
+<td>多个执行者自由协作</td>
+<td>多方协商和相互触发</td>
+<td>冲突、重复工作、共享状态和停止条件</td>
+</tr>
+</tbody>
+</table>
+<p>多 Agent 系统常见的损耗就发生在交接处。主 Agent 知道用户的一项限制，却没有把它传给子 Agent，子任务就可能做出局部合理、整体不合用的结果。不同执行者也可能用不同格式或假设处理同一件事，最后需要额外整理。执行者越多，潜在的沟通关系也越多；并行节省的时间，可能被等待、重复工作和合并错误抵消。<button type="button" class="timecode" data-seconds="208">[00:03:28]</button></p>
+<p>有关失败分析和架构比较的研究，因此值得关注。但小规模个人实验的成功率，不能直接代表所有任务；不同研究的任务、模型和失败定义也可能不同。某次实验里单 Agent 表现更好，说明那组条件下增加协作没有带来足够收益。它没有证明所有分工都会失败，更无法证明未来不再需要多 Agent。对这一类结果，理解失败发生在哪里，比记住一个看起来惊人的百分比更有用。<button type="button" class="timecode" data-seconds="217">[00:03:37]</button> <button type="button" class="timecode" data-seconds="288">[00:04:48]</button></p>
+<h2 id="_3">中间件：把运行约束放在实际执行的地方</h2>
+<p>DeerFlow 2.0 的一个设计重点，是在模型调用前后设置中间件。可以把中间件理解为沿着执行路径安排的几个检查和处理步骤：模型调用前准备上下文，调用后检查返回内容，还可以记录消耗、处理记忆或限制子任务数量。这样，一项通用规则有明确的执行位置，不必散落在每个业务功能里。<button type="button" class="timecode" data-seconds="386">[00:06:26]</button></p>
+<p>子任务数量限制是一个具体例子。录制时所讨论的实现，对同时派出的任务设置上限；当模型返回超过允许数量的子任务调用时，程序在调用后的处理环节限制实际执行数量。这个设计关注的是最终会发生多少次调用。即使模型没有遵守提示里的数量要求，程序仍然可以阻止超额任务进入执行阶段。<button type="button" class="timecode" data-seconds="407">[00:06:47]</button></p>
+<p>这种区别对于理解 Agent 很重要。提示词告诉模型应该怎样行动，执行层控制系统实际允许发生什么。两者可以配合，但不能把提示中的一句约束当成已经实施的资源控制。并发上限、超时等具体数值是版本和配置的一部分，理解这个机制不需要把录制时的数值当作所有部署都相同的规则。</p>
+<h2 id="_4">把执行核心和用户入口分开</h2>
+<p>第二个设计重点，是 Harness 与 App 分层。Harness 负责 Agent 的执行核心，例如工具、沙箱、记忆和任务编排；App 负责用户怎么接入，例如网页接口或不同聊天渠道。应用可以调用执行核心，执行核心不反过来依赖某一个具体界面。这样更换用户入口时，核心任务逻辑有机会继续复用。<button type="button" class="timecode" data-seconds="431">[00:07:11]</button></p>
+<p>设想同一套研究能力，既要供网页使用，也要接入一个聊天软件。如果执行逻辑到处依赖网页层的对象，增加新入口就可能需要复制代码，或者把界面相关内容也一起带过去。依赖方向保持清楚后，不同入口只需把请求交给共同的核心，再把结果显示给用户。这个例子要说明的是分层的作用，并不意味着两个入口天然拥有完全相同的权限和交互方式。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1ja95BKE6J-00451.jpg" data-caption="左侧 Harness 负责执行能力，右侧 App 负责网页和聊天入口；底部强调由应用单向依赖核心。">
+    <img src="../assets/frames/BV1ja95BKE6J-00451.jpg" loading="lazy" alt="视频截图 01，00:07:31：左侧 Harness 负责执行能力，右侧 App 负责网页和聊天入口；底部强调由应用单向依赖核心。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="451.000">图 01 · 00:07:31</button><span>左侧 Harness 负责执行能力，右侧 App 负责网页和聊天入口；底部强调由应用单向依赖核心。</span></figcaption>
+</figure>
+<p>分层约定还需要被检查。代码通过持续集成测试检测不合规的导入关系，避免某次修改让核心重新依赖应用层。持续集成可以先理解为代码变更后自动运行的一组检查。这里的检查目标很具体：保护已经约定的依赖方向，使以后复用核心时不必不断处理界面耦合。<a href="https://github.com/bytedance/deer-flow/blob/main/backend/AGENTS.md">DeerFlow 后端架构说明</a></p>
+<h2 id="_5">虚拟路径与按需加载技能，各自解决什么问题</h2>
+<p>第三个设计是任务环境里的虚拟路径。Agent 看到一个稳定的工作目录，宿主机上实际保存文件的位置可以不同；命令输出中出现的某些实际路径，还可以转换回任务使用的虚拟路径。这样，模型不必随着部署位置变化去理解不同机器的目录结构，任务环境也能减少直接暴露宿主路径的情况。<button type="button" class="timecode" data-seconds="462">[00:07:42]</button></p>
+<p>不过，路径显示和操作权限需要分开理解。把一个真实目录换成另一个名字，并没有自动限制程序能读取哪些文件。实际安全边界还取决于文件挂载、访问权限和网络规则等设置。虚拟路径帮助提供一致的任务视图，真正阻止越权需要执行环境配合。否则，模型看到的名字很整齐，后台进程依然可能访问不该访问的资源。</p>
+<p>第四个设计是用 Markdown 文件描述技能。技能文件包含说明和元信息，告诉 Agent 怎样处理某类任务。渐进式加载的重点，是先保留找到相关技能所需的信息，实际需要时再读更完整的内容。模型每次能处理的上下文有容量限制，如果把所有技能全文一次放进去，即使当前只用到其中一种，也会占据大量空间。<button type="button" class="timecode" data-seconds="489">[00:08:09]</button></p>
+<p>按需加载并不保证模型总能选对技能，但它改变了系统需要管理的问题：先让模型知道有什么能力可用，再把相关能力的细节提供出来。这与前面控制工具选择范围的思路相近。用户当前的任务决定需要哪些信息，无关的详细说明可以暂时留在文件里，不必每一轮都跟着模型走。</p>
+<h2 id="_6">架构值得学习，长期运行还要看恢复能力</h2>
+<p>一个系统能完成演示任务，与它能长时间稳定服务，是不同层次的问题。录制时对 DeerFlow 的讨论提出了限流、长任务中断恢复、并发实际是否发生，以及配置文档等方面的顾虑。这些属于当时所讨论版本的工程状态，不能永久当作项目现状。不过，它们背后的问题不会因为架构图清楚就自动消失。<button type="button" class="timecode" data-seconds="510">[00:08:30]</button></p>
+<p>例如，外部模型接口可能限制请求频率，系统需要知道遇到限制后怎样等待或恢复；长任务进行到一半中断，已经获得的资料和状态能否继续使用，会影响用户是否必须从头等待。代码允许多个子任务同时运行，也不代表模型每次都会同时派出多个独立任务。允许并发、实际调度并发，以及并发带来收益，需要分别观察。</p>
+<p>研究任务还要区分不同的结果质量。引用准确，意味着引用与它支持的说法相符；信息覆盖充分，则意味着用户关心的重要方面都得到了处理。一份报告可以把少数观点引用得很准确，却遗漏其他必要内容。因此，某个引用指标很高，并不能独自说明整篇研究已经完整。整体分数同样需要结合各项指标和测试条件理解。<button type="button" class="timecode" data-seconds="547">[00:09:07]</button></p>
+<p>关于“模型越强，是否越不需要多 Agent”，可以保留为一种有条件的判断。更强的长上下文理解和任务执行能力，确实可能让一个 Agent 承担过去需要拆分的工作；另一方面，独立任务并行、不同权限范围或不同组织负责的系统，仍然可能需要分工。模型能力变化会改变架构选择的理由，无法单凭一个项目的演进宣布所有场景都应采用同一结构。</p>
+<h2 id="_7">总结提炼</h2>
+<p>DeerFlow 2.0 提供了一个值得理解的组合：主 Agent 保持任务主线，子 Agent 按需承担独立工作，执行层负责约束和支撑。中间件提供规则的执行位置，Harness 与 App 分离保护复用，虚拟路径整理任务环境，技能按需加载减少无关上下文。</p>
+<p>把这套设计放回最初的研究任务，我们就能看到它想解决什么：需求变化时，工作顺序可以调整；需要分工时，结果仍由一个主线负责人检查和整合。它的价值取决于这些交接是否可靠，也取决于运行中断、权限和资源限制是否得到实际处理。</p>
+<h2 id="_8">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="80">[00:01:20]</button> 固定研究流水线为什么难以适应不同任务。</li>
+<li><button type="button" class="timecode" data-seconds="130">[00:02:10]</button> 主 Agent 怎样派出临时子任务。</li>
+<li><button type="button" class="timecode" data-seconds="208">[00:03:28]</button> 多方交接带来的上下文与协调损耗。</li>
+<li><button type="button" class="timecode" data-seconds="386">[00:06:26]</button> 中间件与实际执行的数量限制。</li>
+<li><button type="button" class="timecode" data-seconds="431">[00:07:11]</button> Harness 和 App 的单向依赖。</li>
+<li><button type="button" class="timecode" data-seconds="462">[00:07:42]</button> 虚拟路径与任务环境。</li>
+<li><button type="button" class="timecode" data-seconds="489">[00:08:09]</button> 技能为什么按需加载。</li>
+<li><button type="button" class="timecode" data-seconds="510">[00:08:30]</button> 限流、恢复和实际并发的工程问题。</li>
+</ul>
+<h2 id="_9">回看时的三个问题</h2>
+<p>如果主 Agent 派出三个有独立推理循环的子 Agent，这个系统为什么仍然可以叫层级式多 Agent？说它只有一条主决策线，又是在强调什么？</p>
+<p>一个子任务结果本身看起来很好，却不符合最终用户要求，问题可能发生在哪次交接？回想上下文、输入条件和结果合并各自承担的责任。</p>
+<p>为什么隐藏宿主机路径、在提示里限制子任务数，都不能单独构成可靠的执行约束？把“模型看见什么”和“程序允许什么”分开，就比较容易回答。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "字节DeerFlow2.0拆解：5万星背后，单Agent为什么打败了多Agent", "duration": "11:32", "src": "", "poster": "../assets/frames/BV1ja95BKE6J-00451.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

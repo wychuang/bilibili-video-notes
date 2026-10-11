@@ -1,115 +1,306 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 AI 做项目管理工具：把想法、界面和真实操作接起来 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">用 AI 做项目管理工具：把想法、界面和真实操作接起来</h1>
+    <div class="meta"><span>英雄哪里出来</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Qfg56sEfb/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#2vibecodingbai">2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">推理主干</a></li>
-<li><a href="#prd">先把模糊目标变成可删改的 PRD</a></li>
-<li><a href="#_3">人的工作：做减法，决定“我到底要什么”</a></li>
-<li><a href="#_4">再补一层：让界面和交互变成明确规则</a></li>
-<li><a href="#_5">生成应用时，把“可用”写成验收条件</a></li>
-<li><a href="#_6">用一次真实操作验证生成结果</a></li>
-<li><a href="#_7">编码问题要与生成质量分开排查</a></li>
-<li><a href="#_8">边界、疑点与时效性</a></li>
-<li><a href="#_9">时间戳导航</a></li>
-<li><a href="#_10">复习与行动清单</a></li>
+<li><a href="#ai">用 AI 做项目管理工具：把想法、界面和真实操作接起来</a><ul>
+<li><a href="#_1">先让需求完整地出现，再决定哪些留下</a></li>
+<li><a href="#_2">功能清单不会自动决定页面长什么样</a></li>
+<li><a href="#ai_1">让 AI 实现时，还要说明“能使用”具体指什么</a></li>
+<li><a href="#_3">实际添加一条任务，会发现功能清单里看不见的细节</a></li>
+<li><a href="#_4">中文出现乱码时，先弄清文件怎样被读写</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">时间导航</a></li>
+<li><a href="#_7">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1Qfg56sEfb" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>补充 · 既有学习稿</span></div><article data-lesson="BV1Qfg56sEfb"><h1 id="2vibecodingbai">2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Qfg56sEfb.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><button class="done" data-done="BV1Qfg56sEfb" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Qfg56sEfb-00080.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Qfg56sEfb&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Qfg56sEfb/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Qfg56sEfb"><h1>用 AI 做项目管理工具：把想法、界面和真实操作接起来</h1>
 <blockquote>
-<p>上传者：英雄哪里出来<br>
-时长：03:04<br>
-链接：https://www.bilibili.com/video/BV1Qfg56sEfb/<br>
-BV号：BV1Qfg56sEfb<br>
-总结强度：standard<br>
-证据：本地逐字稿、字幕审计、8 张带时间码的候选画面。字幕整体可用，个别同音识别已按语境谨慎校正，如“点击”“增删改查”。</p>
+<p>来源：2分钟VibeCoding项目管理系统(建议收藏)｜文档见评论区【B站AI创造公开赛】｜UP 主：英雄哪里出来｜时长：3 分 5 秒｜<a href="https://www.bilibili.com/video/BV1Qfg56sEfb/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>我可以把 VibeCoding 从“直接让 AI 写一个项目”改成一条可控流程：先让 AI 扩写 PRD，再由我删减范围、补足视觉与交互规则，最后带着明确的真实数据、增删改查和存储要求生成可操作应用。</p>
-<h2 id="_2">推理主干</h2>
-<ol>
-<li>并行项目一多，项目管理工具的成本与功能缺口会放大。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:03]">[00:00:03]</a></li>
-<li>模糊想法先交给 AI 组织成 PRD，减少从零写需求的负担。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a></li>
-<li>AI 扩写后的内容必须由人做减法，因为取舍带有主观目标。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a></li>
-<li>功能需求无法自然推出理想界面，视觉风格和交互规则需要单列、写细。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a></li>
-<li>生成应用时要把数据真实性、完整操作、交互有效性、存储方式写成验收条件。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></li>
-<li>最后通过实际新增任务和列表呈现检查结果，再继续迭代。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a></li>
-</ol>
-<h2 id="prd">先把模糊目标变成可删改的 PRD</h2>
-<p>我不必一开始就给出完整需求。先说明大致要做什么，再在“办公任务”中选择本地电脑与文档能力，让 AI 产出项目管理系统的 PRD。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a> 这一步的价值在于，它会按关键词拆解需求、搭建文档结构，并逐模块填充内容。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a></p>
-<p>画面中可见 AI 的执行过程：它读取工作流文件后，创建飞书文档、获得文档 block ID，再按章节逐步填充；这让“生成 PRD”落在可检查的文档操作上。</p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_002_00-00-34.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_002_00-00-34.jpg" alt="图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。" loading="lazy"></a><figcaption>图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。</figcaption></figure>
-<p><em>图 01 · 00:00:34：界面显示 AI 正在创建飞书文档、获取文档结构并逐章填充内容，支撑从关键词生成 PRD 的过程。</em></p>
-<p>生成出的 PRD 往往很全，项目管理功能可覆盖仪表盘、甘特图、计划管理、需求管理、缺陷管理，以及数据汇总、延期提醒、模板复用、权限管理等。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a> 这些内容可以作为候选范围，不能自动视为最终范围。</p>
-<h2 id="_3">人的工作：做减法，决定“我到底要什么”</h2>
-<p>需求精简是流程中不可省略的一段。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=47" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:47]">[00:00:47]</a> AI 无法替我判断某个模块是否值得做：角色体系、权限或安全设计对团队产品可能重要，对个人自用工具却可能只是负担。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a></p>
-<p>我可以直接从 PRD 的大标题和模块结构入手，把不需要的章节删除。这样更容易保持产品边界清楚，也能让后面的应用生成少走偏路。</p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_003_00-00-57.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_003_00-00-57.jpg" alt="图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。" loading="lazy"></a><figcaption>图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。</figcaption></figure>
-<p><em>图 02 · 00:00:57：PRD 页面左侧列出五大功能模块与通用能力，右侧展示延期提醒规则，支撑按章节审阅和删减需求。</em></p>
-<p>这里的关键判断是：PRD 的完整度不等于项目的合适度。功能数量越多，后续生成、验证与维护的成本也越高；我应保留真正服务于当前使用场景的部分。</p>
-<h2 id="_4">再补一层：让界面和交互变成明确规则</h2>
-<p>功能性需求只回答“系统做什么”，并未充分回答“它长什么样、怎么反馈、怎么动”。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a> 因此我需要追加视觉风格和交互动画要求，写得越具体，结果越接近目标。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=76" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:16]">[00:01:16]</a></p>
-<p>画面中的提示内容把这层要求拆成可执行条目：深色基底、暖色主光、玻璃拟态面板、火焰光带背景、环形进度图等视觉元素；交互上则约束悬浮、切换、性能、按钮与表单反馈等状态。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=127" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:07]">[00:02:07]</a></p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_004_00-01-20.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_004_00-01-20.jpg" alt="图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。" loading="lazy"></a><figcaption>图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。</figcaption></figure>
-<p><em>图 03 · 00:01:20：输入框中列出深色基底、暖色主光、玻璃拟态、粒子与火焰背景等具体视觉和交互要求。</em></p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_006_00-02-07.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_006_00-02-07.jpg" alt="图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。" loading="lazy"></a><figcaption>图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。</figcaption></figure>
-<p><em>图 04 · 00:02:07：左侧可见“视觉风格”和“交互动画”的细化规则，右侧 PRD 已形成对应章节，支撑把设计要求写入需求文档。</em></p>
-<p>如果这一层缺失，生成结果会更接近默认界面。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=83" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:23]">[00:01:23]</a> 我应把视觉语言、页面层级、动效状态、操作反馈和性能边界一起写进文档，再据此生成应用。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=94" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:34]">[00:01:34]</a></p>
-<h2 id="_5">生成应用时，把“可用”写成验收条件</h2>
-<p>进入“应用生成”能力后，需求不能只停留在页面清单。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=111" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:51]">[00:01:51]</a> 我至少要明确四类条件：</p>
+<p>同时推进几个项目时，很容易记不住每个项目停在哪里：哪项任务还没开始，哪项已经延期，哪处问题还需要修改。英雄哪里出来经常并行制作不同教程，因此想要一套符合自己需要的项目管理工具。他用豆包辅助完成了这个尝试。理解这个案例，重点是看一个大致想法怎样逐渐变成明确需求，以及界面做出来之后怎样检查它能否真正使用。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<p>起初不需要已经想好每个按钮的位置。可以先告诉 AI，大致想管理什么，希望解决哪种混乱，让它帮助列出可能的功能。AI 擅长补全常见结构，但补出来的内容往往比真正需要的多。因此，第一份文档只是开始，后面还需要人来选择和删减。</p>
+<h2 id="_1">先让需求完整地出现，再决定哪些留下</h2>
+<p>第一步是生成产品需求文档，通常简称 PRD。它用文字说明这个软件给谁使用，需要完成哪些事情，以及主要功能如何组织。这个案例里，AI 按关键词建立文档结构，再逐个填写模块。生成的内容包含仪表盘、甘特图、计划管理、需求管理和缺陷管理等部分，它们分别从概览、时间安排、任务、待做需求和问题处理等角度组织项目。<button type="button" class="timecode" data-seconds="21">[00:00:21]</button></p>
+<p>把候选功能列出来以后，使用者才比较容易判断哪些与自己有关。比如，独自管理项目的人，可能暂时不需要复杂的角色分工。若照着第一份长文档全部实现，系统会增加许多自己很少使用的入口，还可能花时间处理不必要的复杂度。删去当前不需要的内容，是把常见软件模板变成个人工具的重要一步。<button type="button" class="timecode" data-seconds="41">[00:00:41]</button></p>
+<p>这里也需要分清复杂权限体系与基本安全。个人使用可以减少多用户角色，但仍然要避免重要数据丢失、敏感信息意外公开，以及危险操作缺少确认。是否只有自己使用，影响的是具体设计范围，不能据此省去所有安全考虑。功能做减法时，仍应知道某一项原本在防止什么问题。<button type="button" class="timecode" data-seconds="60">[00:01:00]</button></p>
+<h2 id="_2">功能清单不会自动决定页面长什么样</h2>
+<p>完成需求之后，还有一个明显空缺：即使知道要显示任务列表，也还没有决定页面的视觉风格、信息层次和交互方式。同样的功能，可以呈现为简洁的表格，也可以呈现为图表很多的仪表盘。若不表达偏好，AI 就会按自己的常见模式选择，最后虽然有相应模块，使用起来却可能与想象不同。<button type="button" class="timecode" data-seconds="66">[00:01:06]</button></p>
+<p>因此，英雄哪里出来继续要求 AI 把视觉和交互规则补进文档。这个案例选择了深色基底、橙色与暖金色强调、带透明质感的面板，以及持续变化的背景效果。它还描述了界面切换和动画。这里值得理解的是，颜色、材质、动效也成为了可以明确讨论的要求；这些风格是这个项目的个人选择，其他项目完全可以采用更安静的呈现。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Qfg56sEfb-00080.jpg" data-caption="左侧把深色、橙金配色、面板质感与动效写进要求；右侧保留功能文档，视觉选择与功能结构可以一起讨论。">
+    <img src="../assets/frames/BV1Qfg56sEfb-00080.jpg" loading="lazy" alt="视频截图 01，00:01:20：左侧把深色、橙金配色、面板质感与动效写进要求；右侧保留功能文档，视觉选择与功能结构可以一起讨论。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="80.000">图 01 · 00:01:20</button><span>左侧把深色、橙金配色、面板质感与动效写进要求；右侧保留功能文档，视觉选择与功能结构可以一起讨论。</span></figcaption>
+</figure>
+<p>把规则写下来，后续反馈也会更具体。只说“做得好看一点”，AI 需要猜测我们喜欢什么；明确希望哪些信息更突出、页面切换怎样发生，才能比较生成结果有没有遵守要求。即使第一次做得不合适，也能指出是哪一部分需要改变，不必每次推翻整个页面。</p>
+<h2 id="ai_1">让 AI 实现时，还要说明“能使用”具体指什么</h2>
+<p>接下来，把已经删减的功能和视觉要求一起交给应用生成。重要的是，生成一个看起来像管理系统的页面，与生成一个可以管理任务的工具，存在实际差别。前者可能只有示例卡片和图表；后者需要按钮产生相应动作，表单能够提交，已有数据能够查到和修改。<button type="button" class="timecode" data-seconds="92">[00:01:32]</button></p>
+<p>案例中的要求特意强调了几件事：不要用假数据冒充真实记录，要实现增加、删除、修改和查询，所有交互都应有效，同时说明数据怎样存放。这些要求把注意力从页面外观推进到操作结果。例如，点“新增任务”之后应出现可填写的表单，保存后应能在列表里找到刚才输入的任务；点“编辑”后，改动应反映到对应记录上。<button type="button" class="timecode" data-seconds="120">[00:02:00]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Qfg56sEfb-00127.jpg" data-caption="生成要求明确了按钮行为、增删改查和数据存储；其中使用内存数组作为临时仓库，适合运行时演示。">
+    <img src="../assets/frames/BV1Qfg56sEfb-00127.jpg" loading="lazy" alt="视频截图 02，00:02:07：生成要求明确了按钮行为、增删改查和数据存储；其中使用内存数组作为临时仓库，适合运行时演示。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="127.000">图 02 · 00:02:07</button><span>生成要求明确了按钮行为、增删改查和数据存储；其中使用内存数组作为临时仓库，适合运行时演示。</span></figcaption>
+</figure>
+<p>数据存储尤其需要看清。画面里的要求采用内存数组保存临时记录，也就是把数据留在当前运行的程序里。这能够支持当前页面中的新增和修改，却不等于已经实现长期保存。页面重新加载或运行结束后，数据能否找回，取决于是否另外写入持久存储。内存、浏览器本地保存和服务器存储承担的职责不同，不能因为刚才点过“保存”，就默认关闭以后仍然存在。</p>
+<p>这不妨碍用临时数据做原型。原型阶段可以先检查主要操作是否顺畅，再决定正式使用需要怎样保存和备份。只是当我们希望用它管理真实项目时，长期保留记录就会成为功能本身的一部分。把这一点讲清楚，能够避免界面看起来已经完成，却在重新打开时发现此前记录不见了。</p>
+<h2 id="_3">实际添加一条任务，会发现功能清单里看不见的细节</h2>
+<p>应用生成以后，英雄哪里出来打开新增任务窗口，填写负责人、开始日期、截止日期和名称，再尝试保存。随后发现优先级是必填项，需要补选。这个很小的过程，比看一张完整界面图多说明了一件事：表单中有哪些字段，哪些字段必须填写，以及遗漏时会怎样影响操作。<button type="button" class="timecode" data-seconds="142">[00:02:22]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Qfg56sEfb-00150.jpg" data-caption="新增任务表单中，优先级带有必填标记，并提供高、中、低选项；填写流程需要处理这些具体条件。">
+    <img src="../assets/frames/BV1Qfg56sEfb-00150.jpg" loading="lazy" alt="视频截图 03，00:02:30：新增任务表单中，优先级带有必填标记，并提供高、中、低选项；填写流程需要处理这些具体条件。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="150.000">图 03 · 00:02:30</button><span>新增任务表单中，优先级带有必填标记，并提供高、中、低选项；填写流程需要处理这些具体条件。</span></figcaption>
+</figure>
+<p>沿着一次真实操作继续走，就可以检查界面与数据是否接上。表单里的名称应当进入任务列表，修改优先级之后，相应显示应改变，删除操作应针对选中的任务。这里的检查都围绕同一条记录进行，容易看清每一步有没有发生。一次成功新增仍然不能代替全部功能检查，但它已经比单纯浏览页面更接近实际使用。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>使用者期望看到什么</th>
+<th>需要分清的地方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增任务</td>
+<td>输入的内容出现在列表里。</td>
+<td>有示例任务不等于已经支持真实新增。</td>
+</tr>
+<tr>
+<td>修改任务</td>
+<td>改动反映到同一条记录。</td>
+<td>弹窗可以打开，还需要确认提交确实更新。</td>
+</tr>
+<tr>
+<td>删除任务</td>
+<td>目标记录按预期移除。</td>
+<td>点击有反馈，不等于删除对象正确。</td>
+</tr>
+<tr>
+<td>重新打开</td>
+<td>需要长期保存的内容仍可找回。</td>
+<td>运行时内存不自动提供持久保存。</td>
+</tr>
+</tbody>
+</table>
+<p>后续还能继续调整风格、添加背景效果并填入示例内容，形成更完整的展示。演示数据有助于观察列表密度、状态颜色和排列方式，但应当与真实项目记录区分。看见填满的页面时，我们主要是在观察呈现效果；实际数据管理仍需通过操作和保存行为确认。<button type="button" class="timecode" data-seconds="153">[00:02:33]</button></p>
+<figure class="evidence-figure" id="evidence-frame-04">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Qfg56sEfb-00173.jpg" data-caption="任务列表把负责人、优先级、进度、状态和起止时间并列显示，右侧提供编辑与删除；这些列共同帮助查看一项任务的情况。">
+    <img src="../assets/frames/BV1Qfg56sEfb-00173.jpg" loading="lazy" alt="视频截图 04，00:02:53：任务列表把负责人、优先级、进度、状态和起止时间并列显示，右侧提供编辑与删除；这些列共同帮助查看一项任务的情况。">
+    <span class="frame-stamp">视频画面 / 04</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="173.000">图 04 · 00:02:53</button><span>任务列表把负责人、优先级、进度、状态和起止时间并列显示，右侧提供编辑与删除；这些列共同帮助查看一项任务的情况。</span></figcaption>
+</figure>
+<h2 id="_4">中文出现乱码时，先弄清文件怎样被读写</h2>
+<p>最后还有一个常见的小问题：生成结果中的中文可能显示成乱码。文字保存到文件时会转成字节，读取时再按某种编码还原。如果写入与读取采用的编码不一致，就可能看到错误字符。UTF-8 和 GBK 是不同编码，处理时应确认原文件使用什么，再让读写两端采用一致方式。<button type="button" class="timecode" data-seconds="161">[00:02:41]</button></p>
+<p>不宜对已经乱码的文本反复盲目切换或覆盖保存，因为某些字符可能在错误转换后丢失。新项目可以统一采用 UTF-8，发现问题时先保留原文件，再检查读取和保存设置。也不能把所有异常都归到编码：模型生成的文字本身有误、字体缺字或显示问题，也可能需要分别处理。</p>
+<p>整个案例可以连起来理解：先形成需求文档，删去不需要的功能，补上视觉和交互要求，再生成应用，用实际操作检查结果。AI 帮助我们快速获得可以讨论的文档和页面，使用者则通过选择、反馈和检验，让它逐渐接近自己的工作需要。页面做得漂亮和工具能够长期可靠使用，都值得认真完成。</p>
+<h2 id="_5">总结提炼</h2>
+<p>第一份需求文档可以先帮助看见可能性，使用者再根据自己的场景删减。功能要求之外，还要表达视觉和交互偏好。</p>
+<p>生成应用时，应把增删改查、按钮行为和存储方式说明白。临时内存支持演示，长期保存需要另外的机制。</p>
+<p>实际填写一条任务，能够检查必填项和数据变化。继续验证修改、删除和重新打开，才更容易判断工具是否符合真实使用需要。</p>
+<h2 id="_6">时间导航</h2>
 <ul>
-<li>不要用假数据，或明确哪些阶段允许使用演示数据。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=121" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:01]">[00:02:01]</a></li>
-<li>要真正实现增删改查，数据不能只停留在静态展示。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=123" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:03]">[00:02:03]</a></li>
-<li>每个可见交互都要有效，按钮、弹窗、表单与筛选都应有真实反馈。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=125" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:05]">[00:02:05]</a></li>
-<li>指定数据如何存储，避免界面完成后数据无法留存。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=127" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:07]">[00:02:07]</a></li>
+<li><button type="button" class="timecode" data-seconds="0">[00:00:00]</button> 并行项目带来的管理需求。</li>
+<li><button type="button" class="timecode" data-seconds="21">[00:00:21]</button> 用大致想法生成需求文档。</li>
+<li><button type="button" class="timecode" data-seconds="41">[00:00:41]</button> 删除个人用不到的功能。</li>
+<li><button type="button" class="timecode" data-seconds="66">[00:01:06]</button> 补充视觉风格和交互规则。</li>
+<li><button type="button" class="timecode" data-seconds="92">[00:01:32]</button> 根据文档生成应用。</li>
+<li><button type="button" class="timecode" data-seconds="120">[00:02:00]</button> 明确真实操作与数据存储。</li>
+<li><button type="button" class="timecode" data-seconds="142">[00:02:22]</button> 添加任务与优先级必填。</li>
+<li><button type="button" class="timecode" data-seconds="153">[00:02:33]</button> 继续调整视觉并查看完整列表。</li>
+<li><button type="button" class="timecode" data-seconds="161">[00:02:41]</button> 中文乱码与编码一致性。</li>
 </ul>
-<p>这些条件让 AI 的工作方向更明确，也把“炫酷页面”推进到“可操作应用”。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=132" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:12]">[00:02:12]</a></p>
-<h2 id="_6">用一次真实操作验证生成结果</h2>
-<p>初始界面即使没有数据，也可以立刻用新增任务来验证：填写负责人、开始与截止时间、任务名称，再保存。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a> 当保存受阻时，界面显示“优先级”为必填项；补全后才能继续，这种校验直接证明表单存在业务约束。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=150" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:30]">[00:02:30]</a></p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_007_00-02-30.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_007_00-02-30.jpg" alt="图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。" loading="lazy"></a><figcaption>图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。</figcaption></figure>
-<p><em>图 05 · 00:02:30：“新增任务”弹窗中优先级带必填星号且下拉菜单展开，直接支撑表单校验与任务字段设计。</em></p>
-<p>最终的列表界面呈现任务名称、负责人、优先级、进度、状态、截止时间以及编辑和删除入口。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=156" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:36]">[00:02:36]</a> 这能用来核对“任务管理”是否真正落地，而非只生成了一个静态首页。</p>
-<figure><a href="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_008_00-02-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E8%8B%B1%E9%9B%84%E5%93%AA%E9%87%8C%E5%87%BA%E6%9D%A5/2%E5%88%86%E9%92%9FVibeCoding%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%28%E5%BB%BA%E8%AE%AE%E6%94%B6%E8%97%8F%29%20_%20%E6%96%87%E6%A1%A3%E8%A7%81%E8%AF%84%E8%AE%BA%E5%8C%BA%E3%80%90B%E7%AB%99AI%E5%88%9B%E9%80%A0%E5%85%AC%E5%BC%80%E8%B5%9B%E3%80%91__BV1Qfg56sEfb/assets/standard/frame_008_00-02-53.jpg" alt="图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。" loading="lazy"></a><figcaption>图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。</figcaption></figure>
-<p><em>图 06 · 00:02:53：计划任务管理页以表格展示负责人、优先级、进度、状态和操作列，支撑任务的查询与管理结果。</em></p>
-<h2 id="_7">编码问题要与生成质量分开排查</h2>
-<p>中文乱码不必先归因于模型输出。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=161" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:41]">[00:02:41]</a> 本地文件编码也会造成显示异常；素材中给出的排查方向是检查 GBK 与 UTF-8，并尝试转换编码。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=166" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:46]">[00:02:46]</a> 实际项目仍应结合编辑器、终端、文件保存编码和运行环境逐项确认。</p>
-<h2 id="_8">边界、疑点与时效性</h2>
-<ul>
-<li>这是一段约三分钟的流程演示，证据展示了 PRD、提示要求、表单和任务列表，未提供完整代码、数据库实现或端到端测试记录。</li>
-<li>画面中的成品功能与样式只能证明该录屏时的界面状态；跨刷新持久化、异常处理、权限安全与多人协作效果仍需自行验证。</li>
-<li>字幕中“全程只用到豆包”属于录制者的工具与流程选择。<a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=12" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:12]">[00:00:12]</a> 同样的思路可迁移到其他具备文档和应用生成能力的工具，具体入口与能力会随版本变化。</li>
-<li>录屏中的日期、任务数据和视觉效果可视作演示样例，不应直接当作真实项目数据。</li>
-</ul>
-<h2 id="_9">时间戳导航</h2>
-<ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> 并行开发为什么需要项目管理系统</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=8" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:08]">[00:00:08]</a> 现有工具的收费与功能缺口</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=21" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:21]">[00:00:21]</a> 用模糊想法让 AI 生成 PRD</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=32" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:32]">[00:00:32]</a> AI 创建飞书文档、拆解并填充需求</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=41" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:41]">[00:00:41]</a> PRD 过多时需要需求精简</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=55" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:55]">[00:00:55]</a> 用大标题快速做需求删减</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a> 功能需求之外还要描述界面</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=76" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:16]">[00:01:16]</a> 补充视觉风格与交互动画</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=94" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:34]">[00:01:34]</a> 带着规则自动生成应用</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a> 应用生成的四项关键约束</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=132" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:12]">[00:02:12]</a> 文档越清楚，生成方向越明确</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=143" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:23]">[00:02:23]</a> 新增一条任务验证表单</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=150" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:30]">[00:02:30]</a> 优先级必填的校验反馈</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=156" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:36]">[00:02:36]</a> 添加效果与数据后的成品</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Qfg56sEfb/?t=161" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:41]">[00:02:41]</a> 中文乱码的本地编码排查</li>
-</ul>
-<h2 id="_10">复习与行动清单</h2>
-<ul>
-<li>[ ] 先用一句话写清项目目标、使用者和最小功能范围。</li>
-<li>[ ] 让 AI 把粗略描述扩写成 PRD，再逐章删除不需要的模块。</li>
-<li>[ ] 单独补充视觉、交互、状态反馈和性能规则。</li>
-<li>[ ] 在生成指令中写明真实数据、增删改查、有效交互与存储方式。</li>
-<li>[ ] 用一条真实新增数据完成冒烟验证：创建、保存、展示、编辑或删除。</li>
-<li>[ ] 若中文显示异常，先检查文件与运行环境的 GBK、UTF-8 编码设置。</li>
-</ul></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_7">回看时的三个问题</h2>
+<p>AI 生成了一份很完整的需求文档，为什么仍然需要你亲自删减？</p>
+<p>“新增任务能保存”与“关闭页面后记录还在”，分别需要确认什么？</p>
+<p>如果页面有编辑和删除按钮，你会怎样判断它们真的处理了对应数据？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "2分钟VibeCoding项目管理系统(建议收藏) | 文档见评论区【B站AI创造公开赛】", "duration": "03:04", "src": "", "poster": "../assets/frames/BV1Qfg56sEfb-00080.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,98 +1,327 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>评测最难的部分：先说清什么才算帮到人 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 的回答到底好不好？从推荐岗位和取消订单讲起 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="ai">AI 的回答到底好不好？从推荐岗位和取消订单讲起</h1>
+    <div class="meta"><span>林木聊AI</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1YvMy6iE1r/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">评测最难的部分：先说清什么才算帮到人</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#1">1. “匹配”里藏着产品判断</a></li>
-<li><a href="#2">2. 容易答的题，不一定最值得测</a></li>
-<li><a href="#3">3. 最后的话说错了，原因可能在更早的地方</a></li>
-<li><a href="#_3">迁移练习：亲手写一张小评测卡</a></li>
-<li><a href="#_4">时间戳导航</a></li>
-<li><a href="#_5">复习与行动清单</a></li>
+<li><a href="#ai">AI 的回答到底好不好？从推荐岗位和取消订单讲起</a><ul>
+<li><a href="#_1">他学的是财务，却想换一个方向</a></li>
+<li><a href="#_2">“怎么退款”和“我的订单还能取消吗”，难度差在哪里</a></li>
+<li><a href="#_3">最后一句话错了，问题可能已经发生了好几步</a></li>
+<li><a href="#_4">现在再看，评测的三件事怎样接起来</a></li>
+<li><a href="#_5">总结提炼</a><ul>
+<li><a href="#_6">一句话抓住核心</a></li>
+<li><a href="#_7">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_8">时间戳导航</a></li>
+<li><a href="#_9">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1YvMy6iE1r" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1YvMy6iE1r"><div class="provenance">来源：林木聊AI · <a href="https://www.bilibili.com/video/BV1YvMy6iE1r/" target="_blank" rel="noopener">BV1YvMy6iE1r 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">评测最难的部分：先说清什么才算帮到人</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1YvMy6iE1r.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><button class="done" data-done="BV1YvMy6iE1r" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1YvMy6iE1r&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1YvMy6iE1r/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1YvMy6iE1r"><h1>AI 的回答到底好不好？从推荐岗位和取消订单讲起</h1>
 <blockquote>
-<p>原视频：被 AI 产品当作 dirtywork，实际很重要的工作 · 林木聊AI · 4 分 28 秒。证据：本地 GPU 自动转写。片尾课程推广不进入学习主线。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1YvMy6iE1r/">林木聊AI｜被 AI 产品当作 dirtywork，实际很重要的工作</a> · 4 分 28 秒 · 标准阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p><strong>评测连接用户理解与系统改进：先定义有价值的结果，再选有区分度的问题，最后沿处理链路定位错误。</strong></p>
-<h2 id="1">1. “匹配”里藏着产品判断</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=26" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:26]">[00:00:26]</a> 一个求职推荐产品面对学财务、做过财务实习的学生。只按履历相似度推荐财务岗位，看起来很合理；如果他希望转向产品，并且具备一定条件，一味推同类岗位就可能没有回应真正目标。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a> 另一个取舍是：某岗位表面上高度匹配，但竞争激烈；另一岗位匹配度稍低，用户却有明显的差异化优势。怎样推荐，需要说明采用了什么标准和风险偏好。</p>
-<p>因此，评价“推荐得好不好”前，至少要区分：能否胜任、是否愿意、现实约束、机会和不确定性。不能把一个模糊的“匹配度”同时当作这些维度的答案。</p>
-<p>补充边界：没有招聘结果数据时，不应把估计包装成精确的录用概率。可以解释为什么值得尝试，并保留需要核实的条件。</p>
-<h2 id="2">2. 容易答的题，不一定最值得测</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=95" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:35]">[00:01:35]</a> 客服评测常出现“怎么退款”“怎么修改地址”等规整问题。真实用户却可能说：“昨天买的东西不想要了，好像已经发货，现在能取消吗？”<a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></p>
-<p>后者需要识别订单、检查物流状态、读取规则，再决定下一步。只覆盖标准问法，可能让一个无法完成实际任务的系统拿到漂亮分数。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a> 还有低频但高损失的错误：重复退款、错误赔付、跨用户泄露信息。它们未必贡献很多平均分，却可能直接决定产品是否可上线。</p>
-<p>我可以把问题集分成三组：常见任务、容易混淆的边界、必须避免的严重失败。再补充各组的抽样方式与数量，避免用少量特别挑选的案例代表全部用户。</p>
-<h2 id="3">3. 最后的话说错了，原因可能在更早的地方</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=182" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:02]">[00:03:02]</a> 销售助手给出错误建议，可能是意图分类错、客户资料不全、检索到过期资料、商机阶段判断错，或者工具未执行成功。</p>
-<p>如果错误主要集中在老客户，一个可测试的假设是历史沟通记录没有完整取回；如果退款任务经常失败，应检查参数和执行结果。先让错误分布产生假设，再检验相应节点。<a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a></p>
-<p>这条路径可以写成：</p>
-
-<code class="language-text">看到坏回答
-→ 按用户情境和任务类型分组
-→ 提出具体失败假设
-→ 查看对应节点的输入与输出
-→ 做一个最小改动
-→ 用原问题和新问题共同复测
-</code>
-<h2 id="_3">迁移练习：亲手写一张小评测卡</h2>
-<p>使用虚构用户和公开材料，避免把真实求职资料放进公开样本。</p>
+<p>假如我们做了一个 AI 求职助手，用户把简历交给它，它就推荐一些岗位。现在想判断这个助手做得好不好，可以准备几份简历，让它实际推荐，再检查推荐结果。这件事就叫评测：让产品处理一些具体输入，依据事先约定的标准，看它完成得怎样。</p>
+<p>问题很快就来了。什么样的推荐值得给高分？只要岗位名称和所学专业差不多，就算推荐得好吗？如果推荐错了，又该改哪里？评测看起来像是在最后给答案打分，但要打出有用的分数，我们得先把这些问题想清楚。下面就从一位想找工作的学生开始。<button type="button" class="timecode" data-seconds="6">[00:00:06]</button></p>
+<h2 id="_1">他学的是财务，却想换一个方向</h2>
+<p>这位学生学财务，也做过财务实习。如果求职助手看到这些经历，推荐了一批财务岗位，我们很容易认为推荐合理。岗位需要的知识与他学过的内容有联系，招聘要求和已有经历也比较接近。按照“岗位与简历是否匹配”这一条标准，这样的答案看起来应该拿到不错的分数。到这里，系统确实使用了简历里的信息，我们也还没看见明显错误。<button type="button" class="timecode" data-seconds="26">[00:00:26]</button></p>
+<p>现在补上一条会影响判断的信息：学生希望转做产品经理，而且他的学校、能力和经历让这种转向具有一定可能性。假如求职助手仍然只推荐财务岗位，完全没有回应他想尝试的方向，我们还会觉得这份推荐足够好吗？原先的简历没有变，财务岗位与简历的相似程度也没有变。发生变化的是，我们开始知道这个人想往哪里走。只检查经历是否相似，就会漏掉这个对求职者很重要的要求。<button type="button" class="timecode" data-seconds="40">[00:00:40]</button></p>
+<p>这也解释了为什么“匹配”两个字看似简单，真正使用时却很含糊。我们可能在问这个人目前能否胜任，也可能在问他是否愿意做，还可能在问这份工作能不能帮助他接近未来的目标。这几个问题会互相影响，却无法自动得出同一个答案。如果评测标准只留下“匹配度高”四个字，评测人员就得各自猜测到底该重视哪一项，最后的分数也很难解释。</p>
+<p>再考虑另一种情况：一个岗位很符合求职者现有经历，他也能做，但竞争特别激烈；另一个岗位看起来没有那么贴合，他却有其他竞争者不容易具备的优势。我们不能仅凭专业名称相似，就把第一种机会排在前面。需要继续考虑竞争情况、个人优势，以及求职者是否愿意承担尝试新方向的不确定性。求职者也可能还不了解某些值得尝试的方向，这时推荐可以帮助他看见此前忽略的机会。<button type="button" class="timecode" data-seconds="62">[00:01:02]</button></p>
+<p>因此，制定评测标准时，需要把“帮用户找工作”具体展开。推荐有没有回应他的意愿？建议的方向有没有条件支持？有没有把值得尝试的机会完全排除？这些问题不要求所有产品作出一模一样的选择，但要求我们说清选择的理由。等到这些理由比较明确，看到一份推荐时，才知道该根据什么给它好评，以及它在哪一处没有帮到这个人。<button type="button" class="timecode" data-seconds="73">[00:01:13]</button></p>
+<h2 id="_2">“怎么退款”和“我的订单还能取消吗”，难度差在哪里</h2>
+<p>有了标准，接下来还要选评测题目。换成客服助手，最容易想到的题是“怎么退款”“怎么修改地址”“什么时候发货”。这些问题已经替系统整理好了意图：一眼就能看出用户想了解哪类规则。如果客服助手背得出对应说明，它在这批题目上的成绩可能很好。我们却还不知道，用户把情况说得不那么清楚时，系统能不能继续处理。<button type="button" class="timecode" data-seconds="94">[00:01:34]</button></p>
+<p>看看这个问法：“我昨天买的那些东西不太想要了，好像已经发货了，现在还能不能取消？”用户关心的是自己的这笔交易，不想先读一份适用于所有订单的退款指南。可是“那些东西”还没有明确指出哪笔订单，“好像已经发货”也只表达了用户的猜测。系统得先找到对应订单，确认物流状态，再依据规则判断现在能否取消。找错订单或弄错发货状态，都会影响后面的答案。<button type="button" class="timecode" data-seconds="120">[00:02:00]</button></p>
+<p>这两个问法的差别，现在就具体了。“怎么退款”主要检查系统能否说明一般规则；“我的订单还能取消吗”还检查它能否把规则用到眼前这笔订单。若评测时只出前一种题，哪怕得分很高，也不能据此认为第二种任务已经做好。我们写题时如果替系统删掉含糊的指代、补全所有缺失的信息，就可能把真实使用中最困难的部分提前处理掉了。</p>
 <table>
 <thead>
 <tr>
-<th>字段</th>
-<th>要填写的内容</th>
+<th>需要弄清楚什么</th>
+<th>“怎么退款”</th>
+<th>“昨天买的那些东西，好像发货了，还能取消吗”</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>任务</td>
-<td>用户最终要做出的动作或决定</td>
+<td>用户指的是什么</td>
+<td>询问一般退款规则</td>
+<td>需要找到对应的那笔订单</td>
 </tr>
 <tr>
-<td>前提</td>
-<td>已知条件、限制、仍需追问之处</td>
+<td>判断依赖什么</td>
+<td>通用规则中的条件</td>
+<td>这笔订单的实际物流状态及适用规则</td>
 </tr>
 <tr>
-<td>必须满足</td>
-<td>三条可以观察的结果标准</td>
-</tr>
-<tr>
-<td>严重错误</td>
-<td>一条出现就不能通过的失败</td>
-</tr>
-<tr>
-<td>证据</td>
-<td>原回答中的具体句子或工具记录</td>
-</tr>
-<tr>
-<td>修复假设</td>
-<td>指向哪个节点，如何验证</td>
+<td>什么结果才帮到了用户</td>
+<td>说明退款通常怎样办理</td>
+<td>说明这笔订单现在能否取消，以及下一步怎么办</td>
 </tr>
 </tbody>
 </table>
-<p>不要在看到两份答案之后才临时改标准来支持自己喜欢的那份。可以修订标准，但要记录版本，并回头检查旧样本是否需要重评。</p>
-<h2 id="_4">时间戳导航</h2>
+<p>选题还需要考虑错误的后果。重复退款、错误赔付，以及把一个用户的信息发给另一个用户，可能都没有普通咨询那么常见，但一旦发生，损失很大。假如只按出现次数挑题，这些情况就可能不在评测范围里。于是我们既要看常见提问，也要留意容易混淆的条件和少见但后果严重的错误。逐个查看真实案例，才能逐渐知道用户会怎样表达，系统又容易在哪一步理解偏了。<button type="button" class="timecode" data-seconds="137">[00:02:17]</button></p>
+<h2 id="_3">最后一句话错了，问题可能已经发生了好几步</h2>
+<p>评测中发现答案不好，最顺手的反应常常是换模型，或者改交给模型的任务说明，也就是提示词。有时这样做确实有用。不过，一个能查资料、执行操作的 AI 产品，在生成最后答复前可能已经做了很多事。如果前面取得的信息就不对，仅把最后的答复要求写得更详细，还没有触及那个错误发生的地方。<button type="button" class="timecode" data-seconds="168">[00:02:48]</button></p>
+<p>用销售助手来想这件事。它要先理解客户当前想解决什么问题，再取得客户资料，查找相关信息，判断目前沟通到了什么阶段，最后给出跟进建议。假如实际需要使用工具，它还得选对工具并调用成功。最终建议不合适，可能是客户意图一开始就理解错了，也可能是资料缺了一部分、找到的信息已经过期，或者根本没有成功取得需要的结果。这些原因会让用户看到相似的坏答案，但需要检查的位置不同。<button type="button" class="timecode" data-seconds="188">[00:03:08]</button></p>
+<p>我们可以先把失败案例分开看。假如错误主要发生在老客户身上，一个值得检查的方向就是历史沟通记录。老客户此前可能已经表达过需求，也可能已经讨论过某个方案。若助手本次没有读到这些记录，给出的建议就可能和实际沟通进度接不上。这里还只能说“可能”：错误集中在老客户身上，给了我们调查方向；接下来要查看系统实际拿到了哪些记录，才能确认历史信息是否缺失。<button type="button" class="timecode" data-seconds="209">[00:03:29]</button></p>
+<p>如果失败主要集中在退款任务上，调查方向就会变。我们需要看处理退款时选了什么工具、交给工具什么参数、工具是否返回了成功结果。“参数”可以理解为这次操作所需的具体输入，例如要处理哪个对象。工具名称选对了，传入的对象错了，操作仍然会出问题。还有一种可能是，系统最开始就把用户的要求分错了类，后面一路按错误的任务执行。只盯着最后的答复，很难区分这些情况。<button type="button" class="timecode" data-seconds="221">[00:03:41]</button></p>
+<p>这种检查和只给整个系统评分的区别，也值得说清。把用户问题交进去，只看最后结果，叫端到端评测；“两端”就是用户输入与最终输出。它能发现用户最终有没有得到帮助，但未必直接指出中间哪里出了错。发现失败后，我们可以沿着刚才的猜测，单独检查意图识别、资料检索、步骤安排、工具选择和参数。每次检查都试着回答一个具体问题：这一环收到的是什么，做了什么，交给下一环的结果是否合适。<button type="button" class="timecode" data-seconds="231">[00:03:51]</button></p>
+<table>
+<thead>
+<tr>
+<th>从失败案例看见的现象</th>
+<th>值得先检查哪里</th>
+<th>怎样继续确认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>老客户的建议经常接不上之前的沟通</td>
+<td>历史记录有没有进入这次输入</td>
+<td>对照此前的沟通内容与助手实际拿到的记录</td>
+</tr>
+<tr>
+<td>退款任务经常失败</td>
+<td>工具、参数和执行结果</td>
+<td>查看用了哪个工具、处理了哪个对象、返回了什么</td>
+</tr>
+<tr>
+<td>系统一路都在处理另一类任务</td>
+<td>最初对用户意图的理解</td>
+<td>对照用户的实际要求与系统判定的任务类型</td>
+</tr>
+</tbody>
+</table>
+<p>表里的现象只提供调查方向。譬如，老客户的建议不合适，也可能与过期信息或沟通阶段判断有关。查看实际记录之后，才能区分这些可能；不能看到“老客户”三个字，就直接认定历史记录缺失。</p>
+<h2 id="_4">现在再看，评测的三件事怎样接起来</h2>
+<p>回到那位想转向产品岗位的财务学生。第一步，我们要明确推荐应该回应他的转向意愿，否则一份只重复旧经历的答案也可能得到高分。第二步，评测题目里要有这样的求职者，否则系统从未面对这个困难，我们就无从知道它会怎样处理。第三步，如果推荐确实忽略了转向意愿，还要进一步检查：是没识别出这个要求，还是后面筛选岗位时没有把它考虑进去？前一种情况要检查系统怎样理解了用户要求，后一种情况要检查岗位筛选用了哪些条件。最终推荐可能同样令人失望，需要修改的位置却不一样。</p>
+<p>这样，标准、题目和问题定位就连成了一件完整的事。标准让我们知道什么结果值得追求；题目让产品面对真实会遇到的困难；检查中间过程，则帮助我们把一次失败变成有依据的改动。你不需要先背一套复杂的评测术语。只要能围绕一个具体用户，把这三件事讲清楚，评测就已经开始变得可操作了。<button type="button" class="timecode" data-seconds="249">[00:04:09]</button></p>
+<h2 id="_5">总结提炼</h2>
+<h3 id="_6">一句话抓住核心</h3>
+<p>评测要先说清怎样才算帮到用户，再用真实、重要的问题检验产品；发现失败后，还要沿处理过程找出值得检查的位置。</p>
+<h3 id="_7">推理主干</h3>
+<p>求职案例告诉我们，“岗位匹配”需要展开成意愿、能力和机会等具体考虑。取消订单的案例提醒我们，标准问法可能没有考到真实任务的困难。销售助手的案例则说明，最后一句建议出错，可以从更早的资料、判断和工具操作开始排查。</p>
+<h2 id="_8">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=17" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:17]">[00:00:17]</a> 标准体现产品的价值判断。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=26" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:26]">[00:00:26]</a> 求职推荐中的转向意愿。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=62" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:02]">[00:01:02]</a> 匹配、竞争与差异化优势。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=95" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:35]">[00:01:35]</a> 测试题的价值并不相同。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a> 真实退款任务的多步条件。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a> 低频高损失边界。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=182" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:02]">[00:03:02]</a> 错误可以发生在多个节点。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YvMy6iE1r/?t=206" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:26]">[00:03:26]</a> 从错误分布产生可检验假设。</li>
+<li><button type="button" class="timecode" data-seconds="26">[00:00:26]</button> 财务学生想转方向，推荐怎样才算好。</li>
+<li><button type="button" class="timecode" data-seconds="62">[00:01:02]</button> 经历匹配、岗位竞争和个人优势的取舍。</li>
+<li><button type="button" class="timecode" data-seconds="94">[00:01:34]</button> 为什么选什么题会影响评测结论。</li>
+<li><button type="button" class="timecode" data-seconds="120">[00:02:00]</button> 从取消订单的真实问法看多步判断。</li>
+<li><button type="button" class="timecode" data-seconds="137">[00:02:17]</button> 少见但后果严重的错误。</li>
+<li><button type="button" class="timecode" data-seconds="188">[00:03:08]</button> 销售建议出错可能涉及哪些环节。</li>
+<li><button type="button" class="timecode" data-seconds="209">[00:03:29]</button> 从老客户错误查历史记录。</li>
+<li><button type="button" class="timecode" data-seconds="231">[00:03:51]</button> 从最终评分走向逐步检查。</li>
 </ul>
-<h2 id="_5">复习与行动清单</h2>
-<p>读完后，我应能回答：一个回答让我“不满意”，具体是哪项任务标准没有满足？什么证据支持这个判断？做什么实验可以区分两个可能的原因？</p>
-<p>这三个问题说清楚，就已经从主观打分迈向了可执行的评测。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_9">复习与行动清单</h2>
+<p>下面是一项补充练习，沿用已经讲过的客服案例即可，不需要另找题目。假如客服面对“好像已经发货，还能取消吗”，直接回复了一段退款说明，你先写下这个答复没有解决的具体问题。然后写出你想继续查看哪项记录，以及那项记录能帮助你分清哪两种可能的原因。暂时不用真的搭建客服系统。</p>
+<p>如果愿意把判断留成一张小卡片，可以按下面的顺序记。每格写清一句话就够；目的在于保留你判断的依据。</p>
+<table>
+<thead>
+<tr>
+<th>要记下什么</th>
+<th>用取消订单的任务来理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户要完成什么</td>
+<td>知道这笔订单现在还能否取消，以及下一步怎么办</td>
+</tr>
+<tr>
+<td>判断前需要什么</td>
+<td>对应订单、实际物流状态、适用规则</td>
+</tr>
+<tr>
+<td>看见了什么问题</td>
+<td>记录答复中的具体遗漏或错误，不只写“不满意”</td>
+</tr>
+<tr>
+<td>接下来查什么</td>
+<td>选择一项相关记录，检查它是否支持你的原因猜测</td>
+</tr>
+</tbody>
+</table></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "被AI产品当作dirtywork，实际很重要的工作", "duration": "04:28", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

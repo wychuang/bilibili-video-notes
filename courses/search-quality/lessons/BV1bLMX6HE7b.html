@@ -1,166 +1,322 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>同一个 Skill，怎样做出更好的作品：内容、设计规则与具体反馈 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="skill">同一个 Skill，怎样做出更好的作品：内容、设计规则与具体反馈</h1>
+    <div class="meta"><span>飞书</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1bLMX6HE7b/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#skill">【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">时间戳导航</a></li>
-<li><a href="#_3">核心问题与推理主线</a></li>
-<li><a href="#1-builder-ai">1. 先有 Builder 能力，再谈 AI 作品</a></li>
-<li><a href="#2-html">2. HTML 的价值：从静态交付物变成可互动的工作界面</a></li>
-<li><a href="#3-designmd">3. 好看可以被外化：从参考图到 design.md</a></li>
-<li><a href="#4">4. 模板的本体是设计说明，不是固定页面</a></li>
-<li><a href="#5-brief">5. 高质量成品靠清楚的 brief 与迭代</a></li>
-<li><a href="#6-ai">6. 找一手信息：让 AI 帮你读巨大的知识库</a></li>
-<li><a href="#7-github-build-in-public">7. GitHub：公开作品、二次创作与 Build in Public</a></li>
-<li><a href="#_4">具体案例与原话细节</a></li>
-<li><a href="#_5">边界、疑点与时效性</a></li>
-<li><a href="#_6">复习与行动清单</a></li>
+<li><a href="#skill">同一个 Skill，怎样做出更好的作品：内容、设计规则与具体反馈</a><ul>
+<li><a href="#ai">一份 AI 作品做出来之后，还发生了什么</a></li>
+<li><a href="#html">为什么这些团队喜欢把材料做成 HTML</a></li>
+<li><a href="#_1">给出可以看见的风格，减少“高级一点”的猜测</a></li>
+<li><a href="#_2">把喜欢的作品变成设计规则，保留风格的同时允许变化</a></li>
+<li><a href="#skill_1">同样的 Skill，仍然需要清楚的内容与逐页反馈</a></li>
+<li><a href="#_3">知识库越来越大时，带着具体需要去找材料</a></li>
+<li><a href="#_4">做好的方法怎样交给别人继续使用</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">时间导航</a></li>
+<li><a href="#_7">复习与实践</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1bLMX6HE7b" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>补充 · 既有学习稿</span></div><article data-lesson="BV1bLMX6HE7b"><h1 id="skill">【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1bLMX6HE7b.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1bLMX6HE7b" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1bLMX6HE7b-00523.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1bLMX6HE7b&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1bLMX6HE7b/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1bLMX6HE7b"><h1>同一个 Skill，怎样做出更好的作品：内容、设计规则与具体反馈</h1>
 <blockquote>
-<p>上传者：飞书<br>
-时长：23 分 16 秒<br>
-来源：<a href="https://www.bilibili.com/video/BV1bLMX6HE7b/">Bilibili</a><br>
-视频 ID：BV1bLMX6HE7b<br>
-总结强度：standard<br>
-证据：本地 Whisper 中文逐字稿 + 12 张带时间戳画面。逐字稿中部分产品名、英文词可能存在 ASR 误识，以下对不确定名称保留谨慎表述。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1bLMX6HE7b/">【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？</a><br>
+UP 主：飞书 · 时长：23 分 16 秒 · 阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>同一个 Skill 做出的作品有美丑差异，关键通常不在 Skill 本身，而在于你是否提供了清晰内容、可复用的视觉规范、足够具体的反馈，以及把成果沉淀成能被继续改造和传播的资产。</p>
-<h2 id="_2">时间戳导航</h2>
+<p>看到别人用 AI 做出一套漂亮的演示文稿，我们很容易先问：用了哪个 Skill？拿到同一份文件，再交给自己的助手，似乎就应该得到相近效果。可实际使用时，第一页或许还不错，接下来却可能出现内容拥挤、版式重复、图片不合适的问题。Skill 提供了方法与参考，具体作品还取决于我们让它处理什么，以及后续怎样判断和修改。</p>
+<p>这里的 Skill 可以理解为一套交给 AI 助手反复使用的工作说明，里面还可以配有模板、参考资料或辅助程序。它帮助助手按照已有方法完成任务。接下来我们从实际作品开始，逐步看看内容、设计规则和反馈怎样进入这套方法，让作品更适合使用，也让别人能够继续使用这些方法。</p>
+<h2 id="ai">一份 AI 作品做出来之后，还发生了什么</h2>
+<p>招聘时，作品集中出现一个 AI 项目很容易吸引注意。但“使用了 AI”与“做成了一件有价值的事”，中间还有不少问题需要回答。内部工具有没有节省实际工作时间，是否被其他同事持续使用？面向外部的产品有没有用户，他们用完以后为什么愿意回来？这些追问帮助我们理解作品与实际需求之间的关系。<button type="button" class="timecode" data-seconds="12">[00:00:12]</button></p>
+<p>王大线在讨论中回顾了自己的招聘判断变化：早先会对候选人的 AI 作品特别兴奋，后来更愿意先看对方原有的专业作品，例如文案、视频或画面，再追问 AI 项目的实际使用情况。这个经验强调专业判断与后续使用，但不能据此认定尚未产生大量用户的练习项目没有价值。关键是把项目所处阶段、已经解决的问题和仍未完成的部分说清楚。</p>
+<p>另一种面试设想，是分两轮观察。先离线交流候选人的专业能力与思考，再提供可以使用 AI 助手的电脑，让对方完成一项贴近未来工作的现实任务。第二轮既看作品，也看他怎样与助手沟通：任务如何拆开，结果哪里不合适，反馈是否针对具体问题。<button type="button" class="timecode" data-seconds="128">[00:02:08]</button></p>
+<p>这样一来，AI 的使用过程就与专业能力连在一起了。写作的人需要判断论证是否清楚，设计的人需要判断版面是否服务内容，运营的人需要理解实际工作流程。助手能够加快操作，人的判断仍然影响最后留下什么结果。</p>
+<h2 id="html">为什么这些团队喜欢把材料做成 HTML</h2>
+<p>HTML 是网页内容使用的基础格式。结合样式和脚本，浏览器中的页面既能呈现文字与图片，也能支持点击、切换或参数调整。对于演示文稿和数据看板，这意味着材料可以在被阅读的同时响应操作。例如，改变一个参数后，页面根据已有计算规则展示另一种情境，听众就能跟着比较不同假设。<button type="button" class="timecode" data-seconds="214">[00:03:34]</button></p>
+<p>过去制作这样的页面，需要投入较多前端开发工作。能够读写代码的 AI 助手降低了制作门槛，团队因此更容易把原来的静态材料改成网页。讨论中的参与者观察到，自己接触的活动和团队越来越多地采用这种方式。这是他们所处环境中的使用经验，并不意味着所有演示都适合换成网页。</p>
+<p>一个实际问题就发生在现场展示中：页面在原来的电脑上看起来合适，换到会议屏幕后，比例变化使内容显示不全。制作时需要考虑展示区域如何变化、内容能否完整呈现。网页能够交互，是它的一项能力；适配现场设备，则是让这项能力真正可用的条件。<button type="button" class="timecode" data-seconds="276">[00:04:36]</button></p>
+<p>飞书内部的材料复用案例更具体。团队把已经做好的页面放入资料库，添加标签，记录使用次数，并区分原创和后续调整的版本。准备新的客户介绍时，先挑选适用的客户案例和行业方案，再像购物车一样调整页面顺序，组成一套材料。<button type="button" class="timecode" data-seconds="304">[00:05:04]</button></p>
+<p>下载后，使用者还可以根据当前客户的需要修改某几页，讲完以后把效果好的版本再放回资料库。这里节省的是重复整理共同材料的工作：团队保留可复用的页面，同时允许具体任务继续调整内容。记录哪些页面常被使用，也让团队更容易知道哪些案例真正进入了日常沟通。<button type="button" class="timecode" data-seconds="346">[00:05:46]</button></p>
+<h2 id="_1">给出可以看见的风格，减少“高级一点”的猜测</h2>
+<p>决定用网页承载材料之后，才来到外观问题。仅仅告诉助手“做得好看一点”，它需要自己猜测好看指什么。即使我们不熟悉字体、配色和版式术语，也可以通过已有作品表达偏好：这张图的颜色很舒服，这组页面适合数据复盘，这种标题与正文的关系适合邀请函。<button type="button" class="timecode" data-seconds="411">[00:06:51]</button></p>
+<p>王大线制作活动战报的例子里，先从设计参考网站选择适合数据展示的风格，再把相关设计文件交给助手。选择时考虑了材料本身要呈现图表，因此参考对象也偏向数据界面。这样，风格参考与任务内容已经有了联系，助手不必只凭一个抽象形容词开始探索。<button type="button" class="timecode" data-seconds="490">[00:08:10]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1bLMX6HE7b-00523.jpg" data-caption="参考库展示不同类型的网页风格，数据界面、品牌展示和产品页面具有明显不同的内容安排。">
+    <img src="../assets/frames/BV1bLMX6HE7b-00523.jpg" loading="lazy" alt="视频截图 01，00:08:43：参考库展示不同类型的网页风格，数据界面、品牌展示和产品页面具有明显不同的内容安排。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="523.000">图 01 · 00:08:43</button><span>参考库展示不同类型的网页风格，数据界面、品牌展示和产品页面具有明显不同的内容安排。</span></figcaption>
+</figure>
+<p>内容准备与页面制作也分成了两步。先从活动消息与作品中整理出复盘文档，检查里面的内容是否完整、准确，再进入网页制作。到了第二步，把确认过的文档与选好的设计文件一起提供，助手就同时获得了“要讲什么”和“希望怎样呈现”两类信息。<button type="button" class="timecode" data-seconds="540">[00:09:00]</button></p>
+<p>分开处理的好处很直接：内容还没定时，先讨论内容；内容已经清楚后，再检查版式是否把它表达好。否则，漂亮页面很容易让人忽略缺失的材料，也容易使每次内容修改都牵动整套排版。这个例子里，审阅文档属于真正的内容工作，页面生成接在它之后。</p>
+<h2 id="_2">把喜欢的作品变成设计规则，保留风格的同时允许变化</h2>
+<p>Zara 制作模板的起点更日常。她会收集喜欢的图片与配色，也会拍下书的封面，把这些视觉参考交给有图像理解能力的助手，再请它形成一组 HTML 演示页面。先做出约八到十页，可以让同一种风格经过标题页、内容页等不同安排，成为可以观察和比较的具体结果。<button type="button" class="timecode" data-seconds="628">[00:10:28]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1bLMX6HE7b-00640.jpg" data-caption="模板预览把不同页面放在一起，同一套字体、颜色和气质贯穿标题页与内容页。">
+    <img src="../assets/frames/BV1bLMX6HE7b-00640.jpg" loading="lazy" alt="视频截图 02，00:10:40：模板预览把不同页面放在一起，同一套字体、颜色和气质贯穿标题页与内容页。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="640.000">图 02 · 00:10:40</button><span>模板预览把不同页面放在一起，同一套字体、颜色和气质贯穿标题页与内容页。</span></figcaption>
+</figure>
+<p>相关作品可以在 <a href="https://github.com/zarazhangrui/frontend-slides">Frontend Slides</a> 与 <a href="https://github.com/zarazhangrui/beautiful-html-templates">Beautiful HTML Templates</a> 中查看。它们让人先看到一组实际页面，再讨论希望使用哪种方向。</p>
+<p>但保留一份成品 HTML，并不一定是最适合复用的方式。Zara 遇到的情况是，助手会过分贴近示例里的布局，把新内容硬塞进原有框架。原来某页恰好适合三个项目，新的材料却未必也适合。复制得越机械，内容与版面的关系就越容易变差。<button type="button" class="timecode" data-seconds="662">[00:11:02]</button></p>
+<p>她使用“overfit”描述这种现象。这个词在机器学习里通常译为“过拟合”；在这里是一个形象类比，意思是助手过度模仿了某份示例，没能根据新材料灵活安排。问题出在复用时保留了太多偶然的布局，连同它们一起限制了后续页面。</p>
+<p>更灵活的做法，是从这些页面中提取设计规则，写成 design.md。Markdown 是一种便于阅读和编辑的文本格式；这个文件用文字和表格记录颜色、字体、间距以及视觉风格等约定。助手之后读取的是一组可以应用到新内容的规则，具体页面仍有调整空间。<button type="button" class="timecode" data-seconds="679">[00:11:19]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1bLMX6HE7b-00756.jpg" data-caption="design.md 分别列出颜色、字体、间距和画布等规则，让风格可以脱离某一张页面被复用。">
+    <img src="../assets/frames/BV1bLMX6HE7b-00756.jpg" loading="lazy" alt="视频截图 03，00:12:36：design.md 分别列出颜色、字体、间距和画布等规则，让风格可以脱离某一张页面被复用。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="756.000">图 03 · 00:12:36</button><span>design.md 分别列出颜色、字体、间距和画布等规则，让风格可以脱离某一张页面被复用。</span></figcaption>
+</figure>
+<p>例如，颜色规则告诉助手使用哪些色彩，字体规则说明标题与正文怎样区分，间距规则提供留白的尺度。这些约定能让不同页面保持一家人的感觉，却不要求它们拥有完全相同的内容结构。HTML 成品负责展示一种实现，design.md 帮助说明实现背后哪些选择值得保留。</p>
+<table>
+<thead>
+<tr>
+<th>保留的材料</th>
+<th>下一次使用时主要提供什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>喜欢的图片、书封面或网页</td>
+<td>可以直观看到的风格方向</td>
+</tr>
+<tr>
+<td>一组具体演示页面</td>
+<td>风格在不同内容中的实际表现</td>
+</tr>
+<tr>
+<td>design.md</td>
+<td>颜色、字体、间距等可重复使用的约定</td>
+</tr>
+<tr>
+<td>本次任务的内容文档</td>
+<td>这次每页实际要说什么、放什么</td>
+</tr>
+</tbody>
+</table>
+<p>这种分离也让规则更容易用于不同产物。同样一套颜色与文字风格，可以用于 HTML 页面，也可以用于 SVG 图形。SVG 用文字描述形状、线条和文字的位置，常用于可缩放的图形。具体实现形式发生变化，品牌气质仍然可以通过共同规则保持一致。<button type="button" class="timecode" data-seconds="734">[00:12:14]</button></p>
+<p>公司已有的演示模板或活动设计指南，也可以按这个思路整理。把长期需要保持的颜色、字体与视觉要求写清楚，之后交给助手使用。文件名本身没有神奇作用；真正有用的是里面的规则足够明确，又给具体内容留下必要变化空间。<button type="button" class="timecode" data-seconds="771">[00:12:51]</button></p>
+<h2 id="skill_1">同样的 Skill，仍然需要清楚的内容与逐页反馈</h2>
+<p>现在再回到最初的问题：为什么同一个 Skill，别人的结果更好看？Zara 的一套英文演示材料，在第一轮生成之后还经历了多次修改。她开始时就已经知道每一页要放什么，因此助手主要承担排版与实现；后续反馈继续针对具体页面，而非笼统要求整份作品“再优化一下”。<button type="button" class="timecode" data-seconds="890">[00:14:50]</button></p>
+<p>这套材料还加入了点击后才出现的示例、放大查看以及链接等交互。做这些决定之前，需要知道哪一页在解释什么，听众在什么位置需要看例子，哪些内容值得展开。交互的价值来自它与讲述之间的关系，仅仅增加可点击元素，不会自动让演示更好。</p>
+<p>她展示的修改记录涉及多轮交流，并提到约二十七轮。这个数字不适合作为必须达到的工作量，更不代表对话越多结果越好。它提醒我们，看到的成熟成品可能经历过持续判断和修改，第一版只承担了其中一部分工作。明确的初始要求，能够减少无谓试探；细致的后续反馈，则处理第一版仍未解决的问题。<button type="button" class="timecode" data-seconds="942">[00:15:42]</button></p>
+<p>为了让要求更容易交接，可以把每一页的文字、图片和视频放在同一份文档中。用表格说明“这一页讲什么、对应什么材料”，比在聊天里反复描述图片位置更清楚。助手在获得适当访问权限、能够读取所需资料的条件下，就可以按页取用材料，放到相应位置。<button type="button" class="timecode" data-seconds="1014">[00:16:54]</button></p>
+<p>反馈也可以留在对应文档位置。某页需要换例子，就在那一页旁边说明；某张图太小，就明确指向那张图。这样既保留了内容的稳定参照，也减少“这里”“上一张”“那个图片”引起的误解。文档成为持续协作的对象，后续修改容易与原来的要求联系起来。<button type="button" class="timecode" data-seconds="1049">[00:17:29]</button></p>
+<h2 id="_3">知识库越来越大时，带着具体需要去找材料</h2>
+<p>设计参考的发现过程还带出一个问题：很多好资料早已存在，我们却没有时间逐项读完。王大线提到，自己关注的 AI 知识库不断变大，以至于里面已经收录的设计资源也很晚才被注意到。知道一个知识库存在，与在需要时找到其中合适内容，仍然是两件事。<button type="button" class="timecode" data-seconds="804">[00:13:24]</button></p>
+<p>一个可用的办法，是把已经发现的好材料作为线索，请助手在同一个资料库中继续寻找相关资源。比如，这次发现了一份有帮助的设计规范，接下来可以问还有哪些资源能帮助完成类似的视觉工作。问题越接近当前任务，候选内容越容易被比较；拿到结果后，再进入具体资源判断是否适用。</p>
+<p>这并不要求把所有阅读都交出去。助手能够帮助缩小范围，人仍然需要理解自己选择的材料。对于快速变化的工具，可以关注真正制作和使用它们的人，以及项目本身的文档、说明和公开分享。教学材料可以帮助建立基础，源头资料则更有机会及时反映具体工具的变化。<button type="button" class="timecode" data-seconds="1064">[00:17:44]</button></p>
+<h2 id="_4">做好的方法怎样交给别人继续使用</h2>
+<p>最后一个例子是预算沙盘。王大线把已有预算表变成可交互页面，让使用者调整部分变量，比较不同情境下的计算结果。页面里的结果依赖输入数据、假设和计算规则，适合用来讨论“条件这样变化会怎样”，不能因为呈现得生动就视为确定的未来。<button type="button" class="timecode" data-seconds="1147">[00:19:07]</button></p>
+<p>做完之后，他原本只想把 Markdown 文件发给 Zara，随后开始尝试把技能放到 GitHub。GitHub 在这里承担公开保存与分发的作用：别人可以通过一个稳定链接获取文件，查看说明，也能在允许的范围内继续修改。它让一次私下传文件，变成更多人可以找到、使用和讨论的产物。</p>
+<p>公开之前，他给助手提出了一个更具体的目标：其他工具、能力较弱的模型，以及一台新的电脑，也应尽量能够按说明使用这份技能，并得到预期类型的结果。这样的要求会把注意力从“我这次做出来了”推向“别人拿到后是否知道怎么开始”。这是可复用性目标，实际效果仍需要在对应环境中试用，不能只凭一句要求保证一致。<button type="button" class="timecode" data-seconds="1197">[00:19:57]</button></p>
+<p>已有开源技能同样可以根据自己的任务调整。讨论中的例子包括把浏览器标签管理工具改成中文，以及把通用演示文稿技能结合公司的颜色、字体、模板和业务流程。原有项目提供一个起点，自己的材料和要求让它逐渐适合具体工作。<button type="button" class="timecode" data-seconds="1247">[00:20:47]</button></p>
+<p>当一份方法可以公开获取，再配上清楚的录屏和使用说明，别人就更容易看见它能做什么，也更容易提出具体反馈。这个过程回到了开头的问题：作品除了做出来，还需要进入真实使用。公开分享是一条可能的路径，内部团队采用也能提供同样重要的使用检验。<button type="button" class="timecode" data-seconds="1347">[00:22:27]</button></p>
+<h2 id="_5">总结提炼</h2>
+<p>一个 Skill 能提供起点，作品质量还受到内容准备、视觉参考和修改判断的影响。先把要讲什么整理清楚，再给出具体风格与规则，助手就更容易围绕同一目标工作。</p>
+<p>HTML 示例帮助人看见效果，design.md 保留可复用的设计约定，本次内容文档说明每页实际要承载什么。把这三者区分开，既能保持风格，也能允许内容改变版式。</p>
+<p>第一轮生成之后，逐页反馈仍然重要。具体指出对象、问题和希望发生的变化，比反复要求“更好看”更容易推进。等方法稳定，再通过说明、文件和实际使用，让它成为别人也能接着用的东西。</p>
+<h2 id="_6">时间导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=18" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:18]">[00:00:18]</a> 招 AI 人时，作品要看实际价值：提效、推广范围、收入或留存。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=97" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:37]">[00:01:37]</a> 以 Ramp 的 “We only hire builders” 为例，人人都应能在岗位上构建工具。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=128" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:08]">[00:02:08]</a> 招聘可分两轮：先看专业基本功，再现场使用 Agent 完成真实任务。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=214" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:34]">[00:03:34]</a> AI 团队将 HTML 用作 slides、数据看板与客户材料的常见载体。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=307" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:07]">[00:05:07]</a> HTML 内容组件化、入库、打标、统计使用情况，像拼积木组装客户方案。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=413" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:53]">[00:06:53]</a> “品味”可以通过优秀案例、设计规范和模板被部分外化、复用。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=490" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:10]">[00:08:10]</a> 用 <code>design.md</code> 为网页生成提供具体的视觉参考。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=628" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:28]">[00:10:28]</a> 从喜欢的图片、配色中提取设计语言，再生成可复用模板。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=679" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:19]">[00:11:19]</a> 真正可迁移的模板是描述色彩、字体和风格的 <code>design.md</code>，而非固定 HTML 成品。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=787" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:07]">[00:13:07]</a> 公司应把现有品牌模板和设计规范转成适合 Agent 消费的设计描述。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=897" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:57]">[00:14:57]</a> 高质量 HTML slides 来自清楚的 brief、内容规划与后续交互，不会靠一句话自动完成。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1020" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:00]">[00:17:00]</a> 把协作文档作为 Agent 的 brief，承载文字、图片、视频、页序与评论。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1070" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:50]">[00:17:50]</a> 获取一手信息的路径，是追随真正做产品的人和开源项目。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1152" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:12]">[00:19:12]</a> 文科背景也能借助 Agent 将一个具体需求封装、上传并分享。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1249" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:49]">[00:20:49]</a> GitHub 上的 Skill 值得拆解、改造并喂入自己的模板和业务流程。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1350" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:30]">[00:22:30]</a> Build in public：先做出东西，再用公开链接与录屏展示它。</li>
+<li><button type="button" class="timecode" data-seconds="12">[00:00:12]</button> 招聘时怎样继续追问 AI 作品。</li>
+<li><button type="button" class="timecode" data-seconds="128">[00:02:08]</button> 专业能力与现场 AI 协作任务。</li>
+<li><button type="button" class="timecode" data-seconds="214">[00:03:34]</button> HTML 演示和数据看板的特点。</li>
+<li><button type="button" class="timecode" data-seconds="304">[00:05:04]</button> 页面入库、挑选与重新组合。</li>
+<li><button type="button" class="timecode" data-seconds="490">[00:08:10]</button> 为活动战报选择合适的视觉参考。</li>
+<li><button type="button" class="timecode" data-seconds="540">[00:09:00]</button> 先整理内容，再制作网页。</li>
+<li><button type="button" class="timecode" data-seconds="628">[00:10:28]</button> 从图片与配色形成模板。</li>
+<li><button type="button" class="timecode" data-seconds="662">[00:11:02]</button> 机械套用布局的问题。</li>
+<li><button type="button" class="timecode" data-seconds="679">[00:11:19]</button> 用 design.md 保存设计规则。</li>
+<li><button type="button" class="timecode" data-seconds="804">[00:13:24]</button> 在大型知识库中寻找需要的资源。</li>
+<li><button type="button" class="timecode" data-seconds="942">[00:15:42]</button> 清楚的初始要求与多轮修改。</li>
+<li><button type="button" class="timecode" data-seconds="1014">[00:16:54]</button> 用文档组织每页材料和反馈。</li>
+<li><button type="button" class="timecode" data-seconds="1147">[00:19:07]</button> 预算沙盘与可复用技能。</li>
+<li><button type="button" class="timecode" data-seconds="1247">[00:20:47]</button> 按自己的需求调整开源项目。</li>
 </ul>
-<h2 id="_3">核心问题与推理主线</h2>
-<p>视频从一个更宽的判断开始：AI 时代值得看重的能力，并非“是否调用过某个工具”，而是能否把工具推进到真实结果。发言者举的判断维度很直接：对内工具有没有带来效率提升、覆盖多少团队；对外工具有没有带来曝光、收入、拉新或留存。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a></p>
-<p>这一标准也解释了“同一个 Skill，为什么别人做得更好看”：Skill 是能力的起点，成品质量取决于上游输入、设计约束、内容判断和反复反馈。把 AI 当成一次性生成器，往往只能得到一个可运行的初稿；把 AI 放进完整工作流，才有机会得到可展示、可传播、可复用的成果。</p>
-<h2 id="1-builder-ai">1. 先有 Builder 能力，再谈 AI 作品</h2>
-<p>发言者引用 Ramp 的招聘口号 “We only hire builders”，用来强调客服、运营等传统上不被视作“构建者”的岗位，同样可以通过 AI 为自身工作制作小工具、工作流或产品化方案。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=97" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:37]">[00:01:37]</a></p>
-<p>她提出的招聘方法也很具体：</p>
-<ol>
-<li>第一轮先脱离 AI，聊候选人的专业基本功、既有作品与文化匹配。</li>
-<li>第二轮给电脑、Agent 和 token，让候选人围绕未来真实工作完成现场任务，例如做网页、App 或工作流。</li>
-<li>同时考察成品与“和 Agent 对话的过程”。</li>
-</ol>
-<p>这里的隐含判断是：模型能力降低了制作门槛，领域能力却决定了任务怎么被定义、结果能否被验收。发言者将自身这一代人的系统训练称为在 AI 时代仍然重要的“手艺活”。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=185" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:05]">[00:03:05]</a></p>
-<h2 id="2-html">2. HTML 的价值：从静态交付物变成可互动的工作界面</h2>
-<p>视频将 HTML 视为 AI 时代办公产物的重要载体：它可读、可交互，也更容易由 Agent 快速生成。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=214" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:34]">[00:03:34]</a> 因此 slides、数据看板、客户材料、产品方案都可以从传统文件形态迁移到网页形态。</p>
-<p>以数据看板为例，HTML 可以让用户拖动参数、查看不同情景（scenario）的变化；这使汇报材料从“展示结论”扩展为“允许探索结论”。同时，视频也保留了现实限制：在部分现场屏幕比例不匹配时，HTML 展示可能出现适配问题。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=282" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:42]">[00:04:42]</a></p>
-<p>更进一步的做法，是将客户案例、行业方案等内容变成可检索的 HTML 页面组件：团队产出后入库、打标、记录调用次数；面向新客户时，用户像往购物车里选组件一样拼装，再调整页序、替换页面内容，效果好的版本回流入库。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=307" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:07]">[00:05:07]</a></p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_004_00-06-47.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_004_00-06-47.jpg" alt="图 01 · 00:06:47：投影中展示的是一个包含多张页面缩略图和界面内容的 HTML 方案画面，发言围绕组件化组装客户材料展开。" loading="lazy"></a><figcaption>图 01 · 00:06:47：投影中展示的是一个包含多张页面缩略图和界面内容的 HTML 方案画面，发言围绕组件化组装客户材料展开。</figcaption></figure>
-<p><em>图 01 · 00:06:47：投影中展示的是一个包含多张页面缩略图和界面内容的 HTML 方案画面，发言围绕组件化组装客户材料展开。</em></p>
-<p>这套思路的重点不只是“把 PPT 换成网页”，还包括：</p>
-<ul>
-<li>把高频内容从一次性交付变成积木；</li>
-<li>让素材来源、使用次数、原创与微调状态可追踪；</li>
-<li>让客户方案有可组合的生产方式；</li>
-<li>让有效版本能回流为组织知识。</li>
-</ul>
-<h2 id="3-designmd">3. 好看可以被外化：从参考图到 <code>design.md</code></h2>
-<p>视频对“审美差距”的回答很务实：审美固然有差异，但优秀设计可以被封装成 AI 可读取的约束。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=413" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:53]">[00:06:53]</a> 发言者举了 <code>design.md</code> 的例子：从风格案例中选择契合任务的视觉参考，再把相应文件交给 Agent，以此生成网页或视觉战报。</p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_005_00-08-43.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_005_00-08-43.jpg" alt="图 02 · 00:08:43：浏览器展示风格案例库的深色网格页面，每个卡片以网站缩略图、名称和简短风格描述区分不同视觉方向。" loading="lazy"></a><figcaption>图 02 · 00:08:43：浏览器展示风格案例库的深色网格页面，每个卡片以网站缩略图、名称和简短风格描述区分不同视觉方向。</figcaption></figure>
-<p><em>图 02 · 00:08:43：浏览器展示风格案例库的深色网格页面，每个卡片以网站缩略图、名称和简短风格描述区分不同视觉方向。</em></p>
-<p>选择参考时，任务类型应影响选择。例如，视频中提到图标丰富的界面更适合数据可视化复盘场景。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=517" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:37]">[00:08:37]</a> 这体现的是“先选视觉语境，再交给模型排版”的顺序：模型并不需要从空白处猜测审美，输入已经告诉它该靠近什么样的层级、配色和组件语言。</p>
-<p>发言者演示的实际工作流是：</p>
-<ol>
-<li>先把活动群消息、作品等原始内容整理到文档中；</li>
-<li>人工审核内容；</li>
-<li>选定一个 <code>design.md</code> 参考及相关文件；</li>
-<li>将内容与设计参考一起交给 Agent，要求转成网页；</li>
-<li>继续检查和修改展示结果。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=541" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:01]">[00:09:01]</a></li>
-</ol>
-<p>这套流程的价值，是把“内容是否正确”和“视觉如何呈现”分开处理，避免让 Agent 在信息混乱时同时猜内容、猜结构、猜风格。</p>
-<h2 id="4">4. 模板的本体是设计说明，不是固定页面</h2>
-<p>视频中很重要的一个纠偏是：可复用模板不应停留在一套固定 HTML 页面上。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=663" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:03]">[00:11:03]</a> 固定 HTML 容易让模型把每页内容硬塞进原来的框架，造成发言者所说的 overfit——风格被机械套用，内容结构失去弹性。</p>
-<p>更适合作为模板的是 <code>design.md</code>：用 Markdown 明确描述颜色、字体、视觉风格、间距、组件与画布信息。这样，Agent 能在保持设计语言一致的前提下，为不同内容重建页面结构。</p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_007_00-12-36.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_007_00-12-36.jpg" alt="图 03 · 00:12:36：代码仓库中打开了一个 `design.md`，页面以表格列出颜色、字体、字号、间距、画布尺寸和组件说明，显示模板被写成结构化设计规范。" loading="lazy"></a><figcaption>图 03 · 00:12:36：代码仓库中打开了一个 `design.md`，页面以表格列出颜色、字体、字号、间距、画布尺寸和组件说明，显示模板被写成结构化设计规范。</figcaption></figure>
-<p><em>图 03 · 00:12:36：代码仓库中打开了一个 <code>design.md</code>，页面以表格列出颜色、字体、字号、间距、画布尺寸和组件说明，显示模板被写成结构化设计规范。</em></p>
-<p>视频给出的沉淀路径是：</p>
-
-<code class="language-text">喜欢的图片 / 书封 / 网站配色
-        ↓
-交给具备视觉理解能力的 Agent，生成若干页视觉样稿
-        ↓
-提炼为 design.md：色彩、字体、风格、版式与组件规则
-        ↓
-用于 HTML、SVG、海报、活动物料等不同载体
-</code>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_006_00-10-40.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_006_00-10-40.jpg" alt="图 04 · 00:10:40：GitHub 页面展示多组演示模板缩略图，包含单色研究汇报、粗体海报风和其他不同风格方向，体现素材库覆盖多种视觉语言。" loading="lazy"></a><figcaption>图 04 · 00:10:40：GitHub 页面展示多组演示模板缩略图，包含单色研究汇报、粗体海报风和其他不同风格方向，体现素材库覆盖多种视觉语言。</figcaption></figure>
-<p><em>图 04 · 00:10:40：GitHub 页面展示多组演示模板缩略图，包含单色研究汇报、粗体海报风和其他不同风格方向，体现素材库覆盖多种视觉语言。</em></p>
-<p>对组织而言，这意味着现有 PPT、海报与品牌规范也可以进一步转成 Agent 可消费的设计描述。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=771" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:51]">[00:12:51]</a> 视频的观点是：传统 guideline 更偏向给人阅读；面向大量 Agent 参与制作的环境，公司需要自己的 <code>design.md</code>。</p>
-<h2 id="5-brief">5. 高质量成品靠清楚的 brief 与迭代</h2>
-<p>发言者针对“一句话做 slides”给出明确反对意见。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1005" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:45]">[00:16:45]</a> 她认为，同一个 Skill 做得丑，常见原因是用户只发出一次 prompt，看到初稿不满意便停止；而一份高质量 deck 的前提是，创作者已经想清楚每页放什么、想让观众经历什么。</p>
-<p>视频中的高质量英文 deck 有交互元素：点击后放大、出现内容或跳转链接，页面内还包含有创意的导航系统。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=905" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:15:05]">[00:15:05]</a> 这说明 Agent 在承担排版、实现和局部创意时，前提是创作者给了足够准确的内容架构。</p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_009_00-16-29.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_009_00-16-29.jpg" alt="图 05 · 00:16:29：飞书文档中按“Prompt 1、Prompt 2”等章节组织了幻灯片内容说明，正文包含每页要求与实现提示，画面体现了详细 brief 的写法。" loading="lazy"></a><figcaption>图 05 · 00:16:29：飞书文档中按“Prompt 1、Prompt 2”等章节组织了幻灯片内容说明，正文包含每页要求与实现提示，画面体现了详细 brief 的写法。</figcaption></figure>
-<p><em>图 05 · 00:16:29：飞书文档中按“Prompt 1、Prompt 2”等章节组织了幻灯片内容说明，正文包含每页要求与实现提示，画面体现了详细 brief 的写法。</em></p>
-<p>对于 slides，视频建议把飞书文档作为 Agent 的 brief：把每页文字、图片、视频、媒体资源和位置要求放进一个表或文档；Agent 可读取并下载资源，按对应位置嵌入。成品不符合预期时，用户可在文档的对应位置直接评论，Agent 再读取评论做定向修改。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1040" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:20]">[00:17:20]</a></p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_011_00-20-21.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_011_00-20-21.jpg" alt="图 06 · 00:20:21：Agent 工作界面中显示对需求、待办和反馈的文本讨论，画面对应“读取文档与评论后继续修改”的协作方式。" loading="lazy"></a><figcaption>图 06 · 00:20:21：Agent 工作界面中显示对需求、待办和反馈的文本讨论，画面对应“读取文档与评论后继续修改”的协作方式。</figcaption></figure>
-<p><em>图 06 · 00:20:21：Agent 工作界面中显示对需求、待办和反馈的文本讨论，画面对应“读取文档与评论后继续修改”的协作方式。</em></p>
-<p>因此，较好的使用方式可以概括为：</p>
-<ul>
-<li>先写内容事实、页序和每页目的；</li>
-<li>再提供明确的视觉参考或 <code>design.md</code>；</li>
-<li>生成后逐项指出问题：层级、密度、字数、图片、交互、导航；</li>
-<li>将改好的结构和规范沉淀为下一次的起点。</li>
-</ul>
-<h2 id="6-ai">6. 找一手信息：让 AI 帮你读巨大的知识库</h2>
-<p>视频将“影响力”拆成两个问题：如何得到一手信息，以及如何在平台上形成自己的声量。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1067" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:47]">[00:17:47]</a> 对于快速变化的 AI 领域，发言者更建议追随真正构建产品的人、产品创始人的公开表达和开源项目，而非把“上课”当作唯一学习入口。</p>
-<p>她以“通往 AGI 之路”知识库为例：内容越积越多，人很难完整读完；可以把知识库交给 Coding Agent，让它围绕一个已发现的条目继续搜索“还有哪些类似的好东西”。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=835" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:55]">[00:13:55]</a> 在她的案例里，Agent 从知识库中找到了一个用于邀请文案的开源 Skill。</p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_008_00-14-32.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_008_00-14-32.jpg" alt="图 07 · 00:14:32：浏览器打开“通往AGI之路”知识库主页，顶部有大幅彩色城市插画，页面呈现知识库作为可交给 Agent 检索的原始资料库。" loading="lazy"></a><figcaption>图 07 · 00:14:32：浏览器打开“通往AGI之路”知识库主页，顶部有大幅彩色城市插画，页面呈现知识库作为可交给 Agent 检索的原始资料库。</figcaption></figure>
-<p><em>图 07 · 00:14:32：浏览器打开“通往AGI之路”知识库主页，顶部有大幅彩色城市插画，页面呈现知识库作为可交给 Agent 检索的原始资料库。</em></p>
-<p>这里的可复用方法是：把大知识库视为待查询的资料源，先由人提出具体目标，再让 Agent 归纳、检索、找关联条目；人仍要回到原文验证关键结论。</p>
-<h2 id="7-github-build-in-public">7. GitHub：公开作品、二次创作与 Build in Public</h2>
-<p>视频后段用一个“预算 Excel 变交互式沙盘”的 Skill 说明：输入预算表后，工具可按不同档位推演未来结果，也能开关变量。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1152" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:12]">[00:19:12]</a> 发言者将自己的 Markdown 形式 Skill 上传到 GitHub，过程中让 Agent 处理上传和兼容性问题；她强调，即使没有传统技术背景，也能先把目标、输入、输出与限制讲清楚，再让 Agent 执行工程动作。</p>
-<figure><a href="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_012_00-22-18.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E9%A3%9E%E4%B9%A6/%E3%80%90%E7%BB%9D%E6%B4%BB%E5%A4%A7%E4%BC%9A%E3%80%91%E5%90%8C%E4%B8%80%E4%B8%AA%20Skill%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%AB%E4%BA%BA%E5%81%9A%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E6%AF%94%E4%BD%A0%E5%A5%BD%E7%9C%8B%EF%BC%9F__BV1bLMX6HE7b/assets/standard/frame_012_00-22-18.jpg" alt="图 08 · 00:22:18：GitHub 个人仓库页列出多个公开项目，其中包含预算沙盘和落地页构建相关 Skill，画面直观呈现将能力公开为可访问仓库的结果。" loading="lazy"></a><figcaption>图 08 · 00:22:18：GitHub 个人仓库页列出多个公开项目，其中包含预算沙盘和落地页构建相关 Skill，画面直观呈现将能力公开为可访问仓库的结果。</figcaption></figure>
-<p><em>图 08 · 00:22:18：GitHub 个人仓库页列出多个公开项目，其中包含预算沙盘和落地页构建相关 Skill，画面直观呈现将能力公开为可访问仓库的结果。</em></p>
-<p>更有价值的一点是，GitHub 上的 Skill 用途不止“下载即用”。视频鼓励用户拆解已有 Skill，再把自己的公司品牌模板、业务流程与素材输进去，改造成更贴近场景的版本。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1249" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:49]">[00:20:49]</a></p>
-<p>最后，发言者把这些行动串成一句话：成为 builder 需要 build in public——先做出某个具体东西，再通过 GitHub 链接、录屏演示和内容分享让别人看见并使用它。<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1350" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:30]">[00:22:30]</a></p>
-<h2 id="_4">具体案例与原话细节</h2>
-<ul>
-<li>关于 AI 作品的价值判断：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a> “如果这是一个对内的提效工具，它有没有带来切实的效率提升？”对外则看曝光、收入、拉新与留存。</li>
-<li>关于 HTML 的采用：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a> 发言者观察到，自己参与的活动中，PPT 已大量转成 HTML；这属于录制时的个人观察。</li>
-<li>关于模板：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=687" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:27]">[00:11:27]</a> <code>design.md</code> 用文字描述颜色、字体与视觉风格，因而能迁移到 HTML 以外的载体，例如 SVG。</li>
-<li>关于视觉素材的来源：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=745" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:25]">[00:12:25]</a> 日常收集喜欢的图片和配色，放入文件夹，再交给有视觉能力的 Agent 复刻为模板。</li>
-<li>关于 AI 生成的预期：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=937" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:15:37]">[00:15:37]</a> “你不能指望你第一次发给它做出来的东西就符合预期。”</li>
-<li>关于公开 Skill：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1249" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:49]">[00:20:49]</a> “GitHub 上面获取 Skill，不是让你拿来用的，是让你拿来改的。”</li>
-<li>关于技术门槛：<a class="timecode" href="https://www.bilibili.com/video/BV1bLMX6HE7b/?t=1334" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:14]">[00:22:14]</a> 她把 GitHub 称为“AI 时代的朋友圈”“一种自我表达的媒介”；这是发言者的个人感受与倡议。</li>
-</ul>
-<h2 id="_5">边界、疑点与时效性</h2>
-<ul>
-<li>视频中的产品名、站点名、仓库名多由自动语音识别转写，存在同音或拼写误差。学习其方法即可，使用前应回到项目原文确认名称、许可证、安装要求和安全边界。</li>
-<li>“HTML 已 100% 渗透”“一句话上传 GitHub”等属于现场表达或个人经验，不能直接视为通用事实。</li>
-<li><code>design.md</code> 的效果依赖输入参考、内容结构、模型视觉能力和具体实现；它能降低风格传递成本，不能替代对内容、品牌和可用性的审查。</li>
-<li>让 Agent 读取知识库、文档和素材前，应确认访问权限、敏感信息范围及产物发布权限。</li>
-</ul>
-<h2 id="_6">复习与行动清单</h2>
-<ul>
-<li>[ ] 下次评价 AI 项目时，写下实际指标：节省了什么、谁在用、产生了什么结果。</li>
-<li>[ ] 为一个高频工作准备内容 brief：目标、受众、页序、每页信息、素材与验收标准。</li>
-<li>[ ] 收集 10 个自己真正喜欢的视觉参考，按场景归档。</li>
-<li>[ ] 从其中一个参考提炼颜色、字体、间距、组件与语气，形成自己的 <code>design.md</code> 初稿。</li>
-<li>[ ] 用“内容文档 + 设计规范”驱动一次 HTML 或 SVG 产出，并至少完成一轮针对性反馈。</li>
-<li>[ ] 在现有开源 Skill 中选一个与工作最相关的项目，先拆解其结构，再加入自己的流程和品牌约束。</li>
-<li>[ ] 选一个可公开的小成果，补上说明、链接和演示，让它成为下一次协作的可复用起点。</li>
-</ul></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_7">复习与实践</h2>
+<p>找一套你喜欢的演示材料，区分其中三种东西：实际内容、某一页恰好使用的布局、贯穿多页的设计规则。哪些适合保留，哪些应当随新内容调整？</p>
+<p>如果助手生成的某一页让你觉得不好看，试着说出具体对象和原因。是标题抢走了重点、图太小看不清，还是内容之间的关系没有安排好？再把反馈写到对应页面旁边。</p>
+<p>回到自己做过的小工具，想一想别人拿到以后能否开始使用。需要什么输入、得到什么结果、遇到什么限制，这些信息是否已经清楚？实际使用能给出的反馈，又与一张展示截图有什么不同？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【绝活大会】同一个 Skill，为什么别人做出来就是比你好看？", "duration": "23:16", "src": "", "poster": "../assets/frames/BV1bLMX6HE7b-00523.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

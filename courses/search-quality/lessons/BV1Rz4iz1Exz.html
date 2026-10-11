@@ -1,74 +1,323 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>Agent 的能力，长在整套基础设施上 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Infra：模型想做一件事，谁让它真正发生 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="agent-infra">Agent Infra：模型想做一件事，谁让它真正发生</h1>
+    <div class="meta"><span>秋芝2046</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Rz4iz1Exz/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#agent">Agent 的能力，长在整套基础设施上</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">“想拥抱朋友”与“完成拥抱”隔着许多工作</a></li>
-<li><a href="#_3">用六个问题检查基础设施</a></li>
-<li><a href="#_4">记忆要区分存在哪里、怎样拿出来</a></li>
-<li><a href="#_5">工作环境会影响用户体验</a></li>
-<li><a href="#_6">迁移练习：把“它不聪明”改写成可检查的问题</a></li>
+<li><a href="#agent-infra">Agent Infra：模型想做一件事，谁让它真正发生</a><ul>
+<li><a href="#_1">模型形成判断，调度把判断接到行动上</a></li>
+<li><a href="#_2">为什么同一个助手能接着刚才的话往下聊</a></li>
+<li><a href="#_3">外部资料库，为什么也会被称作记忆</a></li>
+<li><a href="#_4">工具从单一接口，发展到完整工作环境</a></li>
+<li><a href="#_5">让任务隔天接着做，需要保存哪些东西</a></li>
+<li><a href="#_6">运维与治理，让能力能够稳定地用下去</a></li>
+<li><a href="#agent">多个 Agent 协作，需要共同理解任务怎样交接</a></li>
+<li><a href="#ai">当 AI 成为操作入口，还缺哪些条件</a></li>
+<li><a href="#_7">总结提炼</a></li>
+<li><a href="#_8">时间导航</a></li>
+<li><a href="#_9">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1Rz4iz1Exz" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1Rz4iz1Exz"><div class="provenance">来源：秋芝2046 · <a href="https://www.bilibili.com/video/BV1Rz4iz1Exz/" target="_blank" rel="noopener">BV1Rz4iz1Exz 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 的能力，长在整套基础设施上</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Rz4iz1Exz.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><button class="done" data-done="BV1Rz4iz1Exz" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Rz4iz1Exz-00610.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Rz4iz1Exz&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Rz4iz1Exz"><h1>Agent Infra：模型想做一件事，谁让它真正发生</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1Rz4iz1Exz/">秋芝2046 · Agent Infra 到底是什么</a> · 23 分钟 · 快读。含云产品介绍与未来展望，本文提炼结构，不作购买建议。</p>
+<p>来源：Agent Infra到底是什么？【AI基建】<br>
+UP 主：秋芝2046 · 23 分 3 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1Rz4iz1Exz/</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>Agent 的实际效果由模型、调度、记忆、工具、运维治理和协作共同决定；先找出薄弱环节，再谈升级模型。</p>
-<h2 id="_2">“想拥抱朋友”与“完成拥抱”隔着许多工作</h2>
-<p>视频用机场遇到朋友的例子：识别并产生行动意图是一部分，协调身体、利用记忆、完成动作又是另一部分。这个比喻用来说明，模型输出行动意图后，系统还要把它接到真实执行中。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=135" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:15]">[00:02:15]</a></p>
-<p>对数字 Agent 也一样。说“我会搜索资料”不等于已经搜索；说“报告已保存”不等于文件确实存在且能打开。</p>
-<h2 id="_3">用六个问题检查基础设施</h2>
+<p>你在机场出口看到了多年未见的朋友，认出了对方，也想起你们的关系，于是决定走过去给她一个拥抱。这个决定很自然，但“想要拥抱”还没有完成拥抱。你得迈步、靠近、抬起手臂，身体不同部分还要配合起来。我们平常把这些看成一件事，拆开之后就能发现：理解情境、形成意图、安排动作和真正执行，各自承担了不同工作。<button type="button" class="timecode" data-seconds="164">[00:02:44]</button></p>
+<p>理解 Agent 也可以从这个比喻开始。模型根据输入形成回答或行动建议，系统还要把建议交给可以执行的程序，接收结果，再决定下一步。一个助手看起来会查资料、写文件、操作浏览器，背后需要的不只有模型。围绕它安排流程、保存信息、提供工具、控制风险的设施，合起来就是这里所说的 Agent Infra，也就是 Agent 的基础设施。</p>
+<p>接下来使用六个层次帮助辨认这些工作：模型、调度、记忆、工具、运维与治理，以及多个执行者之间的协作。它是一个便于理解的分层视角，实际产品的模块可能合并或交叉，并不需要都照着六个盒子实现。我们先顺着“意图怎样成为行动”往下看，再逐渐补上长期工作需要的条件。<button type="button" class="timecode" data-seconds="75">[00:01:15]</button></p>
+<h2 id="_1">模型形成判断，调度把判断接到行动上</h2>
+<p>在机场的比喻里，大脑识别朋友，结合记忆理解情境，最后形成“走过去拥抱”的意图。对于语言模型，输入是它能够看到的文字或其他信息，输出可能是一段回答，也可能是结构化的动作请求。即使请求写得很明确，例如要调用哪一个工具、传什么参数，它仍然只是信息，需要其他程序接收并执行。<button type="button" class="timecode" data-seconds="107">[00:01:47]</button></p>
+<p>调度层承担接下来的连接工作，也常被称为编排层。它接到模型的动作请求，解析内容，找到相应执行能力，安排先后或依赖，并在获得结果后把信息交回模型。在拥抱的比喻中，需要先靠近对方，再抬起手臂；在数字任务中，可能要先获得搜索结果，再决定打开哪一个页面。具体顺序有时预先规定，有时由模型根据刚得到的结果继续选择。<button type="button" class="timecode" data-seconds="241">[00:04:01]</button></p>
+<p>这个区别能解释一个常见误会：模型回复“我将搜索资料”，并不代表搜索已经发生。调度程序必须真的调用搜索工具，拿到结果，再把结果提供给后续步骤。同样，模型说“文件已经保存”，也需要有写文件的实际执行及其返回结果。语言可以描述动作，基础设施需要让描述与发生的事情对应起来。</p>
+<p>调度还要维持当前任务的状态。假如第一步已经找到资料，第二步正在整理内容，后续步骤就需要知道这些进展。如果每一步都从最初的用户问题重新开始，却没有此前结果，系统会重复工作，或者作出与前面不一致的选择。像 LangGraph、LlamaIndex、CrewAI 等工具可以参与流程组织，不过具体提供哪些能力，需要看它们各自的设计。理解调度的职责，比记住一串框架名称更有用。<button type="button" class="timecode" data-seconds="302">[00:05:02]</button></p>
+<p>模型与调度因此互相依赖。模型帮助决定现在该做什么，调度把决定送到正确位置，并让结果回到下一次判断中。一个聪明的模型，接在不可靠的交接流程上，也可能表现得混乱；一个组织清楚的流程，也需要模型或规则能够作出恰当判断。</p>
+<h2 id="_2">为什么同一个助手能接着刚才的话往下聊</h2>
+<p>回到机场的例子，你选择拥抱朋友，需要知道她是谁，以及你们过去是什么关系。Agent 的判断同样依赖它能获得的信息。但“记忆”这个词覆盖了几种不同机制，不能只因为助手回答得像记得，就假定信息都保存在同一个地方。<button type="button" class="timecode" data-seconds="346">[00:05:46]</button></p>
+<p>第一种是模型训练时形成的知识。模型学到语言、常识和许多领域关系，能够据此回答问题。这些知识体现在参数中，回答时仍然要经过计算生成，并不像打开某个文件直接复制一行记录。如果希望改变参数本身，需要相应的训练或更新机制。临时给模型看一份新资料，可以影响当前回答，却不等于资料已经永久写进参数。<button type="button" class="timecode" data-seconds="378">[00:06:18]</button></p>
+<p>第二种是当前会话里的上下文。连续对话时，应用通常会把相关历史连同新问题交给模型。模型因此知道前面在说什么，能继续处理“刚才那一点”。最直观的实现是每次带上完整历史，随着聊天变长，输入也会越来越长；实际系统还可能选择片段、做摘要或使用其他状态管理方式。因此，我们感受到的连续记忆，依赖应用怎样保存和提供会话信息。<button type="button" class="timecode" data-seconds="418">[00:06:58]</button></p>
+<p>上下文窗口就是一次请求能容纳信息的范围限制。除了用户的话，工具返回、系统规则和历史结果也可能占据空间。任务越长，保留所有细节的成本越高，也越容易碰到容量限制。此时不能只指望模型“记性更好”，还需要决定哪些内容当前最重要、哪些可以留在外部需要时再找。</p>
+<p>第三种是面向当前任务的工作记忆。完成一些步骤后，可以把关键发现、中间结果和待处理事项保存在临时位置。后续步骤再读取这些内容，继续向前推进，而不用每次重读全部过程。工作记忆围绕这一次任务组织，任务结束后可以按需要归档或清理；它与模型训练形成的一般知识不同，也与每轮完整对话记录不同。<button type="button" class="timecode" data-seconds="489">[00:08:09]</button></p>
+<p>还有需要跨任务保存的长期信息，例如用户明确提供并允许使用的偏好。以后遇到相关任务，系统可以把适用的信息取出来，让服务更符合这个用户的需要。这里要分清保存和使用：信息被存进数据库，不表示模型当前一定看得到；系统还需要在合适时机找出它，避免使用已经过期或不相关的内容。长期记忆的管理也包括修改与遗忘。<button type="button" class="timecode" data-seconds="518">[00:08:38]</button></p>
+<h2 id="_3">外部资料库，为什么也会被称作记忆</h2>
+<p>假如一个公司有一万种商品，要根据这些商品的信息回答问题。商品资料既未必进入模型训练，也不可能都在当前聊天记录里。即便我们愿意把所有资料都交给模型，篇幅、更新和成本也会成为问题。这个场景更适合让系统先到资料库中寻找相关内容，再把找到的部分和用户问题一起交给模型。<button type="button" class="timecode" data-seconds="554">[00:09:14]</button></p>
+<p>这就是检索增强生成，也就是 RAG 的基本思路。资料库像一本可以随时翻阅的参考书：模型不必提前记住里面的每一项内容，系统在任务需要时找出相关材料。它也带来了新的要求，比如商品资料是否更新、问题能否检索到正确对象、返回的片段是否足以回答。外部信息可访问，只完成了第一步；找到并正确使用信息，仍然需要检索与理解配合。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Rz4iz1Exz-00610.jpg" data-caption="参数知识、会话上下文、任务与长期记忆、外部资料库，分别为当前判断提供不同类型的信息。">
+    <img src="../assets/frames/BV1Rz4iz1Exz-00610.jpg" loading="lazy" alt="视频截图 01，00:10:10：参数知识、会话上下文、任务与长期记忆、外部资料库，分别为当前判断提供不同类型的信息。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="610.000">图 01 · 00:10:10</button><span>参数知识、会话上下文、任务与长期记忆、外部资料库，分别为当前判断提供不同类型的信息。</span></figcaption>
+</figure>
 <table>
 <thead>
 <tr>
-<th>视频中的层次</th>
-<th>我会追问什么</th>
+<th>信息类型</th>
+<th>保存的主要内容</th>
+<th>怎样进入一次判断</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>模型</td>
-<td>它能理解约束并选对下一步吗？</td>
+<td>参数中的知识</td>
+<td>训练形成的语言与知识关系</td>
+<td>模型计算时使用</td>
 </tr>
 <tr>
-<td>调度</td>
-<td>步骤如何衔接，失败怎样重试？</td>
+<td>会话上下文</td>
+<td>当前对话及相关工具结果</td>
+<td>应用随请求提供</td>
 </tr>
 <tr>
-<td>记忆</td>
-<td>当前信息从哪来，过期内容怎样更新？</td>
+<td>任务工作记忆</td>
+<td>中间发现、进展与待办事项</td>
+<td>后续步骤按需要读取</td>
 </tr>
 <tr>
-<td>工具</td>
-<td>能采取什么行动，结果是否可验证？</td>
+<td>长期信息</td>
+<td>经允许保存的偏好和可复用信息</td>
+<td>遇到相关任务时取出</td>
 </tr>
 <tr>
-<td>运维与治理</td>
-<td>成本、权限、异常和审计怎样管理？</td>
-</tr>
-<tr>
-<td>协作</td>
-<td>多个执行者怎样共享目标并合并结果？</td>
+<td>外部资料库</td>
+<td>商品、文档等持续维护的材料</td>
+<td>先检索，再把相关内容交给模型</td>
 </tr>
 </tbody>
 </table>
-<p>这是作者便于理解的分层法，并非唯一行业标准。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=58" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:58]">[00:00:58]</a></p>
-<h2 id="_4">记忆要区分存在哪里、怎样拿出来</h2>
-<p>视频区分参数中的知识、当前对话、任务中间状态、长期偏好以及外部资料库。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=350" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:50]">[00:05:50]</a></p>
-<p>关键区别是更新方式。外部记忆可以修改或删除；参数中的知识通常需要训练等机制改变；会话历史则要由系统选择、压缩或取回，再交给模型。</p>
-<p>有些系统会发送完整历史，有些只发送摘要和片段。不要把某一种演示机制当作所有产品的实现。保存了信息，也不代表当前任务一定能正确检索出来。</p>
-<h2 id="_5">工作环境会影响用户体验</h2>
-<p>Agent 使用本机桌面时，可能占用鼠标和窗口，还会接触私人文件。独立工作环境可以减少这些干扰，提供专用浏览器、代码运行区和持久化文件。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=710" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:50]">[00:11:50]</a></p>
-<p>但本地与云端各有风险：本地要控制文件和凭据访问，云端要关注传输、服务方权限、保存期限和费用。环境位置本身不能决定谁更安全。</p>
-<p>视频关于系统自动进化、无限算力、软件入口全面变化的部分属于产品叙事或预测。一次工具反馈是否用于训练、怎样改变后续行为，必须看具体实现，不能默认所有 Agent 都会越用越聪明。<a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=820" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:40]">[00:13:40]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1Rz4iz1Exz/?t=1275" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:15]">[00:21:15]</a></p>
-<h2 id="_6">迁移练习：把“它不聪明”改写成可检查的问题</h2>
-<p>找一段失败输出，按六层各提出一个可能原因，然后只验证最有证据的一项。例如找不到生成文件，先看保存工具是否成功、路径是否正确，再考虑模型能力。</p>
-<p>练习结束时写出一句具体结论：“调用成功，但界面给了错误下载链接。”这样的定位才有明确的负责人和修复入口。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>这些类型在实际系统里可以共用存储组件，划分的重点是用途和更新方式。例如，一份数据库记录可以保存长期偏好，也可以保存任务进度，但取用时机和保留期限并不相同。看清这种差别，我们就更容易理解为什么“加一个数据库”并不能自动解决所有记忆问题。</p>
+<p>它也解释了 Agent 为什么可能产生比普通问答更多的输入。每一步判断除了新问题，还可能需要历史、任务状态、检索结果和工具说明。成本来自一连串具体请求，不能只看用户最初输入了多少字。怎样选择和压缩上下文，因此同时影响理解质量、速度和费用。<button type="button" class="timecode" data-seconds="611">[00:10:11]</button></p>
+<h2 id="_4">工具从单一接口，发展到完整工作环境</h2>
+<p>知道该做什么以后，Agent 还需要能够采取行动。最容易理解的工具，是搜索、天气查询、计算器这一类单一接口。程序定义清楚输入和输出，模型提出调用，程序执行并返回结果。这样的接口范围相对明确，也容易针对单项功能做检查。<button type="button" class="timecode" data-seconds="625">[00:10:25]</button></p>
+<p>当可连接的服务越来越多，每个服务都单独定一套接入方式，会增加重复工作。MCP 提供一种描述和连接能力的协议，让应用更统一地发现并调用外部工具。统一协议可以减少一部分接入差异，但服务本身的认证、权限、错误和可用性仍然存在。接口形式相似，不代表它们处理的数据和允许的操作都相同。<button type="button" class="timecode" data-seconds="669">[00:11:09]</button></p>
+<p>更通用的工具则让 Agent 使用人原本使用的界面。通过浏览器，它可以阅读页面、填写表单；通过桌面或手机操作，它可以使用不同应用；通过终端与代码执行，它还可以编写小程序，完成原先没有专用接口的工作。能力范围逐渐变大，任务也不再被少数固定 API 完全限定。<button type="button" class="timecode" data-seconds="695">[00:11:35]</button></p>
+<p>通用能力同时带来环境问题。如果 Agent 直接操作你的日常电脑，它可能占用窗口、鼠标和浏览器，让你难以同时工作；安装依赖、准备工具也会花时间。更重要的是，这台电脑里还有与任务无关的私人文件和登录状态。把工作交给 Agent 之前，就需要考虑它能看到什么、能修改什么，以及它出错时会影响哪里。<button type="button" class="timecode" data-seconds="761">[00:12:41]</button></p>
+<p>因此，一种思路是为 Agent 准备独立工作空间。浏览器、代码环境或桌面放在单独的沙箱里，提前准备必要工具，让任务在自己的环境里运行。录制时讨论了 AgentBay、AgentCore、E2B 等云端服务作为这一方向的例子。它们的具体功能和配置会随版本变化，理解共同需求更重要：为 Agent 提供可运行、可限制、可持续使用的工作位置。<button type="button" class="timecode" data-seconds="734">[00:12:14]</button></p>
+<h2 id="_5">让任务隔天接着做，需要保存哪些东西</h2>
+<p>独立工作空间如果每次结束都完全消失，长期任务仍然很不方便。我们今天生成了几个文件，明天希望继续修改，就需要把这些文件保存下来。类似地，任务进行到哪里、还欠哪些步骤，也可能需要持久化。这里“持久化”指的是让信息在当前进程或会话结束后仍然存在，下一次能够重新取得。<button type="button" class="timecode" data-seconds="810">[00:13:30]</button></p>
+<p>保存工作文件与保存对话记忆有联系，也有区别。文件是任务的实际产物，任务状态记录已经做了什么，而模型下一轮仍然需要通过读取或上下文获得这些信息。仅仅在云盘里保留一个目录，并不能保证助手知道哪份文件是最新版本。顺畅的继续工作，需要运行环境、状态管理和模型输入相互配合。</p>
+<p>工作环境还可以记录操作结果，供后续改进使用。不过，“记录了错误”和“模型以后不会再犯”之间还隔着具体机制。系统可能根据记录更新提示、保存经验，或把数据纳入后续训练；这些方式对行为的影响不同。不能仅凭环境保留了反馈，就推断模型参数已经自动改变。把训练、记忆和普通日志分开，才能理解某个产品所说的学习究竟发生在哪里。<button type="button" class="timecode" data-seconds="838">[00:13:58]</button></p>
+<p>云端环境的另一项潜力是并发。多个独立任务可以使用不同工作空间，同时执行，避免都等待同一台桌面。但实际能同时运行多少、是否值得并行，仍取决于资源配置、服务限制和任务依赖。并发能力是一种可提供的条件，无法直接等同于无成本、无限规模，或者所有任务都会更快。<button type="button" class="timecode" data-seconds="868">[00:14:28]</button></p>
+<h2 id="_6">运维与治理，让能力能够稳定地用下去</h2>
+<p>工具越通用，运行过程中需要处理的事情也越多。运维关注系统能否持续工作：高负载时是否还能响应，某一步失败后怎样处理，哪些任务占用了大量资源，是否出现无意义的重复调用。如果这些问题没有安排好，一个短演示看起来顺利的 Agent，可能在长任务或多人同时使用时暴露困难。<button type="button" class="timecode" data-seconds="954">[00:15:54]</button></p>
+<p>治理则关心行为是否在授权和规则范围内。外部内容可能通过提示注入影响模型，工具可能接触敏感资料，多个系统之间的数据传递也可能扩大访问范围。我们需要明确谁可以发起任务、Agent 可以使用哪些身份和凭据、哪些操作需要确认，以及发生异常时能否追踪实际执行过程。给模型一条“注意安全”的要求，仍然需要执行层的权限和记录来配合。<button type="button" class="timecode" data-seconds="1037">[00:17:17]</button></p>
+<p>本地和云端都有各自的条件。云服务可能提供成熟的身份管理、隔离与监测设施；本地运行则可以让某些数据保持在自己控制的环境里。与此同时，本地如果把整个电脑权限都交出去，同样可能不安全；云端如果权限、数据保存和访问安排不清楚，也不能只凭“云厂商”三个字就信任。环境位置本身无法替代具体的安全配置。<button type="button" class="timecode" data-seconds="1082">[00:18:02]</button></p>
+<p>这一层和前面的工具层紧密相连。给 Agent 一台专用电脑，提供的是行动环境；限制它能访问的资源，记录它做过的事，处理错误和费用，才让这个环境适合持续使用。模型可以越来越能干，系统仍要对它造成的实际影响负责。</p>
+<h2 id="agent">多个 Agent 协作，需要共同理解任务怎样交接</h2>
+<p>当一个 Agent 已经能完成一些工作，我们自然会想到让多个 Agent 分工。有人负责查资料，有人负责处理数据，再由另一个角色组织结果。不同应用甚至可能由不同团队管理，需要在系统之间发任务、交换进度和交付内容。这样的协作需要共同约定，否则每个执行者都完成了自己的局部目标，最后仍可能拼不成用户需要的结果。<button type="button" class="timecode" data-seconds="1121">[00:18:41]</button></p>
+<p>这里把协作部分称作“社会层”，是一个帮助理解的比喻。人类用组织和协议安排分工，Agent 系统也需要定义角色、消息、任务状态与交付关系。像 A2A 这类面向 Agent 之间通信的协议，关注的是系统如何交流和协作；它与连接具体工具的协议承担的重点不同。协议能够让信息被理解和传递，但不能自动保证各方目标一致、结果可靠。<button type="button" class="timecode" data-seconds="1176">[00:19:36]</button></p>
+<p>多方协作还会产生协调成本。任务是否适合拆开，子任务是否知道必要条件，结果由谁检查，失败如何通知，都需要具体设计。一个 Agent 能顺利完成的事情，增加多个角色未必会更好；当工作边界清楚、可以独立进行时，分工才更容易带来收益。把协作视为基础设施的一部分，也就意味着它需要像工具和记忆一样被认真安排。</p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Rz4iz1Exz-01241.jpg" data-caption="六层视角把模型、流程、信息、行动环境、可靠性与协作放在一起，便于看见一项能力依赖哪些条件。">
+    <img src="../assets/frames/BV1Rz4iz1Exz-01241.jpg" loading="lazy" alt="视频截图 02，00:20:41：六层视角把模型、流程、信息、行动环境、可靠性与协作放在一起，便于看见一项能力依赖哪些条件。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1241.000">图 02 · 00:20:41</button><span>六层视角把模型、流程、信息、行动环境、可靠性与协作放在一起，便于看见一项能力依赖哪些条件。</span></figcaption>
+</figure>
+<h2 id="ai">当 AI 成为操作入口，还缺哪些条件</h2>
+<p>这些设施逐渐完善后，可以想象一种交互方式：我们主要用自然语言提出目标，由 Agent 调用不同软件和工作环境完成具体操作。手机、音箱或其他设备都可以成为发起任务的入口，实际工作在背后的系统里继续。这是关于未来体验的一种设想，重点是入口与执行位置可以分开。<button type="button" class="timecode" data-seconds="1295">[00:21:35]</button></p>
+<p>比如，你向家里的设备提出订票和继续昨天工作的请求，背后需要的远不止语音识别。系统要确认用户身份和具体需求，取得昨天的任务状态，调用合适服务，并在涉及费用或对外操作时遵守授权。越是看起来简单的一句话，背后越可能需要多层基础设施协同。这个设想不代表所有设备已经具备这样的完整能力，也不意味着传统界面会立即消失。</p>
+<h2 id="_7">总结提炼</h2>
+<p>Agent 的体验来自整套系统。模型帮助理解和判断，调度让步骤相互衔接，记忆提供必要信息，工具把请求变成动作，运维与治理控制持续运行的风险，协作机制安排多个执行者之间的关系。</p>
+<p>因此，当一个 Agent 做事不顺时，可以先回到发生问题的环节。它可能没有拿到正确资料，工具结果可能没被传回来，文件可能没有被保存，或者子任务丢失了重要条件。把这些具体问题看清楚，才能知道需要改进的是模型能力，还是围绕模型工作的设施。</p>
+<h2 id="_8">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="164">[00:02:44]</button> 机场拥抱的例子：意图与动作之间发生了什么。</li>
+<li><button type="button" class="timecode" data-seconds="241">[00:04:01]</button> 调度怎样连接判断和执行。</li>
+<li><button type="button" class="timecode" data-seconds="378">[00:06:18]</button> 参数知识、会话与任务记忆。</li>
+<li><button type="button" class="timecode" data-seconds="554">[00:09:14]</button> 一万种商品为什么需要外部资料库。</li>
+<li><button type="button" class="timecode" data-seconds="669">[00:11:09]</button> 从单一接口到浏览器与电脑操作。</li>
+<li><button type="button" class="timecode" data-seconds="761">[00:12:41]</button> 独立工作环境解决哪些不便。</li>
+<li><button type="button" class="timecode" data-seconds="810">[00:13:30]</button> 长任务怎样保存文件和状态。</li>
+<li><button type="button" class="timecode" data-seconds="954">[00:15:54]</button> 运维与治理为什么缺一不可。</li>
+<li><button type="button" class="timecode" data-seconds="1176">[00:19:36]</button> 多个 Agent 的通信与协作。</li>
+<li><button type="button" class="timecode" data-seconds="1295">[00:21:35]</button> 自然语言操作入口的未来设想。</li>
+</ul>
+<h2 id="_9">回看时的三个问题</h2>
+<p>模型说“我会查资料”以后，还需要发生哪些事情，搜索结果才会真正影响下一次回答？沿着模型、调度和工具把过程讲完整。</p>
+<p>为什么把商品资料存进数据库，不等于模型已经学会了这些知识？参数、检索结果和当前上下文分别在哪里起作用？</p>
+<p>如果一个长任务第二天无法继续，是缺少对话记录、工作文件，还是任务进度？把保存的对象分清楚，才知道要补哪种能力。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Agent Infra到底是什么？【AI基建】", "duration": "23:03", "src": "", "poster": "../assets/frames/BV1Rz4iz1Exz-00610.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

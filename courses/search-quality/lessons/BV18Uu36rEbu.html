@@ -1,89 +1,411 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>Agent 真正在做什么：沿执行轨迹看运行框架 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>看懂 Agent Harness：从“读一下 README”到一次完整的执行循环 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="agent-harness-readme">看懂 Agent Harness：从“读一下 README”到一次完整的执行循环</h1>
+    <div class="meta"><span>清华大学计算机系科协</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV18Uu36rEbu/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#agent">Agent 真正在做什么：沿执行轨迹看运行框架</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#readme">“帮我读 README”后面发生了什么</a></li>
-<li><a href="#_2">一条用户消息，可能触发多种请求</a></li>
-<li><a href="#_3">五块职责，比记源码函数名更有用</a></li>
-<li><a href="#_4">为什么长任务需要事件流</a></li>
-<li><a href="#_5">工具需要两份说明</a></li>
-<li><a href="#_6">上下文压缩：续上任务，也可能丢掉关键约束</a></li>
-<li><a href="#_7">迁移练习：做一张最小执行轨迹表</a></li>
+<li><a href="#agent-harness-readme">看懂 Agent Harness：从“读一下 README”到一次完整的执行循环</a><ul>
+<li><a href="#_1">先走完最小的一次工具调用</a></li>
+<li><a href="#_2">先分清几种控制流程</a></li>
+<li><a href="#_3">实际请求，为什么比输入框里的内容多</a></li>
+<li><a href="#_4">接口长得不同，也会影响这条循环能不能接上</a></li>
+<li><a href="#_5">从界面到核心循环，五块职责怎样相接</a></li>
+<li><a href="#_6">启动准备和执行循环，为什么要分开</a></li>
+<li><a href="#_7">两个循环，分别服务于人和任务</a></li>
+<li><a href="#_8">工具同时面向模型和执行程序</a></li>
+<li><a href="#mcp">MCP 怎样把外部能力接进同一个循环</a></li>
+<li><a href="#_9">权限检查，放在意图与真实影响之间</a></li>
+<li><a href="#_10">上下文里，有一直保留的规则，也有按需加载的资料</a></li>
+<li><a href="#agent">子 Agent 也可以作为一种工具来启动</a></li>
+<li><a href="#_11">上下文压缩，到底替换了什么</a></li>
+<li><a href="#_12">总结提炼</a></li>
+<li><a href="#_13">时间导航</a></li>
+<li><a href="#_14">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV18Uu36rEbu" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV18Uu36rEbu"><div class="provenance">来源：清华大学计算机系科协 · <a href="https://www.bilibili.com/video/BV18Uu36rEbu/" target="_blank" rel="noopener">BV18Uu36rEbu 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="agent">Agent 真正在做什么：沿执行轨迹看运行框架</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV18Uu36rEbu.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><button class="done" data-done="BV18Uu36rEbu" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV18Uu36rEbu-00951.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV18Uu36rEbu&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV18Uu36rEbu/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV18Uu36rEbu"><h1>看懂 Agent Harness：从“读一下 README”到一次完整的执行循环</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV18Uu36rEbu/">B 站原讲解 · Claude Code 与 Harness</a> · 49 分钟 · 标准学习稿。视频包括运行轨迹演示与作者对旧版代码的分析；后者提及非正式披露版本，不能视为当前官方实现证明。本篇只提炼通用结构，不转载相关源码。</p>
+<p>来源：手撕 Claude Code 源码：从零理解 Agent Harness<br>
+UP 主：清华大学计算机系科协 · 48 分 44 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV18Uu36rEbu/</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>模型提出下一步，运行框架决定它能否执行、怎样执行、如何把结果交回模型，以及什么时候结束。</p>
-<h2 id="readme">“帮我读 README”后面发生了什么</h2>
-<p>用户只输入一句话。系统先把任务、规则、可用工具和会话状态组织成请求；模型返回读取文件的工具调用；程序检查参数与权限，再执行读取；文件内容作为工具结果进入下一轮。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=165" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:45]">[00:02:45]</a></p>
-<p>如果模型已经能回答，就结束这一轮任务；如果还要查别的文件，则继续。这条循环是理解 Agent 的主干：</p>
-<p><strong>准备上下文 → 请求模型 → 检查行动 → 执行工具 → 回传结果 → 再次判断。</strong></p>
-<p>注意两个区别：输出一个工具调用只表示意图；工具成功返回，也不代表用户的整个目标已经完成。</p>
-<h2 id="_2">一条用户消息，可能触发多种请求</h2>
-<p>演示中，系统先生成会话标题，再进入主要任务循环。标题请求和实际做事的请求目的不同。分析调用次数与成本时，应把辅助请求单独辨认出来。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=410" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:50]">[00:06:50]</a></p>
-<p>后续请求会带入历史消息和工具结果。项目规则、时间、工作目录等上下文，也可能由运行框架自动加入。用户看到的聊天记录通常只展示了其中一部分。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a></p>
-<p>这提示了一种排查方法：发现回答异常时，查看实际送入模型的请求结构，确认规则与资料是否被加载。日志包含敏感数据时，应先脱敏，再分享最小必要片段。</p>
-<h2 id="_3">五块职责，比记源码函数名更有用</h2>
+<p>我们在编码助手里输入：“读一下 README.md。”界面随后显示读取文件，最后给出说明。这个过程看起来像模型自己打开了文件，但模型服务通常没有直接坐在我们的电脑里，也不会因为看到一句请求，就自然知道文件存放在哪里。中间有一套程序准备请求、执行读取，再把文件内容交给模型。</p>
+<p>这套围绕模型工作的运行框架，就是 Harness。它安排模型请求与工具执行怎样接续，管理当前上下文、权限、错误和会话记录。对于需要多次查找、修改和测试的任务，Harness 让模型能够根据每一步的新结果继续判断。要理解它，我们可以先跟着一次任务走完，再看每个环节在整体结构中处于什么位置。<button type="button" class="timecode" data-seconds="9">[00:00:09]</button></p>
+<h2 id="_1">先走完最小的一次工具调用</h2>
+<p>用户说要读 README，Harness 先准备一个结构化请求。除了用户的文字，请求里还可能有系统规则、项目说明和可用工具定义。工具定义告诉模型：有一个读取文件的能力，它叫什么，需要哪些参数。模型看到这些信息后，才能提出与程序能够执行的形式对应的调用。<button type="button" class="timecode" data-seconds="196">[00:03:16]</button></p>
+<p>请求进入模型服务后，会被转换成模型能够处理的输入形式。模型生成输出，服务再把有关内容组织成返回结果。如果输出包含读取文件的工具调用，Harness 解析工具名称与参数，找到本地对应的实现，再检查输入是否合法、权限是否允许。通过这些检查后，读取才真正发生。模型生成调用请求，与程序执行调用，是两个不同步骤。<button type="button" class="timecode" data-seconds="230">[00:03:50]</button></p>
+<p>文件内容返回以后，任务还没有必然结束。Harness 把模型刚才的调用和实际读取结果加入消息历史，再发起下一次模型请求。模型这时已经能够看到 README 的内容，才有条件解释其中的信息。如果它还需要查其他文件，就继续提出工具调用；如果信息已经足够，则给出最终回答。这个过程可以反复进行，形成 Agent 的核心循环。</p>
+<p>把它压成一条顺序，便于先认清位置：</p>
+<blockquote>
+<p>准备任务与上下文 → 请求模型 → 接收工具调用 → 校验并执行 → 把结果交回模型 → 继续判断或结束。</p>
+</blockquote>
+<p>这里有两个容易混淆的“成功”。工具执行成功，只能说明某个动作已经完成，例如读到了文件；用户任务是否完成，还要看读取的文件是否正确、内容是否被理解、回答是否满足要求。Harness 能把实际结果送回来，模型仍然可能解释错结果。因此，执行记录与最终回答都值得观察。</p>
+<h2 id="_2">先分清几种控制流程</h2>
+<p>有些应用只需要把问题交给模型，拿到文字就结束。摘要、改写或简单问答可以采用这种形式，结构直观，也不需要处理多轮工具反馈。如果一个任务有固定的步骤和分支，还可以预先设计工作流，例如先检查条件，再经过审批，最后执行操作。路径由程序规定，模型只承担其中需要语言理解或生成的部分。<button type="button" class="timecode" data-seconds="70">[00:01:10]</button></p>
+<p>编码任务往往更难提前写死流程。模型可能需要先搜索，再根据搜索结果决定打开哪个文件；修改之后运行测试，测试失败又要回到代码里继续检查。每一步依赖刚才观察到的结果，这类“判断、行动、观察，再判断”的循环常被称为 ReAct 式 Agent Loop。它让执行路径能够随着环境反馈调整，但也需要管理停止条件、重试和权限。<button type="button" class="timecode" data-seconds="106">[00:01:46]</button></p>
+<p>多个 Agent 则可以进一步分工。适合独立进行的工作有机会并行处理，完成后汇总结果；同时也增加通信、重复劳动和冲突修改的可能。它可以建立在已有执行循环之上：主 Agent 负责整体任务，子 Agent 各自运行自己的循环。选哪种形式，需要看任务是否真的需要动态决策和分工，复杂结构本身没有自动的质量保证。<button type="button" class="timecode" data-seconds="133">[00:02:13]</button></p>
+<h2 id="_3">实际请求，为什么比输入框里的内容多</h2>
+<p>接下来观察一个很简单的任务：让 Claude Code 串行调用三个不同工具。用户只写了一句请求，但运行记录里出现了多个模型请求。其中先有一个生成会话标题的辅助请求，之后才进入真正完成任务的循环。这个细节说明，界面上的一轮交互和底层的一次请求不一定一一对应；分析时间或费用时，需要知道每个请求在做什么。<button type="button" class="timecode" data-seconds="398">[00:06:38]</button></p>
+<p>进入主循环后，请求里还加入了用户没有在这一次输入框中重复填写的信息，例如项目的 CLAUDE.md、时间和其他环境说明。CLAUDE.md 可以保存希望跨会话沿用的约定：项目结构、需要遵守的原则、常用工作方式等。新会话加载这些内容后，模型就能在当前任务中使用它们，而不必每次都由用户重新输入。<button type="button" class="timecode" data-seconds="481">[00:08:01]</button></p>
+<p>这是一种通过外部文件提供持续信息的方式。文件内容进入上下文，不意味着模型参数已经被永久修改。它的效果取决于文件是否被加载、内容是否适用，以及模型是否正确理解。放得越多也未必越好：过时的规则、重复的说明和无关资料，同样会进入模型需要处理的范围。</p>
+<p>第一轮模型响应可能包含可见文本，以及真正请求执行的工具调用。Harness 收到调用后执行工具，把结果加入历史，连同前面的信息一起发给模型。第二轮因此知道第一步实际做了什么，可以决定接着调用第二个工具。每次工具结果都为下一轮增加新的观察，最后模型返回不再包含工具调用的回答，正常流程便结束这一轮任务。<button type="button" class="timecode" data-seconds="575">[00:09:35]</button> <button type="button" class="timecode" data-seconds="621">[00:10:21]</button></p>
+<table>
+<thead>
+<tr>
+<th>模型请求的位置</th>
+<th>比上一轮多了什么</th>
+<th>模型现在能据此做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一次主任务请求</td>
+<td>用户目标、项目约定和工具说明</td>
+<td>选择第一步动作</td>
+</tr>
+<tr>
+<td>第一个工具执行后</td>
+<td>刚才的调用与真实结果</td>
+<td>判断结果，再选择下一步</td>
+</tr>
+<tr>
+<td>后续工具执行后</td>
+<td>更完整的执行历史</td>
+<td>继续处理剩余要求或修正做法</td>
+</tr>
+<tr>
+<td>最后一轮</td>
+<td>完成任务所需的已有结果</td>
+<td>给出回答，不再提出新调用</td>
+</tr>
+</tbody>
+</table>
+<p>这张表描述的是当前观察到的串行过程。实际 Harness 还可能并行执行某些工具，或者因为错误、取消、预算限制提前停止。没有新工具调用，可以作为正常结束的一种信号，却不能独自证明用户的所有要求都完成了。</p>
+<h2 id="_4">接口长得不同，也会影响这条循环能不能接上</h2>
+<p>模型服务之间的请求协议可能不同。即便都使用 JSON，也不代表字段和消息结构相同。例如，一种接口用 input 描述输入，另一种用 messages 保存消息列表；工具调用、工具结果和流式响应也可能使用不同的组织方式。如果客户端按一种协议发送，服务端却只接受另一种，换一个模型名称并不能消除格式差异。<button type="button" class="timecode" data-seconds="284">[00:04:44]</button></p>
+<p>这时需要客户端原生支持相应协议，或通过适配层转换请求和响应。转换也不只涉及把某个字段改名：工具调用的标识、参数和结果必须对应起来，流式事件也要被正确处理。否则普通问答可能勉强工作，一旦涉及多轮工具执行，就会因为消息关系不完整而出错。</p>
+<p>这里把接口差异放在最小循环之后理解，是因为我们现在知道了消息承担什么作用。系统需要把用户任务和工具说明送进去，也要把调用请求和执行结果准确接回来。协议兼容问题影响的是这条交接路径，具体产品和服务支持哪些协议，则应按使用版本的说明判断。</p>
+<h2 id="_5">从界面到核心循环，五块职责怎样相接</h2>
+<p>Claude Code 的内部结构在这里采用旧版代码分析作为观察角度，来源并非当前官方公开实现，因此下面的函数和模块关系应按这次材料理解，不能直接当作最新版源码指南。更稳定、也更值得掌握的是职责怎样划分：入口接收任务，启动流程准备环境，核心循环推进工作，状态服务保留过程，外部系统提供实际能力。<button type="button" class="timecode" data-seconds="696">[00:11:36]</button></p>
+<p>第一块是入口与界面。命令行进程需要接收参数，交互界面需要等待用户输入、显示结果；非交互模式或程序集成则可能直接提交任务并等待返回。IDE 和远程会话又提供了另外的入口。它们面向使用者的方式不同，但没有必要各自重新实现一套模型与工具循环。</p>
+<p>第二块是应用编排。配置、身份认证、斜杠命令、插件与技能，以及任务拆分等，都需要在相应位置管理。第三块才是核心运行时：它负责模型请求、上下文整理、工具调用和权限检查之间的循环。第四块保存会话、任务状态并记录运行情况。第五块是外部模型服务、Shell、文件系统和远程工具等实际依赖。<button type="button" class="timecode" data-seconds="759">[00:12:39]</button></p>
 <table>
 <thead>
 <tr>
 <th>部分</th>
-<th>负责什么</th>
-<th>对应的体验问题</th>
+<th>主要承担的工作</th>
+<th>与其他部分的连接</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>入口与界面</td>
-<td>接收输入、显示过程、响应取消</td>
-<td>用户是否知道任务还在运行？</td>
+<td>接收输入，显示过程，处理交互</td>
+<td>把任务交给运行核心，接收执行事件</td>
 </tr>
 <tr>
 <td>应用编排</td>
-<td>配置、命令、扩展、任务安排</td>
-<td>当前启用了哪些能力？</td>
+<td>配置、认证、命令和扩展</td>
+<td>准备本次任务可用的环境与能力</td>
 </tr>
 <tr>
-<td>核心运行循环</td>
-<td>模型请求、工具执行、上下文管理</td>
-<td>下一步怎样决定，循环怎样结束？</td>
+<td>核心循环</td>
+<td>请求模型，处理工具，推进任务</td>
+<td>使用准备好的依赖，不断更新任务状态</td>
 </tr>
 <tr>
 <td>状态与观测</td>
-<td>会话恢复、执行记录、成本与延迟</td>
-<td>出错后能否定位、恢复？</td>
+<td>保存会话、恢复状态、记录用量</td>
+<td>在执行过程中持续接收记录</td>
 </tr>
 <tr>
-<td>外部环境</td>
-<td>模型服务、文件、网络、远程工具</td>
-<td>依赖失败或权限变化时怎么办？</td>
+<td>外部系统</td>
+<td>模型服务、本地命令、文件和远程工具</td>
+<td>执行请求并返回真实结果</td>
 </tr>
 </tbody>
 </table>
-<p>这张表是对视频结构的归纳，便于跨产品比较。具体函数名和内部边界随版本变化。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:20]">[00:11:20]</a></p>
-<h2 id="_4">为什么长任务需要事件流</h2>
-<p>任务可能运行几分钟。如果程序只在最后返回一个结果，界面中间就像卡住了。视频用异步事件解释：新文本、工具开始、工具结束、错误等，都可以逐步交给界面显示。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1212" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:12]">[00:20:12]</a></p>
-<p>事件流既改善等待体验，也让不同入口复用同一套执行逻辑。终端、网页或 SDK 可以消费相同类型的事件，分别呈现给用户。</p>
-<p>好的进度提示应说明正在处理什么、已经得到什么、是否需要用户决定。不断转圈或反复说“处理中”，信息价值很低。</p>
-<h2 id="_5">工具需要两份说明</h2>
-<p>对模型，要说明工具名、用途和参数结构。对执行器，还要说明是否可用、怎样检查权限、怎样执行、是否允许并发、怎样处理异常。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1660" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:40]">[00:27:40]</a></p>
-<p>例如读取两个独立文件可以并行；同时改同一个文件就可能互相覆盖。一个命令被模型描述为“只读”，仍应由程序检查。无法可靠判断的复合操作，需要更保守的处理。</p>
-<p>MCP 工具接入后也应遵守同样的执行边界。协议连接让调用形式更统一，不会自动消除远程服务的错误、敏感信息风险或授权要求。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=1930" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:32:10]">[00:32:10]</a></p>
-<h2 id="_6">上下文压缩：续上任务，也可能丢掉关键约束</h2>
-<p>演示中，手动压缩把较长历史整理成摘要，下一轮使用摘要继续。原始细节可能保存在另一个记录中，需要时再查。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=2660" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:44:20]">[00:44:20]</a></p>
-<p>评测压缩质量，不能只看摘要短了多少。还要检查用户最新要求、已完成事项、未解决错误、关键证据位置以及禁止事项是否保留。少掉一句“不要覆盖原文件”，可能比少掉整段闲聊严重得多。</p>
-<p>视频也展示了子任务委派：主任务派出独立工作，等待结果再整合。并发应有清晰边界，避免重复搜索、冲突写入与把一个子任务的失败藏在总结果里。<a class="timecode" href="https://www.bilibili.com/video/BV18Uu36rEbu/?t=2495" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:41:35]">[00:41:35]</a></p>
-<h2 id="_7">迁移练习：做一张最小执行轨迹表</h2>
-<p>找一次可安全重现的 Agent 失败，记录五列：步骤、预期行动、实际工具与参数、返回结果、下一步决策。只保留必要信息，删除令牌、私人文件内容和真实账号。</p>
-<p>然后判断问题发生在哪里：模型选择错了、参数不合法、工具没执行成功、结果没被理解，还是任务早早宣告完成？每个标签都要指向一条可观察记录。</p>
-<p>补充边界：本课讲解中的 API 格式、工具列表和压缩细节都是录制时的例子。实际接入前应核对目标服务当前文档，不能仅通过更换模型名推定接口兼容。</p></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>一项能力可能横跨几个部分。比如，恢复会话需要状态服务保存历史，启动流程读取历史，核心循环把历史作为上下文继续使用。只知道有一个名为 session 的模块，还不足以理解恢复怎样发生；沿着这些连接看，才能明白信息从哪里来、被谁使用。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV18Uu36rEbu-00951.jpg" data-caption="任务从界面进入 queryLoop，模型请求与工具执行反复往返，事件交回界面，会话记录在旁持续保存。">
+    <img src="../assets/frames/BV18Uu36rEbu-00951.jpg" loading="lazy" alt="视频截图 01，00:15:51：任务从界面进入 queryLoop，模型请求与工具执行反复往返，事件交回界面，会话记录在旁持续保存。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="951.000">图 01 · 00:15:51</button><span>任务从界面进入 queryLoop，模型请求与工具执行反复往返，事件交回界面，会话记录在旁持续保存。</span></figcaption>
+</figure>
+<h2 id="_6">启动准备和执行循环，为什么要分开</h2>
+<p>在进入真正的 Agent Loop 之前，程序需要完成许多准备。main 一类入口处理进程启动、退出或中断，以及命令行参数；run 一类启动流程读取用户和项目配置，建立认证与 API 客户端，准备会话。随后还要了解当前工作目录、项目约定、仓库状态和工具权限，才能知道本次任务在什么环境里执行。<button type="button" class="timecode" data-seconds="1023">[00:17:03]</button></p>
+<p>这些信息会影响实际行为。同样一句“修改配置文件”，当前目录不同，应该操作的文件就可能不同；可用工具或权限不同，能够执行的方法也不同。项目里的技能、外部工具连接和当前运行模式，也需要在这一阶段发现或准备。外部 MCP 工具可以被转换成内部统一的工具描述，加入本次任务可用的工具集合。</p>
+<p>环境准备好以后，系统再根据入口决定如何接收任务。交互模式等待用户继续输入，单次输出模式直接处理给定请求。真正交给核心循环的，是一个包含必要依赖的参数集合，材料中用 QueryParams 表示。它可以包括已有消息、系统提示、工具、权限回调、所选模型、轮数和预算等。这些参数告诉循环：开始这次工作时，有哪些条件和限制。<button type="button" class="timecode" data-seconds="1132">[00:18:52]</button> <button type="button" class="timecode" data-seconds="1275">[00:21:15]</button></p>
+<p>开始之后，状态又会持续变化。工具返回了新的内容，历史消息增加，任务消耗了部分预算，或者上下文经过压缩。QueryLoopState 表示这类执行中不断更新的状态。QueryParams 与 QueryLoopState 的区别，就像“出发时拿到了什么”和“现在进行到哪里”：前者定义本次运行的起点与依赖，后者记录沿途变化。<button type="button" class="timecode" data-seconds="1633">[00:27:13]</button></p>
+<h2 id="_7">两个循环，分别服务于人和任务</h2>
+<p>交互界面有一个外层循环，通常称为 REPL，即读取、求值、输出循环。它不断等待用户输入。如果收到的是斜杠命令，就交给对应的命令处理；如果收到普通任务，就准备参数，进入核心执行流程。一次任务完成以后，外层仍然可以继续等待下一条输入。<button type="button" class="timecode" data-seconds="1213">[00:20:13]</button></p>
+<p>内层 Agent Loop 则是在处理当前这一项任务。它反复请求模型、执行工具、接收反馈，直到停止。外层的“一条用户输入”，可能对应内层很多轮模型调用。把这两个循环分清楚，我们就不会把“助手还在等待用户”与“助手正在执行上一项任务”混成同一种状态。</p>
+<p>问题是，内层任务可能运行几分钟。如果它直到最后才返回一个结果，外层界面在中间就没有信息可显示，用户会以为程序卡住了。为此，内层可以不断产生事件：一段新文字、工具开始、工具结束，或者发生错误。外层收到事件后更新界面，让用户知道任务仍在进行。<button type="button" class="timecode" data-seconds="1304">[00:21:44]</button></p>
+<p>异步生成器是实现这种方式的一种手段。普通异步函数通常在结束时给出一个最终结果；异步生成器可以在等待模型或工具的同时，多次产生中间事件。TypeScript 中的 async function*、yield 和 for await 可以用于这样的生产与接收关系。这里不必先背语法，只要理解：核心持续报告发生的事情，界面持续接收并展示。<button type="button" class="timecode" data-seconds="1338">[00:22:18]</button></p>
+<p>事件流还建立了一个有用的边界。同一套核心循环可以把事件交给终端、其他界面或调用它的程序，各入口决定怎样显示和保存，不必把界面绘制逻辑塞进工具执行里。QueryEvent 因此描述的是运行中发生了什么，也让核心逻辑更容易被不同入口复用。<button type="button" class="timecode" data-seconds="1411">[00:23:31]</button></p>
+<h2 id="_8">工具同时面向模型和执行程序</h2>
+<p>模型需要知道怎样提出调用请求，因此工具要提供名称、用途和参数结构。以 Edit 为例，模型必须知道它用于字符串替换，需要定位哪个文件、把哪段旧内容替换成新内容，以及某些选项允许什么类型。input schema 定义这些输入要求，例如字段是否必填、值应当是字符串还是布尔值。<button type="button" class="timecode" data-seconds="1661">[00:27:41]</button></p>
+<p>执行程序关心的则更多。工具当前是否启用，决定它能否出现在可用工具集合中；输入校验决定参数是否符合定义；权限检查决定这次动作是否允许；执行函数真正完成操作。工具还可能说明自己是否只读、是否具有破坏性，以及能否和其他调用并发。它同时承担“让模型理解”和“让程序可靠执行”两面的约定。<button type="button" class="timecode" data-seconds="1797">[00:29:57]</button></p>
+<table>
+<thead>
+<tr>
+<th>给模型看的信息</th>
+<th>给执行程序使用的能力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工具叫什么，什么时候使用</td>
+<td>在工具集合里找到对应实现</td>
+</tr>
+<tr>
+<td>参数是什么，类型和限制有哪些</td>
+<td>校验实际输入是否满足要求</td>
+</tr>
+<tr>
+<td>调用能获得什么结果</td>
+<td>执行并组织结果或错误</td>
+</tr>
+<tr>
+<td>使用时需要注意什么</td>
+<td>检查权限、并发和执行边界</td>
+</tr>
+</tbody>
+</table>
+<p>并发安全是一个直观例子。读取相互独立的文件，常常可以同时进行；两个调用同时修改同一个文件，则可能互相覆盖或基于不同状态修改。模型即便在一次响应里提出多个工具调用，执行层也不能一律同时运行。它需要根据具体操作的性质安排执行，保留必要的先后关系。<button type="button" class="timecode" data-seconds="1613">[00:26:53]</button></p>
+<p>Bash 工具尤其需要谨慎。命令字符串看起来可能很简单，但复合命令、重定向或子命令会改变它实际做的事情。材料中的处理思路是，先校验参数，再通过静态分析判断能否可靠地按只读动作处理；无法明确解析的情况采用更保守的策略。工具的风险分类应由可信的执行逻辑检查，不能仅凭模型自己声明“这是只读”就放行。<button type="button" class="timecode" data-seconds="1889">[00:31:29]</button></p>
+<h2 id="mcp">MCP 怎样把外部能力接进同一个循环</h2>
+<p>一个网站的能力可以通过普通网络请求调用，也可以由 MCP 服务把可用工具统一描述出来。客户端连接服务后，获取工具列表，再把外部工具映射到自己内部使用的工具结构。这样，模型看到的仍然是工具名、说明和参数，并能像调用其他工具一样提出请求。<button type="button" class="timecode" data-seconds="1930">[00:32:10]</button></p>
+<p>真正执行时，内部工具实现把请求发送给对应 MCP 服务，服务处理后返回结果，再由客户端转换成模型能够接收的工具结果。核心循环不必为每一个外部服务发明完全不同的消息流。协议中的 tools/list 与 tools/call 分别承担工具发现和调用，它们是协议方法，不能简单理解为所有服务都必须暴露的固定 HTTP 路径；具体传输方式另有约定。<a href="https://modelcontextprotocol.io/specification/2025-06-18/server/tools">MCP 工具协议</a> <button type="button" class="timecode" data-seconds="2006">[00:33:26]</button></p>
+<p>统一调用方式没有消除权限问题。连接远程服务需要适当认证，某个工具是否可以用于当前任务仍要判断，返回结果也可能出错或包含不可信内容。MCP 让能力更容易接入，Harness 仍然负责把它放进已有的校验、执行和结果处理流程中。</p>
+<h2 id="_9">权限检查，放在意图与真实影响之间</h2>
+<p>模型已经提出调用，系统却还没有执行，这个位置正适合检查权限。先找到工具，校验输入，再根据动作类型和当前规则决定允许、拒绝，或请用户确认。用户确认后，操作还可能受到沙箱、文件访问和网络规则的限制。权限因此是一组在执行路径上生效的安排，无法只靠上下文里的一段提醒完成。<button type="button" class="timecode" data-seconds="2107">[00:35:07]</button></p>
+<p>这也解释了为什么工具说明与权限检查需要同时存在。说明帮助模型选择合理动作，权限系统处理即便模型选择不合理时也不能越过的边界。例如，一个参数格式完全正确的文件操作，目标路径仍可能不在授权范围内。格式合法回答的是“程序能不能理解”，权限判断回答的是“这次任务允不允许这样做”。</p>
+<p>权限拒绝或用户取消也需要成为可理解的结果，让模型知道原先的行动没有完成。否则模型可能继续沿着“已经执行成功”的假设往下推断。正确的反馈既保护系统，也帮助模型理解当前条件，从而选择其他可行办法，或明确告诉用户需要哪些条件才能继续。</p>
+<h2 id="_10">上下文里，有一直保留的规则，也有按需加载的资料</h2>
+<p>实际发送给模型的内容可能分布在不同字段里。系统规则介绍助手角色、行为要求和环境，消息历史包含用户任务、模型响应与工具结果；项目约定、当前时间和附加目录信息，也可能被应用组织进请求。模型看见的是最终准备好的这些内容，用户界面通常只显示其中一部分。<button type="button" class="timecode" data-seconds="2165">[00:36:05]</button></p>
+<p>因此，当我们分析一次异常回答时，要区分“用户没有在这次输入”和“模型完全没有收到”。某些信息可能由程序自动加入，例如工作目录、仓库状态或项目说明；另一些信息虽然保存在磁盘上，却未必已经加载。只有看清本次请求包含什么，才能知道模型是在什么条件下作出判断。这类记录可能包含私有资料，查看和分享时也需要控制范围。</p>
+<p>技能提供了按需加载的一种方式。技能文件通常有名字、简介和详细内容，还可以附带脚本、参考资料。系统先把技能的名称与简介提供给模型，让它知道有哪些可用方法；任务匹配时，再加载相应说明。这样，模型不必一开始就接收所有技能的完整内容。<button type="button" class="timecode" data-seconds="2334">[00:38:54]</button></p>
+<p>这是一种上下文管理策略。简介承担发现和选择的作用，详细内容承担实际指导的作用。简介如果不准确，模型可能找不到需要的技能；详细内容如果过时，加载以后仍然会影响任务。把资料分层加载节省了空间，资料本身的质量和适用条件仍然要维护。<button type="button" class="timecode" data-seconds="2446">[00:40:46]</button></p>
+<h2 id="agent">子 Agent 也可以作为一种工具来启动</h2>
+<p>当主 Agent 需要把工作交出去，可以调用一个创建子 Agent 的工具。调用参数包含任务描述、具体提示和子 Agent 类型等信息。执行层据此建立子任务，子 Agent 获得自己的上下文并运行，完成后再把结果或状态通知主 Agent。这条路径仍然符合我们已经理解的工具循环，只是工具执行的内容变成了另一个 Agent 的工作。<button type="button" class="timecode" data-seconds="2515">[00:41:55]</button></p>
+<p>报数的例子把这个结构缩得很小：主 Agent 创建三个子任务，分别处理对应的报数要求。每个子任务有自己的运行记录，完成后通知主任务，再由主 Agent 汇总。工具返回“成功启动”时，只说明任务已经建立；后续完成通知，才表示相应子任务已经结束。这两个状态必须区分，否则主 Agent 可能在工作还没做完时就宣布全部完成。<button type="button" class="timecode" data-seconds="2568">[00:42:48]</button></p>
+<p>这个例子帮助看清委派机制，但没有证明复杂任务只要拆成三个就能变好。真正的子任务还需要足够的背景、清楚的边界和可检查的交付。对于会修改共享文件的工作，还要注意前面讨论的并发安全。子 Agent 复用了执行循环，也继承了执行循环需要管理的权限、状态和错误问题。</p>
+<h2 id="_11">上下文压缩，到底替换了什么</h2>
+<p>循环持续进行，历史会越来越长。模型的上下文容量有限，Harness 因而需要在适当时机整理已有信息。常见思路是把较长的历史总结成更短的内容，保留继续任务所需的要点，再用这份摘要进入后续请求。自动压缩什么时候触发，属于具体实现和配置，不能把一个示意阈值当成固定标准。<button type="button" class="timecode" data-seconds="1446">[00:24:06]</button></p>
+<p>手动执行 compact 的例子展示了这个过程。原有对话后面增加了一次要求总结历史的请求，模型返回摘要；下一次用户发消息时，较长的历史被摘要替代。请求中还告诉模型，这段会话从之前的上下文延续而来，必要时可以去保存的记录中查找更详细的信息。<button type="button" class="timecode" data-seconds="2680">[00:44:40]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV18Uu36rEbu-02779.jpg" data-caption="压缩后的上下文保留任务意图、技术内容和涉及文件等信息，用摘要帮助下一轮接着工作。">
+    <img src="../assets/frames/BV18Uu36rEbu-02779.jpg" loading="lazy" alt="视频截图 02，00:46:19：压缩后的上下文保留任务意图、技术内容和涉及文件等信息，用摘要帮助下一轮接着工作。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="2779.000">图 02 · 00:46:19</button><span>压缩后的上下文保留任务意图、技术内容和涉及文件等信息，用摘要帮助下一轮接着工作。</span></figcaption>
+</figure>
+<p>在这次轨迹里，临近压缩前的部分消息也被保留，用于继续交互。它展示了一种实际观察到的整理结果，不能据此推定所有版本、所有自动压缩都采用完全相同的保留方式。更重要的是，我们现在知道摘要接在循环的什么位置：模型下一次判断所依据的历史变短了，能够继续运行，但未被保留的细节也可能影响后续理解。<button type="button" class="timecode" data-seconds="2762">[00:46:02]</button></p>
+<p>摘要质量因此不能只看长度。如果目标、已经完成的事情、尚未解决的问题和重要限制没有保留下来，模型可能重复工作或忘掉约束。原始记录仍然存在，也不等于模型一定会主动找回缺少的内容；它需要知道相关细节可能在哪里，并在必要时读取。压缩与外部记录配合，可以延长任务持续时间，但信息取舍仍然会影响质量。</p>
+<h2 id="_12">总结提炼</h2>
+<p>Harness 把一次模型输出接成可持续执行的过程。它准备上下文，请求模型，处理工具与权限，接回结果，再决定继续或停止。界面看到的一次任务，可能包含多轮请求、多个工具，甚至其他子任务；每一步之间的信息交接，都会影响最终表现。</p>
+<p>沿着读取 README、三个工具串行调用、子任务报数和手动压缩这几个例子，我们可以看见同一条主线：模型提出行动，程序管理实际执行，结果回到下一次判断。入口、配置、事件流、工具描述、权限和会话状态都围绕这条主线工作。记住它们承担的职责，之后阅读不同 Agent 的实现就更容易找到方向。</p>
+<h2 id="_13">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="196">[00:03:16]</button> “读 README”怎样变成结构化模型请求。</li>
+<li><button type="button" class="timecode" data-seconds="398">[00:06:38]</button> 三个串行工具调用的实际轨迹。</li>
+<li><button type="button" class="timecode" data-seconds="696">[00:11:36]</button> 入口、编排、核心、状态和外部环境。</li>
+<li><button type="button" class="timecode" data-seconds="1023">[00:17:03]</button> 进入执行循环之前需要准备什么。</li>
+<li><button type="button" class="timecode" data-seconds="1213">[00:20:13]</button> 外层交互循环与内层任务循环。</li>
+<li><button type="button" class="timecode" data-seconds="1338">[00:22:18]</button> 异步生成器怎样不断交出中间事件。</li>
+<li><button type="button" class="timecode" data-seconds="1661">[00:27:41]</button> 工具对模型和执行程序的两套约定。</li>
+<li><button type="button" class="timecode" data-seconds="1930">[00:32:10]</button> MCP 工具怎样接入已有循环。</li>
+<li><button type="button" class="timecode" data-seconds="2107">[00:35:07]</button> 权限检查怎样位于执行之前。</li>
+<li><button type="button" class="timecode" data-seconds="2334">[00:38:54]</button> 技能的简介与详细内容为什么分开加载。</li>
+<li><button type="button" class="timecode" data-seconds="2568">[00:42:48]</button> 子任务启动和完成如何通知主 Agent。</li>
+<li><button type="button" class="timecode" data-seconds="2680">[00:44:40]</button> 上下文压缩怎样让会话继续。</li>
+</ul>
+<h2 id="_14">回看时的三个问题</h2>
+<p>模型提出读取文件后，到它真正能够根据文件回答，中间经过了哪些程序步骤？哪一步可以发现路径或权限问题？</p>
+<p>QueryParams、QueryLoopState 和 QueryEvent 分别描述开始条件、当前状态还是运行中发生的事情？试着把它们放回一次工具调用中解释。</p>
+<p>如果一个子任务显示启动成功，或者一次工具返回成功，为什么主 Agent 仍然需要检查整个用户目标是否完成？沿着实际执行记录回答，能看见这些状态之间的区别。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "harness", "duration": "48:44", "src": "", "poster": "../assets/frames/BV18Uu36rEbu-00951.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

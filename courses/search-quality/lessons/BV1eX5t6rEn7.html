@@ -1,76 +1,290 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>接入知识之前，先选一条最短的路 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>给 AI 接上资料，先弄清它需要怎样找答案 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">给 AI 接上资料，先弄清它需要怎样找答案</h1>
+    <div class="meta"><span>blackstone_99</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1eX5t6rEn7/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">接入知识之前，先选一条最短的路</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#ai">同样是“给 AI 一点资料”，其实有五种任务</a></li>
-<li><a href="#_3">精确的东西，先尝试精确地找</a></li>
-<li><a href="#rag">用上 RAG 后，别只盯着向量模型</a></li>
-<li><a href="#_4">评测和整理数据，要先于架构竞赛</a></li>
-<li><a href="#_5">迁移练习：给三个问题分路由</a></li>
+<li><a href="#ai">给 AI 接上资料，先弄清它需要怎样找答案</a><ul>
+<li><a href="#_1">资料能直接读完时，为什么还要先切开</a></li>
+<li><a href="#_2">资料太多时，让检索先缩小阅读范围</a></li>
+<li><a href="#_3">问题需要沿着线索追下去时，让模型决定下一次查什么</a></li>
+<li><a href="#_4">已经在表格里的数据，直接按字段查询</a></li>
+<li><a href="#_5">研究问题需要把多次查询组织起来</a></li>
+<li><a href="#_6">选完路线，还需要知道自己有没有变好</a></li>
+<li><a href="#_7">总结提炼</a><ul>
+<li><a href="#_8">一句话抓住核心</a></li>
+<li><a href="#_9">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_10">时间戳导航</a></li>
+<li><a href="#_11">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1eX5t6rEn7" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1eX5t6rEn7"><div class="provenance">来源：blackstone_99 · <a href="https://www.bilibili.com/video/BV1eX5t6rEn7/" target="_blank" rel="noopener">BV1eX5t6rEn7 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">接入知识之前，先选一条最短的路</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1eX5t6rEn7.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><button class="done" data-done="BV1eX5t6rEn7" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1eX5t6rEn7&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1eX5t6rEn7/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1eX5t6rEn7"><h1>给 AI 接上资料，先弄清它需要怎样找答案</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1eX5t6rEn7/">blackstone_99 · RAG 五条路线对比</a> · 11 分钟 · 自动转写。录制中的价格、产品能力与行业判断具有时效性。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1eX5t6rEn7/">blackstone_99｜RAG 五条路线对比</a> · 11 分 3 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>先弄清数据长什么样、问题需要怎样查、用户能等多久，再选择检索架构。</p>
-<h2 id="ai">同样是“给 AI 一点资料”，其实有五种任务</h2>
-<p>假设我要让 AI 回答公司制度问题。只有十页稳定的制度，和每天变化的百万条业务记录，需要的系统会完全不同。视频先用两个问题划分场景：资料是否能放进上下文？查询需要精确匹配，还是模糊的语义理解？<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=55" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:55]">[00:00:55]</a></p>
+<p>接到“让 AI 能回答我们的资料”这个需求时，我们很容易立刻开始选向量数据库。但先停在这个需求上想一会儿：资料究竟有多少？提问的人通常已经知道要找哪个名字，还是只能描述一个大概意思？一个问题能否查一次就得到答案，还是必须沿着线索继续找？这些区别会直接改变系统需要做的工作。知识接入有好几条路，先把眼前的任务说具体，后面的选择才有依据。<button type="button" class="timecode" data-seconds="55">[00:00:55]</button></p>
+<p>我们先认识最常见的一条路。RAG，全称检索增强生成，做法是先从资料里找出与问题有关的内容，再让语言模型参照这些内容回答。例如，系统先找到一段说明，再把说明和用户的问题一起交给模型。模型无需每次通读全部资料，也能利用当前找到的信息。不过，“先找什么、怎样找到、找到的内容够不够”都成为我们需要负责的事情。下面的五种做法，正是在不同条件下安排这份工作。</p>
+<h2 id="_1">资料能直接读完时，为什么还要先切开</h2>
+<p>第一种办法非常直观：把资料直接交给模型阅读。模型一次调用时能够看到的文字叫上下文，其中既有我们的任务要求，也有资料和此前的对话。如果相关资料能放进上下文，而且模型能够稳定理解它们，就可以先试这种直接阅读的做法。它省去了提前切分文档、建立检索索引、再把片段拼回来的几道工序。对数量可控、变化较少的资料，这个起点值得认真考虑。<button type="button" class="timecode" data-seconds="73">[00:01:13]</button></p>
+<p>这里还有一项影响成本的条件。假如每次提问使用的资料相同，改变的只有最后的问题，那么大量输入文字会被重复处理。Prompt caching，即提示词缓存，允许符合服务规则的重复输入复用部分计算，从而可能减少后续调用的花费。这种办法适合反复使用相对稳定的资料。缓存具体省多少，要看所用服务、缓存命中情况和计费规则；录制时提到的折扣不能直接当作今天任何产品的报价。<button type="button" class="timecode" data-seconds="154">[00:02:34]</button></p>
+<p>“放得下”和“读得好”也需要分开。模型允许接收很长的输入，只说明输入长度合规；关键信息埋在大段文字中间时，模型仍然可能漏看。因此，几百份文档只是一个粗略描述，实际还得看每份文档有多长、问题是否需要同时联系很多位置。先用真实问题试读，才能知道直接阅读是否足够。上下文容量扩大，为我们增加了一种选择，并没有取消检查回答的必要。<button type="button" class="timecode" data-seconds="187">[00:03:07]</button></p>
+<h2 id="_2">资料太多时，让检索先缩小阅读范围</h2>
+<p>当资料增长到无法一次读完，RAG 的作用就清楚了。我们先把文档解析成可处理的文字，切成较小的片段；再用 embedding 模型把片段转换成一组数字，使含义接近的文字更容易被搜索到。用户提问时，系统找到相关片段，把它们交给语言模型组织回答。这条流程的难处在于：片段选错了或缺了重要条件，后面的模型就无法仅凭阅读补回那些信息。<button type="button" class="timecode" data-seconds="206">[00:03:26]</button></p>
+<p>为了减少漏找，我们可以同时使用关键词检索和向量检索。关键词检索关注文字是否匹配，例如某个函数名、版本号或专有名称；向量检索关注含义接近，适合用户用自己的说法描述需求。两路一起查，叫混合检索。它让精确名称和不同措辞各有一条被找到的路，但两边返回的内容仍需要进一步筛选，不能简单把所有片段都塞进回答提示词。</p>
+<p>下一步是重排序，也叫 rerank。假设初步检索返回了 100 条候选内容，我们再用一个模型逐一比较候选内容与问题的关系，从中挑出更值得交给回答模型的几条。初步检索负责尽量找全，重排序负责在候选中细选，两步解决的困难不同。给重排序更多候选，也会增加处理时间，因此“先取 100 条、最后留 5 条”可以帮助理解分工，却不必成为每个系统固定照搬的参数。<button type="button" class="timecode" data-seconds="235">[00:03:55]</button></p>
+<p>还有一种改进叫 Contextual Retrieval：给每个片段补一段说明，交代这个片段在整份文档中的位置和含义，再建立检索表示。单独拿出的一段文字可能只写“本年度增长”，读者却不知道属于哪份材料；上下文说明的目的，就是让片段离开原位置后仍保留必要的指代。这个例子用于解释原理，实际应补什么，要由文档本身决定。补充说明也需要准确，不能把模型猜出的背景写进知识库。<button type="button" class="timecode" data-seconds="253">[00:04:13]</button></p>
+<p>这几项改动关注的都是“怎样把合适的资料送到模型面前”。它们可以帮助我们分析问题，但不能仅凭名称判断提升幅度。不同资料的格式、不同提问方式，以及原有检索已经做到什么程度，都会影响改进空间。真正需要比较的是同一批问题在改动前后的结果。</p>
+<h2 id="_3">问题需要沿着线索追下去时，让模型决定下一次查什么</h2>
+<p>有些问题查一次就足够，有些问题要接着查。代码就是很容易理解的例子：先找到一个函数的定义，看到它调用了另一个函数，再去读被调用函数的实现。第二次要搜的名字，是读完第一次结果才知道的。若我们预先规定只做一次检索，很容易在找到入口之后就停住，仍然没有弄清实际行为。<button type="button" class="timecode" data-seconds="279">[00:04:39]</button></p>
+<p>Agentic Retrieval 把检索放进一个反复进行的过程。模型先提出查询，读取结果，判断还缺什么，再决定是否继续查以及下一次查什么。这里的 Agent 可以理解为能够利用工具结果安排后续动作的程序。对于代码，工具可以是精确搜索函数名的命令，也可以是读取文件的工具。代码本来就有函数、类和引用路径，保留这些结构，经常比把每个片段只当作一段“意思相近的文字”更有帮助。<button type="button" class="timecode" data-seconds="310">[00:05:10]</button></p>
+<p>长上下文也改变了这一步的做法。当一次可以读下完整文件时，我们有机会把函数附近的条件、类的定义和调用关系放在一起理解，减少只看一个孤立片段造成的误判。不过，模型能调用工具，并不代表它每一步都选得对。模型可能反复搜同样的词，也可能在还没找到关键资料时就提前结束。多轮检索的价值，依赖它能否根据已有结果作出合适的下一步判断。</p>
+<p>这种灵活性有明确的代价。每多一次模型判断和工具查询，就多一次时间与费用支出。需要追踪调用关系的代码问题、需要逐步调查的研究问题，可能值得付出这些代价；一句话即可回答的常见问答，通常没有必要绕许多轮。我们选择这条路线时，实际上也在选择让用户等多久，以及一次问题允许系统做多少次尝试。<button type="button" class="timecode" data-seconds="347">[00:05:47]</button></p>
+<h2 id="_4">已经在表格里的数据，直接按字段查询</h2>
+<p>如果信息原本保存在数据库、客户管理系统或监控系统中，就要再问一句：我们是否已经有一套能够准确查询它的接口？数据库里的记录通常有明确字段，字段之间也有关系。把这些记录先改写成文字，再建立向量索引，会增加一次转换；当用户真正需要的是按条件筛选或统计，直接使用原有查询能力更容易保留字段的准确含义。<button type="button" class="timecode" data-seconds="378">[00:06:18]</button></p>
+<p>这条路线可以让模型生成 SQL，也可以让模型调用业务系统提供的 API。SQL 是表达数据库查询的语言，API 则是程序已经开放的操作入口。模型需要知道有哪些表、每个字段是什么意思，以及一次查询可以怎样组合条件。Schema 就是这样的结构说明；提供几组问法与正确查询的对应例子，也能帮助模型理解。最后还需要检查生成的查询是否正确，不能因为它看起来像一条 SQL，就认为它问对了问题。<button type="button" class="timecode" data-seconds="389">[00:06:29]</button></p>
+<p>数据库查询和语义检索关注的对象不同。前者适合已有明确字段、需要严格条件的记录；后者适合分散在文档里、措辞可能不同的内容。一个产品完全可以同时使用这两种能力。关键是保留资料原有的结构，让查询方式配得上用户实际要找的东西。</p>
+<h2 id="_5">研究问题需要把多次查询组织起来</h2>
+<p>Deep Research 可以看成更完整的一种多轮调查。先把大问题拆成若干子问题，分别搜索与阅读，再把各部分发现合起来形成报告。这里除了“找到一篇资料”以外，还多了安排调查顺序、理解多篇材料、处理彼此关系的工作。一个复杂问题可能需要几十次搜索和模型调用，时间与费用都会随之增加。<button type="button" class="timecode" data-seconds="420">[00:07:00]</button></p>
+<p>这与前面的 Agentic Retrieval 有重合：两者都可能根据已有结果继续查询。把深度研究单独列出来，是为了强调任务规模和交付形态的不同。代码检索也许只需沿三个函数读下去；研究报告则可能围绕几个子问题反复调查，最后还要说明不同材料怎样共同支持结论。因此，五条路线可以互相组合，不必把它们理解为彼此排斥的五种产品。</p>
 <table>
 <thead>
 <tr>
-<th>路线</th>
-<th>适合尝试的情况</th>
-<th>最先检查的代价</th>
+<th>眼前主要困难</th>
+<th>可以先考虑的办法</th>
+<th>还要确认什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>长上下文与缓存</td>
-<td>资料量可控，经常重复使用</td>
-<td>实际 token 数、缓存命中、长文本遗漏</td>
+<td>资料能一次读下，且经常重复使用</td>
+<td>长上下文与提示词缓存</td>
+<td>模型是否漏看，缓存是否命中</td>
 </tr>
 <tr>
-<td>检索增强生成</td>
-<td>大量文档中寻找相关段落</td>
-<td>解析、切块、召回、排序、引用是否可靠</td>
+<td>文档很多，问题与文档措辞常常不同</td>
+<td>混合检索、重排序及必要的片段上下文</td>
+<td>相关内容有没有被找到并保留下来</td>
 </tr>
 <tr>
-<td>Agent 自主检索</td>
-<td>要反复查找并追踪线索</td>
-<td>调用次数、延迟、停止条件</td>
+<td>下一次查什么取决于刚读到的结果</td>
+<td>Agent 多轮检索</td>
+<td>查询是否有效，何时停止</td>
 </tr>
 <tr>
-<td>SQL 或业务 API</td>
-<td>数据已经是结构化表格或业务记录</td>
-<td>字段含义、查询正确性、权限</td>
+<td>资料已经有明确的表和字段</td>
+<td>SQL 或现有业务 API</td>
+<td>字段理解和查询条件是否正确</td>
 </tr>
 <tr>
+<td>大问题需要调查多个子问题</td>
 <td>深度研究流程</td>
-<td>一个问题需要多来源、多步骤调查</td>
-<td>预算、等待时间、来源质量</td>
+<td>调查是否充分，等待和费用能否接受</td>
 </tr>
 </tbody>
 </table>
-<p>“几百份文档”只是视频中的粗略说法。十页文档和千页文档不能按同一个份数计算；能放下也不代表能稳定读对。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=138" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:18]">[00:02:18]</a></p>
-<h2 id="_3">精确的东西，先尝试精确地找</h2>
-<p>函数名、错误码、配置键通常有确定写法。关键词搜索找到定义，继续读调用方，可能比把每个文件向量化更直接。反过来，用户说“我总觉得这里不安全”，没有准确术语，语义检索就更有价值。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=102" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:42]">[00:01:42]</a></p>
-<p>代码检索还常常需要多跳：找到函数，看它调用谁，再检查配置。Agent 可以根据前一次结果决定下一步。这个循环也会积累调用成本，需要步数上限和可解释的终止条件。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=283" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:43]">[00:04:43]</a></p>
-<p>对于数据库中的订单总额，优先考虑查询数据库。把数值表格切成文本，再靠语义相似度凑出统计结果，会多出不少出错机会。查询仍需校验，尤其要限制修改、删除及敏感字段访问。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=373" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:13]">[00:06:13]</a></p>
-<h2 id="rag">用上 RAG 后，别只盯着向量模型</h2>
-<p>视频把混合检索、重排序、给片段补足上下文列为可尝试的升级：关键词召回保住专有名词，语义召回覆盖不同说法；重排序进一步比较问题与候选内容；片段上下文帮助识别“这个数值究竟属于哪一年、哪家公司”。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=204" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:24]">[00:03:24]</a></p>
-<p>这些方法都要通过同一套测试来判断。视频中的“提升十倍”“降低到三分之一”等概括缺少本地任务的完整实验条件，不能直接作为自己的预期收益。</p>
-<h2 id="_4">评测和整理数据，要先于架构竞赛</h2>
-<p>一张表被切碎、过期制度排在最新制度前面、某个字段单位丢失，都可能让复杂系统给出错误回答。换更强模型未必能补回丢失的信息。<a class="timecode" href="https://www.bilibili.com/video/BV1eX5t6rEn7/?t=468" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:48]">[00:07:48]</a></p>
-<p>先收集一批实际问题，记下应该找到哪份资料、哪些条件必须保留、什么时候应该说明证据不足。每次改动后重跑。模型说得流畅，只说明它能组织语言，资料是否找全仍要另外检查。</p>
-<h2 id="_5">迁移练习：给三个问题分路由</h2>
-<p>分别考虑“这份合同的违约条款是什么”“上月各地区订单总额是多少”“两个竞争产品未来半年可能怎么发展”。为每题写出最轻的可行路线、需要的证据和停止条件。</p>
-<p>最后加一个约束：如果只能等五秒，方案怎样变化？如果允许等五分钟，又多了哪些值得做的检查？这些约束比跟随架构热词更接近产品决策。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_6">选完路线，还需要知道自己有没有变好</h2>
+<p>再复杂的方案，也无法自动解决脏资料。表格被切成碎片时，数值可能与对应项目分离；新旧版本混放时，检索可能找到已经失效的说明。资料解析、表格处理、版本区分和附加信息整理，都会影响最终回答。模型能力再强，也需要知道眼前这段话到底属于什么对象、什么时间、什么条件。<button type="button" class="timecode" data-seconds="518">[00:08:38]</button></p>
+<p>同样重要的是评测。我们可以从实际使用的问题里整理一批测试题，写清每题预期找到什么、回答应该包含什么。以后每次调整提示词、更换模型或修改切分，都重新跑这些题。这样才能区分“刚才手动试的几个问题变好了”和“整体表现确实改善了”。测试题需要覆盖实际任务，单凭少量顺手的演示问题，很容易漏掉改动带来的退步。<button type="button" class="timecode" data-seconds="483">[00:08:03]</button></p>
+<p>现在回头看，路线选择有了一条朴素的顺序：先看资料和问题，再选处理方式，然后用真实问题验证。关于哪种架构将来占主流，可以继续讨论；眼前更值得弄清楚的，是当前用户需要什么、系统缺了哪一步，以及这次改动是否真的帮助了他。<button type="button" class="timecode" data-seconds="565">[00:09:25]</button></p>
+<h2 id="_7">总结提炼</h2>
+<h3 id="_8">一句话抓住核心</h3>
+<p>让 AI 使用资料，可以直接读、先检索、按字段查，也可以多轮调查；选择取决于资料的形态、问题的复杂程度和可接受的等待时间。</p>
+<h3 id="_9">推理主干</h3>
+<p>少量稳定资料可以先试直接阅读。资料过多时，检索帮助缩小范围。需要沿线索继续寻找时，再让模型安排后续查询。结构化记录保留数据库的查询方式。复杂研究把这些操作组织成更长的调查过程，而每条路线都要接受数据质量和评测的检验。</p>
+<h2 id="_10">时间戳导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="73">[00:01:13]</button> 先问资料能否读下、查询是否需要精确匹配。</li>
+<li><button type="button" class="timecode" data-seconds="154">[00:02:34]</button> 长上下文和提示词缓存。</li>
+<li><button type="button" class="timecode" data-seconds="206">[00:03:26]</button> 混合检索、重排序与片段上下文。</li>
+<li><button type="button" class="timecode" data-seconds="279">[00:04:39]</button> 沿代码线索继续查询。</li>
+<li><button type="button" class="timecode" data-seconds="378">[00:06:18]</button> 结构化数据直接查询。</li>
+<li><button type="button" class="timecode" data-seconds="420">[00:07:00]</button> 深度研究怎样组织多轮调查。</li>
+<li><button type="button" class="timecode" data-seconds="483">[00:08:03]</button> 用评测检查改动，用数据整理减少错误。</li>
+</ul>
+<h2 id="_11">复习与行动清单</h2>
+<p>补充练习：拿一个你确实想交给 AI 的问题，先写出资料在哪里、资料长什么样，以及一次查询能否找到回答所需的全部内容。再从表里选一个起点。暂时不列软件名称，先说明这条路线对资料做了什么，以及为什么需要这一步。能够说清这些关系，再选具体工具会轻松许多。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "output-final", "duration": "11:03", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

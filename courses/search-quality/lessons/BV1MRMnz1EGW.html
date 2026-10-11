@@ -1,106 +1,332 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>高质量数据集：先判断样本值不值得学 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>微调数据怎么准备，才能让模型学到我们真正需要的能力？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">微调数据怎么准备，才能让模型学到我们真正需要的能力？</h1>
+    <div class="meta"><span>code秘密花园</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1MRMnz1EGW/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">高质量数据集：先判断样本值不值得学</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">推理主干</a></li>
-<li><a href="#1">1. 先确定要教什么，再去找材料</a></li>
-<li><a href="#2">2. 格式在教模型怎样参与对话</a></li>
-<li><a href="#3">3. 五类问题会让数据帮倒忙</a></li>
-<li><a href="#4">4. 生成出来的题，也需要筛选</a></li>
-<li><a href="#5">5. 最后一关是判断，不能只看导出成功</a></li>
-<li><a href="#_4">补充判断：别把老师的自信当成正确答案</a></li>
-<li><a href="#_5">时间戳导航</a></li>
-<li><a href="#_6">复习与行动清单</a></li>
+<li><a href="#_1">微调数据怎么准备，才能让模型学到我们真正需要的能力？</a><ul>
+<li><a href="#_2">先看效果时，怎样理解“学会了”</a></li>
+<li><a href="#_3">一条训练数据，到底教模型做什么</a></li>
+<li><a href="#_4">五种常见问题，为什么会让微调效果变差</a></li>
+<li><a href="#_5">把知识材料变成问答：先决定材料各自负责什么</a></li>
+<li><a href="#_6">分块和提示词，怎样影响最后得到的问题</a></li>
+<li><a href="#_7">增加多样性时，保持知识不变，改变解释对象和表达方式</a></li>
+<li><a href="#_8">哪些问题应该删掉：几个具体例子</a></li>
+<li><a href="#_9">最后审核的，是完整问答能否成为好示范</a></li>
+<li><a href="#_10">总结提炼</a></li>
+<li><a href="#_11">时间戳导航</a></li>
+<li><a href="#_12">复习时想清楚三件事</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1MRMnz1EGW" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1MRMnz1EGW"><div class="provenance">来源：code秘密花园 · <a href="https://www.bilibili.com/video/BV1MRMnz1EGW/" target="_blank" rel="noopener">BV1MRMnz1EGW 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">高质量数据集：先判断样本值不值得学</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1MRMnz1EGW.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><button class="done" data-done="BV1MRMnz1EGW" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1MRMnz1EGW-00600.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1MRMnz1EGW&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1MRMnz1EGW/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1MRMnz1EGW"><h1>微调数据怎么准备，才能让模型学到我们真正需要的能力？</h1>
 <blockquote>
-<p>原视频：LLaMA Factory 微调教程：如何构建高质量数据集？ · code 秘密花园 · 约 25 分钟。以 Web 安全领域微调为教学案例，本文聚焦数据生产与质量判断，不复现训练。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1MRMnz1EGW/">code秘密花园｜LLaMA Factory 微调教程：如何构建高质量数据集？</a> · 24 分 37 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p><strong>一个样本是否值得进入训练集，取决于它是否准确、独立可理解、贴近任务，并且补充了已有数据没有覆盖的能力。</strong></p>
-<h2 id="_3">推理主干</h2>
-<p>明确目标行为 → 选择可靠材料 → 正确解析与分块 → 生成问题与答案 → 人工检查 → 去重、划分数据 → 验证模型行为。</p>
-<p>数据准备不只是把文件换成 JSON。它在决定模型将反复模仿哪些行为，以及哪些错误会被成批放大。<a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a></p>
-<h2 id="1">1. 先确定要教什么，再去找材料</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=20" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:20]">[00:00:20]</a> 教学案例希望把一个较小的指令模型调整为 Web 安全助手，能回答领域问题，也能对业务与代码风险给出提示。选择领域书籍、相关研究与合成问答，都是围绕这个目标展开。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 同一个领域里的材料，仍可能与目标任务不匹配。财经新闻主要描述事件，金融问答需要解决具体问题；把二者混在一起，并不会自动获得更好的问答能力。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=640" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:40]">[00:10:40]</a> 多样性也不限于换几个同义词。解释、比较、推理、操作等指令，对应不同任务；长短句、背景完整度和使用场景，也会改变难度。</p>
-<p>原视频演示了训练前后若干回答。它们有助于观察变化，但几条展示题不足以证明泛化、避免过拟合或全面超越另一个模型。回答更长、出现推理段落，也不能替代正确性与任务完成度的检验。</p>
-<h2 id="2">2. 格式在教模型怎样参与对话</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=279" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:39]">[00:04:39]</a> 课程介绍 Alpaca 与 ShareGPT 等数据格式。可以先把它们理解成不同的对话记录约定：谁提出要求，是否有系统说明，工具返回了什么，助手应输出什么。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=450" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:30]">[00:07:30]</a> 工具读取数据配置后，还会映射字段、套用对应的对话模板、分词，再设置哪些位置参与训练损失。这些步骤任何一个错位，都可能让“看起来正常”的 JSON 变成错误的训练信号。</p>
-<p>因此，检查数据至少包括两个层面：语义是否正确，以及数据被工具加载后是否仍表达同一个对话。导入预览和少量样本检查值得保留。</p>
-<h2 id="3">3. 五类问题会让数据帮倒忙</h2>
-<figure><a href="../assets/frames/BV1MRMnz1EGW-00600.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1MRMnz1EGW-00600.jpg" alt="原课件把数据问题分成数量、噪声、分布、任务相关性与多样性五类；其中样本数量为教学经验值，不是效果保证。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=600&amp;p=1" target="_blank" rel="noopener">[00:10:00]</a> 原课件把数据问题分成数量、噪声、分布、任务相关性与多样性五类；其中样本数量为教学经验值，不是效果保证。</figcaption></figure>
+<p>假设一家企业想在内部部署一个能回答 Web 安全问题的模型。员工会拿业务代码来询问风险，也会问某种漏洞怎样预防。这些代码和需求文档可能涉及机密，不适合直接发到外部服务；企业又未必有资源部署非常大的模型。一个自然的想法是：选择较小的模型，再用 Web 安全领域的材料进行微调，让它在有限的范围里做得更好。<button type="button" class="timecode" data-seconds="24">[00:00:24]</button></p>
+<p>这里的案例选择 Qwen2.5-7B-Instruct 作为基础模型。目标包含两件事：回答安全知识问题，以及对业务场景和代码中的潜在风险作出分析。要达到这样的目标，光有一批“与安全有关的文字”还不够。模型需要接触具体的问题、合适的回答，以及我们希望它采用的分析方式。接下来准备数据的每一步，都要回到这个目标：这条材料究竟在教模型完成什么工作？</p>
+<h2 id="_2">先看效果时，怎样理解“学会了”</h2>
+<p>可以先用几类问题观察微调前后的变化。第一类在训练材料里出现过，例如从防护角度解释静态分析恶意软件的原理。微调后回答更充分，说明模型可能学到了材料中的内容。但熟悉的题目做得好，还无法说明它遇到新问题也能做好，所以还要问训练材料中没有直接出现的领域问题。<button type="button" class="timecode" data-seconds="99">[00:01:39]</button></p>
+<p>第二类检查模型能否把知识组织起来，例如让它介绍 Web 安全的知识体系。我们希望看到漏洞、防护方法和相关概念之间有合理联系，不能只看它列了多少条。第三类把问题移到领域之外，例如询问化学知识体系，目的是观察专门训练安全知识以后，原先的其他能力是否还在。这三类问题分别关注记住材料、处理新问题和保留原有能力，不能互相替代。<button type="button" class="timecode" data-seconds="141">[00:02:21]</button></p>
+<p>回答更长、分析段落更多，也不能直接等同于推理更可靠。少量问答对比适合帮助我们发现变化；要判断泛化能力、是否过拟合，以及是否稳定超过更大的模型，还需要独立测试。过拟合可以先理解为过度熟悉训练样本，换一批真实问题就表现变差。保留这个区别，后面谈数据量和质量时才有清楚的判断对象。</p>
+<h2 id="_3">一条训练数据，到底教模型做什么</h2>
+<p>这次任务采用 SFT，即监督微调。我们向模型提供输入与示范回答，训练它在类似输入下更容易生成符合要求的回答。一本安全书可以提供知识，但整本书直接放进去，与把知识组织成适合实际任务的问答，是两种不同的数据准备方式。如果部署后主要接受用户提问，训练样本就需要让模型接触这样的问答过程。<button type="button" class="timecode" data-seconds="216">[00:03:36]</button></p>
+<p>LLaMA Factory 支持的 Alpaca 格式，把一条样本的主要部分拆成 instruction、input 和 output。instruction 表达用户要求，input 放需要一同考虑的输入内容，output 是模型要学习的回答。还可以有 system，说明系统层面的要求，以及 history，保存此前的对话。ShareGPT 格式则按对话消息组织，能够表示不同角色的发言和工具交互。两种格式的核心作用都是把“谁给了什么信息，接下来应当怎样回应”表达清楚。<button type="button" class="timecode" data-seconds="289">[00:04:49]</button></p>
 <table>
 <thead>
 <tr>
-<th>问题</th>
-<th>直观表现</th>
-<th>我如何检查</th>
+<th>数据中的内容</th>
+<th>在训练情境里意味着什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>数量或覆盖不足</td>
-<td>只见过一种问法，稍微变形就失败</td>
-<td>看任务类型和难度分布</td>
+<td>用户要求与补充输入</td>
+<td>模型需要理解的任务及条件</td>
 </tr>
 <tr>
-<td>噪声与错误标注</td>
-<td>错别字、错答案、角色或标签颠倒</td>
-<td>对照来源与字段规则</td>
+<td>示例回答</td>
+<td>希望模型学会生成的内容</td>
 </tr>
 <tr>
-<td>分布偏差</td>
-<td>训练中几乎全是某一类，真实使用却不同</td>
-<td>对比目标场景分布</td>
+<td>系统提示词</td>
+<td>回答需要遵守的整体要求</td>
 </tr>
 <tr>
-<td>任务相关性不足</td>
-<td>主题相关，但没有练到实际行为</td>
-<td>逐题问“它教会什么”</td>
+<td>对话历史</td>
+<td>当前问题之前已经发生的交流</td>
 </tr>
 <tr>
-<td>多样性不足</td>
-<td>大量近似表达重复同一点</td>
-<td>合并重复，补缺失场景</td>
+<td>工具调用及返回内容</td>
+<td>某些对话任务中，模型怎样利用外部结果继续回答</td>
 </tr>
 </tbody>
 </table>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=533" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:53]">[00:08:53]</a> 原视频给出过数据量经验值。所需样本数取决于任务、原模型和样本质量，不能把某个数量理解成训练有效的保证。</p>
-<h2 id="4">4. 生成出来的题，也需要筛选</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=990" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:30]">[00:16:30]</a> 一种扩展方法是组合内容载体与目标读者：同一知识可以写成不同结构、不同深度的内容。这样做的价值是覆盖表达与使用场景，前提是核心事实不能在改写中变化。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:20]">[00:18:20]</a> 流程中先检查领域结构和文档分块，再生成问题。解析时漏掉表头或限定条件，后面的问答生成会沿着错误材料继续工作。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:30]">[00:19:30]</a> 不合格问题的例子包括只问“作者的未来工作”、笼统的“文献里的数据是什么”，以及脱离原文就无法理解的“这个变量 K 是什么”。这些题即使有流畅答案，也可能没有教会目标能力。</p>
-<p>这个筛选原则有适用范围：如果目标就是论文阅读，作者未来工作的归纳可能有价值；在这次领域助手训练中，它不符合主要目标。质量标准要与任务绑定。</p>
-<h2 id="5">5. 最后一关是判断，不能只看导出成功</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1296" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:36]">[00:21:36]</a> 生成的答案需要人工复核。原视频强调事实与材料一致、不过度超出来源、直接回答问题、保留关键条件、统一术语、合并重复，以及修正模糊表述。</p>
-<p>例如“数据质量很高”几乎没有可执行信息。应该进一步明确：覆盖哪些情况、怎样标注、哪些条件仍未知。改成具体事实，才方便下一位审核者确认。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:23]">[00:23:23]</a> 演示最后保留 2876 条数据并导入训练工具。这是该次案例的产量，不构成通用的推荐规模。导入成功只说明格式被接受，效果还需要独立评测。</p>
-<h2 id="_4">补充判断：别把老师的自信当成正确答案</h2>
-<p>用更强模型生成样本，可以提高生产效率，也会继承它的遗漏与偏差。用户可见的推理文本也不等于可验证的内部推理过程；应围绕结果、证据和需要训练的行为进行审核。</p>
-<p>从同一篇材料生成的近似问答，划分训练与测试时尤其要防止泄漏。否则模型可能在测试中见到换一种说法的旧答案。这个检查属于本课程补充的数据纪律。</p>
-<h2 id="_5">时间戳导航</h2>
+<p>真正操作时，还有一个容易混淆的地方：数据文件本身与“告诉程序怎样读取数据”的配置文件分开保存。dataset_info.json 为数据集登记名称、来源和字段对应关系。假如你自己的文件里，问题字段不叫 instruction，程序就需要知道哪一列对应问题、哪一列对应回答。这样，许多来源不同、字段名称不同的数据，才可以进入后续统一的处理流程。<button type="button" class="timecode" data-seconds="323">[00:05:23]</button></p>
+<p>数据进入训练前，还要经历一段转换。首先把不同结构整理成内部可处理的形式，再套用模型对应的对话模板，标明各轮消息的角色与边界；接着，分词器把文字转成模型处理的数字序列；最后，决定哪些位置参与训练损失的计算。损失衡量模型当前预测与目标内容之间的差距，训练据此更新参数。<button type="button" class="timecode" data-seconds="456">[00:07:36]</button></p>
+<p>对常见的助手回复训练，我们把用户要求作为条件，重点训练模型怎样接着回答。模型当然仍要利用用户输入，但“读取输入”和“把某段文字作为需要学着生成的目标”是不同的角色。因此，格式正确只解决了能否读入的问题，模板与标签设置还会决定实际训练了什么。具体字段和当前支持格式可对照 <a href="https://llamafactory.readthedocs.io/zh-cn/latest/getting_started/data_preparation.html">LLaMA Factory 数据准备文档</a>，不要只靠文件扩展名判断数据已经准备好。</p>
+<h2 id="_4">五种常见问题，为什么会让微调效果变差</h2>
+<p>先看数据太少。模型只见过少量固定问法，很容易熟悉这些样本，却没有接触足够多的条件变化。继续增加训练轮次，相当于反复学习同一小批材料，并不会自动补出缺少的场景。案例给出的经验是，面向 7B 模型的领域知识任务，可以从千条量级考虑准备数据；这个数字是经验起点，任务难度、基础模型原有能力和每条样本的信息量都会改变需求，不能当成统一的合格线。<button type="button" class="timecode" data-seconds="536">[00:08:56]</button></p>
+<p>接着是噪声。错别字、乱码、重复内容会降低材料质量，错误标注则会直接教给模型错误关系。例如情感分类任务里，一段明显的好评被标成差评，训练就会推动模型把这样的文本与差评标签联系起来。增加这种数据的数量，只会重复强化问题。因此，检查一条样本是否有效，应放在追求总条数之前。<button type="button" class="timecode" data-seconds="575">[00:09:35]</button></p>
+<p>第三种问题是样本分布与实际使用差得太远。假如训练评论中九成是正面评论，实际使用时正负评论却接近均衡，模型在训练中形成的倾向就可能不适合真实输入。这里要检查的对象是一整批数据的组成，即使每条标签单独看都正确，也可能因为某些类型出现得过多、另一些出现得过少，让最终表现失衡。<button type="button" class="timecode" data-seconds="602">[00:10:02]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1MRMnz1EGW-00600.jpg" data-caption="五类数据问题分别涉及数量、噪声、分布、任务相关性与多样性，需要从不同角度检查。">
+    <img src="../assets/frames/BV1MRMnz1EGW-00600.jpg" loading="lazy" alt="视频截图 01，00:10:00：五类数据问题分别涉及数量、噪声、分布、任务相关性与多样性，需要从不同角度检查。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="600.000">图 01 · 00:10:00</button><span>五类数据问题分别涉及数量、噪声、分布、任务相关性与多样性，需要从不同角度检查。</span></figcaption>
+</figure>
+<p>第四种问题很容易被“同一个领域”掩盖。想训练金融问答模型，就大量收集财经新闻，看起来方向一致。但新闻通常在叙述事件，用户问答要求围绕一个问题作解释。领域相关只说明材料在谈相近的事情，任务相关还要求材料展示我们希望模型完成的工作。准备 Web 安全数据时，也要区分介绍术语、分析场景和给出操作建议，不能把它们看作完全相同的训练目标。<button type="button" class="timecode" data-seconds="617">[00:10:17]</button></p>
+<p>最后是多样性不足。只有短句的样本，无法充分覆盖长问题和复杂条件；只有“解释某个概念”的指令，也很难覆盖需要推理和具体操作的任务。多样性包含问题的长度、表达方式、背景条件和要求完成的动作。把同一个问题换几个近义词，可能增加了表面数量，却没有增加多少新的情境。我们真正需要的是，让训练材料覆盖实际使用中会发生的差别。<button type="button" class="timecode" data-seconds="638">[00:10:38]</button></p>
+<h2 id="_5">把知识材料变成问答：先决定材料各自负责什么</h2>
+<p>这个案例的数据由几种来源共同构成。基础知识来自《白帽子讲 Web 安全》；较新的问题来自几篇相关论文，包括代码生成的安全风险、提示词注入与 Web Agent 安全，以及安全领域的人类认知偏差研究。书籍与论文承担的作用不同：前者帮助建立较完整的领域基础，后者补充具体的新问题。<button type="button" class="timecode" data-seconds="665">[00:11:05]</button></p>
+<p>此外，还由更强的教师模型生成一部分数据，补充材料覆盖不均的领域，并利用它输出的分析过程构造训练样本。这里的“蒸馏”可以理解为用强模型提供的示范训练较小模型。小模型能够学到什么，取决于示范是否正确、是否适合它的任务，以及训练后的实际表现；教师模型给出的答案同样需要检查，不能因为它更大就免于审核。<button type="button" class="timecode" data-seconds="703">[00:11:43]</button></p>
+<p>处理这些材料使用 Easy Dataset。整体顺序是：导入文献，提取可用文本，按结构分块，生成问题，生成回答，再审核与导出。不同模型可以分别负责长文本理解、回答生成和 PDF 视觉解析。这样的分工让我们看清每个模型被用在哪里，也有助于理解某类错误来自哪一步。例如，PDF 表格在解析时已经错位，后面问答生成再流畅，也可能只是在重复错误文本。<button type="button" class="timecode" data-seconds="741">[00:12:21]</button></p>
+<p>项目名称在这里还有实际作用：它会被用作后续蒸馏的顶级主题。因此，应写清楚准备训练的领域，避免使用与任务无关的临时名称。随后配置模型的服务地址、密钥和模型名称。对于涉及企业内部资料的任务，还需要分别看清这些生成环节会把资料发送到哪里；最终模型在本地部署，并不自动意味着准备数据的整个过程都在本地完成。</p>
+<h2 id="_6">分块和提示词，怎样影响最后得到的问题</h2>
+<p>文献首先被转成便于处理的 Markdown 文本，再进行分块。一个文本块是模型生成问答时看到的一段材料。切得太碎，前后条件可能被拆开；切得过大，又可能把多个主题混在一起。案例采用按文本结构分块，块大小设为 2400，重叠长度为 150，并建议根据章节的实际长度调整。这些值服务于当前材料，不能脱离文献结构照搬。<button type="button" class="timecode" data-seconds="842">[00:14:02]</button></p>
+<p>问题生成密度也需要结合内容判断。案例配置为每 100 个字符生成一个问题，信息密集的材料可以生成得更密一些；重复铺垫较多的材料则未必有那么多独立问题。还设置一部分问题不带问号，因为真实用户并不总按标准书面疑问句提问。这种变化主要覆盖表达形式，不能代替问题本身的知识质量。<button type="button" class="timecode" data-seconds="858">[00:14:18]</button></p>
+<p>提示词用来明确生成任务的范围。材料里有英文论文，但目标数据是中文问答，因此先约定输出语言。然后约束问题聚焦 Web 安全，减少针对作者、引用文献等与目标任务无关的提问。回答则应直接回应问题，避免总以“根据提供的资料”开头。否则模型容易学会依赖一份在真实对话中并不存在的材料，或形成与用户问题无关的固定套话。<button type="button" class="timecode" data-seconds="901">[00:15:01]</button></p>
+<p>这些设置之后，仍要查看实际的领域分类和文本块。领域树把材料分到不同主题下，帮助观察哪些地方覆盖得多、哪些地方薄弱；文本块检查则关注一段材料是否完整，标题和正文是否配对，问题需要的条件是否被截断。只有这两层基本合理，批量生成问题才有可靠的起点。<button type="button" class="timecode" data-seconds="1113">[00:18:33]</button></p>
+<h2 id="_7">增加多样性时，保持知识不变，改变解释对象和表达方式</h2>
+<p>这里采用了“类型与受众配对”的增强思路。类型指内容怎样呈现，例如学术说明、科普文章或故事；受众指内容面向谁，例如初学者、专业学生或需要教学材料的老师。把这两个维度结合，同一份知识就可以有不同的解释方式。<button type="button" class="timecode" data-seconds="990">[00:16:30]</button></p>
+<p>急救指南的例子比较直观。面向办公室工作人员时，需要强调怎样识别情况、接下来做什么，用词也要让没有医学训练的人看懂；面向医学生时，则可以增加专业术语和理论背景。两份内容的深度与组织方式不同，但涉及同一事实时仍应保持一致。增强的价值来自更丰富的表达与使用情境，不能通过随意改变事实来制造差异。<button type="button" class="timecode" data-seconds="1035">[00:17:15]</button></p>
+<p>同样的思路用到训练数据上，可以帮助模型适应不同背景的提问者。不过，生成了多种版本还需要检查它们是否真正有区别，是否保留重要条件。如果五种版本只是替换了开头或语气，就很难带来预期的多样性；如果改写为了通俗而删掉了安全条件，反而会降低示范质量。因此，数据增强与审核应当一起考虑。</p>
+<h2 id="_8">哪些问题应该删掉：几个具体例子</h2>
+<p>问题生成完成后，可以先检查它脱离文献能否成立。“这个变量里的 K 是什么”就有明显困难：用户没有给公式，模型不知道正在讨论哪一个 K。这样的问答依赖原来页面的上下文，如果训练样本里没有保留那段上下文，问题本身就是不完整的。<button type="button" class="timecode" data-seconds="1231">[00:20:31]</button></p>
+<p>“作者在结论中提到哪些未来工作”则在询问某篇论文的写作内容。若目标是训练 Web 安全技术问答，这类问题与预期使用场景距离较远。“文献里的 Web 安全数据是什么”又过于笼统，没有说明要问数据类型、字段还是采集方式，回答容易同样笼统。它们需要删除或重写的理由不同：一个偏离任务，一个缺少明确对象。<button type="button" class="timecode" data-seconds="1207">[00:20:07]</button></p>
+<p>案例还剔除了政策合规、实验硬件环境等问题。这要结合当时正在提取的数据主题理解：那一批样本希望聚焦数据构成、标注方式和样本特征，所以其他问题被排除。不能由此推成合规或实验环境一概没有训练价值；如果实际任务就要求回答这类问题，它们当然可以成为有价值的样本。<button type="button" class="timecode" data-seconds="1182">[00:19:42]</button></p>
+<table>
+<thead>
+<tr>
+<th>生成的问题</th>
+<th>需要先判断的事情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“这个变量 K 是什么？”</td>
+<td>必要公式和上下文是否包含在输入中</td>
+</tr>
+<tr>
+<td>“作者未来要做什么？”</td>
+<td>论文叙述是否属于目标任务</td>
+</tr>
+<tr>
+<td>“Web 安全数据是什么？”</td>
+<td>对象是否过于笼统，能否得到明确回答</td>
+</tr>
+<tr>
+<td>关于合规政策或实验环境的问题</td>
+<td>是否属于这一批数据要覆盖的主题</td>
+</tr>
+</tbody>
+</table>
+<p>把问题先整理好，再批量生成答案，能减少一部分无效工作。随后还可以按领域标签让教师模型补充问答，改善不同主题的覆盖。标签数量均衡只是一个可观察的表面条件，我们仍要看每个主题下面的问题是不是有实质差别，以及这些问题是否贴近使用需求。<button type="button" class="timecode" data-seconds="1240">[00:20:40]</button></p>
+<h2 id="_9">最后审核的，是完整问答能否成为好示范</h2>
+<p>到了数据管理阶段，应把问题与答案放在一起读。答案首先要与材料事实一致，没有关键错误，也没有把材料没有给出的结论补得过于确定。其次，它需要真正回应问题，避免堆入数据来源、模型训练效果等无关内容。回答越长，越需要逐项看它增加了哪些有效信息。<button type="button" class="timecode" data-seconds="1287">[00:21:27]</button></p>
+<p>对知识边界和条件也要格外留意。涉及时间范围、数据格式、字段定义或标注标准时，缺掉其中一项可能改变整句话的意思；相同概念若用了多个容易混淆的名称，读者和模型都更难建立稳定关系。不同书籍、论文和蒸馏任务还可能产出重复问答，应检查是否有必要合并，而非把重复出现当成多份独立知识。<button type="button" class="timecode" data-seconds="1326">[00:22:06]</button></p>
+<p>对于含糊的回答，需要回到问题所要求的具体程度。例如一个漏洞的防护问题，只写“加强安全措施”无法构成有用示范；应当说明与该漏洞相关的具体条件和防护内容，同时保持在可靠材料支持的范围内。这个审核过程需要领域判断，所以案例建议请熟悉 Web 安全的人参与，最终保留了 2876 条数据。这个数量是该次筛选后的结果，不代表所有领域都应该准备同样多的样本。<button type="button" class="timecode" data-seconds="1377">[00:22:57]</button></p>
+<p>最后将数据导出，登记到 LLaMA Factory 的 dataset_info.json，或者使用 Easy Dataset 生成的对应配置目录。在界面选中数据集后，通过预览检查能否正确读入、问题和回答是否对应。预览成功说明加载与格式配置基本可用；训练后是否更适合业务问题，还要通过与训练数据分开的测试来判断。<button type="button" class="timecode" data-seconds="1408">[00:23:28]</button></p>
+<h2 id="_10">总结提炼</h2>
+<p>高质量微调数据，要同时满足“内容可靠”和“教的工作正确”。一份材料可以属于同一领域，却没有展示模型将来需要完成的任务；一条问答可以单独看完全正确，放进整批数据后却因分布失衡而产生问题。准备数据时，需要在单条样本和整体组成之间来回检查。</p>
+<p>这个案例的主线是：用专业资料建立知识基础，用教师模型补充覆盖，再通过不同表达与受众增强多样性，最终由人工检查问题和答案。工具加快了生成过程，训练目标、材料边界和审核判断仍然决定哪些内容值得让模型学习。</p>
+<h2 id="_11">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a> 数据质量影响训练。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=279" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:39]">[00:04:39]</a> 数据格式。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=450" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:30]">[00:07:30]</a> 字段、模板、分词与标签。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=533" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:53]">[00:08:53]</a> 小样本、噪声、偏差与覆盖。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 领域相关不等于任务相关。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=990" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:30]">[00:16:30]</a> 表达形式与受众组合。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:30]">[00:19:30]</a> 筛掉不适合目标的题。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1296" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:36]">[00:21:36]</a> 答案审核规则。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1MRMnz1EGW/?t=1403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:23]">[00:23:23]</a> 数据导出与实际效果分开验收。</li>
+<li><button type="button" class="timecode" data-seconds="24">[00:00:24]</button> Web 安全模型的任务和部署动机。</li>
+<li><button type="button" class="timecode" data-seconds="289">[00:04:49]</button> 数据格式、配置与训练前的转换。</li>
+<li><button type="button" class="timecode" data-seconds="536">[00:08:56]</button> 五种常见的数据质量问题。</li>
+<li><button type="button" class="timecode" data-seconds="665">[00:11:05]</button> 专业资料、论文与教师模型的分工。</li>
+<li><button type="button" class="timecode" data-seconds="842">[00:14:02]</button> 分块、生成密度和提示词设置。</li>
+<li><button type="button" class="timecode" data-seconds="990">[00:16:30]</button> 类型与受众配对的数据增强。</li>
+<li><button type="button" class="timecode" data-seconds="1164">[00:19:24]</button> 删除或改写不合适的问题。</li>
+<li><button type="button" class="timecode" data-seconds="1287">[00:21:27]</button> 审核完整问答，导出并预览数据。</li>
 </ul>
-<h2 id="_6">复习与行动清单</h2>
-<p>迁移练习：从一篇公开技术文档生成十个问题，先人工留下五个。给每个删除决定写一句理由，再逐句核对留下的答案。记录“有来源的事实”和“需要额外证据的推测”。</p>
-<p>暂时不训练模型也能完成这个练习。它直接训练数据判断、标注说明和问题归因的能力。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_12">复习时想清楚三件事</h2>
+<ol>
+<li>为什么“同领域的文章”还不等于“适合这项任务的训练数据”？可以用财经新闻与金融问答的区别解释。</li>
+<li>一条样本正确，整批数据仍然可能有什么问题？想一想九成正面评论的例子。</li>
+<li>数据集在界面中成功加载，究竟验证了什么？它与训练后的独立测试分别回答哪一个问题？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "LLaMA Factory 微调教程：如何构建高质量数据集？", "duration": "24:37", "src": "", "poster": "../assets/frames/BV1MRMnz1EGW-00600.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

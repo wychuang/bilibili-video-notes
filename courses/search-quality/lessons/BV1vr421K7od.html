@@ -1,73 +1,354 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>找到、答对、帮上忙：RAG 的三道关 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG 怎样从“找到资料”走到有依据的图文回答 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="rag">RAG 怎样从“找到资料”走到有依据的图文回答</h1>
+    <div class="meta"><span>Google中国</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1vr421K7od/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#rag">找到、答对、帮上忙：RAG 的三道关</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">一个“水龙头漏水”的问题，为什么能难住检索</a></li>
-<li><a href="#_3">把整个流程想成一条证据流水线</a></li>
-<li><a href="#_4">引用存在，也要检查它到底支持了哪一句</a></li>
-<li><a href="#_5">客服案例：用户通常还需要下一步</a></li>
-<li><a href="#rag_1">多模态 RAG：图也需要能被追溯</a></li>
-<li><a href="#_6">迁移练习：给同一个回答分三次分</a></li>
+<li><a href="#rag">RAG 怎样从“找到资料”走到有依据的图文回答</a><ul>
+<li><a href="#pdf">从一份 PDF 到回答，需要保留下来哪些东西</a></li>
+<li><a href="#_1">文字和图片，可以进入同一个可比较的空间</a></li>
+<li><a href="#_2">资料很多时，怎样把寻找范围缩小得足够快</a></li>
+<li><a href="#_3">都在讲漏水，哪一段真正回答“怎样修”</a></li>
+<li><a href="#_4">找到资料以后，生成和核查还要继续分开</a></li>
+<li><a href="#_5">客服助手要让用户知道下一步怎么做</a></li>
+<li><a href="#_6">图片也能成为答案的一部分，关键是保留它与内容的联系</a></li>
+<li><a href="#_7">把这一整条过程重新接起来</a></li>
+<li><a href="#_8">总结提炼</a><ul>
+<li><a href="#_9">一句话抓住核心</a></li>
+<li><a href="#_10">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_11">时间戳导航</a></li>
+<li><a href="#_12">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1vr421K7od" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1vr421K7od"><div class="provenance">来源：Google中国 · <a href="https://www.bilibili.com/video/BV1vr421K7od/" target="_blank" rel="noopener">BV1vr421K7od 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="rag">找到、答对、帮上忙：RAG 的三道关</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1vr421K7od.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><button class="done" data-done="BV1vr421K7od" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1vr421K7od-00986.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1vr421K7od&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1vr421K7od/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1vr421K7od"><h1>RAG 怎样从“找到资料”走到有依据的图文回答</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1vr421K7od/">Google 中国 · 基于 Gemini 和向量搜索的生成式推荐</a> · 33 分钟 · 自动转写。本文提炼流程与案例，具体云服务规格按录制时期理解。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1vr421K7od/">Google中国｜超越 RAG：基于 Gemini 和向量搜索的生成式推荐</a> · 33 分 9 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>检索找得到证据，回答忠实于证据，用户据此能行动——这三件事要分别检查。</p>
-<h2 id="_2">一个“水龙头漏水”的问题，为什么能难住检索</h2>
-<p>我问“怎样修好漏水的水龙头”，系统找回三段文字：一段抱怨漏水，一段讨论浪费水，另一段讲更换零件的步骤。前三段都和漏水有关，只有第三段直接支持修理任务。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=935" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:15:35]">[00:15:35]</a></p>
-<p>这说明“主题相近”和“能回答问题”存在差距。向量召回先广泛找候选，重排序再比较候选是否满足当前问题。重排序只能处理已找回的内容，正确资料压根没进候选集时，还要回到召回环节排查。</p>
-<figure><a href="../assets/frames/BV1vr421K7od-00986.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1vr421K7od-00986.jpg" alt="同一个“水龙头漏水”问题，谈维修步骤的段落比抱怨漏水或讨论浪费更贴合任务；图中两组分数只是该演示中的相对比较。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=986&amp;p=1" target="_blank" rel="noopener">[00:16:26]</a> 同一个“水龙头漏水”问题，谈维修步骤的段落比抱怨漏水或讨论浪费更贴合任务；图中两组分数只是该演示中的相对比较。</figcaption></figure>
-<h2 id="_3">把整个流程想成一条证据流水线</h2>
-<p>文档进入系统后，先经过解析与切块，再转成可搜索的表示。用户提问时，检索取回候选，排序挑选证据，模型据此组织答案，最后检查答案中的断言是否有依据。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=212" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:32]">[00:03:32]</a></p>
-<p>视频里的 PDF 例子很实用：标题要与对应段落保持关系，表格要保留行列含义。只按字符数截断，可能把“适用对象”和“收费金额”分到两个互不相连的片段里。后续搜索再准，也会遇到证据残缺的问题。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=852" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:12]">[00:14:12]</a></p>
-<p>关键词检索与语义检索可以一起使用。前者照顾明确术语，后者照顾不同表达。近似最近邻搜索解决的是大规模搜索的效率问题；采用更快的索引，不会自动解决文档本身不相关的问题。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=485" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:05]">[00:08:05]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=689" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:29]">[00:11:29]</a></p>
-<h2 id="_4">引用存在，也要检查它到底支持了哪一句</h2>
-<p>视频用电影介绍演示 grounding 检查：导演和剧情可能有来源，票房或奖项却没有对应证据。一段回答只要混入两句无依据的结论，就不能因为附带几个链接而整体判定可靠。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1247" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:47]">[00:20:47]</a></p>
-<p>检查时可逐条列出：答案的断言、对应证据、是否支持、是否冲突。这里的“支持”仅说明答案与所提供资料一致；资料本身可能过期或有误，还需要来源质量和时效检查。</p>
-<p>录制演示中的分数用于该服务和该例子，不能直接解释为“整段回答真实的概率”。不同系统对分数的定义可能不同。</p>
-<h2 id="_5">客服案例：用户通常还需要下一步</h2>
-<p>视频展示了司机帮助场景：用户问背景调查为什么迟迟没有结果。一个可用回答需要说明通常耗时、可能的延迟原因，以及超过条件后可以采取的行动。只解释背景调查概念，用户仍不知道接下来怎么办。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1336" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:16]">[00:22:16]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1645" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:25]">[00:27:25]</a></p>
-<p>这个案例把质量拆成三层：</p>
+<p>假如我们问模型：“使用 Flutter 开发游戏，有没有专门的工具包？”模型只能利用训练时学到的内容，可能不知道后来出现的资源，于是回答没有发现相应工具。问题并没有超出语言理解能力，它缺的是当前这项信息。若我们先查到有关资料，再让模型阅读资料后回答，它就有机会给出与现实更接近的答案。<button type="button" class="timecode" data-seconds="105">[00:01:45]</button></p>
+<p>这就是 RAG，即 Retrieval-Augmented Generation，检索增强生成的基本思路。先从资料源找出相关内容，再把这些内容放进模型输入，最后让模型据此组织答案。资料进入这次输入，不等于重新训练模型；它让模型在当前问题上有东西可读。这里使用 Flutter Casual Games Toolkit 作为例子，说明外部资料怎样补上模型可能缺少的知识。<button type="button" class="timecode" data-seconds="145">[00:02:25]</button></p>
+<p>接下来我们沿着一次问答走下去。先看资料怎样变成可以检索的片段，再看相似片段为什么还需要筛选，最后检查答案是否得到资料支持。后面的客服和图文问答案例，会把这些步骤连成真正面向用户的一次交互。具体服务名称来自这场 Google Cloud 分享所使用的方案，理解各服务的职责，比记住当时的产品组合更重要。</p>
+<h2 id="pdf">从一份 PDF 到回答，需要保留下来哪些东西</h2>
+<p>资料可能来自网页、文本文件，也可能是 PDF。对于文字不能直接提取的页面，需要先用 OCR 识别其中的字。OCR 可以理解为让程序从图像中读出文字。提取之后，再把较长内容分成小片段，方便在提问时找到相关部分，而无需每次把所有文档交给模型。<button type="button" class="timecode" data-seconds="231">[00:03:51]</button></p>
+<p>接着，embedding 模型把每个片段转换成一组数字，即向量。向量保存的是便于比较的表示，原来的文字仍然需要留着。用户提问时，问题也被转换为向量，与已存片段比较，找回比较相关的若干项。常见的 Top N 表示按当前排序取前 N 项。真正交给回答模型阅读的，是这些候选对应的内容，而不只是检索得到的数字分数。<button type="button" class="timecode" data-seconds="272">[00:04:32]</button></p>
+<p>PDF 中还可能有表格、图表和图片。只提取连续文字，容易丢掉这些部分；只把每个字识别出来，也可能失去数值与行列标题的对应关系。因此，资料准备要关心“这些内容原来怎样组织”。图表里的数值属于哪条曲线，某个段落位于哪个标题之下，这些关系会影响后续解释，不能一律当作无关格式丢掉。<button type="button" class="timecode" data-seconds="323">[00:05:23]</button></p>
+<p>例如，一份文档同时有标题、正文和表格，按版面结构处理时，可以把标题与相关段落联系起来，再把表格对应到适当位置。这里介绍的 Document Processing 服务，尝试把这样的布局关系整理成树状结构，然后据此分块。分块的目的仍然是方便查找，但查回一个片段时，我们希望它还带着理解所需的背景。<button type="button" class="timecode" data-seconds="874">[00:14:34]</button></p>
+<h2 id="_1">文字和图片，可以进入同一个可比较的空间</h2>
+<p>普通文本 embedding 处理文字，多模态 embedding 进一步处理图片、视频等输入。一个直观例子是“cute puppy”这段文字、一张小狗图片和一段包含小狗的视频。假如它们能够被编码到同一个向量空间，我们就可以比较不同形式的内容，用文字寻找图片，也可以根据图片寻找相关视频。<button type="button" class="timecode" data-seconds="428">[00:07:08]</button></p>
+<p>“同一个空间”的意义在于，让不同类型输入的表示可以共同参与搜索。我们不用先要求用户准确说出图片的文件名，也有机会按内容找到它。但搜索到主题相近的图像，与图像是否支持某项具体结论，仍然需要区分。例如，一张小狗图片可以满足“找小狗”的任务，却无法仅凭主题接近就回答某只狗的身份。这与文本检索的限制是相通的。</p>
+<p>这种能力也能用于推荐、内容分类和审核，因为这些任务都可能需要比较内容之间的联系。向量表示与相似搜索为多种应用提供了共同基础。我们先沿知识问答走完一条完整过程，看看文字与图片怎样共同参与回答；再遇到其他应用时，就能认出它们共享的部件。<button type="button" class="timecode" data-seconds="611">[00:10:11]</button></p>
+<h2 id="_2">资料很多时，怎样把寻找范围缩小得足够快</h2>
+<p>向量已经建好，下一步是从大量向量中找出与问题接近的候选。最直接的方法，是把问题向量与每个文档向量逐一比较。数量很大时，逐个算一遍会消耗较多时间。近似最近邻搜索，通常缩写为 ANN，会利用专门的索引和搜索方法，尽快找到足够接近的一组候选，以减少全部比较的工作。<button type="button" class="timecode" data-seconds="489">[00:08:09]</button></p>
+<p>这里的“近似”也有实际含义：我们需要同时考虑检索速度和找到相关结果的程度。Google 的 ScaNN 是这类方法中的一个例子，这场分享介绍了基于相关技术提供的 Vertex AI Vector Search 服务。服务承担的是保存与搜索大量向量的工作；模型理解问题、资料解析以及最终写回答，属于其他环节。向量搜索本身很快，并不意味着用户一定能在同样短的时间里得到完整答案。<button type="button" class="timecode" data-seconds="526">[00:08:46]</button></p>
+<p>检索还可以结合稠密与稀疏两类表示。稠密检索通常指使用 embedding 捕捉含义相近的内容，稀疏检索则常用于保留关键词匹配信号。用户用了不同说法，前者可能找到相关材料；用户提供准确名称，后者可以帮助保住这个名称。混合检索把这两种线索结合起来，让候选不只依赖一种相似性。<button type="button" class="timecode" data-seconds="693">[00:11:33]</button></p>
+<p>查询时还可能需要附加过滤条件。比如某些内容属于不同类别，或者用户只应访问其中一部分，搜索不能只考虑“像不像”。从产品角度看，一个候选必须同时满足相关性和适用范围。后面的客服流程会继续用到这个区别：资料找到了，也要确认能否交给当前用户。</p>
+<h2 id="_3">都在讲漏水，哪一段真正回答“怎样修”</h2>
+<p>向量检索通常先给出一组候选及分数。现在看一个具体问题：“如何解决水龙头漏水？”候选中有三段文字。第一段说漏水看起来难处理，其实新手也能做简单维修；第二段说长期漏水会浪费水资源、增加水费；第三段提到可能需要更换内部部件，具体处理取决于水龙头类型。<button type="button" class="timecode" data-seconds="944">[00:15:44]</button></p>
+<p>三段都包含水龙头和漏水，主题非常接近。不过，问题要的是解决办法。第一段主要安慰读者，第二段解释后果，第三段才开始提供处理方向。只根据主题接近来排序，三段可能得到相近分数，我们仍然需要进一步区分它们对当前任务的帮助程度。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vr421K7od-00986.jpg" data-caption="左侧三段都谈水龙头漏水，只有第三段展开处理办法；右侧蓝色的向量分数较接近，红色的重排序分数把第三段与前两段区分开。">
+    <img src="../assets/frames/BV1vr421K7od-00986.jpg" loading="lazy" alt="视频截图 01，00:16:26：左侧三段都谈水龙头漏水，只有第三段展开处理办法；右侧蓝色的向量分数较接近，红色的重排序分数把第三段与前两段区分开。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="986.000">图 01 · 00:16:26</button><span>左侧三段都谈水龙头漏水，只有第三段展开处理办法；右侧蓝色的向量分数较接近，红色的重排序分数把第三段与前两段区分开。</span></figcaption>
+</figure>
+<p>重排序，也叫 reranking，会把原问题与各候选内容进一步比较，重新给出优先顺序。它接在初步检索之后：先取得一批可能相关的内容，再从中细选真正适合当前问题的部分。这里的 Ranking API 就承担这个工作。候选范围可以比最终交给模型的范围更大，例如先取得前 100 项，再留下更值得阅读的几项。<button type="button" class="timecode" data-seconds="1024">[00:17:04]</button></p>
+<p>这个过程也解释了为什么“已经有分数，还要再打一次分”有意义。第一次的任务是从很大范围尽快寻找候选，第二次可以对较小范围作更细的比较。两次打分的目的和计算方式不同。重排序可能帮助改善相关性，但它仍然可能判断错误；如果正确资料没有进入初步候选，也无法仅靠重新排列把它凭空补回来。</p>
+<p>水龙头例子不要求读者学会维修。它帮助我们理解相关性的层次：谈同一主题是一层，回应用户此刻的要求又是一层。做问答评估时，也需要明确自己在检查哪一层，避免把“检索结果里出现了这个词”直接当作成功。<button type="button" class="timecode" data-seconds="1087">[00:18:07]</button></p>
+<h2 id="_4">找到资料以后，生成和核查还要继续分开</h2>
+<p>候选选好，就可以交给模型生成回答。Grounded Generation 强调让回答与给定资料建立依据关系。这里的 grounding 可以先理解为“这句话由哪份资料支持”。输入中既有问题，也有相关片段，模型据此组织答复。服务可以帮助处理生成与来源关联，但回答是否准确，仍需看具体输出。<button type="button" class="timecode" data-seconds="1128">[00:18:48]</button></p>
+<p>接下来的 Check Grounding 则从已经生成的回答出发，检查里面的重要说法与资料怎样对应。这个方向与检索不同：检索问“哪些资料可能帮助回答问题”，核查问“答案里的这句话是否得到了这些资料的支持”。两者前后相接，却不能彼此替代。<button type="button" class="timecode" data-seconds="1186">[00:19:46]</button></p>
+<p>《盗梦空间》的例子把这种核查讲得很清楚。输入资料包含导演、故事等信息，模型生成一段电影介绍。随后逐句检查：导演说法对应哪条资料，故事介绍对应哪条资料，某项获奖说法是否没有依据，以及票房说法是否与现有资料冲突。这样看答案时，我们不再只问整段文字“像不像一篇正常介绍”，也能找到具体需要处理的句子。<button type="button" class="timecode" data-seconds="1254">[00:20:54]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vr421K7od-01280.jpg" data-caption="中间的电影介绍逐句连到右侧判断：有些说法有资料依据，有些缺少依据，还有说法与资料不符。54% 是这个示例的核查评分。">
+    <img src="../assets/frames/BV1vr421K7od-01280.jpg" loading="lazy" alt="视频截图 02，00:21:20：中间的电影介绍逐句连到右侧判断：有些说法有资料依据，有些缺少依据，还有说法与资料不符。54% 是这个示例的核查评分。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1280.000">图 02 · 00:21:20</button><span>中间的电影介绍逐句连到右侧判断：有些说法有资料依据，有些缺少依据，还有说法与资料不符。54% 是这个示例的核查评分。</span></figcaption>
+</figure>
+<p>“缺少依据”和“与资料冲突”也有区别。资料没有讲某个奖项，我们只能说当前材料没有支持这句话；资料明确写出另一个票房数字，才构成与这份资料不一致。无论哪一种，都值得继续检查，但不能把所有没有证据的句子都解释为已经证明错误。反过来，资料支持一句话，也还要看资料本身是否准确和适用。</p>
 <table>
 <thead>
 <tr>
-<th>检查对象</th>
-<th>要问的问题</th>
-<th>常见失败</th>
+<th>检查结果</th>
+<th>可以作出的判断</th>
+<th>仍不能直接推出什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>找回的文档</td>
-<td>正确帮助材料进来了吗？</td>
-<td>错产品、错地区、旧版本</td>
+<td>找到对应资料</td>
+<td>这句话在当前资料中有支持</td>
+<td>来源在任何条件下都正确</td>
 </tr>
 <tr>
-<td>生成的回答</td>
-<td>每个关键断言与材料一致吗？</td>
-<td>混淆条件、补造流程、漏掉限制</td>
+<td>没找到支持内容</td>
+<td>目前缺少作出这项说法的依据</td>
+<td>这项说法在现实中一定为假</td>
 </tr>
 <tr>
-<td>用户的任务</td>
-<td>回答完整且可执行吗？</td>
-<td>解释很多，却没有下一步</td>
+<td>与已有资料不一致</td>
+<td>回答与当前资料存在冲突</td>
+<td>不经核对就知道冲突哪一方正确</td>
 </tr>
 </tbody>
 </table>
-<p>还要检查权限：知识库存在的内容，不一定都能给当前用户看。权限过滤应贯穿检索与使用过程，不能让模型凭感觉决定哪些信息可以披露。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1540" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:40]">[00:25:40]</a></p>
-<h2 id="rag_1">多模态 RAG：图也需要能被追溯</h2>
-<p>最后一部分讨论怎样回答关于 TPU 扩展效率的问题。单靠论文正文可能说不清，相关曲线图能直接展示趋势。流程可以提取原图，为图生成描述，再让描述参与检索；回答时带回对应的原图。<a class="timecode" href="https://www.bilibili.com/video/BV1vr421K7od/?t=1720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:40]">[00:28:40]</a></p>
-<p>图片描述与原图必须绑定，否则系统可能检索到正确解释，却展示错图。描述中还可能出现识别错误，因此应保留原图、页码和来源，方便核查。</p>
-<h2 id="_6">迁移练习：给同一个回答分三次分</h2>
-<p>自拟一个售后问题，准备两段政策材料和一个候选回答。先只评价检索是否充分，再评价回答是否有依据，最后评价用户是否知道下一步。不要用一个笼统的“准确率”把三层混在一起。</p>
-<p>补充判断：视频标题强调生成式推荐，主体更集中在 RAG 组件、客服及多模态检索。这里按实际内容组织，未把它扩写成一套完整推荐系统课程。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>示例中的 54% 是核查系统对这段回答给出的评分，不能读成“整段答案有 54% 的概率为真”。它的用处在于提示我们继续看具体句子与材料的对应关系。分数帮助发现问题，真正解释问题的，仍然是哪些说法有依据、哪些没有。<button type="button" class="timecode" data-seconds="1301">[00:21:41]</button></p>
+<h2 id="_5">客服助手要让用户知道下一步怎么做</h2>
+<p>Uber 的客服问答案例把上述步骤放到一个实际交互里。用户可能问怎样查看收入，助手需要从大量帮助中心文章中找到相关说明，再组织成回答，并把所用文章的链接提供出来。用户继续追问时，系统还要结合前面的对话，理解这次问题承接了什么。<button type="button" class="timecode" data-seconds="1332">[00:22:12]</button></p>
+<p>这时，产品评价至少分成三件事。第一，所需资料有没有被找到；第二，答复有没有忠于找到的资料；第三，用户的问题是否真的得到完整、实用的回应。一段答复可以完全照着资料写，却漏掉用户下一步最需要的操作，因此第三项仍然需要单独检查。这里使用模型辅助评判完整性和实用性，评价要求本身也需要写清楚。<button type="button" class="timecode" data-seconds="1461">[00:24:21]</button></p>
+<p>进入查询之前，系统可以先处理用户的拼写、口语化表达和不完整问法，让查询更适合搜索。检索之后，还要过滤当前用户不可访问的内容。随后把问题、获准使用的资料和必要背景放进提示词，再生成答复。这个顺序说明，检索相关性只是条件之一，资料能否提供给当前用户也参与决定最后的输入。<button type="button" class="timecode" data-seconds="1537">[00:25:37]</button></p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>对当前任务做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题整理</td>
+<td>把用户表达改成适合查找的查询，同时保留原意</td>
+</tr>
+<tr>
+<td>候选检索</td>
+<td>从帮助文章中找出相关部分</td>
+</tr>
+<tr>
+<td>范围与权限检查</td>
+<td>排除当前用户不能使用的内容</td>
+</tr>
+<tr>
+<td>生成与检查</td>
+<td>组织回答，并观察是否遗漏必要说明</td>
+</tr>
+<tr>
+<td>来源与后续交互</td>
+<td>提供文章入口，继续理解用户追问</td>
+</tr>
+</tbody>
+</table>
+<p>背景调查的例子尤其能说明“完整”是什么意思。用户说自己的背景调查一直没有结果，系统先把这句话整理为“为什么背景调查花费这么长时间”，再查找相关说明。最终回答既解释通常需要等待多久，也给出延迟时可以采取的下一步，以及进一步联系的渠道。对用户来说，只有等待时间的解释可能仍不够，他还想知道现在能做什么。<button type="button" class="timecode" data-seconds="1659">[00:27:39]</button></p>
+<p>这里还使用了多次生成或检查的过程，观察答复是否需要补充和修改。多跑一轮的价值，需要落实到它补上了哪项遗漏，不能仅凭轮数认为回答更可靠。同时，多轮处理会增加时间与费用。客服场景要在答复完整和响应速度之间找到合适安排，继续用实际问题检验结果。</p>
+<h2 id="_6">图片也能成为答案的一部分，关键是保留它与内容的联系</h2>
+<p>最后把资料扩展到图文。假如我们询问 TPU v5e 的扩容效率与模型规模之间的关系，论文正文可能解释实验设置，图表则直接展示变化趋势。只给一段文字概括，读者可能很难把几个条件与曲线联系起来。如果相关图表也能被找到，并出现在解释旁边，就可以帮助读者观察正在讨论的关系。<button type="button" class="timecode" data-seconds="1723">[00:28:43]</button></p>
+<p>一种做法是先从 PDF 提取图片，再让多模态模型为图片生成文字描述。描述说明图里有哪些对象、比较什么、展示了怎样的关系。随后把描述转换为向量，和正文片段一起进入检索。检索命中描述后，系统还能沿保存的关联找到原来的图片，最后把图片与解释一起返回。<button type="button" class="timecode" data-seconds="1802">[00:30:02]</button></p>
+<p>注意，这里有两条相互配合的内容：帮助搜索的图片描述，以及供用户查看的原图。描述提供文字入口，原图保留实际画面。若只保存描述却丢掉图片的对应位置，系统即使知道有一张相关图，也无法准确把它展示出来。图片与描述之间的关联，因此属于整个问答流程需要保存的信息。</p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1vr421K7od-01890.jpg" data-caption="文档一边生成文本块嵌入，另一边生成图片及图片说明的嵌入；检索取得相关文本和图片，再与用户查询一起进入回答。">
+    <img src="../assets/frames/BV1vr421K7od-01890.jpg" loading="lazy" alt="视频截图 03，00:31:30：文档一边生成文本块嵌入，另一边生成图片及图片说明的嵌入；检索取得相关文本和图片，再与用户查询一起进入回答。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1890.000">图 03 · 00:31:30</button><span>文档一边生成文本块嵌入，另一边生成图片及图片说明的嵌入；检索取得相关文本和图片，再与用户查询一起进入回答。</span></figcaption>
+</figure>
+<p>这与前面“小狗文字、图片和视频进入共同空间”的例子有所区别。共同空间展示了多模态表示怎样帮助跨类型搜索；图片描述方案则展示了如何通过文字说明给图片建立检索入口。两种方式都可以支持图文检索，具体系统需要明确自己使用哪条路径，以及原图怎样跟随结果返回。<button type="button" class="timecode" data-seconds="1863">[00:31:03]</button></p>
+<p>图文回答也需要核查。描述可能误读坐标或图例，找到的图片可能只在主题上相近，无法支持正文中的具体数字。最终使用时，应让解释与画面中的对象、条件和关系对应起来。图片能够减轻理解负担的前提，是它确实说明了正在讨论的事情。把一张相关主题的图放在旁边，仍然不等于完成了图文讲解。</p>
+<h2 id="_7">把这一整条过程重新接起来</h2>
+<p>现在我们再看最开始的 Flutter 问题。模型不知道新工具时，外部检索为它提供新资料；资料很多时，向量搜索缩小范围；候选主题相近时，重排序进一步筛选；答案生成后，逐句核查帮助发现无依据说法。客服案例再加上完整性与下一步操作，图文案例则让原始图表也成为解释的一部分。</p>
+<p>这些步骤可以由现成云服务承担，也可以由其他工具实现。它们共同回答的是不同问题：资料有没有被正确处理，有没有被找到，答案有没有依据，用户能否看懂并继续行动。理解了这些分工，我们就能指出一次失败发生在哪里，也更容易判断新增一项服务究竟帮助了哪一环。</p>
+<h2 id="_8">总结提炼</h2>
+<h3 id="_9">一句话抓住核心</h3>
+<p>有用的 RAG 要把资料处理、候选筛选、依据核查和用户理解接起来；图表也可以随检索结果进入答案，帮助解释具体关系。</p>
+<h3 id="_10">推理主干</h3>
+<p>新资料补充模型当前缺少的知识。结构化分块保留文档关系，向量搜索寻找候选，重排序区分“谈同一主题”与“回应当前问题”。生成后逐句核查依据，再看答复是否完整实用。处理图片时，还要保留原图与可检索描述的对应关系。</p>
+<h2 id="_11">时间戳导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="105">[00:01:45]</button> Flutter 工具包与外部知识。</li>
+<li><button type="button" class="timecode" data-seconds="231">[00:03:51]</button> 文档提取、分块与向量检索。</li>
+<li><button type="button" class="timecode" data-seconds="428">[00:07:08]</button> 文字、图片和视频的共同表示。</li>
+<li><button type="button" class="timecode" data-seconds="489">[00:08:09]</button> 大规模向量搜索与近似最近邻。</li>
+<li><button type="button" class="timecode" data-seconds="693">[00:11:33]</button> 稠密、稀疏与混合检索。</li>
+<li><button type="button" class="timecode" data-seconds="874">[00:14:34]</button> 根据标题、段落和表格关系分块。</li>
+<li><button type="button" class="timecode" data-seconds="944">[00:15:44]</button> 水龙头漏水的重排序例子。</li>
+<li><button type="button" class="timecode" data-seconds="1254">[00:20:54]</button> 电影介绍的逐句依据核查。</li>
+<li><button type="button" class="timecode" data-seconds="1461">[00:24:21]</button> 客服回答的检索、一致性与实用性。</li>
+<li><button type="button" class="timecode" data-seconds="1659">[00:27:39]</button> 背景调查回答中的解释和下一步。</li>
+<li><button type="button" class="timecode" data-seconds="1723">[00:28:43]</button> 从论文问题到图文回答。</li>
+<li><button type="button" class="timecode" data-seconds="1863">[00:31:03]</button> 原图、图片说明与检索结果怎样关联。</li>
+</ul>
+<h2 id="_12">复习与行动清单</h2>
+<p>补充练习：找一份有图表的公开说明，用其中一段文字和一张图回答一个具体问题。完成后逐句看：哪句话由正文支持，哪句话需要看图才能理解，哪句话暂时缺少依据。再检查读者是否能从回答知道下一步做什么。这个练习把检索、核查和图文解释放在了同一次任务里。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "超越 RAG：基于 Gemini 和向量搜索的生成式推荐", "duration": "33:09", "src": "", "poster": "../assets/frames/BV1vr421K7od-00986.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

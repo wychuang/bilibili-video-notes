@@ -17,6 +17,7 @@ from bili_notes.providers import (
     save_llm_settings,
 )
 from bili_notes.summary import (
+    _skill_system_prompt,
     _single_api_prompt,
     _write_summary_metadata,
     _markdown_to_safe_html,
@@ -232,6 +233,28 @@ class SummaryTests(unittest.TestCase):
         self.assertIn("$summarize-bilibili-video", prompt)
         self.assertIn("standard", prompt)
 
+    def test_api_receives_canonical_skill_without_a_separate_writing_template(self):
+        skill = Path(__file__).resolve().parents[1] / "skills/summarize-bilibili-video/SKILL.md"
+        body = skill.read_text(encoding="utf-8").split("---", 2)[2].strip()
+        prompt = _skill_system_prompt()
+        self.assertTrue(prompt.startswith(body + "\n\n"))
+        self.assertIn("Runtime Evidence Boundary", prompt[len(body):])
+
+    def test_renderer_accepts_narrative_with_optional_comparison_structure(self):
+        # This verifies rendering compatibility, not writing quality.
+        prose = "我们先确认读者要借哪一本书。两本同名书的作者不同，仅凭书名还不能确定对象。"
+        rendered, toc = _markdown_to_safe_html(
+            "# 找到要借的书\n\n" + prose + " [00:00:26]\n\n"
+            "## 两种查询结果\n\n"
+            "| 对象 | 状态 |\n| --- | --- |\n| 第一本 | 可借 |\n| 第二本 | 已借出 |\n\n"
+            "确认作者后，我们再查看对应书籍的状态。 [00:01:02]"
+        )
+        self.assertIn(prose, rendered)
+        self.assertIn("<table>", rendered)
+        self.assertIn('data-seconds="26"', rendered)
+        self.assertIn('data-seconds="62"', rendered)
+        self.assertIn("两种查询结果", toc)
+
     def test_visual_prompt_uses_timestamped_frames(self):
         prompt = build_prompt("standard", "visual-frames")
         self.assertIn("visual/frames.json", prompt)
@@ -428,6 +451,9 @@ class SummaryTests(unittest.TestCase):
         self.assertIn('src="../../visual/frame_01.jpg"', rendered)
         self.assertIn("人物影像承担主视觉。", rendered)
         self.assertNotIn("关键画面图版", rendered)
+        self.assertIn("视频画面 / 01", rendered)
+        self.assertNotIn("VISUAL EVIDENCE", rendered)
+        self.assertNotIn("画面证据", rendered)
 
     def test_markdown_renderer_omits_unreferenced_candidate_frames(self):
         frames = [
@@ -462,13 +488,118 @@ class SummaryTests(unittest.TestCase):
                     "uploader": "作者",
                     "source_url": "https://www.bilibili.com/video/BV1test",
                 },
-                {"source": "test"},
+                {"source": "private-transcription-engine"},
             )
             rendered = html_path.read_text(encoding="utf-8")
         self.assertIn('font-family:"Bili WenKai"', rendered)
         self.assertIn("LXGWWenKaiGBScreen.ttf", rendered)
         self.assertIn("font-size:17px", rendered)
-        self.assertIn("正文截图：0 张", rendered)
+        self.assertIn("min-width:8em; padding:10px 12px", rendered)
+        self.assertNotIn("转写来源", rendered)
+        self.assertNotIn("正文截图", rendered)
+        self.assertNotIn("private-transcription-engine", rendered)
+        self.assertIn("本地视频已归档", rendered)
+
+    def test_full_reader_keeps_player_summary_navigation_and_source_links(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            (job / "source").mkdir()
+            (job / "source/video.mp4").write_bytes(b"video")
+            (job / "transcript").mkdir()
+            (job / "transcript/transcript.srt").write_text("subtitle", encoding="utf-8")
+            note = job / "summary.md"
+            note.write_text("# 标题\n\n## 总结提炼\n\n结论。\n\n## 完整讲解\n\n[00:00:13] 解释。\n", encoding="utf-8")
+            page = render_summary_html(job, "standard", note, {
+                "source_file": "source/video.mp4", "bvid": "BV1AbCdEfGhJ",
+                "source_url": "https://www.bilibili.com/video/BV1AbCdEfGhJ/?vd_source=private",
+            }, {"source": "test"}).read_text(encoding="utf-8")
+        self.assertIn('<video id="source-video"', page)
+        self.assertIn('class="toc-toggle"', page)
+        self.assertIn("总结提炼", page)
+        self.assertIn("完整讲解", page)
+        self.assertIn('data-seconds="13"', page)
+        self.assertIn('href="summary.md"', page)
+        self.assertIn('href="transcript/transcript.srt"', page)
+        self.assertIn("打开原始页面", page)
+        self.assertRegex(page, r"\.hero h1\s*\{[^}]*overflow-wrap:anywhere")
+        self.assertRegex(page, r"article\s*\{[^}]*overflow-wrap:anywhere")
+        self.assertNotIn("vd_source", page)
+        self.assertNotIn('id="source-online-player"', page)
+
+    def test_subtitle_only_reader_keeps_online_player_without_fake_local_archive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            note = job / "summary.md"
+            note.write_text("# 标题\n\n## 总结提炼\n\n[00:00:25] 内容。", encoding="utf-8")
+            page = render_summary_html(job, "standard", note, {
+                "bvid": "BV1AbCdEfGhJ", "url": "https://www.bilibili.com/video/BV1AbCdEfGhJ/?p=2&spm_id_from=private",
+            }, {"source": "subtitles"}).read_text(encoding="utf-8")
+        self.assertIn('id="source-online-player"', page)
+        self.assertIn('data-player-url="https://player.bilibili.com/player.html?bvid=BV1AbCdEfGhJ&amp;page=2&amp;autoplay=0"', page)
+        self.assertIn('src="about:blank"', page)
+        self.assertIn("加载在线视频", page)
+        self.assertIn("未保存视频", page)
+        self.assertIn('id="online-fallback"', page)
+        self.assertNotIn('<video id="source-video"', page)
+        self.assertNotIn("SHA-256 已校验", page)
+        self.assertNotIn("spm_id_from", page)
+
+    def test_reader_rejects_missing_media_without_valid_bilibili_identity(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            note = job / "summary.md"
+            note.write_text("# 标题", encoding="utf-8")
+            with self.assertRaises(WorkflowError):
+                render_summary_html(job, "standard", note, {
+                    "url": "https://example.invalid/video/BV1AbCdEfGhJ/",
+                }, {})
+
+    def test_online_collection_and_custom_output_keep_full_reader(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            note = job / "BV1AbCdEfGhJ.md"
+            note.write_text("# 合集\n\n## 总结提炼\n\n[P03 00:00:05] 内容。", encoding="utf-8")
+            result = render_summary_html(job, "deep", note, {"bvid": note.stem}, {},
+                page_videos=[{"part": i, "title": f"第 {i} 集"} for i in (1, 2, 3)],
+                visual_frames_override=[], output_path=note.with_suffix(".html"))
+            page = result.read_text(encoding="utf-8")
+            self.assertEqual(result, note.with_suffix(".html"))
+            self.assertFalse((job / "summary.html").exists())
+            self.assertEqual(3, page.count('class="part-button'))
+            self.assertIn('data-part="3"', page)
+            self.assertIn('data-seconds="5"', page)
+            self.assertIn('id="source-online-player"', page)
+            self.assertIn('href="BV1AbCdEfGhJ.md"', page)
+            self.assertNotIn("整套 3 集已归档", page)
+            with self.assertRaises(WorkflowError):
+                render_summary_html(job, "deep", note, {"bvid": note.stem}, {},
+                    output_path=job / "elsewhere/page.html")
+
+    def test_partial_local_collection_is_not_silently_downgraded(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            note = job / "summary.md"
+            note.write_text("# 标题", encoding="utf-8")
+            video = job / "part1.mp4"
+            video.write_bytes(b"fixture")
+            with self.assertRaises(WorkflowError):
+                render_summary_html(job, "deep", note, {"bvid": "BV1AbCdEfGhJ"}, {},
+                    page_videos=[{"part": 1, "path": video}, {"part": 2}])
+
+    def test_reader_preserves_archive_identity_and_part_from_manifest(self):
+        with tempfile.TemporaryDirectory() as temp:
+            job = Path(temp)
+            note = job / "summary.md"
+            note.write_text("# Article\n\n## Summary\n\n[00:00:05] 内容。", encoding="utf-8")
+            page = render_summary_html(job, "standard", note, {
+                "video_id": "BV1AbCdEfGhJ", "requested_part": 3,
+                "source_url": "https://b23.tv/example?share_source=private",
+            }, {}).read_text(encoding="utf-8")
+        self.assertIn("bvid=BV1AbCdEfGhJ&amp;page=3&amp;autoplay=0", page)
+        self.assertIn('href="https://www.bilibili.com/video/BV1AbCdEfGhJ/?p=3"', page)
+        self.assertIn('<h1 id="article">', page)
+        self.assertEqual(1, page.count('id="article"'))
+        self.assertNotIn("share_source", page)
 
 
 class ExportTests(unittest.TestCase):

@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import sys
 import threading
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 if os.name == "nt" and ROOT.drive.casefold() == os.environ.get("SystemDrive", "C:").casefold():
@@ -50,9 +51,19 @@ def main():
                 args=[f"--disk-cache-dir={QA / 'cache'}", "--disable-background-networking", "--disable-component-update", "--no-first-run"])
             try:
                 ctx = browser.new_context(viewport={"width": 1440, "height": 1000}, accept_downloads=True)
-                ctx.route("**/*", lambda route: route.continue_() if route.request.url.startswith(f"http://127.0.0.1:{server.server_port}/") else route.abort())
+                def route_request(route):
+                    url = route.request.url
+                    if url.startswith(f"http://127.0.0.1:{server.server_port}/"):
+                        route.continue_()
+                    elif urlsplit(url).hostname == 'player.bilibili.com':
+                        # Test our routing contract without depending on third-party playback.
+                        route.fulfill(status=200, content_type='text/html', body='<title>Playback routing fixture</title>')
+                    else:
+                        route.abort()
+                ctx.route("**/*", route_request)
                 page = ctx.new_page()
                 page.on("pageerror", lambda err: errors.append(str(err)))
+                page.on("console", lambda msg: errors.append(msg.text) if msg.type == 'error' else None)
                 page.on("response", lambda r: errors.append(f"HTTP {r.status}: {r.url}") if r.status >= 400 else None)
                 page.goto(base, wait_until="networkidle")
                 page.evaluate("document.fonts.ready")
@@ -96,19 +107,43 @@ def main():
                 page.reload(wait_until="networkidle")
                 assert page.locator("[data-done]").get_attribute("aria-pressed") == "true"
                 page.goto(base + "lessons/BV1Vegf6nEag.html", wait_until="networkidle")
-                assert page.locator('a.timecode[href*="p=17"]').count() > 0
-                assert page.locator('figure img').count() == 2
-                with page.expect_popup() as info:
-                    page.locator('figure a').first.click()
-                popup = info.value; popup.wait_for_load_state()
-                assert ".jpg" in popup.url
-                popup.close()
+                assert page.locator('.part-button').count() == 18
+                assert page.locator('figure img').count() == 4
+                assert page.locator('#source-online-player').is_hidden()
+                page.locator('#load-online-video').click()
+                assert page.locator('#source-online-player').is_visible()
+                stamp = page.locator('button.timecode[data-part="17"]').first
+                seconds = stamp.get_attribute('data-seconds')
+                stamp.click()
+                query = parse_qs(urlsplit(page.locator('#source-online-player').get_attribute('src')).query)
+                assert query['page'] == ['17'] and query['t'] == [seconds]
+                assert query['bvid'] == ['BV1Vegf6nEag']
+                fallback = parse_qs(urlsplit(page.locator('#online-fallback').get_attribute('href')).query)
+                assert fallback['p'] == ['17'] and fallback['t'] == [seconds]
+                page.locator('.part-button[data-part="18"]').click()
+                assert page.locator('.part-button.active').get_attribute('data-part') == '18'
+                assert parse_qs(urlsplit(page.locator('#source-online-player').get_attribute('src')).query)['page'] == ['18']
+                page.locator('button.frame-image').first.click()
+                assert page.locator('#frame-lightbox').is_visible()
+                page.wait_for_function('document.querySelector("#lightbox-image").naturalWidth > 0')
+                page.locator('.lightbox-close').click()
+                assert not page.locator('#frame-lightbox').is_visible()
+                frame_stamp = page.locator('.frame-jump').last
+                frame_part = frame_stamp.get_attribute('data-part')
+                frame_stamp.click()
+                assert parse_qs(urlsplit(page.locator('#source-online-player').get_attribute('src')).query)['page'] == [frame_part]
+                assert page.locator('#progress').text_content() == ''
                 for width in (1440, 768, 390):
                     page.set_viewport_size({"width":width, "height":900})
                     page.goto(base, wait_until="networkidle")
                     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Home overflow at {width}"
                     page.screenshot(path=str(QA / f"home-{width}.png"))
                     page.goto(base + "lessons/BV1Q3NUetEzV.html", wait_until="networkidle")
+                    if width <= 900:
+                        assert page.locator('.toc-toggle').get_attribute('aria-expanded') == 'false'
+                        page.locator('.toc-toggle').click()
+                        assert page.locator('.toc-toggle').get_attribute('aria-expanded') == 'true'
+                        page.locator('.toc-toggle').click()
                     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Lesson overflow at {width}"
                     page.locator('figure').first.scroll_into_view_if_needed()
                     page.wait_for_function("[...document.querySelectorAll('figure img')].filter(x=>x.getBoundingClientRect().top < innerHeight).every(x=>x.complete && x.naturalWidth>0)")
@@ -119,8 +154,24 @@ def main():
                     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Formula overflow at {width}"
                     page.locator('.math-display').scroll_into_view_if_needed()
                     page.screenshot(path=str(QA / f"formula-{width}.png"))
+                entries = json.loads((site / 'courses/search-quality/index.json').read_text(encoding='utf-8'))
+                for index, entry in enumerate(e for e in entries if e['ready']):
+                    for width in (1440, 390):
+                        page.set_viewport_size({'width': width, 'height': 900})
+                        page.goto(base + f"lessons/{entry['bvid']}.html", wait_until='networkidle')
+                        page.evaluate('document.fonts.ready')
+                        page.evaluate("document.querySelectorAll('figure img').forEach(img => img.loading = 'eager')")
+                        page.wait_for_function("[...document.querySelectorAll('figure img')].every(img => img.complete && img.naturalWidth > 0)")
+                        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f"Overflow: {entry['bvid']} at {width}"
+                        assert page.locator('article button.timecode').count() > 0
+                        assert page.locator('.math-fallback').count() == 0, entry['bvid']
+                        assert page.locator('#source-online-player').get_attribute('src') == 'about:blank'
+                        assert page.locator('#load-online-video').is_visible()
+                        assert page.locator('[data-done]').count() == 1
+                    if (index + 1) % 10 == 0:
+                        print(f'Checked {index + 1}/51 lessons at desktop and mobile widths', flush=True)
                 assert not errors, errors
-                print(json.dumps({"status":"passed","cards":54,"readable":51,"viewports":[1440,768,390],"checks":["filter","progress persistence","export/import","invalid import","lesson navigation","part timestamps","frame zoom","MathML","overflow","console/network"]}, ensure_ascii=False))
+                print(json.dumps({"status":"passed","cards":54,"readable":51,"viewports":[1440,768,390],"checks":["filter","progress persistence","export/import","invalid import","lesson navigation","online playback routing fixture","18-part playlist","part timestamps","frame jump and zoom","MathML","all-lesson images and overflow","console/network"]}, ensure_ascii=False))
             finally:
                 browser.close()
     finally:

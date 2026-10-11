@@ -1,84 +1,317 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>快速调研：每找到一条信息，就把问题问得更准 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>快速调研怎样开始：带着问题找资料，再让资料长出新问题 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">快速调研怎样开始：带着问题找资料，再让资料长出新问题</h1>
+    <div class="meta"><span>老蒋巨靠谱</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1pF411f7yD/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">快速调研：每找到一条信息，就把问题问得更准</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">看完很多资料，为什么仍然讲不清楚？</a></li>
-<li><a href="#_4">第一步：把调研动机写成问题</a></li>
-<li><a href="#_5">第二步：先找到地图，暂时保留疑问</a></li>
-<li><a href="#_6">第三步：两栏笔记，让搜索继续生长</a></li>
-<li><a href="#_7">第四步：整理关系，再返回起点</a></li>
-<li><a href="#_8">互联网之外，还有两条路</a></li>
-<li><a href="#_9">迁移练习：做一次有停止条件的调研</a></li>
+<li><a href="#_1">快速调研怎样开始：带着问题找资料，再让资料长出新问题</a><ul>
+<li><a href="#_2">有现成报告，为什么还要自己找资料</a></li>
+<li><a href="#_3">第一步：先把“想了解”变成具体问题</a></li>
+<li><a href="#_4">第二步：先通过介绍性材料认识这个领域</a></li>
+<li><a href="#_5">第三步：把读到的信息与新产生的问题放在一起</a></li>
+<li><a href="#_6">第四步：把散点重新排成能够解释的关系</a></li>
+<li><a href="#_7">再往前一步：回到最初的问题，尝试给出自己的解释</a></li>
+<li><a href="#_8">搜索之外，人与书也能提供不同层次的理解</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间导航</a></li>
+<li><a href="#_11">复习与实践</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1pF411f7yD" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1pF411f7yD"><div class="provenance">来源：老蒋巨靠谱 · <a href="https://www.bilibili.com/video/BV1pF411f7yD/" target="_blank" rel="noopener">BV1pF411f7yD 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">快速调研：每找到一条信息，就把问题问得更准</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1pF411f7yD.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><button class="done" data-done="BV1pF411f7yD" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1pF411f7yD&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1pF411f7yD/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1pF411f7yD"><h1>快速调研怎样开始：带着问题找资料，再让资料长出新问题</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1pF411f7yD/">老蒋巨靠谱｜面试必备！每个人都应该掌握的快速调研法</a>；全片约 22 分钟。主要面向社会、文化与商业问题的入门调研，不能代替学科训练。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1pF411f7yD/">面试必备！每个人都应该掌握的快速调研法</a><br>
+UP 主：老蒋巨靠谱 · 时长：21 分 54 秒 · 阅读强度：深度</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>调研从一个想弄明白的问题出发，用搜索结果长出新问题，最后回到最初的问题，给出有依据的判断。</p>
-<h2 id="_3">看完很多资料，为什么仍然讲不清楚？</h2>
-<p>假设我要了解香水行业。打开一份厚研报，市场规模、品牌名单、供应链、增长率扑面而来。读完觉得很充实，合上页面，却只能说“这个市场挺大”。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=121" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:01]">[00:02:01]</a></p>
-<p>信息本身没有自动变成我的理解。视频把困难分成三类：找不到可靠信息，不知道该从信息中提取什么，拿到事实后不会组织成框架。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=241" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:01]">[00:04:01]</a></p>
-<p>对应的主线很简单：<strong>先问问题，再找材料，边找边修正，最后组织答案。</strong></p>
-<h2 id="_4">第一步：把调研动机写成问题</h2>
-<p>“了解新能源汽车”范围太大。换成下面两个问题，搜索方向立即不同：</p>
-<ul>
-<li>中国车企为什么在这个领域形成竞争力？</li>
-<li>一个普通车主，什么条件下适合从油车换成电车？</li>
-</ul>
-<p>前者会寻找技术、产业链和市场条件；后者更关心使用场景、成本与约束。它们都来自视频对调研动机的拆解。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=361" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:01]">[00:06:01]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a></p>
-<p>对产品调研也一样：“研究 AI 搜索”可以改写成“用户核对引用为什么费劲”“什么问题需要澄清后再搜索”。一个明确问题会帮我判断资料是否有用。</p>
-<h2 id="_5">第二步：先找到地图，暂时保留疑问</h2>
-<p>初步搜索可以使用综述、文章、访谈、研究报告。它们帮我认识常用术语、参与者和争议点。视频还讨论搜索引擎、公众号、问答社区与播客等渠道，各有时间成本和质量差异。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=480" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:00]">[00:08:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=600" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:00]">[00:10:00]</a></p>
-<p>这里保留一个重要边界：渠道名称无法担保某条信息可靠。同一篇文章也可能同时包含事实、推测与营销。模型生成的介绍适合提供关键词，但涉及日期、数字、因果和引文时，仍需找到可核对的来源。</p>
-<h2 id="_6">第三步：两栏笔记，让搜索继续生长</h2>
-<p>视频最实用的动作，是把笔记分成左右两栏。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=722" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:02]">[00:12:02]</a></p>
+<p>你想了解一个陌生行业，找到了一份很完整的报告。市场规模、品牌名单、产品分类和供应链都写在里面，读的时候似乎每句话都明白。但合上报告，要向另一个人解释这个行业怎么运转，却只能零零散散地说出几个名词。材料已经读过，理解却还没有组织起来。</p>
+<p>快速调研要解决的，正是这个问题。我们希望在有限时间里知道一个领域有哪些重要对象，它们之间怎样联系，以及最初让自己好奇的问题可以怎样回答。下面这套方法主要用于社会、文化和商业领域的入门了解；如果目标是掌握超导原理之类的专业理论，还需要相应的学科基础与系统学习。<button type="button" class="timecode" data-seconds="138">[00:02:18]</button> <button type="button" class="timecode" data-seconds="353">[00:05:53]</button></p>
+<h2 id="_2">有现成报告，为什么还要自己找资料</h2>
+<p>现成报告很有价值，尤其当我们已经具备一些基础时。熟悉行业分析的人看到市场、成本或渠道的数据，容易知道哪个数字值得关注，接下来应该追问什么。同一份报告交到完全陌生的人手里，却可能让他把注意力平均分给所有信息，读完以后仍然不知道主次。</p>
+<p>可以做一个简单检查：找一个自己不了解的领域，读完一份介绍后，把材料放到一旁，试着向别人连续讲清楚它。这个检查关注的并不只是记住多少内容，还包括能否解释每个部分与其他部分有什么关系。说到一半突然不知道为什么，通常就暴露了理解尚未接上的位置。<button type="button" class="timecode" data-seconds="163">[00:02:43]</button></p>
+<p>报告的覆盖范围也有限。规模较大的商业领域更容易找到成熟研究，小众兴趣、文化生态和具体社会问题则未必有现成材料完整回答。集换式卡牌、虚拟主播、某类游戏文化或老年人的婚恋，可能需要从不同渠道拼出轮廓。即使能找到报告，它关注的问题也不一定与我们的动机相同。<button type="button" class="timecode" data-seconds="55">[00:00:55]</button></p>
+<p>因此，自己调研还有一种训练价值：我们实际经历提出问题、寻找材料、选择信息和组织解释的过程。阅读报告可以提供内容，这些动作则让我们知道内容是怎样被找到、怎样构成答案的。两种方式能够一起使用，不需要把现成报告排除在调研之外。<button type="button" class="timecode" data-seconds="190">[00:03:10]</button></p>
+<h2 id="_3">第一步：先把“想了解”变成具体问题</h2>
+<p>“我想了解新能源汽车”是一个方向，但还不足以决定接下来读什么。这个领域可以谈用户、企业、零部件、技术、成本，也可以谈不同产品类型。我们可以先用这些共同问题建立一个初步范围：谁在购买，哪些企业在提供产品，一辆车由哪些重要部分组成，成本又花在什么地方。<button type="button" class="timecode" data-seconds="383">[00:06:23]</button></p>
+<p>不过，仅有通用问题还不够。为什么是现在想了解新能源汽车？如果起因是看到中国车企在这个领域表现活跃，我们可能真正想知道竞争力从哪里来。技术、品牌、营销与市场条件，都可能成为需要分别调查的方向。把它们写成问题，能避免还没调查就选定某个解释。</p>
+<p>如果起因是身边越来越多人从燃油车换成电动车，关注点又会变化：两类车辆各有什么优势与限制？它们适合的使用条件有何不同？燃油车长期发展的经验，对电动车未来的变化有没有参考意义？同一个行业，因为进入它的动机不同，会长出不同的问题。<button type="button" class="timecode" data-seconds="436">[00:07:16]</button></p>
 <table>
 <thead>
 <tr>
-<th>已经看到的信息</th>
-<th>它引出的新问题</th>
+<th>最初注意到什么</th>
+<th>可以进一步问什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>调香师常在香精公司工作</td>
-<td>品牌为什么不全部自建调香团队？</td>
+<td>中国新能源车企表现活跃</td>
+<td>竞争力与技术、品牌、市场条件分别有什么关系？</td>
 </tr>
 <tr>
-<td>香调有不同分类方法</td>
-<td>各种分类回答的是什么问题？</td>
+<td>身边的人陆续更换电动车</td>
+<td>电动车与燃油车各适合什么条件，优势和限制是什么？</td>
 </tr>
 <tr>
-<td>一篇文章给出市场规模</td>
-<td>统计口径、年份和原始数据是什么？</td>
+<td>人口趋势相关报道增加</td>
+<td>趋势是否成立、受什么因素影响、可能带来什么变化？</td>
 </tr>
 </tbody>
 </table>
-<p>前两行改写自视频的香水例子，最后一行增加了证据核查。人名、技术词、公司名和不懂的因果关系，都可以变成下一轮查询。</p>
-<p>这个过程会从二手介绍逐步进入财报、论文、原始访谈与专业社区。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=841" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:01]">[00:14:01]</a> 一旦不同来源出现冲突，就把冲突本身记下来，不急着挑一个顺眼的答案。</p>
-<p>视频用“不再遇到陌生词”描述停止时机。实际工作中还需要限制范围：核心问题已能回答，关键结论有证据，剩余未知不会改变当前决定，就可以先交付一版。理解术语并不等于穷尽事实。</p>
-<h2 id="_7">第四步：整理关系，再返回起点</h2>
-<p>把散点按问题组织：谁参与、用户为何需要、产品怎样生产、钱从哪里来、限制在哪里。框架服务于这次调研，无须每次套同一张行业模板。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=841" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:01]">[00:14:01]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=960" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:00]">[00:16:00]</a></p>
-<p>最后把资料放到一旁，试着独立解释最初的问题。以香水为例，能否说清它满足什么需求、品牌之间靠什么竞争？说到某个关键判断时，再回到资料确认依据。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=960" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:00]">[00:16:00]</a></p>
-<p>我会把结论分成三种，避免越写越笃定：</p>
+<p>人口问题的例子也值得完整走一遍。假如我们因为报道和统计数据产生担忧，可以先检查担忧所依据的趋势是否真实，再看影响出生率的因素，继续问趋势能否改变、改变需要哪些条件。如果难以改变，还要讨论这种变化对社会与个人分别有什么影响。国际经验和历史案例，则可能提供比较对象。<button type="button" class="timecode" data-seconds="499">[00:08:19]</button></p>
+<p>注意，这些都是准备调查的问题，暂时没有替任何原因作出结论。提出问题的过程，把一个模糊情绪逐步拆成可以寻找资料的方向。我们不需要一开始就知道所有专业术语，可以先从“为什么想了解这件事”出发，把自己真正不明白的地方写出来。</p>
+<h2 id="_4">第二步：先通过介绍性材料认识这个领域</h2>
+<p>带着第一组问题，我们可以开始初步搜索。这个阶段常用的是别人已经整理过的材料，例如文章、问答、行业报告和访谈。它们能够先介绍常见术语、主要参与者以及正在讨论的争议，帮助我们知道这个领域的人通常在谈什么。<button type="button" class="timecode" data-seconds="576">[00:09:36]</button></p>
+<p>老蒋在 2023 年的使用经验里提到了搜索引擎、微信公众号、知乎、行业研究报告和播客。这些渠道各有可能出现的材料，也各有筛选成本。文章容易快速浏览，专业讨论可能提供实践细节，播客有时能展开一段较长的经验与推理，但听完往往需要更多时间。具体选择取决于问题和可用时间，平台名称本身无法保证内容质量。<button type="button" class="timecode" data-seconds="588">[00:09:48]</button></p>
+<p>初步阅读时，不需要把每篇材料都当作最后答案。我们更关心它能否帮助认识对象：有哪些公司、什么岗位重要、哪些词反复出现、各方在争论什么。这个阶段取得的认识，会成为下一轮更准确搜索的起点。</p>
+<p>对于 AI 生成的介绍，需要区分“提供一个可以继续查的方向”与“已经给出可靠事实”。老蒋对自己在 2023 年使用的 ChatGPT 比较谨慎，担心它泛泛回答或编造内容。放到调研方法中理解，重要的是不能仅凭语言顺畅就确认事实；涉及具体数字、事件和关系时，需要能回到相应材料检查。<button type="button" class="timecode" data-seconds="666">[00:11:06]</button></p>
+<h2 id="_5">第三步：把读到的信息与新产生的问题放在一起</h2>
+<p>初步搜索之后，最容易出现的困惑是：这些文章已经看了，接下来还搜什么？答案常常就在刚才的阅读里。陌生名词、没有解释清楚的关系、看起来意外的现象，都可以变成新的查询。老蒋把这个过程称为“以搜养搜”，也就是用搜索得到的内容继续扩大和改善搜索。<button type="button" class="timecode" data-seconds="714">[00:11:54]</button></p>
+<p>他的做法很具体：把笔记本分成左右两栏。左边记读到的信息，右边记这条信息引出的新问题和新关键词。这样，记录同时承担两件事：保留已经获得的线索，也告诉我们还有哪些地方没有弄明白。电子笔记同样可以用两栏实现。</p>
+<p>以香水调研为例，初步材料里出现“香调轮盘”，我们还不认识它，就把这个名称写到右边继续查。另一条笔记写着“调香师主要集中在香精公司”，于是可以继续寻找知名调香师的信息、岗位收入，以及香水品牌为什么采用这种合作方式。市场规模的介绍，则继续引出增长率、中国品牌与资本活动等问题。<button type="button" class="timecode" data-seconds="755">[00:12:35]</button></p>
+<table>
+<thead>
+<tr>
+<th>左边：当前读到的线索</th>
+<th>右边：下一轮要查的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>香调分类中出现“香调轮盘”</td>
+<td>香调轮盘是什么，怎样组织不同气味？</td>
+</tr>
+<tr>
+<td>调香师是重要岗位，与香精公司有关</td>
+<td>有哪些知名调香师？品牌与调香师怎样合作？</td>
+</tr>
+<tr>
+<td>材料介绍了中国香水市场规模</td>
+<td>市场怎样增长？有哪些中国品牌与相关资本活动？</td>
+</tr>
+</tbody>
+</table>
+<p>左边写下的内容，在当前阶段仍然可能只是某篇材料的说法。继续往下查，可能发现更完整的解释，也可能遇到不同口径。两栏笔记的作用，是让追问不断接着现有信息向前走。我们逐渐知道哪些名词需要解释、哪些关系需要更多材料，搜索词也就越来越贴近实际问题。</p>
+<p>“品牌为什么不全部自己雇用调香师”尤其能说明这个过程。最初，我们也许只是想了解香水有哪些品牌；读到生产与岗位信息后，才意识到品牌和香味设计之间可能存在专业分工。于是问题从名单转向行业怎样协作。这个新问题是由材料引出的，能够帮助我们看见最初没有想到的一层关系。<button type="button" class="timecode" data-seconds="795">[00:13:15]</button></p>
+<p>人名、公司名、产品名、事件名和技术术语，都可以用同样方式记录。不懂一个词，先查它指什么；不懂一段解释，继续追问为什么。在这一过程中，材料也可能从概括性文章逐渐进入公司报告、原始访谈、论文、书籍或专业社区，信息越来越靠近具体对象。<button type="button" class="timecode" data-seconds="820">[00:13:40]</button> <button type="button" class="timecode" data-seconds="858">[00:14:18]</button></p>
+<p>老蒋用“不再反复遇到陌生词与不明白的问题”描述这一阶段逐渐完成的感觉。它意味着我们开始能听懂这个领域的讨论，尚不意味着已经成为专家，也不保证所有结论都正确。应用到一次入门调研时，可以回看右栏：最初记下的重要疑问是否已经处理，哪些词仍然阻碍理解？这比单纯计算读了多少篇文章更贴近目标。<button type="button" class="timecode" data-seconds="846">[00:14:06]</button> <button type="button" class="timecode" data-seconds="905">[00:15:05]</button></p>
+<h2 id="_6">第四步：把散点重新排成能够解释的关系</h2>
+<p>两栏笔记会积累很多信息，但记录顺序通常只是搜索顺序。我们今天先看品牌，接着看一位调香师的采访，再读市场材料，最后才了解生产分工。这个顺序适合探索，却未必适合向别人解释。到了整理阶段，需要把左边的散点通读一遍，根据对象与关系重新分组。<button type="button" class="timecode" data-seconds="923">[00:15:23]</button></p>
+<p>商业领域可能分成市场情况、上下游参与者、技术与工艺、本地市场特点以及发展历史。分类的意义，在于让相关事实待在一起：哪些信息说明需求，哪些说明生产，哪些说明分工，哪些说明变化。一个问题涉及多个模块时，还要把模块之间的联系说清楚。</p>
+<p>社会问题需要的结构可能不同。我们可能先梳理事件经过，再了解参与方，然后讨论原因与解决办法。不能因为手里有一张行业分析表，就强行把任何问题填进去。最终结构要跟随这次实际研究的对象，也要服务我们准备回答的问题。<button type="button" class="timecode" data-seconds="939">[00:15:39]</button></p>
+<p>“形成框架”因此有很具体的含义。它让原来分散的材料有了位置，并让我们知道从一个部分怎样走到下一个部分。仅仅把若干标题排出来，还没有完成这一步；每个标题下面需要有相应内容，标题之间也需要能够解释的关系。读者顺着这些关系，才容易逐渐认识整个领域。</p>
+<h2 id="_7">再往前一步：回到最初的问题，尝试给出自己的解释</h2>
+<p>完成整理以后，我们已经有了一份较清楚的领域介绍。接下来可以把屏幕和笔记暂时放到一边，重新想最初为什么要了解它。现在能不能回答那个问题？回答时能不能给出理由，并说明这些理由与刚才找到的事实怎样联系？<button type="button" class="timecode" data-seconds="987">[00:16:27]</button></p>
+<p>香水的例子里，综合问题包括：香水到底满足人们什么需求？品牌之间靠什么竞争？消费者为什么愿意支付这样的价格？这些问题很难只靠抄下一条市场规模或一个品牌名单回答。我们需要把用户需求、产品、品牌和行业分工联系起来，形成可以讨论的解释。<button type="button" class="timecode" data-seconds="1027">[00:17:07]</button></p>
+<p>这里的难度比整理材料更高。我们可能已经认识所有常见术语，却仍然无法判断哪一个因素更重要。老蒋建议，即使经验不多，也可以在调研结束后尝试回答这类问题。回答不必假装确定，关键是说明目前怎样理解、依据是什么，哪些地方还需要继续调查。</p>
+<p>这个动作也会检验前面的框架。如果我们能背出许多分类，却始终回答不了最初的疑问，可能是材料与问题脱节，也可能是关键关系还没想明白。回到起点，可以帮助我们决定还需要查哪一块，或者把结论限制在目前真正理解的范围里。</p>
+<h2 id="_8">搜索之外，人与书也能提供不同层次的理解</h2>
+<p>互联网搜索并非唯一入口。与某个领域的资深参与者直接交谈，可能很快补上公开材料中难以看到的细节。不过，这种效率有前提：需要找到真正了解相关事情的人，也需要听懂他的回答，及时提出下一层问题。一个人的岗位和经历也有范围，不能自动代表整个行业。<button type="button" class="timecode" data-seconds="1085">[00:18:05]</button></p>
+<p>对于缺少访谈经验的人，可以从身边熟悉的人练起。比如，我们可能知道父母在哪家公司工作，却说不清那家公司怎样运转，他们每天处理什么事情，与哪些岗位协作。围绕这些具体工作聊天，就是一次从熟悉名字走向理解实际过程的练习。<button type="button" class="timecode" data-seconds="1130">[00:18:50]</button></p>
+<p>如果目标变成系统学习一个学科，例如宏观经济、人口学或社会心理学，碎片搜索的局限会更明显。这些领域中的概念彼此依赖，往往需要教材或有组织的阅读来建立基础。此时，读书和论文承担的是较完整的知识展开，搜索可以帮助定位材料和解决局部疑问。<button type="button" class="timecode" data-seconds="1158">[00:19:18]</button></p>
+<p>寻找入门读物也可以逐步进行。先通过参考书目、可信介绍或熟悉该领域的人，找到一本适合起步的书；再沿着相关书目寻找其他读物，比较它们介绍的范围和学习要求。大学相关专业的课程或参考书目，也可以提供教材线索。推荐列表能缩小范围，是否适合自己仍需要结合目录、前置知识和阅读目标判断。<button type="button" class="timecode" data-seconds="1189">[00:19:49]</button></p>
+<p>老蒋当时的具体查找习惯，是进入一本书在豆瓣或微信读书上的页面，再寻找收录这本书的主题书单。一本书因此成为入口，帮助发现围绕相同领域组织的其他材料。先获得一个较可信的起点，再顺着它寻找一组可以比较的读物，与前面“以搜养搜”的方法相通。选出几本适合入门的书完整阅读，才能逐渐把概念之间的联系建立起来；收集书单本身还没有完成学习。<button type="button" class="timecode" data-seconds="1208">[00:20:08]</button></p>
+<p>这些方法共享同一种思路：先取得一个足以继续深入的起点，再让新获得的理解帮助我们找到下一步。人与书补充了搜索的不同侧面，实际调研中可以根据问题选择组合。</p>
+<h2 id="_9">总结提炼</h2>
+<p>快速调研从问题开始。先说清为什么想了解，再寻找能够帮助认识领域的材料；阅读过程中，把新信息和新疑问放在一起，让下一次搜索更具体。</p>
+<p>两栏笔记保存探索过程，整理框架负责把散点变成可以解释的关系。最后回到最初的问题，尝试给出有理由的回答，能检验我们究竟理解了什么。</p>
+<p>这套方法适合建立社会、文化和商业问题的入门认识。需要具体工作细节时，可以与参与者交谈；需要系统学科基础时，就要安排更完整的阅读与学习。</p>
+<h2 id="_10">时间导航</h2>
 <ul>
-<li>已核对的事实：附来源与时间。</li>
-<li>根据事实做出的解释：写出推理过程和其他可能解释。</li>
-<li>尚未解决的问题：标明需要什么材料才能继续判断。</li>
+<li><button type="button" class="timecode" data-seconds="55">[00:00:55]</button> 现成报告没有覆盖所有问题。</li>
+<li><button type="button" class="timecode" data-seconds="138">[00:02:18]</button> 读懂句子与形成理解的差别。</li>
+<li><button type="button" class="timecode" data-seconds="383">[00:06:23]</button> 调研之前先提出问题。</li>
+<li><button type="button" class="timecode" data-seconds="436">[00:07:16]</button> 从新能源汽车的调研动机继续追问。</li>
+<li><button type="button" class="timecode" data-seconds="499">[00:08:19]</button> 把人口趋势的担忧拆成问题。</li>
+<li><button type="button" class="timecode" data-seconds="576">[00:09:36]</button> 初步搜索与不同信息渠道。</li>
+<li><button type="button" class="timecode" data-seconds="714">[00:11:54]</button> 用已有搜索结果产生新搜索。</li>
+<li><button type="button" class="timecode" data-seconds="755">[00:12:35]</button> 香水调研的两栏笔记。</li>
+<li><button type="button" class="timecode" data-seconds="923">[00:15:23]</button> 将散点整理为有联系的模块。</li>
+<li><button type="button" class="timecode" data-seconds="987">[00:16:27]</button> 回到最初的问题，形成自己的解释。</li>
+<li><button type="button" class="timecode" data-seconds="1085">[00:18:05]</button> 与领域参与者交谈。</li>
+<li><button type="button" class="timecode" data-seconds="1158">[00:19:18]</button> 需要学科基础时怎样寻找读物。</li>
 </ul>
-<p>这是对视频方法的补充整理。</p>
-<h2 id="_8">互联网之外，还有两条路</h2>
-<p>和熟悉该行业的人交谈，适合补工作细节，但一个人的经历也有范围。系统学习一个学科，则需要教材、论文和完整课程，碎片搜索难以替代。<a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=1080" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:00]">[00:18:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1pF411f7yD/?t=1202" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:02]">[00:20:02]</a></p>
-<p>视频中的“读几本书能超过多少人”属于激励性说法，没有对应测量。本次练习只检查自己能否解释和验证。</p>
-<h2 id="_9">迁移练习：做一次有停止条件的调研</h2>
-<p>用 30 分钟回答：“AI 搜索给出引用后，用户还需要做什么核查？”先列三个问题，再找两份原始产品说明与一个实际失败案例。</p>
-<p>交付一页：三条结论、每条的证据、一条尚不确定的判断，以及下一次值得测试的任务。到点就停，把缺口写出来。这张纸比继续堆十个链接更容易指导下一步。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_11">复习与实践</h2>
+<p>选择一个你确实想了解的领域，先写出产生兴趣的具体原因，再由这个原因展开几个问题。检查这些问题是否已经替某个答案作了假定。</p>
+<p>读一篇介绍，把信息与疑问分成两栏。挑出一个因为阅读才出现的新问题，继续搜索，看看它是否让你认识了此前没有想到的对象或关系。</p>
+<p>完成一轮整理后，把资料放到一边，向一个不熟悉领域的人解释最初的问题。说不清楚的位置，可以成为下一轮调研的起点。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "面试必备！每个人都应该掌握的快速调研法", "duration": "21:54", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,380 +1,354 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 怎样参与下一代 AI 的研究：从研究助手到递归自我改进 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai-ai">AI 怎样参与下一代 AI 的研究：从研究助手到递归自我改进</h1>
+    <div class="meta"><span>晚点聊LateTalk</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1XnuH66EzS/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#ai-latetalk">对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">时间戳导航</a></li>
-<li><a href="#_3">核心问题与推理主线</a></li>
-<li><a href="#rsi">一、RSI 为什么在此时复兴</a></li>
-<li><a href="#automl-rsiai">二、从 AutoML 到当代 RSI：AI 开始参与定义问题</a><ul>
-<li><a href="#_4">递归改进与完全自动化是两个维度</a></li>
-</ul>
-</li>
-<li><a href="#coding-agent-ai">三、Coding Agent 距离 AI 科学家还有多远</a><ul>
-<li><a href="#rsi_1">RSI 是一座多级台阶</a></li>
-</ul>
-</li>
-<li><a href="#_5">四、“强者恒强”是否必然成立</a></li>
-<li><a href="#ai-for-ai">五、从 AI for AI 到更大的科学愿景</a></li>
-<li><a href="#_6">六、第一阶段成果：先让闭环跑起来</a><ul>
-<li><a href="#_7">这些结果尚未证明什么</a></li>
-</ul>
-</li>
-<li><a href="#rsi_2">七、RSI 当前最缺什么</a><ul>
-<li><a href="#1">1. 评价信号</a></li>
-<li><a href="#2">2. 数据</a></li>
-<li><a href="#3">3. 算力</a></li>
-<li><a href="#4">4. 跨尺度迁移</a></li>
-<li><a href="#5">5. 可解释性</a></li>
-</ul>
-</li>
-<li><a href="#_8">八、安全：创造力、意识与控制需要分开讨论</a></li>
-<li><a href="#ai">九、AI 最终会从工程经验变成科学吗</a></li>
-<li><a href="#rsi_3">十、个人经历怎样塑造 RSI 方法论</a><ul>
-<li><a href="#_9">两种优秀研究者</a></li>
-</ul>
-</li>
-<li><a href="#ai_1">十一、AI 时代的组织为何需要更小、更直接</a></li>
-<li><a href="#_10">十二、技术品位：追求美，也接受现实</a></li>
-<li><a href="#_11">具体案例与原话细节</a></li>
-<li><a href="#_12">边界、疑点与时效性</a></li>
-<li><a href="#_13">复习与行动清单</a><ul>
-<li><a href="#_14">记住这五个判断</a></li>
-<li><a href="#rsi_4">把 RSI 思路用于自己的研究或工程</a></li>
-<li><a href="#_15">值得重看和继续追问的问题</a></li>
-</ul>
-</li>
+<li><a href="#ai-ai">AI 怎样参与下一代 AI 的研究：从研究助手到递归自我改进</a><ul>
+<li><a href="#_1">先从一个研究者已经用得上的助手说起</a></li>
+<li><a href="#_2">为什么越有经验，反而越需要重新动手</a></li>
+<li><a href="#_3">自动搜索一个设计，与重新理解研究问题，有多大距离</a></li>
+<li><a href="#_4">递归，不要求每一步都无人参与</a></li>
+<li><a href="#_5">会写复杂软件，为什么还不等于会做科学</a></li>
+<li><a href="#_6">不必等到解决最深的理论问题，才能开始有用的改进</a></li>
+<li><a href="#_7">如果进步会遇到瓶颈，还会不会出现一家永远领先的公司</a></li>
+<li><a href="#_8">理解模型为什么这样学习，对改进和安全有什么帮助</a></li>
+<li><a href="#_9">从炼金术到化学：一个关于研究方向的比喻</a></li>
+<li><a href="#_10">研究判断怎样长出来：从自动驾驶经历谈起</a></li>
+<li><a href="#_11">好问题和好解法，是两种可以互相成全的贡献</a></li>
+<li><a href="#_12">喜欢漂亮的解释，也要允许现实不够漂亮</a></li>
+<li><a href="#_13">总结提炼</a></li>
+<li><a href="#_14">时间导航</a></li>
+<li><a href="#_15">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1XnuH66EzS" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><span>拓展 · 既有学习稿</span></div><article data-lesson="BV1XnuH66EzS"><h1 id="ai-latetalk">对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1XnuH66EzS.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← 04 · Agent 的过程与交付</a><button class="done" data-done="BV1XnuH66EzS" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1XnuH66EzS&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1XnuH66EzS/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1XnuH66EzS"><h1>AI 怎样参与下一代 AI 的研究：从研究助手到递归自我改进</h1>
 <blockquote>
-<ul>
-<li><strong>UP 主：</strong> 晚点聊LateTalk<br></li>
-<li><strong>嘉宾：</strong> 田渊栋<br></li>
-<li><strong>时长：</strong> 01:24:28<br></li>
-<li><strong>视频 ID：</strong> BV1XnuH66EzS<br></li>
-<li><strong>来源：</strong> <a href="https://www.bilibili.com/video/BV1XnuH66EzS/">Bilibili 原视频</a><br></li>
-<li><strong>总结强度：</strong> deep<br></li>
-<li><strong>证据：</strong> 本地视频逐字稿、SRT 与 12 张定时画面。转写由 faster-whisper small 生成，中文识别置信度约 99.24%，全片语音覆盖较连续。英文专名、模型版本和公司名存在少量识别误差，本文只做谨慎校正；访谈中的融资、产品进展和性能数字均属录制时陈述，未作外部核验。</li>
-</ul>
+<p>来源：对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】<br>
+UP 主：晚点聊LateTalk · 1 小时 24 分 28 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1XnuH66EzS/</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>田渊栋所说的 RSI（Recursive Self-Improvement，递归自进化），核心是一条越来越快的研究闭环：AI 参与发现模型问题、提出方案、写代码、运行实验和读取反馈；改进后的模型再参与下一轮研究。当前可行形态仍需要人类承担问题定义、研究品位和高层判断，距离完全自主的“AI 科学家”还有创造性抽象、跨尺度迁移、评价体系、可解释性与安全等关键台阶。</p>
-<h2 id="_2">时间戳导航</h2>
-<ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=157" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:37]">[00:02:37]</a> RSI 公司的目标：让 AI 参与改进 AI，探索新模型、新训练逻辑和新范式。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=256" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:16]">[00:04:16]</a> RSI 最近升温的直接背景：模型能力和 Coding Agent 同时增强。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=360" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:00]">[00:06:00]</a> 田渊栋与 GPT-5 合作研究后，开始感到 AI 已能进入真实科研流程。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=522" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:42]">[00:08:42]</a> 高层研究判断必须与亲手实验结合，否则方向容易脱离实际。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=630" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:30]">[00:10:30]</a> AI 将一次科研验证从数天压缩到数小时甚至数分钟。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=826" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:46]">[00:13:46]</a> 当代 RSI 与十年前 AutoML、架构搜索的根本差异。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=961" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:01]">[00:16:01]</a> 递归改进可以先发生，完全自动化仍很遥远。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=1053" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:33]">[00:17:33]</a> 更强模型参与改进自身，可能形成加速循环。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=1142" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:02]">[00:19:02]</a> Anthropic 案例在田渊栋看来仍以提效和指标优化为主。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=1240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:40]">[00:20:40]</a> Coding Agent 与 AI Research 之间仍有能力鸿沟。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=1554" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:54]">[00:25:54]</a> RSI 的问题空间、研究难度和潜在路径都远大于代码生成。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=1714" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:34]">[00:28:34]</a> AI 科学家需要研究品位、方向感、抽象能力和创造力。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2055" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:34:15]">[00:34:15]</a> RSI 具有多级台阶，低级能力也能产生实际价值。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2201" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:36:41]">[00:36:41]</a> “率先进入 RSI 就永远领先”的逻辑及其成立条件。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2277" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:37:57]">[00:37:57]</a> 田渊栋提出“增长—平台—突破—再增长”的阶段式路径。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2367" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:39:27]">[00:39:27]</a> Scaling Law 仍可能有效，但资源投入面临物理与经济上限。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2666" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:44:26]">[00:44:26]</a> RSI 公司公开的第一阶段成果：三个可快速反馈的优化任务。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=2898" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:48:18]">[00:48:18]</a> 第一阶段目标很朴素：先让通用系统跑起来并产生可靠结果。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3091" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:51:31]">[00:51:31]</a> 小模型基准上的成果迁移到前沿大模型仍存在明显鸿沟。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3183" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:53:03]">[00:53:03]</a> RSI 当前缺少清晰的数据方法，也高度依赖算力和评价信号。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3299" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:54:59]">[00:54:59]</a> 可解释性可能成为突破 Scaling Law 局限的重要方向。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3376" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:56:16]">[00:56:16]</a> RSI 的安全问题、训练压力、意识与创造力之间的区分。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3461" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:57:41]">[00:57:41]</a> 田渊栋相信神经网络背后存在可理解的统一原理。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=3744" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:02:24]">[01:02:24]</a> 他的长期目标：让 AI 从经验工程走向真正的科学。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=4017" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:06:57]">[01:06:57]</a> 从 Google 无人车、FAIR 到 RSI 的个人研究路径。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=4413" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:13:33]">[01:13:33]</a> 两类研究员：指出大方向，以及进一步拆出实现路径。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=4742" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:19:02]">[01:19:02]</a> 大组织的层级、激励和信息损耗为何拖慢 AI 研究。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=4912" target="_blank" rel="noopener" aria-label="在 B 站打开 [01:21:52]">[01:21:52]</a> 技术品位的终点：追求美，也接受工程现实的约束。</li>
-</ul>
-<h2 id="_3">核心问题与推理主线</h2>
-<p>这场访谈持续追问四个问题：</p>
-<ol>
-<li>RSI 究竟是什么，为什么在此时成为热门方向？</li>
-<li>当前系统已经做到哪一步，距离真正的 AI 科学家还有多远？</li>
-<li>先进入 RSI 的团队会不会形成无法追赶的优势？</li>
-<li>如果 AI 可以持续改进 AI，人类研究员、科研组织和安全体系将发生什么变化？</li>
-</ol>
-<p>田渊栋描述的基本闭环可以压缩为：</p>
-<blockquote>
-<p>发现问题 → 提出假设 → 写代码与运行实验 → 获得量化反馈 → 选择有效改进 → 得到更强模型 → 用更强模型进入下一轮</p>
-</blockquote>
-<p>这条闭环有两层反馈：</p>
-<ul>
-<li><strong>任务层反馈：</strong> 性能、速度、BPP、延迟或算子效率等明确指标是否改善。</li>
-<li><strong>能力层反馈：</strong> 改进后的模型能否提出更好的研究问题、理解更复杂的现象并加速下一轮实验。</li>
-</ul>
-<p>当前系统较擅长第一层。第二层需要模型理解稀缺数据、形成新概念、判断研究方向，并发现已有知识体系之外的解释。田渊栋把这视为真正困难的部分。</p>
-<h2 id="rsi">一、RSI 为什么在此时复兴</h2>
-<p>RSI 的想法早已存在。最近的变化来自两个条件同时成熟：<a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=256" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:16]">[00:04:16]</a></p>
-<ul>
-<li>模型开始具备一定程度的 AI 知识，能阅读代码、分析模型问题并参与实验。</li>
-<li>Coding Agent 可以把自然语言想法快速转化为代码和可运行的实验。</li>
-</ul>
-<p>过去，导师提出方向，学生实现、调试、汇报，一轮反馈往往需要数天，完整项目可能持续数月。AI 加入后，一个较简单的想法可以很快变成实验：研究者提出细节，Agent 编写代码并运行；研究者开完会或喝完茶，结果可能已经返回。[00:09:57—00:11:03]</p>
-<p>这种速度变化重新提升了资深研究者的价值。以往许多经理或研究负责人有想法，却缺少亲自实现的时间，团队也无法验证每个设想。Agent 接手部分执行工作后，人类可以把更多精力放在判断、研究品位和方向选择上。[00:12:48—00:13:42]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_001_00-03-31.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_001_00-03-31.jpg" alt="图 01 · 00:03:31：画面中的田渊栋正在解释 RSI 从小众概念逐渐成为行业共识的背景。" loading="lazy"></a><figcaption>图 01 · 00:03:31：画面中的田渊栋正在解释 RSI 从小众概念逐渐成为行业共识的背景。</figcaption></figure>
-<p><em>图 01 · 00:03:31：画面中的田渊栋正在解释 RSI 从小众概念逐渐成为行业共识的背景。</em></p>
-<p>田渊栋的个人转折发生在他与 GPT-5 合作完成一项 Grokking 研究时。他发现，自己可以给出细节和方向，让模型提出想法、证明定理，再由代码实验检验。这个闭环开始真正转动后，他产生了“五年后自己也许会被取代”的判断，并给出颇具个人色彩的回应：“与其自己被取代，不如我就开公司。”[00:06:00—00:07:00]</p>
-<p>他的经验强调了一个容易被忽略的条件：只有把模型当作研究合作者，拿它解决足够具体、足够困难的问题，才能真实感知能力边界。仅把模型用作聊天对象或简单执行工具，很难察觉科研工作方式正在发生什么变化。[00:07:18—00:08:27]</p>
-<h2 id="automl-rsiai">二、从 AutoML 到当代 RSI：AI 开始参与定义问题</h2>
-<p>十年前的 AutoML、神经架构搜索和 AI-guided optimization，同样在使用算法优化算法。那一代方法通常由研究员预先定义搜索空间、变量和评价方式，AI 只在封闭空间里寻找更优解。[00:13:46—00:14:36]</p>
-<p>当代大模型带来的变化，是模型已经能够理解部分高层知识和架构语义。因此，它有机会参与下列工作：</p>
-<ul>
-<li>改写问题定义；</li>
-<li>扩大或重构搜索空间；</li>
-<li>选择工具和实验；</li>
-<li>综合外部知识；</li>
-<li>从实验反馈中提出下一步方向。</li>
-</ul>
-<p>这使搜索空间更大，也更智能。但由此产生的新难点是：怎样让模型自己发现有价值的空间结构，避免在庞大空间中机械搜索。[00:14:37—00:15:24]</p>
-<h3 id="_4">递归改进与完全自动化是两个维度</h3>
-<p>田渊栋判断，递归改进可能先于完全自动化发生。<a class="timecode" href="https://www.bilibili.com/video/BV1XnuH66EzS/?t=961" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:01]">[00:16:01]</a></p>
-<p>AI 能力提升后，低层工作逐渐由模型完成，人类转向更高层的问题定义、方向判断和结果审查。人的操作时间可能减少，认知负担和判断要求反而提高。因此，未来一段时间更可能出现“人处于更高层闭环”的结构。</p>
-<p>真正的递归性来自能力回流：模型改进后，能够理解更深的问题，形成更强的 Agent 或 AI Scientist，再进一步寻找自身缺陷。[00:17:33—00:18:04]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_003_00-17-35.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_003_00-17-35.jpg" alt="图 02 · 00:17:35：字幕“让自己变得越来越强”对应 RSI 的能力回流：改进后的模型继续参与下一轮改进。" loading="lazy"></a><figcaption>图 02 · 00:17:35：字幕“让自己变得越来越强”对应 RSI 的能力回流：改进后的模型继续参与下一轮改进。</figcaption></figure>
-<p><em>图 02 · 00:17:35：字幕“让自己变得越来越强”对应 RSI 的能力回流：改进后的模型继续参与下一轮改进。</em></p>
-<h2 id="coding-agent-ai">三、Coding Agent 距离 AI 科学家还有多远</h2>
-<p>Coding Agent 的核心角色偏向执行：目标和验收条件相对清楚，它负责实现、调试和完成任务。RSI 面对的研究空间更开放，连正确问题、评价方式和实现路径都可能未知。[00:20:40—00:21:24]</p>
-<p>例如，从头写一个操作系统或编辑器虽然繁重，整体目标和工程路径已有历史经验可循；真正困难的 AI Research Problem 可能连人类也不知道该怎样解决。模型需要发现新概念、新机制和新理论，无法单靠已有模式的重组完成。</p>
-<p>田渊栋认为，AI 科学家至少需要四类能力：[00:28:34—00:30:30]</p>
-<ol>
-<li><strong>研究品位：</strong> 判断什么问题重要，什么方向值得长期投入。</li>
-<li><strong>抽象能力：</strong> 从纷繁表象和少量样本中抽取核心结构。</li>
-<li><strong>创造力：</strong> 将抽取出的概念迁移到未出现过的新问题。</li>
-<li><strong>Agent 能力：</strong> 调用工具、搜集知识、设计实验并把复杂步骤组织成任务链。</li>
-</ol>
-<p>今天的大模型依赖海量数据，在常见任务和重复性工程上表现强大。开创性科学问题的数据天然稀缺，每次实验还会暴露新问题。模型必须用极少证据形成精准联系，这正是人类顶尖研究员仍然占优的区域。</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_004_00-24-38.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_004_00-24-38.jpg" alt="图 03 · 00:24:38：双人访谈画面中，主持人继续追问 RSI 从小众方向走向行业热点的过程。" loading="lazy"></a><figcaption>图 03 · 00:24:38：双人访谈画面中，主持人继续追问 RSI 从小众方向走向行业热点的过程。</figcaption></figure>
-<p><em>图 03 · 00:24:38：双人访谈画面中，主持人继续追问 RSI 从小众方向走向行业热点的过程。</em></p>
-<h3 id="rsi_1">RSI 是一座多级台阶</h3>
-<p>田渊栋并未要求第一阶段系统立刻成为牛顿或爱因斯坦式科学家。RSI 可以逐级产生价值：[00:34:15—00:35:09]</p>
-<ul>
-<li>优化既有算法、速度和资源效率；</li>
-<li>改进预训练、后训练和系统结构；</li>
-<li>发现新的架构或训练方法；</li>
-<li>最终从少量样本中形成深层理论。</li>
-</ul>
-<p>低层台阶已经有工程价值。最高台阶极难，却不影响中间成果被应用。</p>
-<h2 id="_5">四、“强者恒强”是否必然成立</h2>
-<p>硅谷围绕 RSI 的一个诱人假设是：最早实现递归自进化的组织会获得更强模型；更强模型又能更快研究下一代模型，于是领先优势持续扩大，后来者逐渐失去入场机会。[00:36:27—00:36:47]</p>
-<p>田渊栋认可这种可能性，同时给出一个关键修正：AI 进展可能呈阶段性跳跃，而非持续平滑增长。</p>
-<p>他设想的轨迹更接近连续的 S 型曲线：</p>
-<ol>
-<li>新范式出现，性能快速增长；</li>
-<li>现有范式逐渐逼近上限，进入平台；</li>
-<li>新理论、新架构或新训练逻辑带来突破；</li>
-<li>系统跃迁到下一层，再经历增长和平台。</li>
-</ol>
-<p>如果增长完全由 Scaling Law 平滑推动，拥有最多算力、数据和领先模型的大公司确实更容易一路领先。若发展依赖范式突破，平台期就为新团队留下机会。[00:37:23—00:39:27]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_006_00-38-42.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_006_00-38-42.jpg" alt="图 04 · 00:38:42：字幕明确写出“它是一个阶段式跳跃的”，对应增长平台与范式突破的判断。" loading="lazy"></a><figcaption>图 04 · 00:38:42：字幕明确写出“它是一个阶段式跳跃的”，对应增长平台与范式突破的判断。</figcaption></figure>
-<p><em>图 04 · 00:38:42：字幕明确写出“它是一个阶段式跳跃的”，对应增长平台与范式突破的判断。</em></p>
-<p>Scaling Law 仍可能成立，但横轴投入通常按指数增长。为了得到有限提升，可能需要十倍数据、算力和能源。全球电力、芯片供应、资金和组织能力都会形成现实边界。[00:39:27—00:40:08]</p>
-<p>因此，创业公司的机会来自对新范式的判断。如果团队只相信扩大现有路线，留在资源雄厚的大公司更合理；创业需要看到某个主流路线之外、尚未被充分验证的差异。</p>
-<h2 id="ai-for-ai">五、从 AI for AI 到更大的科学愿景</h2>
-<p>RSI 公司首先选择 AI for AI，因为 AI 研究拥有可执行的代码、可重复实验和较快的反馈。若系统能发现新架构、新理论或新训练算法，说明它已经对一个复杂问题形成较深理解。届时，同类能力才有机会迁移到其他自然科学领域。[00:43:38—00:44:08]</p>
-<p>田渊栋对更远未来抱有强烈个人想象：当超越人类的智能广泛存在，物质欲望可能被高度满足，疾病等现实痛苦可能得到解决。但丰裕也会削弱人的行动动力。他提到自己的科幻小说曾通过“重启虚拟社会、重新引入价格系统”等设定，讨论享受便利与保持社会动力之间的矛盾。[00:41:40—00:43:17]</p>
-<p>这部分属于嘉宾的科幻想象，并未被表述为公司的近期路线图。</p>
-<h2 id="_6">六、第一阶段成果：先让闭环跑起来</h2>
-<p>RSI 公司在访谈所述的 6 月 11 日公开了三个方向的初步成果：[00:44:12—00:44:58]</p>
+<p>假如你正在研究一个模型，发现它在某类任务上总是出错。过去，你需要自己查论文、猜测原因、写实验代码，等结果出来，再判断猜测对不对。现在，AI 可以参与其中几步：一起分析失败案例，给出可能的解释，帮助写代码，甚至根据实验结果提出下一次尝试。研究仍然由你推动，但一次想法从提出到得到反馈，可能比过去快得多。</p>
+<p>接下来还有一个更大胆的问题。如果这些研究真的让模型变强了，能不能把改进后的模型再放回研究工作里，让它帮助发现更难的问题、做出更好的改进？这样，研究工具的能力和研究成果就发生了联系：我们用 AI 改进 AI，而改进后的 AI 又参与下一轮研究。这就是递归自我改进，通常简称 RSI，Recursive Self-Improvement。<button type="button" class="timecode" data-seconds="157">[00:02:37]</button></p>
+<p>田渊栋在这次访谈里讨论的，是怎样从已经能使用的研究助手，逐步走向这种能力相互促进的过程。他对方向相当乐观，也承认许多关键问题没有解决。理解他的判断，最好把已经发生的工作方式变化、团队正在尝试的任务，以及对未来的设想分开看。它们可以彼此支持，但还处在不同的确定程度上。</p>
+<h2 id="_1">先从一个研究者已经用得上的助手说起</h2>
+<p>田渊栋举了自己研究 Grokking 的经历。Grokking 指一种值得解释的训练现象：模型可能先记住训练样本，继续训练很久以后，才突然表现出较好的泛化能力，也就是把学到的规律用于没见过的样本。研究这种现象，除了观察实验曲线，还需要猜测背后的机制，推导可能成立的数学关系，再用实验检查。<button type="button" class="timecode" data-seconds="360">[00:06:00]</button></p>
+<p>在这项工作里，他与模型来回讨论，给出比较细的研究方向，让模型尝试提出想法、推进证明，自己继续判断和做实验。这种分工与“把题目交给 AI，等着收论文”差得很远。模型有用的前提，是研究者能够看出哪些回答值得继续、哪些推导存在问题，以及下一步应该把问题缩小到哪里。他当时把这种帮助比作研究实习生：已经能分担工作，仍然需要带领和检查。</p>
+<p>这里真正改变的是反馈的速度。传统的导师与学生合作，导师提出一个想法，学生理解、实现、运行实验，几天以后再讨论结果；如果双方最初理解得稍有偏差，可能一轮工作结束才发现。研究者直接与 AI 合作时，一些小实验和初步推导可以很快做起来，刚产生的疑问也可以立刻追问。一个原本要等到下次会议才能澄清的问题，可能在当前工作过程中就得到反馈。<button type="button" class="timecode" data-seconds="524">[00:08:44]</button></p>
+<p>不过，反馈快不等于方向一定好。研究者如果把一个错误的问题问得非常细，模型也可能迅速产出大量沿着错误方向的工作。经验的价值因此没有消失：知道什么问题重要，知道什么现象值得解释，知道一项结果究竟改变了什么，仍然决定着后续劳动有没有意义。AI 减少了一部分执行等待，也让提出问题和判断结果的人更直接地面对自己的选择。</p>
+<h2 id="_2">为什么越有经验，反而越需要重新动手</h2>
+<p>一种常见的职业变化是：资历越深，越少写具体代码，越多安排方向、管理项目。田渊栋认为，AI 让这种分工值得重新考虑。资深研究者积累了对问题的判断，模型又能够协助完成许多实现细节，两者结合以后，资深研究者有机会直接推进自己最想验证的想法。<button type="button" class="timecode" data-seconds="679">[00:11:19]</button></p>
+<p>关键在于，研究者需要亲自使用模型，才能知道它具体能帮到哪里。只读能力报告，很难体会某次推导在哪一步开始含糊，某个代码修改为什么反复失败，或者一个看起来困难的实验其实已经可以很快完成。亲手推进任务，会把“AI 似乎很强”变成更细的认识：这一段可以交给它，这一段需要自己判断，另一段需要把输入条件重新说清楚。</p>
+<p>这也解释了为什么单靠年轻或资深的身份，都不能直接推出优势。初学者可能执行熟练，却还在学习判断重要问题；资深者可能方向感很好，却已经很久没有接触具体实现。能够把问题判断与实际操作重新连起来的人，更容易发现新的合作方式。田渊栋关于经验优势的判断，指向的是这种组合，不能读成年龄越大就必然越擅长 AI 研究。<button type="button" class="timecode" data-seconds="768">[00:12:48]</button></p>
+<h2 id="_3">自动搜索一个设计，与重新理解研究问题，有多大距离</h2>
+<p>AI 帮助设计 AI，已经有很长的探索历史。早期 AutoML，也就是自动机器学习，常见做法是先由人规定可以尝试哪些结构、参数和组合，再让程序在这些选择里搜索。比如，我们先规定神经网络可以有多少层、每层有哪些候选部件，搜索程序负责试出其中表现较好的设计。<button type="button" class="timecode" data-seconds="824">[00:13:44]</button></p>
+<p>这种方式的能力边界，很大程度上来自人预先给出的搜索范围。搜索可以非常勤奋，也可以采用聪明的策略，但如果某种新思路根本没有被写进候选空间，它就没有机会尝试。人仍然承担着“这个问题应该允许哪些解法”的工作。</p>
+<p>语言模型带来的新可能，是它有机会使用论文、代码和已有概念来讨论问题本身。它可以协助提出新的假设，改写实验方案，解释一个异常结果，甚至帮助重新安排哪些方向值得探索。这使搜索不再只表现为调整几个预定数字。当然，能够写出一个新想法，距离这个想法真的成立，还有推导、实现和实验之间的一系列检查。我们不能因为表达空间更大，就直接认定模型已经掌握了科学创造。</p>
 <table>
 <thead>
 <tr>
-<th>任务</th>
-<th>评价重点</th>
-<th>访谈中的结果描述</th>
+<th>研究中的工作</th>
+<th>需要解决的具体问题</th>
+<th>判断是否进步，要看什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>nanoChat 五分钟训练</td>
-<td>固定算力和时间下的模型效果</td>
-<td>BPP 低于社区已有成绩</td>
+<td>在已给定的设计里搜索</td>
+<td>哪一组参数或结构表现更好</td>
+<td>比较条件是否一致，结果能否复现</td>
 </tr>
 <tr>
-<td>nanoChat Speedrun</td>
-<td>完成训练所需时间</td>
-<td>在社区长期优化的成绩上继续缩短约两秒</td>
+<td>辅助完成一次研究</td>
+<td>怎样解释现象，怎样设计下一次实验</td>
+<td>假设、推导与实验是否互相支持</td>
 </tr>
 <tr>
-<td>GPU 算子优化</td>
-<td>训练与推理基础设施效率</td>
-<td>在 NVIDIA 新基准上找到优于既有 SOTA 的算子</td>
+<td>递归自我改进</td>
+<td>改进后的 AI 能否进一步提高研究能力</td>
+<td>下一轮是否真的能处理此前更难的问题</td>
 </tr>
 </tbody>
 </table>
-<p>三个任务由同一套系统完成。它们共同具备一个重要性质：反馈快、评价明确，系统可以迅速知道一次改动是否有效。[00:46:33—00:48:07]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_007_00-45-45.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_007_00-45-45.jpg" alt="图 05 · 00:45:45：主持人以“为什么要去做这件事”追问算子基准的选择依据和实际价值。" loading="lazy"></a><figcaption>图 05 · 00:45:45：主持人以“为什么要去做这件事”追问算子基准的选择依据和实际价值。</figcaption></figure>
-<p><em>图 05 · 00:45:45：主持人以“为什么要去做这件事”追问算子基准的选择依据和实际价值。</em></p>
-<p>田渊栋特别强调算子优化结果。按他的陈述，团队缺少传统 GPU 专家，却依靠通用 RSI 系统，在该基准上超过由专业 GPU 工程师组成的 WAI 团队约 10%。他把这视为通用研究系统可以跨越专业经验门槛的初步证据。[00:49:09—00:50:44]</p>
-<p>nanoChat Speedrun 的绝对变化看起来只有约两秒，但此前约 79 秒的成绩已经是社区持续优化两年的结果。在接近局部上限时，继续缩短到约 77 秒具有不同于早期大幅改进的难度。[00:50:51—00:51:31]</p>
-<h3 id="_7">这些结果尚未证明什么</h3>
-<p>三个 SOTA 说明系统能在明确指标和快速反馈的任务上寻找有效改进。它们暂时无法证明系统已经具备开放式科学创造力，也无法证明同样的方法可直接迁移到前沿大模型。</p>
-<p>当前 nanoChat 测试大致处于 GPT-2 级别的小模型规模。田渊栋明确承认，迁移到更大模型和更复杂架构仍有鸿沟，团队还在继续探索。[00:51:31—00:52:01]</p>
-<p>第一阶段的目标因而很克制：让系统跑起来，确认它能在多个任务上产生初步结果，再逐渐扩展到预训练、后训练和更广泛的问题。[00:48:18—00:48:54]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_008_00-52-47.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_008_00-52-47.jpg" alt="图 06 · 00:52:47：画面字幕提到 OpenAI 的阶段路线图经历多年形成，衬托 RSI 当前仍处于早期探索期。" loading="lazy"></a><figcaption>图 06 · 00:52:47：画面字幕提到 OpenAI 的阶段路线图经历多年形成，衬托 RSI 当前仍处于早期探索期。</figcaption></figure>
-<p><em>图 06 · 00:52:47：画面字幕提到 OpenAI 的阶段路线图经历多年形成，衬托 RSI 当前仍处于早期探索期。</em></p>
-<h2 id="rsi_2">七、RSI 当前最缺什么</h2>
-<h3 id="1">1. 评价信号</h3>
-<p>递归优化必须知道什么叫“更好”。当前最可靠的反馈仍是分数：性能、速度、延迟、BPP、正确率或资源消耗。没有可信指标，系统很难筛选改进。[00:19:18—00:20:12]</p>
-<p>指标也可能限制探索。系统容易优化可测量的局部结果，却难以判断一个新理论是否真正重要。</p>
-<h3 id="2">2. 数据</h3>
-<p>田渊栋表示，RSI 应该使用什么数据、怎样构造数据、遵循什么准则，行业尚无定论。容易获取的数据未必有效，高质量数据可能昂贵或难以生成。[00:53:03—00:53:56]</p>
-<h3 id="3">3. 算力</h3>
-<p>RSI 本身需要大量探索、训练和实验。团队必须同时解决两个方向：</p>
+<p>这三个层次可以同时发生。我们已经从第一层得到很多有用工具，也正在看到第二层的实际帮助；第三层则需要证明，模型的改进确实回到了研究能力上，并持续带来新的改进。把三层混在一起，很容易把“某项自动优化成功”听成“AI 已经开始无限自我进化”。</p>
+<h2 id="_4">递归，不要求每一步都无人参与</h2>
+<p>“自我改进”容易让人联想到一台彻底独立的机器：自己决定目标，自己获取资源，自己训练下一代模型，全程无需人类。但在田渊栋的设想里，递归改进可以先在人类参与的条件下发生。人继续选择方向、审查结果、决定投入多少资源，模型在其中承担越来越多执行和分析工作。<button type="button" class="timecode" data-seconds="931">[00:15:31]</button></p>
+<p>我们可以把过程写成一条简单的关系链，作为理解用的示意：</p>
+<blockquote>
+<p>较强的模型参与研究 → 找到某项有效改进 → 新模型能力提高 → 新模型帮助研究更难的问题 → 再检验是否产生下一项有效改进。</p>
+</blockquote>
+<p>这里最重要的箭头，是“能力提高”怎样转化成“更会研究”。如果模型只在一个固定测试上提高分数，却没有更好的推理、实验规划或工具使用能力，下一轮研究未必受益。同样，如果一次改进花费了极大的计算资源，后续是否能够持续，也需要单独判断。链条画得出来，只说明问题之间怎样相连，还不能证明这些连接已经可靠成立。<button type="button" class="timecode" data-seconds="1053">[00:17:33]</button></p>
+<p>人类在这条链中可能逐步转向更高层的问题：哪些目标值得追求，哪些结果可信，系统应该受什么限制。低层工作变少以后，人的判断要求可能更高，因为一项错误决定能够很快带动大量自动执行。田渊栋因此预期，递归改进可能早于完全自主的研究系统出现。先让人机共同推进的研究能力逐步增强，是一种更贴近现有工作方式的理解。</p>
+<h2 id="_5">会写复杂软件，为什么还不等于会做科学</h2>
+<p>一个模型能够写出很大的软件系统，看起来已经很像“研究者”。但软件开发和科学研究经常面对不同类型的不确定性。对于一个已有成熟先例的系统，人们大体知道它可以怎么实现；困难主要在于任务量、细节和部件之间的协调。真正开放的研究问题，可能连哪一条路径能通向答案都不知道。<button type="button" class="timecode" data-seconds="1229">[00:20:29]</button></p>
+<p>这并不贬低工程工作。复杂软件仍然可能非常难，尤其是在可靠性、性能和长期维护上。区别在于，我们不能只根据系统规模来判断它证明了哪一种能力。把大量已知方法组织成一个能用的系统，证明的是重要的工程能力；从少量异常现象中找出一个此前没有的解释，还需要另一类判断。</p>
+<p>田渊栋特别关心“从少量复杂观察中形成新认识”的能力。成熟任务往往拥有许多训练样本，模型可以从反复出现的模式里学习。但一个新的科学问题，可能只有几个现象、少数失败实验，以及一些尚不完整的猜测。研究者要判断这些现象究竟共享什么规律，哪些细节只是偶然，哪些反例足以推翻自己的解释。<button type="button" class="timecode" data-seconds="1714">[00:28:34]</button></p>
+<p>以 Grokking 为例，问题不只是让模型在某个数据集上取得更高分，还包括为什么训练过程中会出现那种变化，参数怎样组织出能够泛化的规律。已有数学工具可以提供线索，但新问题没有一份可以直接照着学习的标准答案。让 AI 参与这种研究，需要它在已有知识与当前特殊现象之间建立新的联系。</p>
+<h2 id="_6">不必等到解决最深的理论问题，才能开始有用的改进</h2>
+<p>科学创造听起来很高远，容易让人误以为：只有 AI 能提出一套重大理论，自动研究才算有价值。田渊栋区分了不同难度层次。最深层的理论突破当然令人期待，但训练算法、程序效率和实验设计上的改进，也可能实实在在地减少资源消耗、提高模型能力。<button type="button" class="timecode" data-seconds="2010">[00:33:30]</button></p>
+<p>因此，早期工作可以从反馈明确、实验时间较短的任务开始。田渊栋所在团队的三类尝试，分别是在固定训练预算下提高模型效果，更快达到已有的效果目标，以及优化底层计算程序。它们都允许提出修改以后较快得到结果，便于反复检查什么做法有效。<button type="button" class="timecode" data-seconds="2648">[00:44:08]</button></p>
+<table>
+<thead>
+<tr>
+<th>尝试的方向</th>
+<th>先固定什么</th>
+<th>希望改善什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定预算训练</td>
+<td>可用训练时间或资源预算</td>
+<td>在相同预算下得到更好的模型</td>
+</tr>
+<tr>
+<td>训练提速</td>
+<td>要达到的效果目标</td>
+<td>减少到达目标所需的时间</td>
+</tr>
+<tr>
+<td>计算内核优化</td>
+<td>某项计算要完成的功能与正确性要求</td>
+<td>更高效地使用硬件，缩短运行时间</td>
+</tr>
+</tbody>
+</table>
+<p>第三类里的“内核”，可以先理解为在硬件上执行具体计算的小段程序。模型训练和使用会重复进行大量计算，如果一个常用计算能够更快完成，收益可能在反复调用中积累起来。不过，速度比较必须以结果正确和条件可比为前提；做了较少的工作，或者改变了输出要求，不能直接算作同一计算被加速了。</p>
+<p>这些任务适合起步，还有一个原因：反馈比较容易定义。训练效果、到达目标所花的时间、某段程序运行多久，都能形成相对明确的比较。相比之下，“这套理论是否解释了一个新现象”通常需要更长的论证过程，可能还会遇到意见分歧。先做反馈清楚的任务，有助于检验系统是否真的能够提出、实现并筛选有效修改。<button type="button" class="timecode" data-seconds="2883">[00:48:03]</button></p>
+<p>但小规模实验的成功，仍然需要经过放大后的验证。适用于一个小模型或短时间训练的修改，可能在大模型、长训练或不同硬件上失去优势。田渊栋也明确谈到了从小规模优化走向大规模训练的距离。因此，这些成果更适合被理解为自动研究的一些可操作起点，尚不足以独自证明递归改进已经成熟。<button type="button" class="timecode" data-seconds="3091">[00:51:31]</button></p>
+<h2 id="_7">如果进步会遇到瓶颈，还会不会出现一家永远领先的公司</h2>
+<p>对于 RSI，有一种很强的推论：最先取得优势的系统会不断把优势变大，最终其他人再也追不上。这个推论暗中依赖一个条件，即改进能够持续自我加速，中间很少遇到难以跨越的障碍。</p>
+<p>田渊栋更倾向于另一种图景：一项方法开始有效以后，能力快速提高，随后逐步遇到瓶颈；新的方法或认识打破瓶颈，才开启下一段增长。这种变化常被画成一段段 S 形曲线：早期增长慢，中间加速，接近限制后又慢下来。<button type="button" class="timecode" data-seconds="2186">[00:36:26]</button></p>
+<p>这里的限制可能来自计算成本、供电、数据，也可能来自方法本身。即便增加训练规模仍然有效，如果成本上涨得太快，组织也未必能够无限投入。新的研究思路有机会改变效率，或者使此前无效的方向重新变得可行。这也是他认为小团队仍可能找到机会的理由之一。</p>
+<p>不过，一段段 S 形增长同样是一种判断，不能拿来保证竞争一定开放。具体领域会出现什么瓶颈，谁能跨过去，领先者能否利用已有资源继续扩大优势，都需要观察。我们可以从这段讨论里带走一个更稳妥的问题：当前的进步依赖什么条件，这些条件还能持续多久，下一步最可能卡在哪里？它比直接相信“永远加速”或“马上到顶”更有解释力。</p>
+<h2 id="_8">理解模型为什么这样学习，对改进和安全有什么帮助</h2>
+<p>如果我们只知道某个修改让分数上升，却不了解它为什么有效，就很难判断它换一个环境以后还会不会有效。对模型学习机制的理解，可以帮助研究者缩小尝试范围，解释失败，并发现表面成绩背后的问题。田渊栋希望这类理解同时服务于能力改进和安全性。<button type="button" class="timecode" data-seconds="3298">[00:54:58]</button></p>
+<p>他的兴趣尤其在训练过程：模型参数怎样变化，某种内部结构怎样出现，为什么一段训练以后突然表现出新的能力。它与只观察最终回答的研究视角有所不同。最终输出告诉我们系统做了什么；学习过程的分析试图回答，这种能力是怎样形成的，以及哪些条件促成了变化。<button type="button" class="timecode" data-seconds="3438">[00:57:18]</button></p>
+<p>关于安全，田渊栋也提出了自己的判断，区分创造力、意识和争夺权力的动机。这几个概念确实不能直接画等号：一个系统产生了新解法，并不据此证明它有主观体验，也不说明它必然具有某种意图。但意识问题本身仍有许多争议，训练出合作行为，也不能单独保证所有情境下的安全。<button type="button" class="timecode" data-seconds="3330">[00:55:30]</button> <button type="button" class="timecode" data-seconds="3404">[00:56:44]</button></p>
+<p>我们理解这种观点时，需要把“没有理由直接推断某种危险动机”和“系统已经没有风险”分开。即便不涉及意识，错误判断、工具误用或目标理解偏差也可能造成损害。关于模型机制的研究可以帮助发现问题，实际使用仍然需要检查权限、行为与结果。任何关于未来系统的乐观类比，都不能替代这些具体判断。</p>
+<h2 id="_9">从炼金术到化学：一个关于研究方向的比喻</h2>
+<p>田渊栋把当前 AI 研究中的一些状态，比作尚未形成完整理论解释的早期科学：我们已经能做出有效的东西，积累了许多经验，但还没有充分理解为什么这样做会成功。他期待经验结果、规律发现和更一般的解释逐渐连接起来。<button type="button" class="timecode" data-seconds="3740">[01:02:20]</button></p>
+<p>天文学提供了一个容易理解的层次。长期观测积累了行星位置，规律总结描述了行星怎样运动，更一般的理论又把这些规律放到统一解释之中。每一层都重要，也不必由同一个人完成。对于 AI，实验观察、可重复的经验规律，以及对学习机制的解释，也可能以类似方式相互促进。</p>
+<p>这个比喻表达的是一种研究愿望，并不意味着 AI 理论必然按同样顺序发展。更有价值的是它帮助我们区分“找到一个好办法”与“理解一类办法为什么有效”。前者能立即改善实践，后者可能让我们把认识带到更广泛的问题上。田渊栋对精巧数学结构的兴趣，主要指向后者。<button type="button" class="timecode" data-seconds="3840">[01:04:00]</button></p>
+<p>他谈到具体算法优化时，也保留这种层次区别。找到一个运算更少的实现，是有意义的进步；形成能够解释并推广一类现象的认识，又有不同价值。两者可以互相帮助，无需把实用优化贬低成没有创造性，也不宜把每一次局部优化都描述成理论革命。<button type="button" class="timecode" data-seconds="3905">[01:05:05]</button></p>
+<h2 id="_10">研究判断怎样长出来：从自动驾驶经历谈起</h2>
+<p>访谈后半段回到田渊栋自己的经历。他早期加入自动驾驶团队，希望把深度学习用于实际问题，但在当时的工作分配和资源条件下，接触到的任务与自己的期待有距离。例如，识别紧急车辆需要处理样本较少、情况复杂的场景，实际工作包含了大量具体规则和工程细节。他从中感受到，自己想追求的研究成长，与当时岗位提供的工作并不完全一致。<button type="button" class="timecode" data-seconds="4000">[01:06:40]</button></p>
+<p>这段经历值得保留其具体背景。它反映的是一个人在某个时期、某个岗位上的选择，不能推出所有自动驾驶工作都缺少研究价值。它也揭示了一种真实难处：现实系统要处理低频而重要的情况，失败后果可能很大，验证过程较长。研究者如果希望很快得到反馈，就会明显感受到这种工作节奏与实验研究之间的差异。<button type="button" class="timecode" data-seconds="4202">[01:10:02]</button></p>
+<p>后来进入 FAIR，他仍然花了不少时间做工程，搭建搜索与强化学习相关系统，参与围棋项目。长期写代码并没有自动让研究判断成熟；但这些具体工作让他更清楚一个想法实现起来需要什么，哪些困难只是劳动量，哪些困难触及了方法本身。随着研究经历积累，他逐渐形成自己对问题和解法的偏好。<button type="button" class="timecode" data-seconds="4277">[01:11:17]</button></p>
+<p>这也是他一直强调亲手做事的原因。如果一个人只在很高的层面讨论问题，可能会觉得所有困难都差不多：都需要更好的模型、更好的数据、更好的方法。真正实现以后，困难会分出层次。有些问题改几行代码就能验证，有些要重新设计实验，还有些连怎样判断成功都没有想清楚。对这些距离的感受，会影响研究者下一次选择什么问题。<button type="button" class="timecode" data-seconds="4338">[01:12:18]</button></p>
+<h2 id="_11">好问题和好解法，是两种可以互相成全的贡献</h2>
+<p>研究中有一类贡献，是把重要问题说出来，并提出值得长期探索的方向。这样的想法未必当场给出完整实现，却可能改变很多人后来投入什么。另一类贡献，是沿着一个问题深入下去，弄清机制，找到可以实际走通的路径。田渊栋认为两类贡献都有价值，也把自己的偏好更多放在后者。<button type="button" class="timecode" data-seconds="4456">[01:14:16]</button></p>
+<p>这种区分有助于理解“研究品味”这个容易显得空泛的说法。它包含了具体选择：我愿意把时间花在哪类问题上，什么结果会让我觉得真正增加了理解，什么解法只是暂时绕开了困难。偏好不会替研究结果自动背书，但它会持续影响一个人寻找和评价问题的方式。</p>
+<p>团队组织也会影响这种判断能否迅速变成行动。田渊栋偏好让理解问题的人直接使用 AI、观察结果，再决定下一步。如果每一次信息都需要穿过多层汇报，执行细节和最初意图就容易在传递中丢失。这个观点与前面的导师—学生反馈例子是相连的：他关心的是判断与实际结果之间的距离。<button type="button" class="timecode" data-seconds="4741">[01:19:01]</button></p>
+<p>小团队可能减少这种距离，大团队也可以尝试让关键工作保持直接联系。但人数本身不能决定一个组织是否有效；职责、信息传递和评价方式同样重要。田渊栋对大组织的批评带有他的经历和创业选择，我们可以理解其中的机制，不必把它扩大成所有大公司的统一结论。</p>
+<h2 id="_12">喜欢漂亮的解释，也要允许现实不够漂亮</h2>
+<p>最后，田渊栋谈到自己喜欢数学里精巧的结构，也知道这种偏好有局限。如果只追求一个形式上很漂亮的答案，可能会忽略现实问题尚未解决，或者回避那些重要却不优雅的工程工作。<button type="button" class="timecode" data-seconds="4904">[01:21:44]</button></p>
+<p>他希望让理想与现实碰撞：一方面继续寻找能够增加理解的结构，另一方面也做对他人、团队和实际问题有用的事情。有些有效工作看起来琐碎，有些理论想法暂时找不到应用，研究者需要在具体任务中判断怎样安排它们。对美的追求可以引导探索，真实结果则不断提醒我们哪些想法还站不住。</p>
+<p>这与整场讨论最初的研究助手形成了呼应。AI 帮忙写出一个推导或实验，只是开始；研究者仍然要回到问题本身，看看解释是否成立，结果是否可靠，改进是否真的能继续帮助下一轮研究。递归自我改进最值得追问的地方，就在这一轮轮具体检验里。</p>
+<h2 id="_13">总结提炼</h2>
+<p>AI 参与研究，首先改变的是一些工作得到反馈的速度。研究者能够更快尝试推导和实验，也更需要判断哪些问题值得做、哪些结果值得相信。经验与亲手操作相结合，才能把模型能力变成真实帮助。</p>
+<p>递归自我改进多了一项要求：改进后的模型，需要进一步提高研究本身的能力。这个过程可以有人参与，也可能遇到成本、方法和资源的瓶颈。一次优化成功与持续的能力相互促进，之间还有需要证明的连接。</p>
+<p>固定预算训练、训练提速和计算内核优化，提供了反馈较清楚的起点；理解学习机制、从少量观察形成新认识，则指向更深的科学问题。田渊栋的研究偏好把这两端连在一起：做出有用的结果，也继续追问它为什么有效。</p>
+<h2 id="_14">时间导航</h2>
 <ul>
-<li>降低每轮探索的计算成本；</li>
-<li>让相同算力产生更多有效发现。</li>
+<li><button type="button" class="timecode" data-seconds="157">[00:02:37]</button> 递归自我改进想解决什么问题。</li>
+<li><button type="button" class="timecode" data-seconds="360">[00:06:00]</button> 使用模型推进 Grokking 研究的经历。</li>
+<li><button type="button" class="timecode" data-seconds="524">[00:08:44]</button> 人机合作怎样缩短研究反馈时间。</li>
+<li><button type="button" class="timecode" data-seconds="824">[00:13:44]</button> AutoML 与开放研究的区别。</li>
+<li><button type="button" class="timecode" data-seconds="931">[00:15:31]</button> 为什么递归改进可以先有人参与。</li>
+<li><button type="button" class="timecode" data-seconds="1229">[00:20:29]</button> 已知工程任务与未知研究路径。</li>
+<li><button type="button" class="timecode" data-seconds="1714">[00:28:34]</button> 从少量复杂观察中形成新认识。</li>
+<li><button type="button" class="timecode" data-seconds="2186">[00:36:26]</button> 增长瓶颈与一段段 S 形曲线。</li>
+<li><button type="button" class="timecode" data-seconds="2648">[00:44:08]</button> 固定预算、训练提速与内核优化。</li>
+<li><button type="button" class="timecode" data-seconds="3298">[00:54:58]</button> 理解学习机制与安全问题。</li>
+<li><button type="button" class="timecode" data-seconds="4000">[01:06:40]</button> 自动驾驶、工程经历与研究成长。</li>
+<li><button type="button" class="timecode" data-seconds="4456">[01:14:16]</button> 提出重要问题与找到实际解法。</li>
+<li><button type="button" class="timecode" data-seconds="4904">[01:21:44]</button> 数学之美及其局限。</li>
 </ul>
-<p>访谈提到公司首轮融资 6.5 亿美元，田渊栋认为足以支持早期工作，但距离前沿大厂的资源规模仍有差距。[00:53:57—00:54:34]</p>
-<h3 id="4">4. 跨尺度迁移</h3>
-<p>小模型上的发现是否适用于前沿模型，需要实际检验。规模扩大后，训练动态、系统瓶颈和最优结构都可能变化。</p>
-<h3 id="5">5. 可解释性</h3>
-<p>田渊栋将可解释性视为 Scaling Law 之外的重要方向。理解模型为何形成某种能力，可能提供新洞见，减少盲目搜索，并同时改善性能和安全。[00:54:44—00:55:20]</p>
-<h2 id="_8">八、安全：创造力、意识与控制需要分开讨论</h2>
-<p>面对“AI 自我进化后会不会脱离人类控制”的问题，田渊栋提出两层回答。</p>
-<p>第一层是训练压力。他用驯化犬类作类比：人类持续奖励服务、协作和解决问题的行为，模型在这种选择压力下发展，并不天然需要形成与人类相同的权力欲或自我意识。[00:56:16—00:56:42]</p>
-<p>第二层是能力拆分。科学创造力与主观意识、权力欲望可以彼此分离。他以专注数学或物理、对世俗权力兴趣有限的天才作类比，说明高水平认知能力并不自动推出控制欲。[00:56:44—00:57:17]</p>
-<p>这些属于嘉宾的判断，访谈没有给出足以验证该安全结论的实验。驯化类比也无法覆盖目标错配、欺骗行为、分布外失效和系统级竞争等全部风险。</p>
-<p>更坚实的安全路线仍落在可解释性：知道模型调用了什么能力、哪些结构在起作用、怎样得到结果，才能减少对黑箱的恐惧，并为监测和干预提供基础。[00:57:19—00:57:37]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_009_00-59-49.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_009_00-59-49.jpg" alt="图 07 · 00:59:49：田渊栋说明自己对训练机制和模型学习方式的分析已经持续多年。" loading="lazy"></a><figcaption>图 07 · 00:59:49：田渊栋说明自己对训练机制和模型学习方式的分析已经持续多年。</figcaption></figure>
-<p><em>图 07 · 00:59:49：田渊栋说明自己对训练机制和模型学习方式的分析已经持续多年。</em></p>
-<h2 id="ai">九、AI 最终会从工程经验变成科学吗</h2>
-<p>田渊栋自称属于少数派：他相信复杂神经网络背后存在可以理解的原理。找到这些 principle，一方面可能让模型更强，另一方面可能让模型更安全。[00:57:41—00:58:10]</p>
-<p>他的历史类比是：</p>
-<ul>
-<li>炼金术逐渐转化为化学；</li>
-<li>第谷积累观测；</li>
-<li>开普勒总结规律；</li>
-<li>牛顿提出统一原理。</li>
-</ul>
-<p>当前 AI 更接近大量实验、经验定律和工程技巧共同推动的阶段。深度学习从 2013—2014 年起曾被重整化群、自旋玻璃、神经正切核、高斯过程等不同理论解释，但尚未形成令人普遍满意的统一框架。[00:31:47—00:33:19]</p>
-<p>AI 的工程发展并未因此停下。可真正称作 AI 科学家的系统，最终还要能研究“模型为什么学会”“涌现怎样产生”“哪些机制可以跨问题复用”等开放问题。</p>
-<p>田渊栋用“术”和“道”区分两个层次：[01:05:40—01:06:30]</p>
-<ul>
-<li><strong>术：</strong> 通过搜索和模式变换，少做一次矩阵乘法、降低延迟或提高某项指标。</li>
-<li><strong>道：</strong> 发现新的理论、逻辑链条或解释框架，让人看到此前未被理解的结构。</li>
-</ul>
-<p>访谈提到 AlphaEvolve 改进矩阵乘法作为“术”层面的有趣成果。它具有实用价值，也能呈现精巧结构；更高层目标仍是发现新的理论。</p>
-<p>田渊栋甚至设想，完成下一次科学统一的人可能是人类、AI，或人机共同组成的系统。若 AI 成为持续产生新知识的 discovery system，传统奖项是否颁给某个系统反而会失去重要性。[01:03:19—01:04:03]</p>
-<h2 id="rsi_3">十、个人经历怎样塑造 RSI 方法论</h2>
-<p>田渊栋在 2013 年进入 Google 无人车团队。虽然无人驾驶愿景宏大，他当时承担的工作偏工程，数据又十分稀少，许多问题只能手工编写规则。他较早意识到，无人车存在大量长尾案例，并且安全要求使产品缺少宽容的中间状态：系统必须接近全面可靠，才可能大规模部署。[01:06:57—01:10:31]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_010_01-06-52.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_010_01-06-52.jpg" alt="图 08 · 01:06:52：主持人把话题转向田渊栋早期从 Google 无人车工程工作进入 FAIR 的职业选择。" loading="lazy"></a><figcaption>图 08 · 01:06:52：主持人把话题转向田渊栋早期从 Google 无人车工程工作进入 FAIR 的职业选择。</figcaption></figure>
-<p><em>图 08 · 01:06:52：主持人把话题转向田渊栋早期从 Google 无人车工程工作进入 FAIR 的职业选择。</em></p>
-<p>转入 FAIR 后，他早期仍大量写代码，亲手搭建蒙特卡洛树搜索和分布式强化学习系统。访谈提到，团队后来完成 OpenGo，并以 10:0 战胜韩国职业棋手。从 2019 年到 2022 年，他逐渐形成自己的研究品位，同时保持亲手实现和撰写一作论文的习惯。[01:11:16—01:13:07]</p>
-<p>这段经历支持了他对“hands-on”的强调：如果研究者长期只给方向，可能逐渐无法区分一个问题究竟容易、困难，还是尚无可行路径。亲手实现迫使人面对每个环节，从而建立更精确的难度判断。[01:13:09—01:14:13]</p>
-<h3 id="_9">两种优秀研究者</h3>
-<p>田渊栋区分了两类研究者：</p>
-<ul>
-<li>第一类善于提出重要问题、抓住关键方向，吸引许多人共同探索。LeCun 对自监督学习的推动是他给出的例子：反馈数据足够丰富这一判断，为后续研究打开了空间。</li>
-<li>第二类除了指出方向，还会拆解实现路径，说明达到目标需要完成哪些步骤，并持续追踪机制。</li>
-</ul>
-<p>两类都可能产生杰出成果。田渊栋自己的偏好更接近第二类：既要知道做什么，也要理解怎样做成。[01:14:23—01:16:42]</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_011_01-13-54.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_011_01-13-54.jpg" alt="图 09 · 01:13:54：字幕“他不会想太多”对应对纯高层研究者的讨论：提出方向后，具体实现往往交给其他人。" loading="lazy"></a><figcaption>图 09 · 01:13:54：字幕“他不会想太多”对应对纯高层研究者的讨论：提出方向后，具体实现往往交给其他人。</figcaption></figure>
-<p><em>图 09 · 01:13:54：字幕“他不会想太多”对应对纯高层研究者的讨论：提出方向后，具体实现往往交给其他人。</em></p>
-<h2 id="ai_1">十一、AI 时代的组织为何需要更小、更直接</h2>
-<p>田渊栋认为，当前 AI 研发高度依赖实际使用者的即时感受：亲手使用模型、发现毛刺、验证想法，才能快速校正方向。一旦形成“决策者—管理层—执行者”的多级结构，信息会在传递中损耗，反馈周期也会变慢。[01:19:02—01:20:05]</p>
-<p>他将这一点类比为传统导师和学生的科研结构：</p>
-<ul>
-<li>导师无法完整理解学生遇到的所有细节；</li>
-<li>学生也未必完整理解导师的原始设想；</li>
-<li>双方依赖汇报同步，周期自然拉长。</li>
-</ul>
-<p>他还提出“约 150 人是组织关系发生变化的临界点”，并以若干大型模型项目作为个人经验例证。人数增加后，成员无法彼此认识，只能通过组织架构获取信息，协调成本和激励偏差随之上升。[01:20:31—01:21:31]</p>
-<p>这一数字属于嘉宾的经验判断，不能直接当作普遍组织定律。更值得保留的原则是：核心研究团队应尽量缩短“发现问题的人、提出方案的人、完成实验的人”之间的距离。</p>
-<figure><a href="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_012_01-20-56.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E6%99%9A%E7%82%B9%E8%81%8ALateTalk/%E5%AF%B9%E8%AF%9D%E7%94%B0%E6%B8%8A%E6%A0%8B%EF%BC%9AAI%20%E8%87%AA%E8%BF%9B%E5%8C%96%E5%A6%82%E4%BD%95%E5%88%B0%E6%9D%A5%E3%80%90%E6%99%9A%E7%82%B9%E8%81%8A%20LateTalk%E3%80%91__BV1XnuH66EzS/assets/deep/frame_012_01-20-56.jpg" alt="图 10 · 01:20:56：字幕“但一旦人变多了之后呢”对应团队规模扩大后关系和信息流发生变化的讨论。" loading="lazy"></a><figcaption>图 10 · 01:20:56：字幕“但一旦人变多了之后呢”对应团队规模扩大后关系和信息流发生变化的讨论。</figcaption></figure>
-<p><em>图 10 · 01:20:56：字幕“但一旦人变多了之后呢”对应团队规模扩大后关系和信息流发生变化的讨论。</em></p>
-<h2 id="_10">十二、技术品位：追求美，也接受现实</h2>
-<p>访谈最后，田渊栋把自己的技术品位概括为对数学结构和“美”的偏好。他喜欢精巧、统一、能够揭示机制的解释，同时意识到对美的追求可能形成幻觉。[01:21:52—01:22:43]</p>
-<p>工程现实要求研究者完成一些有用、可运行、能为公司或社会创造价值的工作，即使方案暂时不够优美。理想与现实应当持续碰撞：先承认现实约束，再在约束中寻找更深的统一结构。</p>
-<p>这也解释了 RSI 公司的双层目标：</p>
-<ul>
-<li>近期让系统在明确任务上跑起来，持续产生可验证成果；</li>
-<li>长期让 AI 研究从经验搜索走向可解释、可迁移的科学。</li>
-</ul>
-<h2 id="_11">具体案例与原话细节</h2>
-<ul>
-<li>
-<p><strong>“与其自己被取代，不如我就开公司。”</strong> [00:06:52—00:07:00]<br>
-  这句话浓缩了田渊栋创办 RSI 公司的个人动机。</p>
-</li>
-<li>
-<p><strong>把科研反馈从数天压缩到数分钟。</strong> [00:10:00—00:11:03]<br>
-  AI 的近期价值首先体现为闭环速度，未必立刻体现为完全自主。</p>
-</li>
-<li>
-<p><strong>“爷的青春又回来了。”</strong> [00:12:53—00:13:07]<br>
-  他用这句话描述多年不写代码的资深管理者重新借助 Coding Agent 实现想法。</p>
-</li>
-<li>
-<p><strong>“RSI 比 Coding Agent 要大得多。”</strong> [00:25:54—00:26:24]<br>
-  大在问题空间、研究难度和可能路径，也包含更广泛的商业价值。</p>
-</li>
-<li>
-<p><strong>“阶段式跳跃。”</strong> [00:38:28—00:38:44]<br>
-  这是他反驳线性领先逻辑的关键：平台期会等待下一次范式突破。</p>
-</li>
-<li>
-<p><strong>“前途是光明的，道路是曲折的。”</strong> [00:40:55—00:41:11]<br>
-  他认为智能空间仍极其广阔，人类目前只看到黎明前的一点光。</p>
-</li>
-<li>
-<p><strong>“以后终将变成科学。”</strong> [01:02:24—01:03:06]<br>
-  长期目标是找到 AI 背后的统一原理，使其摆脱单纯依赖经验和规模投入的状态。</p>
-</li>
-<li>
-<p><strong>“术和道是不一样的。”</strong> [01:05:40—01:06:30]<br>
-  局部优化属于“术”，新理论和新解释框架更接近“道”。</p>
-</li>
-</ul>
-<h2 id="_12">边界、疑点与时效性</h2>
-<ol>
-<li><strong>定量成果仍处于早期。</strong> 三个 SOTA 主要来自小规模、反馈明确的任务，无法直接外推到开放科学研究或前沿大模型。</li>
-<li><strong>“递归”程度尚有限。</strong> 现有证据表明系统可以自动搜索和优化，暂未展示模型因改进自身而获得更强科研能力，再用该能力完成多代跃迁。</li>
-<li><strong>人类角色仍然关键。</strong> 问题选择、指标设计、方向判断和成果解释都高度依赖研究者。</li>
-<li><strong>安全论证仍是观点。</strong> 训练压力、意识与创造力分离等判断具有启发性，但访谈未提供完整安全证明。</li>
-<li><strong>行业信息具有录制时效。</strong> OpenAI、Anthropic、模型版本、融资金额、估值和公司进展均为视频中的当时信息。</li>
-<li><strong>专名可能受 ASR 影响。</strong> nanoChat、Grokking、Scaling Law、SOTA、FAIR、模型版本及部分人名经过语义校正，细节仍应回到原视频确认。</li>
-<li><strong>画面证据较稀疏。</strong> 12 张画面以访谈人物和字幕为主，没有展示系统界面、实验日志或基准图表，因此技术结果主要依据逐字稿还原。</li>
-</ol>
-<h2 id="_13">复习与行动清单</h2>
-<h3 id="_14">记住这五个判断</h3>
-<ul>
-<li>RSI 是“改进能力回流到下一轮研究”的闭环。</li>
-<li>递归改进可以在人类仍参与高层决策时先行发生。</li>
-<li>当前最成熟的部分是有明确指标、反馈快速的局部优化。</li>
-<li>真正 AI 科学家的瓶颈在少样本抽象、研究品位、创造力和新理论发现。</li>
-<li>领先优势能否固化，取决于发展是平滑扩张，还是被平台和范式突破分段。</li>
-</ul>
-<h3 id="rsi_4">把 RSI 思路用于自己的研究或工程</h3>
-<ul>
-<li>[ ] 选择一个结果可测、反馈较快的任务。</li>
-<li>[ ] 明确定义评价指标，同时记录指标遗漏了什么。</li>
-<li>[ ] 让 Agent 完成代码、实验、日志整理和初步比较。</li>
-<li>[ ] 由人承担问题选择、异常判断和下一轮方向设计。</li>
-<li>[ ] 记录每次失败，区分实现错误、搜索不足和假设错误。</li>
-<li>[ ] 遇到平台期时，检查现有范式的上限，避免只增加搜索次数。</li>
-<li>[ ] 在小任务取得结果后，测试跨数据、跨规模和跨架构迁移。</li>
-<li>[ ] 为关键结论保留可解释证据，避免只留下一个更高分数。</li>
-<li>[ ] 把安全约束和性能指标同时放入闭环。</li>
-</ul>
-<h3 id="_15">值得重看和继续追问的问题</h3>
-<ol>
-<li>什么证据才能证明一个系统已经进入真正的递归自进化？</li>
-<li>如何评价缺少标准答案的新科学理论？</li>
-<li>小模型上的机制发现怎样迁移到前沿大模型？</li>
-<li>可解释性是否能够形成可预测、可复用的统一原理？</li>
-<li>人类退出低层执行后，怎样保持对真实实验细节的理解？</li>
-<li>如果 AI 发现了人类难以理解的新理论，人类应如何验证和使用？</li>
-<li>小团队怎样在保持直接反馈的同时，获得大规模算力和工程能力？</li>
-</ol></article><nav class="bottom-nav"><a href="../index.html#agent">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_15">回看时的三个问题</h2>
+<p>假如一个 AI 把训练程序加速了，但自身分析实验的能力没有变化，我们已经能确认哪一种进步？要进一步称为递归改进，还需要观察什么？</p>
+<p>同样是“更快”，固定训练预算下提高效果，与更快达到同一效果，有什么区别？比较两项成果以前，需要先确认哪些条件？</p>
+<p>田渊栋为什么同时看重经验和亲手操作？回到导师—学生的反馈例子，以及他自己的工程经历，分别想想缺少其中一端会看不清什么。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "对话田渊栋：AI 自进化如何到来【晚点聊 LateTalk】", "duration": "84:27", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

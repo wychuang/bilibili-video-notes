@@ -1,46 +1,342 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>早期 AIGC 产品课：把技术能力接到行业验收上 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从生成一张图，到做成一个产品：AIGC 产品经理要理解什么 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Collection Notes · 深度</div>
+    <h1 id="aigc">从生成一张图，到做成一个产品：AIGC 产品经理要理解什么</h1>
+    <div class="meta"><span>北歌AIGC</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1SM411d7Kp/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#aigc">早期 AIGC 产品课：把技术能力接到行业验收上</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">第一集：从技术地图走到一个具体行业</a></li>
-<li><a href="#_3">第二集：把“看起来不错”翻译成可验收的要求</a></li>
-<li><a href="#_4">第三集：体验、理解、动手，逐层加深</a></li>
-<li><a href="#_5">迁移练习：写一张行业验收卡</a></li>
+<li><a href="#aigc">从生成一张图，到做成一个产品：AIGC 产品经理要理解什么</a><ul>
+<li><a href="#_1">先分清：我们希望系统判断什么，还是生成什么</a></li>
+<li><a href="#_2">从辅助一步，到尝试推进一项任务</a></li>
+<li><a href="#_3">基础、模型与应用：一项功能背后有哪些分工</a></li>
+<li><a href="#_4">机器学习、深度学习和语言模型，怎样接在这张图里</a></li>
+<li><a href="#_5">提示词、微调和嵌入，各自改变了什么</a></li>
+<li><a href="#_6">图像生成：逼真、可控制与适合行业，是三件相关的事</a></li>
+<li><a href="#_7">包装行业的例子：用户的工作不会在生成图片后结束</a></li>
+<li><a href="#_8">产品经理原有的工作，仍然需要继续做</a></li>
+<li><a href="#_9">系列模特图，把“效果好”变成具体要求</a></li>
+<li><a href="#_10">节点工作流，让方案从描述走到可以运行</a></li>
+<li><a href="#_11">从知道名字，到能够自己做一个小项目</a></li>
+<li><a href="#_12">总结提炼</a></li>
+<li><a href="#_13">时间导航</a></li>
+<li><a href="#_14">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1SM411d7Kp" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1SM411d7Kp"><div class="provenance">来源：北歌AIGC · <a href="https://www.bilibili.com/video/BV1SM411d7Kp/" target="_blank" rel="noopener">BV1SM411d7Kp 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="aigc">早期 AIGC 产品课：把技术能力接到行业验收上</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1SM411d7Kp.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1SM411d7Kp" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1SM411d7Kp-P01-01450.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1SM411d7Kp&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1SM411d7Kp/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div><div class="part-list"><div class="part-list-head"><span>视频选集</span><span>3 集</span></div><button type="button" class="part-button active" data-part="1"><span class="part-number">P01</span><span class="part-title">AIGC行业科普</span><span class="part-duration">29:18</span></button><button type="button" class="part-button" data-part="2"><span class="part-number">P02</span><span class="part-title">AIGC产品经理与传统产品经理的异同</span><span class="part-duration">13:21</span></button><button type="button" class="part-button" data-part="3"><span class="part-number">P03</span><span class="part-title">AIGC的学习路径</span><span class="part-duration">09:53</span></button></div></section>
+      <article data-lesson="BV1SM411d7Kp"><h1>从生成一张图，到做成一个产品：AIGC 产品经理要理解什么</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1SM411d7Kp/">AIGC 产品经理公开课，三分集</a>；覆盖行业概念、工作内容和学习路径。案例明显处于 2023 年前后的行业背景，招聘门槛、免费额度、注册方式与产品能力不作为当前建议。</p>
+<p>来源：产品经理眼中的 AIGC，三集<br>
+UP 主：北歌AIGC · 合计 52 分 32 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1SM411d7Kp/</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>知道模型能生成什么只是起点；产品工作还要判断用户愿意在什么条件下把结果拿去使用。</p>
-<h2 id="_2">第一集：从技术地图走到一个具体行业</h2>
-<p>第一集花了大量篇幅梳理生成内容、模型、算力与应用层，最后落到包装行业：生成一张包装图只是一个环节，它前面有需求，后面还有设计修改、营销与生产管理。<a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=1383&amp;p=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [P01 00:23:03]">[P01 00:23:03]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=1682&amp;p=1" target="_blank" rel="noopener" aria-label="在 B 站打开 [P01 00:28:02]">[P01 00:28:02]</a></p>
-<p>这个例子的启发，是沿着完整工作过程寻找价值。用户希望“自动完成营销全案”，需要进一步拆解：有哪些输入？谁判断好坏？哪些内容可以自动生成？哪一步必须审核？</p>
-<p>入门术语部分有简化与不准确的说法，不适合逐句作为技术教材。例如微调不会自动把大模型变成参数更少的小模型；“Agent 必然通往 AGI”也属于观点，缺少这样的确定结论。本课程的概念地图、检索和后训练章节更适合用来建立技术基础。</p>
-<h2 id="_3">第二集：把“看起来不错”翻译成可验收的要求</h2>
-<p>课程用时尚行业的 AI 模特图举例：连续几张图要像同一个人，脸和手不能出现明显瑕疵，结果还得适合真实业务。单张图惊艳，未必能满足系列化生产。<a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=362&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:06:02]">[P02 00:06:02]</a></p>
-<p>同样的思路迁移到搜索回答：一段话流畅之外，还需要事实正确、引用对应、关键限制完整。评价标准应当来自任务，随后才讨论用提示词、检索、模型训练还是流程调整来改善。</p>
-<p>课程还展示通过节点组合搭建图像生成工作流，再与算法同事一起评估。<a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=481&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:08:01]">[P02 00:08:01]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=600&amp;p=2" target="_blank" rel="noopener" aria-label="在 B 站打开 [P02 00:10:00]">[P02 00:10:00]</a></p>
-<p>我可以把这一方法缩成一个协作闭环：</p>
-<ol>
-<li>保留一个具体失败样本。</li>
-<li>写出用户无法接受的地方。</li>
-<li>做一个最小改动，产出前后对照。</li>
-<li>请相关同事检查可行性、成本和副作用。</li>
-<li>用另一组样本确认改进能否重复出现。</li>
-</ol>
-<p>这是本笔记补充的操作化版本。视频中关于岗位分类和入行难度的说法，只能反映当时讲述者的观察。</p>
-<h2 id="_4">第三集：体验、理解、动手，逐层加深</h2>
-<p>学习路线从连接信息源开始，再去使用产品，理解背后的算法与工程，最后围绕真实需求做一个小项目。<a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=0&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:00:00]">[P03 00:00:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=363&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:06:03]">[P03 00:06:03]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1SM411d7Kp/?t=481&amp;p=3" target="_blank" rel="noopener" aria-label="在 B 站打开 [P03 00:08:01]">[P03 00:08:01]</a></p>
-<p>对现在的学习，更适合保留这条递进关系，压缩工具数量：选一个真实任务，用一两个可合法访问的工具完成，记录问题，再补缺少的知识。旧视频里的工具采购、账户注册与套餐建议可以跳过。</p>
-<h2 id="_5">迁移练习：写一张行业验收卡</h2>
-<p>选“给准备选课的人比较三门课程”。列出五个不可缺少的字段，再各写一个合格样例和失败样例。</p>
-<p>例如“先修知识”只写“适合入门”太含糊；写明需要哪些数学与编程基础，附可核对的课程说明，会更接近可用。最后问自己：这个差距需要更强的模型，还是只缺一份明确的验收标准？</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>一个客户希望输入一句想法，系统就替他完成营销方案、生成配图，再自动发布。听起来，似乎只要找一个足够强的模型，把这些动作串起来就行了。真正开始讨论，却会冒出很多问题：这次营销面向谁，哪些信息必须准确，图片要遵守什么要求，谁决定内容可以发布，以及某一步失败以后怎么办？</p>
+<p>这些问题构成了 AI 产品工作的日常。模型能够生成内容，打开了新的可能；要把这种可能变成用户愿意持续使用的产品，还需要理解需求、技术和实际工作流程。北歌在这组 2023 年末的课程里，从基础概念讲到岗位工作，再讲学习路径。我们可以沿着同一个问题把三集接起来：一项生成能力，怎样变成能解决具体困难的功能？<button type="button" class="timecode" data-part="2" data-seconds="46">[P02 00:00:46]</button></p>
+<h2 id="_1">先分清：我们希望系统判断什么，还是生成什么</h2>
+<p>人工智能可以用于很多任务。有些任务主要要求判断或选择，例如根据已有信息预测结果、给候选排序，或者判断一个对象属于哪一类。生成式 AI 则把重点放在产生内容：根据输入生成文字、图像、声音、视频或代码。<button type="button" class="timecode" data-part="1" data-seconds="74">[P01 00:01:14]</button></p>
+<p>这两类任务经常会在一个产品里相遇。系统可以先判断用户的问题属于什么类型，再生成回答；也可以先生成几张图，再按照要求挑选候选。因此，“判断”和“生成”帮助我们理解任务差异，并不把产品分成互不相通的两个世界。</p>
+<p>AIGC 是 AI Generated Content，即人工智能生成内容。与它经常一起出现的 PGC 和 UGC，分别关注专业生产者和普通用户参与的内容生产。这里比较的是内容由谁、以什么方式产生，不能仅凭这些标签判断质量。专业团队可能使用 AI，普通用户也可能创作高质量内容，几种生产方式完全可以结合。<button type="button" class="timecode" data-part="1" data-seconds="141">[P01 00:02:21]</button></p>
+<p>对产品经理来说，变化在于内容的产生方式更容易被放进软件流程里。用户给出条件，系统就可以尝试生成相应结果。但生成成本下降以后，筛选、修改与使用结果的要求会更加显眼：用户究竟想要多少种方案，哪一种可以采用，哪些错误无法接受，都需要重新考虑。</p>
+<h2 id="_2">从辅助一步，到尝试推进一项任务</h2>
+<p>生成能力还可以参与多步工作。Copilot 常被译作“副驾驶”，强调在人的操作过程中提供帮助；Agent 则通常会根据目标选择下一步，使用工具，再根据结果继续推进。两者之间存在许多中间形态，具体产品允许系统做多少，仍要看实际设计。<button type="button" class="timecode" data-part="1" data-seconds="253">[P01 00:04:13]</button></p>
+<p>回到营销任务，如果系统只帮助改写一段文案，用户还要自己安排后面的步骤；如果系统能够取得材料、生成草案、检查要求，再请求发布确认，它就承担了更多任务组织工作。这里增加的不只有生成内容的能力，还包括工具、状态记录以及处理结果的规则。任务交给系统以后，仍然需要明确哪些动作可以自动执行。</p>
+<p>记忆可以帮助保存已经取得的材料与任务状态，但保存信息不等于信息一定正确。Agent 能推进一些任务，也不能据此证明已经达到通用人工智能。北歌把更自主的系统视为值得期待的方向；对一个具体产品，更有意义的问题是它能在什么条件下完成多少工作，以及人应在哪里继续参与。<button type="button" class="timecode" data-part="1" data-seconds="344">[P01 00:05:44]</button></p>
+<h2 id="_3">基础、模型与应用：一项功能背后有哪些分工</h2>
+<p>要让生成能力进入产品，底下需要几层工作。最基础的是计算资源、数据以及支持训练和运行的软件；模型层把这些条件变成具体能力；应用层再把能力接到用户任务上，提供输入、结果呈现和后续操作。<button type="button" class="timecode" data-part="1" data-seconds="1383">[P01 00:23:03]</button></p>
+<p>比如，图像生成产品让用户上传参考图、输入描述，再挑选生成结果。用户看到的是应用页面，真正计算图像的是模型，模型运行又依赖硬件和软件环境。产品的体验可能在任何一层受到限制：页面不知道怎样让用户表达要求，模型难以保持人物一致，或者运行速度不足以支持当前使用量。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1SM411d7Kp-P01-01450.jpg" data-caption="图中从资源、框架、模型、接口到应用逐层展开；用户看见的页面，依赖下面多层能力共同工作。">
+    <img src="../assets/frames/BV1SM411d7Kp-P01-01450.jpg" loading="lazy" alt="视频截图 01，00:24:10：图中从资源、框架、模型、接口到应用逐层展开；用户看见的页面，依赖下面多层能力共同工作。">
+    <span class="frame-stamp">视频画面 / P01 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-part="1" data-seconds="1450.000">P01 / 图 01 · 00:24:10</button><span>图中从资源、框架、模型、接口到应用逐层展开；用户看见的页面，依赖下面多层能力共同工作。</span></figcaption>
+</figure>
+<p>这个分层帮助我们判断，某个问题应该与谁讨论。交互不清楚，通常先看应用设计；某种图像要求反复无法满足，需要讨论模型与生成方法；任务运行缓慢，还可能涉及部署和计算资源。只说“AI 效果不好”，会把这些不同问题混在一起。</p>
+<p>在 2023 年的产业图谱上，可以看到众多厂商与产品分布在不同层次。一家应用公司可以使用别人的模型，也可以把已有能力组合到特定行业中。具体厂商名单会变化，理解它们分别承担什么工作，比记住一张历史名单更持久。<button type="button" class="timecode" data-part="1" data-seconds="1604">[P01 00:26:44]</button></p>
+<h2 id="_4">机器学习、深度学习和语言模型，怎样接在这张图里</h2>
+<p>机器学习是一类从数据中学习规律的方法。程序无需由人逐条写完所有判断规则，可以通过训练调整内部参数，再对新的输入作出预测或生成结果。深度学习属于机器学习，主要使用多层神经网络来学习较复杂的表示。<button type="button" class="timecode" data-part="1" data-seconds="471">[P01 00:07:51]</button></p>
+<p>神经网络里的“神经”来自生物启发，但实际使用的是由数学运算组成的模型。我们可以把多层结构理解为多次信息处理：前一层的结果交给后一层，训练则不断调整其中参数。无需先把它想象成一个完整人脑，也不能因为用了这种名字，就认定模型拥有人的全部能力。</p>
+<p>自然语言处理，简称 NLP，关心计算机怎样处理人类语言。理解一句话的意图、从文字里提取信息、翻译和生成文章，都在这个范围里。大语言模型是其中一类重要模型，经过大量文本等数据训练，可以完成多种语言相关任务。<button type="button" class="timecode" data-part="1" data-seconds="395">[P01 00:06:35]</button> <button type="button" class="timecode" data-part="1" data-seconds="629">[P01 00:10:29]</button></p>
+<p>许多语言模型采用 Transformer 架构。其中的注意力机制，让模型处理一个位置时能够结合其他位置的信息。对于读者而言，先理解它在解决“当前内容与前后文怎样联系”的问题，就足以接上产品讨论。至于具体计算方法，可以在需要深入模型原理时继续学习，不必把架构名称当成某种万能能力的保证。<button type="button" class="timecode" data-part="1" data-seconds="576">[P01 00:09:36]</button></p>
+<p>GPT 这类生成模型的一项基础训练任务，是根据前面的内容预测接下来的 token。Token 是模型切分和处理文本的单位，可能是一个字、一个词的一部分，也可能对应其他片段。它与中文字数没有固定的一一关系。生成时，模型逐步产生后续内容，所以能够写出流畅文字；文字流畅与事实正确，仍然需要分别判断。<button type="button" class="timecode" data-part="1" data-seconds="671">[P01 00:11:11]</button> <button type="button" class="timecode" data-part="1" data-seconds="939">[P01 00:15:39]</button></p>
+<h2 id="_5">提示词、微调和嵌入，各自改变了什么</h2>
+<p>用户最容易直接接触的是提示词，也就是交给模型的任务说明和上下文。提示词可以告诉模型要做什么、依据哪些材料、输出什么形式。它影响这一次或这一类调用时模型面对的条件，通常不需要重新训练模型。<button type="button" class="timecode" data-part="1" data-seconds="875">[P01 00:14:35]</button></p>
+<p>微调则需要训练。我们在已有模型基础上，使用适合目标任务的数据继续调整参数，希望它更稳定地表现出所需行为。微调能否改善结果，取决于数据、训练方法与评价标准，不能因为使用了行业数据就自动认为模型更懂行业。<button type="button" class="timecode" data-part="1" data-seconds="901">[P01 00:15:01]</button></p>
+<p>还要分清“针对特定行业”和“模型参数更少”。一个通用大模型经过微调，可以变成更适合某类任务的模型，但参数量未必因此下降。LoRA 等方法减少的是训练时需要更新的参数，并不等于把基础模型直接缩成一个小模型。<a href="https://arxiv.org/abs/2106.09685">LoRA 论文</a> <button type="button" class="timecode" data-part="1" data-seconds="1495">[P01 00:24:55]</button></p>
+<p>嵌入，也就是 embedding，把文字或其他对象表示成一组数字，便于比较相似性。在资料检索中，我们可以把问题和文档转换成可比较的向量，再寻找相近的候选。它主要帮助找到可能相关的信息，不会单独完成事实判断，也不保证最相近的内容就是正确答案。<button type="button" class="timecode" data-part="1" data-seconds="928">[P01 00:15:28]</button></p>
+<table>
+<thead>
+<tr>
+<th>做法</th>
+<th>实际改变的对象</th>
+<th>产品中常见的用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提示词</td>
+<td>模型当前收到的任务与上下文</td>
+<td>说明要求、格式和参考材料</td>
+</tr>
+<tr>
+<td>微调</td>
+<td>模型训练得到的参数或适配部分</td>
+<td>学习特定任务中的行为模式</td>
+</tr>
+<tr>
+<td>嵌入</td>
+<td>对资料的数字表示</td>
+<td>查找与问题相近的内容</td>
+</tr>
+<tr>
+<td>Token 统计</td>
+<td>输入与输出的计量</td>
+<td>理解上下文长度与部分服务成本</td>
+</tr>
+</tbody>
+</table>
+<p>这些概念放到具体工作里就不难区分。一个回答格式总不合适，可以先检查要求是否清楚；模型根本没有收到相关资料，就要先解决资料获取；需要长期学习某类行为时，才进一步讨论训练。不同问题可能组合使用几种方法，但每一种方法承担的职责要说得清楚。</p>
+<h2 id="_6">图像生成：逼真、可控制与适合行业，是三件相关的事</h2>
+<p>在图像生成方法中，生成对抗网络 GAN 可以用“生成者与判别者”来理解：生成者尝试产生样本，判别者区分真实样本与生成样本，两者在训练中相互影响。艺术家和评论家的类比能够帮助入门，但实际反馈来自模型训练的数学目标，无需想象它们真的在用语言评论作品。<button type="button" class="timecode" data-part="1" data-seconds="712">[P01 00:11:52]</button></p>
+<p>扩散模型采用另一类思路。训练时，将数据逐渐加上噪声，并学习怎样反向去噪；生成时，可以从噪声开始，经过多步处理形成图像。这个过程不能简单理解成“先把某张原图模糊，再把原图还原”，因为生成新图并不要求手里始终藏着一张对应的完整原图。<a href="https://arxiv.org/html/2006.11239v2">Denoising Diffusion Probabilistic Models</a> <button type="button" class="timecode" data-part="1" data-seconds="799">[P01 00:13:19]</button></p>
+<p>当用户希望生成结果遵守更具体的构图或姿态，单靠文字描述可能不够。ControlNet 一类方法，可以把边缘、深度或人体姿态等空间条件加入生成过程。例如，想保持人物的动作，可以把姿态作为条件，让模型在这个约束下生成内容。<a href="https://arxiv.org/abs/2302.05543">ControlNet 论文</a> <button type="button" class="timecode" data-part="1" data-seconds="821">[P01 00:13:41]</button></p>
+<p>到这里，我们已经可以分清三个问题：图像是否像真的，图像是否按要求生成，图像是否可以用于当前业务。一张图可能很漂亮，却没有保留指定人物；也可能保留了姿态，却在服装细节上出错。产品工作需要知道用户最在意哪一种要求，再和技术同事讨论怎样改善，不能只用“画得好不好看”来概括。</p>
+<h2 id="_7">包装行业的例子：用户的工作不会在生成图片后结束</h2>
+<p>以包装行业为例，一个生成工具可以帮助设计包装图案，但包装企业还要处理设计修改、营销内容和生产管理。北歌因此提出，生成能力如果能够与企业已有流程结合，可能比一个孤立的出图按钮更有价值。<button type="button" class="timecode" data-part="1" data-seconds="1682">[P01 00:28:02]</button></p>
+<p>这里出现的 ERP，可以理解为企业用于管理资源与业务流程的软件系统。它与一张图片承担的作用不同。生成包装设计只是工作的一部分，结果怎样进入后续流程、需要哪些信息、由谁继续使用，才决定这个能力能否稳定地参与日常业务。</p>
+<p>这种整合能否盈利，还要看企业的具体流程、接入成本和实际使用效果。它首先改变了观察问题的范围：既看模型能够完成哪一步，也看用户在那一步之前和之后做什么。单点生成能力是否足够有用，要放到用户完整工作中判断。</p>
+<h2 id="_8">产品经理原有的工作，仍然需要继续做</h2>
+<p>无论是否使用 AI，产品经理都需要理解需求、规划功能、设计体验、协调开发，并在发布后继续处理问题。新技术扩大了解决问题的方法，用户的目标和使用条件仍然需要有人弄清楚。传统产品工作积累的这些能力，仍然能够帮助我们推进 AI 项目。<button type="button" class="timecode" data-part="2" data-seconds="18">[P02 00:00:18]</button></p>
+<p>客户要求一句话完成营销全案时，里面可能包含真实需求：不想反复沟通，希望更快得到可以使用的内容。但“真实需求存在”与“当前技术能够一口气完成全部工作”，是不同判断。产品经理需要把目标拆到具体任务，辨认哪些环节已经有可用方法，哪些仍需补充输入或人工确认。<button type="button" class="timecode" data-part="2" data-seconds="46">[P02 00:00:46]</button></p>
+<p>规划也需要处理先后顺序。第一版交付什么，哪些问题可以稍后解决，算法效果与界面工作怎样安排，都影响项目能否推进。技术变化很快时，尤其容易不断追逐新功能，却没有把原有流程做完整。版本计划与问题收集因此仍然重要。<button type="button" class="timecode" data-part="2" data-seconds="248">[P02 00:04:08]</button></p>
+<p>交互和视觉同样不能长期忽略。用户需要知道怎样表达要求、为什么正在等待、结果能否修改，以及任务失败后怎么办。即使底层能力很新奇，使用过程一直令人困惑，用户仍然可能离开。产品设计把技术能力变成可以理解和操作的过程。<button type="button" class="timecode" data-part="2" data-seconds="180">[P02 00:03:00]</button></p>
+<h2 id="_9">系列模特图，把“效果好”变成具体要求</h2>
+<p>AI 产品新增的一项要求，是更深入地理解技术可以做到什么。产品经理未必需要亲自训练模型，但至少要能够把需求与可能的方法联系起来，并知道什么时候需要算法同事参与。否则，前期承诺很容易超过实际能力，或在可以解决的问题上过早放弃。<button type="button" class="timecode" data-part="2" data-seconds="291">[P02 00:04:51]</button></p>
+<p>时尚行业的模特图是一个清楚的例子。用户需要一组图里的模特保持同一个人，脸部、手部也不能出现明显异常。单独看每一张都可能不错，放到同一组里却发现人物一直变化，这就不满足系列使用的要求。<button type="button" class="timecode" data-part="2" data-seconds="433">[P02 00:07:13]</button></p>
+<p>这个例子说明了评价标准为什么要来自实际业务。若只挑一张最好看的图展示，无法说明人物一致性；若只检查脸，却不检查手和服装细节，也可能漏掉用户无法接受的问题。产品经理需要把“系列看起来像同一个人”“某些部位不能出现瑕疵”等要求说具体，再讨论用何种生成、控制或修复方法实现。</p>
+<p>文字产品也存在类似关系。写一条提示词得到一次满意结果，只能说明这一次可行。要把它放进产品，仍然需要检查不同输入下的表现，并为训练或提示词修改建立评价标准。提示词编写与效果验收因此需要放在一起：知道怎样提出要求，也要知道结果达到要求没有。<button type="button" class="timecode" data-part="2" data-seconds="359">[P02 00:05:59]</button></p>
+<h2 id="_10">节点工作流，让方案从描述走到可以运行</h2>
+<p>除了理解技术，产品经理还有机会更直接地组合技术能力。以 ComfyUI 为例，它将图像生成中的不同操作表示为节点，再用连线说明数据怎样在节点之间传递。一个节点接收输入，执行某项处理，再把结果交给后面的节点。<button type="button" class="timecode" data-part="2" data-seconds="542">[P02 00:09:02]</button></p>
+<p>与只填写几个输入框的界面相比，节点式工具把更多处理关系暴露出来。我们可以尝试不同条件、安排多条生成分支，比较不同组合得到的图像。这需要理解每个部件的输入与输出，也因此能帮助产品经理更具体地认识一项功能如何实现。</p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1SM411d7Kp-P02-00668.jpg" data-caption="多组节点通过连线形成不同处理分支，同一份输入可以进入多条生成路径，工作流把这些关系直接展开。">
+    <img src="../assets/frames/BV1SM411d7Kp-P02-00668.jpg" loading="lazy" alt="视频截图 02，00:11:08：多组节点通过连线形成不同处理分支，同一份输入可以进入多条生成路径，工作流把这些关系直接展开。">
+    <span class="frame-stamp">视频画面 / P02 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-part="2" data-seconds="668.000">P02 / 图 02 · 00:11:08</button><span>多组节点通过连线形成不同处理分支，同一份输入可以进入多条生成路径，工作流把这些关系直接展开。</span></figcaption>
+</figure>
+<p>北歌把这种做法理解为产品工作的一次延伸：自己先搭出可以运行的流程，再和算法同事讨论效果与可行性。这样，沟通材料不只有功能描述，也有实际输入、输出和可以重复尝试的过程。<button type="button" class="timecode" data-part="2" data-seconds="635">[P02 00:10:35]</button></p>
+<p>不过，一个工作流能在开发环境运行，距离可供许多人长期使用的产品还有工作。运行成本、错误处理、稳定性和用户界面，都需要继续检查。节点越多，也不代表方案越好；能够清楚解释每个步骤为何必要，才更容易改进和维护。</p>
+<p>算法同事的协作在这里很重要。某个问题可能已有新的算法能够更直接地解决，继续在旧方案上大量修补就未必划算。保持沟通，能够及时知道能力条件发生了什么变化；同时，新方法也需要通过实际任务验证，不能只因更新就认定值得替换。<button type="button" class="timecode" data-part="2" data-seconds="488">[P02 00:08:08]</button></p>
+<h2 id="_11">从知道名字，到能够自己做一个小项目</h2>
+<p>学习可以分成逐步深入的几个阶段。最开始是主动接触信息，了解行业里正在发生什么。资讯可以帮助发现主题，开源项目则让人进一步看到技术具体提供什么能力。看到一个受关注的项目时，可以继续问它解决哪类问题，以及它与自己熟悉的工作有什么关系。<button type="button" class="timecode" data-part="3" data-seconds="11">[P03 00:00:11]</button></p>
+<p>热度只是发现线索的方式，无法证明技术已经可靠，也不保证存在商业机会。一个项目被大量关注，可能来自新奇的展示、清楚的文档，或者某个真实需求。继续查看它能做什么、还不能做什么，才能从资讯进入理解。</p>
+<p>第二阶段是亲自体验。文字产品让我们练习怎样说明任务和限制；图像产品让我们体会文字生成、参考图生成和精细控制的差别；视频产品则进一步增加了时间与连续变化的要求。使用这些工具时，重点是用真实操作建立对能力的感觉，不必把所有产品名字都当成必须购买和注册的清单。<button type="button" class="timecode" data-part="3" data-seconds="115">[P03 00:01:55]</button></p>
+<p>在文字与图像之间，还可以尝试组合使用：先让语言模型帮助整理想表达的画面，再把描述交给图像工具，观察结果与预期差在哪里。修改描述以后再生成，才能知道哪些表达真的影响了结果。仅收藏一份提示词，无法获得同样具体的认识。<button type="button" class="timecode" data-part="3" data-seconds="326">[P03 00:05:26]</button></p>
+<p>第三阶段开始理解背后的方法和工程。模型怎样训练，如何做适配，图像控制部件分别负责什么，以及输入怎样经过后端处理回到页面，都会影响产品选择。这里无需同时钻透所有算法，可以围绕正在使用的功能逐步补足：某项限制为什么存在，哪种修改可能帮助解决它。<button type="button" class="timecode" data-part="3" data-seconds="444">[P03 00:07:24]</button></p>
+<p>最后，自己围绕一个需求做出小项目。从调研与发现问题开始，提出解决方案，安排功能，再选择和组合技术，直到能够展示一次完整使用。这个过程会让前面零散的知识发生联系：用户条件决定功能，功能要求影响方法选择，实际结果又暴露需要继续学习的地方。<button type="button" class="timecode" data-part="3" data-seconds="541">[P03 00:09:01]</button></p>
+<h2 id="_12">总结提炼</h2>
+<p>生成能力进入产品，需要经过一系列具体判断。基础资源支持模型，模型提供能力，应用把能力放进用户流程；需求分析则帮助我们决定，究竟要让这些能力解决什么困难。</p>
+<p>包装行业提醒我们观察生成前后的工作，系列模特图提醒我们把质量要求写具体，节点工作流则提供了可以动手验证方案的方式。它们分别对应产品的使用范围、效果标准与实现路径。</p>
+<p>学习也沿着同样的关系加深：先发现有用信息，再亲自使用，随后理解技术与工程，最后完成一个真实的小项目。知道某个能力的名称，亲手试过它，以及理解它能在什么条件下解决问题，是三个需要逐步接起来的层次。</p>
+<h2 id="_13">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-part="1" data-seconds="74">[P01 00:01:14]</button> 生成任务与判断任务。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="253">[P01 00:04:13]</button> 辅助工具与多步任务系统。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="471">[P01 00:07:51]</button> 机器学习与深度学习。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="629">[P01 00:10:29]</button> 语言模型、GPT 与 token。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="712">[P01 00:11:52]</button> 图像生成的不同方法。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="875">[P01 00:14:35]</button> 提示词、微调与嵌入。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="1383">[P01 00:23:03]</button> 基础、模型与应用的分工。</li>
+<li><button type="button" class="timecode" data-part="1" data-seconds="1682">[P01 00:28:02]</button> 包装设计与企业工作流程。</li>
+<li><button type="button" class="timecode" data-part="2" data-seconds="46">[P02 00:00:46]</button> 客户期待与实际需求。</li>
+<li><button type="button" class="timecode" data-part="2" data-seconds="433">[P02 00:07:13]</button> 系列模特图的行业要求。</li>
+<li><button type="button" class="timecode" data-part="2" data-seconds="542">[P02 00:09:02]</button> 用 ComfyUI 理解节点工作流。</li>
+<li><button type="button" class="timecode" data-part="3" data-seconds="115">[P03 00:01:55]</button> 从资讯进入亲自体验。</li>
+<li><button type="button" class="timecode" data-part="3" data-seconds="444">[P03 00:07:24]</button> 学习技术与工程实现。</li>
+<li><button type="button" class="timecode" data-part="3" data-seconds="541">[P03 00:09:01]</button> 围绕需求完成小项目。</li>
+</ul>
+<h2 id="_14">回看时的三个问题</h2>
+<p>包装客户已经能够生成漂亮图片，为什么还可能觉得产品没有解决自己的问题？沿着设计之前和之后的工作想一想。</p>
+<p>一组模特图每张都很好看，却无法被采用，可能是什么要求没有满足？如果只保存最好的一张样例，会漏掉什么？</p>
+<p>你搭出的节点工作流已经运行成功，这说明了哪些事情？要让另一个用户稳定使用，还需要继续检查哪些条件？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "AIGC行业科普", "duration": "29:18", "src": "", "poster": "../assets/frames/BV1SM411d7Kp-P01-01450.jpg"}, {"part": 2, "title": "AIGC产品经理与传统产品经理的异同", "duration": "13:21", "src": "", "poster": "../assets/frames/BV1SM411d7Kp-P02-00668.jpg"}, {"part": 3, "title": "AIGC的学习路径", "duration": "09:53", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

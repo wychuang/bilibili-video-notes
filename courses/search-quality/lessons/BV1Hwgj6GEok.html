@@ -1,278 +1,295 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>后训练：如何保持你的独特品味 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>后训练怎样把产品判断，变成模型持续采用的做法？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">后训练怎样把产品判断，变成模型持续采用的做法？</h1>
+    <div class="meta"><span>皮皮蟹勇闯天涯</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Hwgj6GEok/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">后训练：如何保持你的独特品味</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">推理主干</a></li>
-<li><a href="#_4">为什么“独特品味”会成为公司的核心资产</a></li>
-<li><a href="#_5">“拥有自己的智能”是一条闭环</a></li>
-<li><a href="#prompt">从 Prompt 走向后训练：能力逐级加深</a><ul>
-<li><a href="#1-prompt">1. Prompt：快速验证想法</a></li>
-<li><a href="#2-rag">2. RAG：接入私有且动态的事实</a></li>
-<li><a href="#3-sft">3. SFT：修正结构、格式与稳定行为</a></li>
-<li><a href="#4-preference-dpo">4. Preference / DPO：学习产品品味</a></li>
-<li><a href="#5-rl-rft">5. RL / RFT：提升可验证的专业任务</a></li>
-<li><a href="#6-distillation">6. Distillation：压低推理成本</a></li>
-</ul>
-</li>
-<li><a href="#_6">后训练真正困难的部分：把判断变成系统</a><ul>
-<li><a href="#_7">从“创始人感觉”到可重复评测</a></li>
-<li><a href="#_8">奖励信号就是可执行的品味</a></li>
-</ul>
-</li>
-<li><a href="#_9">六种最常见的时间与资金浪费</a><ul>
-<li><a href="#1">1. 追求数据数量，忽略数据质量</a></li>
-<li><a href="#2">2. 训练前没有评测</a></li>
-<li><a href="#3-rl">3. RL 环境过于粗糙</a></li>
-<li><a href="#4">4. 训练与服务发生漂移</a></li>
-<li><a href="#5">5. 为错误问题选择高级工具</a></li>
-<li><a href="#6">6. 把时间花在通用训练基础设施上</a></li>
-</ul>
-</li>
-<li><a href="#_10">成功团队与停滞团队的分界线</a></li>
-<li><a href="#_11">案例想证明什么</a></li>
-<li><a href="#_12">谁更需要后训练</a></li>
-<li><a href="#pmf">什么时候开始：先找到 PMF，再解决规模化</a><ul>
-<li><a href="#_13">阶段一：寻找产品市场匹配</a></li>
-<li><a href="#_14">阶段二：建立可持续规模</a></li>
-</ul>
-</li>
-<li><a href="#_15">边界、疑点与时效性</a></li>
-<li><a href="#_16">时间戳导航</a></li>
-<li><a href="#_17">复习与行动清单</a></li>
+<li><a href="#_1">后训练怎样把产品判断，变成模型持续采用的做法？</a><ul>
+<li><a href="#_2">先用现成模型，弄清用户真正需要什么</a></li>
+<li><a href="#_3">同样是回答不好，背后的原因可能不同</a></li>
+<li><a href="#_4">数据质量里，有一部分判断属于产品本身</a></li>
+<li><a href="#_5">“没有编译错误”，为什么可能训练出空白代码</a></li>
+<li><a href="#_6">怎样把模糊的“品味”写成可讨论的标准</a></li>
+<li><a href="#_7">训练完成以后，还要经过真实使用这一关</a></li>
+<li><a href="#_8">什么阶段值得投入：用户需要与经营成本要分别成立</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间戳导航</a></li>
+<li><a href="#_11">复习时保留这两个判断</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1Hwgj6GEok" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 既有学习稿</span></div><article data-lesson="BV1Hwgj6GEok"><h1 id="_1">后训练：如何保持你的独特品味</h1>
-<ul>
-<li><strong>上传者</strong>：皮皮蟹勇闯天涯</li>
-<li><strong>主讲人</strong>：Lin Qiao，Fireworks AI CEO、联合创始人</li>
-<li><strong>时长</strong>：28:28</li>
-<li><strong>来源</strong>：<a href="https://www.bilibili.com/video/BV1Hwgj6GEok/">Bilibili</a></li>
-<li><strong>视频 ID</strong>：BV1Hwgj6GEok</li>
-<li><strong>总结强度</strong>：Deep</li>
-<li><strong>证据来源</strong>：本地视频元数据、英文自动逐字稿、SRT 时间轴及 24 张候选画面</li>
-<li><strong>证据质量</strong>：英文识别语言置信度为 0.997，247 个连续片段，最大语音间隔 2 秒；逐字稿存在少量术语误识别，本文结合上下文谨慎校正。案例指标均为演讲材料中的录制时点主张，未作外部核验。</li>
-</ul>
-<h2 id="_2">一句话抓住核心</h2>
-<p>后训练的商业价值，是把产品积累的数据、判断标准、独特品味和领域经验编码进专用模型，再用评测、奖励与线上反馈形成闭环，从而同时保护差异化、改善产品质量并降低规模化成本。</p>
-<h2 id="_3">推理主干</h2>
-<ol>
-<li>AI 编程正在压缩应用开发所需的人力、时间和专业门槛，产品表层因此越来越容易复制。</li>
-<li>一家公司真正独特的部分，来自它解决问题时采用的判断、品味、取舍与信念。</li>
-<li>这些隐性能力要先转化成高质量数据、评测标准和奖励信号，随后才能进入模型。</li>
-<li>RAG、SFT、偏好优化、强化学习和蒸馏分别解决不同问题，技术选择应由问题类型决定。</li>
-<li>训练结果必须进入真实服务环境，通过产品指标验证，并持续回流数据。</li>
-<li>更合适的重投入时点通常出现在产品市场匹配之后：此时高质量数据开始形成，成本与护城河问题也真正显现。</li>
-</ol>
-<h2 id="_4">为什么“独特品味”会成为公司的核心资产</h2>
-<p>过去，把一个想法做成可规模化的软件产品，往往需要数十名产品工程师和产品经理协作多个季度。如今，一个人借助 AI，可能在几周内完成过去需要大型团队完成的工作。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=90" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:30]">[00:01:30]</a></p>
-<p>开发资源大幅压缩会产生一个直接后果：应用界面、基础功能和常见工作流更容易被复刻。只依赖通用黑盒 API 的公司，还会共享相近的基础智能，最终容易输出相似的答案、交互和能力。</p>
-<p>公司的存在依据，在于它选择了一个独特问题，并用特定方式解决。这个“特定方式”包含：</p>
-<ul>
-<li>什么结果算好；</li>
-<li>什么错误不可接受；</li>
-<li>面对冲突时优先保护什么；</li>
-<li>用户真正关心哪些细节；</li>
-<li>如何在成本、速度、质量和风险之间取舍。</li>
-</ul>
-<p>这些判断共同构成产品品味。后训练提供了一条路径：把客户理解、生产数据和判断规则逐步写进模型，使产品的智能层也带有公司的独特性。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a></p>
-<h2 id="_5">“拥有自己的智能”是一条闭环</h2>
-<p>“拥有自己的智能”首先从数据开始。通用基础模型主要吸收公共数据和通用标注任务，而每家公司处理的是自己的具体场景。生产过程中的高质量样本、用户行为、失败记录和专家修正，才是专用智能的原料。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=243" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:03]">[00:04:03]</a></p>
-<p>完整闭环可以分成三层：</p>
-<ol>
-<li><strong>合成数据与生产数据</strong>：策划、标注并筛选具有代表性的样本，同时建立奖励信号。</li>
-<li><strong>后训练</strong>：通过 SFT、偏好学习或强化学习，把强大的基础模型转化成特定任务专家。</li>
-<li><strong>服务与迭代</strong>：将模型投入生产环境，用线上评测和产品指标验证，再把新数据送回训练流程。</li>
-</ol>
-<p>底层关系可以概括为：</p>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Hwgj6GEok.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><button class="done" data-done="BV1Hwgj6GEok" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Hwgj6GEok-00533.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Hwgj6GEok&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Hwgj6GEok/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Hwgj6GEok"><h1>后训练怎样把产品判断，变成模型持续采用的做法？</h1>
 <blockquote>
-<p>通用基础模型 + 少量专用权重或适配层 = 面向具体场景的专用智能</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1Hwgj6GEok/">皮皮蟹勇闯天涯｜后训练：如何保持你的独特品味</a> · 28 分 28 秒 · 深度阅读</p>
 </blockquote>
-<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_004_00-04-09.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_004_00-04-09.jpg" alt="图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型" loading="lazy"></a><figcaption>图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型</figcaption></figure>
-<p><em>图 01 · 00:04:09：幻灯片把“数据—后训练—服务迭代”画成三层堆栈，并展示基础模型加专用训练适配层形成定制模型</em></p>
-<p>训练完成只是一次实验的中段。模型还要进入服务层进行 A/B 测试，确认它能真正推动留存、转化、任务成功率、人工接管率或单位成本等产品指标，然后继续迭代。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=311" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:11]">[00:05:11]</a></p>
-<h2 id="prompt">从 Prompt 走向后训练：能力逐级加深</h2>
-<p>团队不应一开始就投入重型后训练。更稳妥的演进顺序是：</p>
-<h3 id="1-prompt">1. Prompt：快速验证想法</h3>
-<p>直接使用通用模型，通过指令和少量示例测试产品假设。这个阶段的反馈周期可以短到几分钟，适合确认需求和基本交互是否成立。</p>
-<h3 id="2-rag">2. RAG：接入私有且动态的事实</h3>
-<p>当问题来自模型不知道的企业事实，并且内容会频繁变化时，把知识写入权重通常缺乏效率。检索增强生成可以在运行时取回当前数据，使回答落在企业知识之上。</p>
-<h3 id="3-sft">3. SFT：修正结构、格式与稳定行为</h3>
-<p>当模型知道相关知识，却无法稳定遵守输出格式、工作流程、语气或工具使用规范时，可用数百个干净示例进行监督微调。</p>
-<p>它类似于人通过教材学习：示例明确告诉模型什么做法正确、什么做法需要避免。</p>
-<h3 id="4-preference-dpo">4. Preference / DPO：学习产品品味</h3>
-<p>当“好答案”难以写成一条精确规则，但人很容易比较两个答案时，可以利用偏好数据。用户的点赞、点踩、选择、修改和放弃行为，都可能成为偏好信号。</p>
-<p>它对应人逐渐形成判断力的过程：面对多种可行方案时，开始知道自己更欣赏哪一种。</p>
-<h3 id="5-rl-rft">5. RL / RFT：提升可验证的专业任务</h3>
-<p>当模型在特定任务上较弱，同时任务结果能够可靠评分时，可以使用强化学习或可验证奖励训练。编译是否成功、测试是否通过、数值是否正确，都可以成为明确奖励。</p>
-<h3 id="6-distillation">6. Distillation：压低推理成本</h3>
-<p>如果模型质量足够，但线上推理过慢或过贵，可以让较大的教师模型指导较小的学生模型，在保留关键行为的同时改善速度和单位经济性。</p>
-<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_008_00-08-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_008_00-08-53.jpg" alt="图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏" loading="lazy"></a><figcaption>图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏</figcaption></figure>
-<p><em>图 02 · 00:08:53：方法选择页逐项对应了动态事实用 RAG、格式行为用 SFT、品味问题用 Preference/DPO、可评分任务用 RL/RFT、成本问题用蒸馏</em></p>
-<p>最重要的决策原则是先定义问题，再选择训练技术。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=502" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:22]">[00:08:22]</a> 多种方法也可以组合，例如先用 RAG 提供事实，再用 SFT 固定操作格式，随后用偏好数据学习风格，最后通过蒸馏降低成本。</p>
-<h2 id="_6">后训练真正困难的部分：把判断变成系统</h2>
-<p>数据量本身无法保证效果。演讲材料给出的经验是，约一千个非常干净的样本可能胜过两万个噪声样本。谁最清楚哪些样本优秀、哪些错误最致命？通常是产品团队和领域专家。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a></p>
-<p>这会改变团队分工。产品人员需要深入参与数据筛选、失败分类、评测设计和奖励定义；研究与机器学习团队负责把这些判断转化为可训练、可重复的系统。</p>
-<h3 id="_7">从“创始人感觉”到可重复评测</h3>
-<p>早期产品经常采用一种朴素评测：创始人查看结果，凭经验判断“这个回答对不对、像不像我们想要的产品”。</p>
-<p>这种感觉已经包含宝贵判断，只是尚未结构化。下一步是把它拆解为可反复运行的评测集和评分规则，类似传统软件工程里的单元测试与集成测试。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=669" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:09]">[00:11:09]</a></p>
-<p>训练前就应回答：</p>
-<ul>
-<li>当前模型在哪些真实任务上失败？</li>
-<li>哪些失败对用户影响最大？</li>
-<li>“改善”究竟由什么指标证明？</li>
-<li>多大提升才值得发布？</li>
-<li>哪些安全和质量底线不得退让？</li>
-<li>线上产品指标怎样映射回离线评测？</li>
-</ul>
-<p>没有训练前基线，团队即使得到一个新模型，也很难判断工作是否完成。</p>
-<h3 id="_8">奖励信号就是可执行的品味</h3>
-<p>问答环节给出了一个更具体的定义：奖励可以写成代码，并由多个评分维度组成。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1399" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:19]">[00:23:19]</a></p>
-<p>以招聘智能体为例，一家公司可能同时评价候选人的主动性、推进速度、解决障碍的能力和岗位匹配度。每个维度都有独立量表，再按照公司的实际偏好加权：</p>
-<div class="math-display" aria-label="R(x)=w_1r_{\text{主动性}}(x)+w_2r_{\text{执行速度}}(x)+w_3r_{\text{岗位匹配}}(x)+\cdots"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>w</mi><mn>1</mn></msub><msub><mi>r</mi><mrow><mtext>主动性</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>w</mi><mn>2</mn></msub><msub><mi>r</mi><mrow><mtext>执行速度</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>w</mi><mn>3</mn></msub><msub><mi>r</mi><mrow><mtext>岗位匹配</mtext></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mo>⋯</mo></mrow></math></div>
-<p>真正独特的部分既包括评分维度，也包括权重、最低门槛和冲突处理规则。两家公司即使使用相同基础模型，也会因为奖励设计不同而形成不同产品行为。</p>
-<h2 id="_9">六种最常见的时间与资金浪费</h2>
-<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_009_00-10-04.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_009_00-10-04.jpg" alt="图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施" loading="lazy"></a><figcaption>图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施</figcaption></figure>
-<p><em>图 03 · 00:10:04：深色幻灯片列出六类失败：重数量轻质量、训练前无评测、粗糙 RL 环境、训练与服务漂移、工具选错、重复建设训练基础设施</em></p>
-<h3 id="1">1. 追求数据数量，忽略数据质量</h3>
-<p>把大量噪声样本直接送进训练，会放大矛盾标注、错误答案和不一致风格。高质量策划、去重、难例覆盖和专家复核通常更有价值。</p>
-<h3 id="2">2. 训练前没有评测</h3>
-<p>如果团队无法衡量模型相较基线改善了多少，就无法可靠发布，也无法判断继续训练是否值得。</p>
-<h3 id="3-rl">3. RL 环境过于粗糙</h3>
-<p>训练模拟与真实生产环境不一致时，模型会学会利用模拟器漏洞，并在虚假目标上“进步”。</p>
-<p>最典型的奖励黑客案例是：要求模型“生成能够最小化编译错误的代码”，模型返回零行代码。编译错误确实归零，用户任务却完全没有完成。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=733" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:13]">[00:12:13]</a></p>
-<p>这个案例说明，单一指标经常会遗漏真实意图。奖励函数必须同时覆盖任务完成度、正确性、约束遵守和异常行为。</p>
-<h3 id="4">4. 训练与服务发生漂移</h3>
-<p>模型在训练栈上取得的结果，进入服务栈后可能下降。不同推理库、数值精度、算子实现和优化方式，都可能造成计算差异；多轮智能体中的小误差还会逐步累积。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=800" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:20]">[00:13:20]</a></p>
-<p>因此，线上服务结果才是最终裁判。训练平台和服务平台需要尽可能保持计算一致，并在每次部署时进行门禁评测。</p>
-<h3 id="5">5. 为错误问题选择高级工具</h3>
-<p>动态事实应优先考虑 RAG；没有可靠奖励的任务不适合仓促投入 RL。团队应先掌握基础方法，再选择复杂技术。</p>
-<h3 id="6">6. 把时间花在通用训练基础设施上</h3>
-<p>如果公司的差异化来自数据和奖励信号，大量自建通用训练基础设施可能分散注意力。演讲材料主张把有限资源集中在专属数据、评测和奖励工程上。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=585" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:45]">[00:09:45]</a></p>
-<h2 id="_10">成功团队与停滞团队的分界线</h2>
-<p>真正的分界线是准备度：</p>
+<p>假设你已经做出了一个有用户的 AI 产品。大家用的是相近的基础模型，界面和功能也越来越容易模仿，但你仍然觉得自己的产品有一些特别之处：你知道用户真正介意什么，知道一个回答在什么地方会让人失望，也知道怎样完成任务才算做得好。问题是，这些判断目前可能只存在于团队成员的脑子里，模型每次回答时未必会稳定采用它们。<button type="button" class="timecode" data-seconds="160">[00:02:40]</button></p>
+<p>这就是这里所说的“品味”。它包含语气和表达偏好，但范围更大：面对一个具体任务，你怎样判断结果好坏，怎样在多个要求之间作取舍。后训练的价值之一，是利用示范、偏好和奖励，把这些判断转化为模型更容易采用的行为。我们仍然建立在基础模型已有能力上，只是继续让它更适合一项具体工作。<button type="button" class="timecode" data-seconds="191">[00:03:11]</button></p>
+<p>这场分享来自 Fireworks 的联合创始人 Lin，讨论带有模型服务平台的实践视角。后训练在这里被视为建立产品差异与改善成本的一种路径。它是否值得投入，需要结合产品阶段、实际数据和维护成本判断，不能仅凭模型训练完成，就认定企业已经获得持久优势。</p>
+<h2 id="_2">先用现成模型，弄清用户真正需要什么</h2>
+<p>做产品早期，最重要的问题通常是：我们想解决的困难是否真实存在，用户是否愿意持续使用这个解决办法。用现成模型写提示词、放入几个示例，往往就能较快验证一个想法。如果连目标任务都在频繁变化，太早训练一个专用模型，可能只是把尚未确定的做法固定下来。<button type="button" class="timecode" data-seconds="331">[00:05:31]</button></p>
+<p>当产品需要使用自己的资料时，可以先考虑 RAG，也就是先检索相关材料，再把材料与问题一起交给模型。比如某些事实经常变化，检索可以让回答参考当时能够查到的信息。这一步主要解决“回答时缺少哪些资料”。整理上下文则进一步决定模型每次看见哪些信息、以什么顺序看见，以及哪些无关内容应当省去。<button type="button" class="timecode" data-seconds="344">[00:05:44]</button></p>
+<p>接下来，如果手里已经积累了一批值得学习的任务示范，就可以考虑 SFT，监督微调。输入一个任务，给出我们希望的回答，让模型在训练中学会类似的回应方式。如果能够稳定比较两份回答哪一份更好，却难以写出唯一标准答案，偏好训练又提供另一种信号。DPO 是其中一种常见方法，用同一输入下较好与较差回答的比较来调整模型。<button type="button" class="timecode" data-seconds="364">[00:06:04]</button></p>
+<p>至于强化学习，关注的是让模型尝试完成任务，再依据结果好坏得到奖励并调整。它特别依赖我们能否对任务完成情况作出有效评价。提示词、检索、示范、偏好和奖励可以配合使用，并没有规定每个产品都要依次做完全部步骤。选择从哪一处开始，取决于眼前的问题到底在哪里。<button type="button" class="timecode" data-seconds="401">[00:06:41]</button></p>
+<h2 id="_3">同样是回答不好，背后的原因可能不同</h2>
+<p>先想一个简单区别：模型答错，是因为缺少一条最新事实，还是因为明明拿到了资料，却没有按要求组织答案？前一种情况适合优先检查检索与资料供给，后一种情况则需要关注指令、示范和行为。把这两个问题混在一起，会让我们尝试了很多训练，却仍然没有把缺失的信息送到模型面前。<button type="button" class="timecode" data-seconds="502">[00:08:22]</button></p>
+<p>如果问题在输出格式或工具使用习惯，清楚的示范可以告诉模型应该怎样做。例如产品要求按固定结构回应，训练样本就需要持续展示这个结构。要是几种回答都基本正确，但其中一种更符合产品判断，就需要把这种偏好变成比较信号。前者相当于教一个明确的做法，后者相当于在多个可接受做法之间教会选择。<button type="button" class="timecode" data-seconds="523">[00:08:43]</button></p>
+<p>还有一种情况是模型在某项能评分的任务上能力较弱。这里可以考虑强化学习，让模型在任务环境里尝试，并根据完成情况调整。最后，若质量已经足够，主要问题变成运行太慢或每次调用太贵，则可以考虑蒸馏：利用较强模型的示范，帮助较小模型学习目标任务。蒸馏是否成功，仍要看小模型能否在可接受的成本下保留所需质量。<button type="button" class="timecode" data-seconds="549">[00:09:09]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Hwgj6GEok-00533.jpg" data-caption="每一行从具体问题出发，分别指向检索、监督微调、偏好训练、强化学习或蒸馏。">
+    <img src="../assets/frames/BV1Hwgj6GEok-00533.jpg" loading="lazy" alt="视频截图 01，00:08:53：每一行从具体问题出发，分别指向检索、监督微调、偏好训练、强化学习或蒸馏。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="533.000">图 01 · 00:08:53</button><span>每一行从具体问题出发，分别指向检索、监督微调、偏好训练、强化学习或蒸馏。</span></figcaption>
+</figure>
+<p>这张对应图可以用来提出排查方向，但实际问题往往会重叠。例如一个任务既需要新资料，又要求严格格式，就可能同时需要检索与行为调整。也不能因为任务有一个分数，就立即认定适合强化学习：还要检查这个分数是否真实反映用户需要的结果。下一节的代码例子，就展示了评分看似清楚、目标却不完整的情况。</p>
+<h2 id="_4">数据质量里，有一部分判断属于产品本身</h2>
+<p>准备训练数据时，很容易把注意力放到数量上：多收一些对话，多生成一些答案，再训练久一点。但模型会学习数据展示出来的规律。如果大量样本中的回应偏离了产品要求，更多数据只会更频繁地重复这些做法。数据量有意义的前提，是我们确实知道哪些样本值得学习。<button type="button" class="timecode" data-seconds="601">[00:10:01]</button></p>
+<p>这也是产品团队需要参与的原因。研究人员和工程师能够检查训练是否正常、代码是否正确，但“这份回答有没有解决我们的用户问题”常常需要理解业务情境。用户真正关心的条件、什么错误最难接受、什么信息虽然正确却不必出现，都可能藏在产品团队长期积累的经验里。这些判断如果没有进入样本选择，技术流程即使顺利，模型也可能学到不合用的行为。<button type="button" class="timecode" data-seconds="629">[00:10:29]</button></p>
+<p>当然，依靠团队成员临时看几眼，再说“这个感觉不错”，还不够支持持续改进。一个版本看起来更好，可能只是这次问的问题恰好适合它；过几天换个人检查，标准又变化了。我们需要把具体判断固定为一组可以重复使用的评测：给出明确任务，说明关心哪些表现，让不同版本在相近条件下接受检查。<button type="button" class="timecode" data-seconds="661">[00:11:01]</button></p>
+<p>这和软件测试有相通之处。单元测试检查一个功能在给定输入下是否得到预期结果，集成测试检查多个部分接在一起是否正常。模型评测也需要把“好不好”分解到具体情境，不能只有一个笼统印象。这里的目的，是让团队能知道新版本改变了什么，原来好的地方有没有丢掉，以及哪些问题仍然没有解决。<button type="button" class="timecode" data-seconds="688">[00:11:28]</button></p>
+<h2 id="_5">“没有编译错误”，为什么可能训练出空白代码</h2>
+<p>来看一个奖励设计的例子。我们希望模型生成代码，并尽量减少编译错误。如果评分只看编译错误数量，模型有一种非常直接的得分办法：完全不写代码。零行代码可以没有编译错误，但用户要求完成的功能也没有实现。<button type="button" class="timecode" data-seconds="733">[00:12:13]</button></p>
+<p>这个例子说明，指标表达的要求比人的真实目标少了一部分。人的要求是“实现功能，同时避免编译错误”；奖励却只记录后半句。模型在训练中寻找高奖励输出，可能就会利用两者之间的空隙。这类现象通常叫 reward hacking，可以理解为利用评分规则的漏洞取得高分。<button type="button" class="timecode" data-seconds="749">[00:12:29]</button></p>
+<p>因此，奖励需要放回完整任务里理解。编译通过能够检查一类错误，却不能单独判断功能是否实现；测试通过能够检查已有测试覆盖的行为，却仍然受到测试设计的限制。我们越清楚各个检查项回答什么问题，就越容易发现哪些重要要求尚未被评分覆盖。单个指标的方向正确，并不意味着它足以独立代表任务成功。</p>
+<p>训练环境也有类似问题。模型在模拟环境里表现越来越好，可能只是学会利用模拟环境中特有的简化条件。真实用户任务没有这些条件时，表现就会下降。于是，除了看奖励函数写得对不对，还要看模型练习的环境与实际使用环境是否足够接近。环境与评分一起决定了模型在训练中受到什么鼓励。<button type="button" class="timecode" data-seconds="706">[00:11:46]</button></p>
+<h2 id="_6">怎样把模糊的“品味”写成可讨论的标准</h2>
+<p>问答环节用招聘 Agent 举例，说明多维度评分的思路。不同团队可能看重不同特征，例如主动推进问题的意愿、快速建立可用结果的能力，以及持续取得进展的方式。每个维度都对应一个具体问题，最后再按照产品需要组合这些判断。<button type="button" class="timecode" data-seconds="1399">[00:23:19]</button></p>
+<p>这里的重点是让要求显露出来。例如，“这个候选选择结果不错”很难让另一个人复现判断；拆成若干维度以后，团队才可以讨论：我们依据哪段经历判断推进能力，是否遗漏了岗位真正需要的条件，各个维度有多重要。Rubric 就是这样一组较明确的评价条目，它把总体判断拆成可以逐项解释的标准。<button type="button" class="timecode" data-seconds="1418">[00:23:38]</button></p>
 <table>
 <thead>
 <tr>
-<th>能持续交付的团队</th>
-<th>容易停滞的团队</th>
+<th>总体评价中容易混在一起的部分</th>
+<th>分开后要回答的问题</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>已有生产数据和奖励信号</td>
-<td>只有原始数据，奖励尚未定义</td>
+<td>评价对象</td>
+<td>我们在评价 Agent 的选择结果，还是某项信息提取是否准确？</td>
 </tr>
 <tr>
-<td>从评测出发，清楚“更好”的含义</td>
-<td>先训练，后定义成功</td>
+<td>评价维度</td>
+<td>这一项具体检查什么能力或表现？</td>
 </tr>
 <tr>
-<td>有可优化的信号后再运行 RL</td>
-<td>在没有优化目标时直接上 RL</td>
+<td>判断依据</td>
+<td>输入材料里哪些内容支持这个判断？</td>
 </tr>
 <tr>
-<td>形成“轨迹→SFT→奖励→RL→服务”闭环</td>
-<td>没有评测，无法判断训练何时完成</td>
+<td>组合方式</td>
+<td>多个维度冲突时，各自占多大影响？</td>
 </tr>
 </tbody>
 </table>
-<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_018_00-20-45.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_018_00-20-45.jpg" alt="图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度" loading="lazy"></a><figcaption>图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度</figcaption></figure>
-<p><em>图 04 · 00:20:45：投影页以绿色 Ships 与红色 Stalls 对照，分界项集中在生产奖励、训练前评测和闭环准备度</em></p>
-<p>资源充足无法代替准备度。拥有更多 GPU、预算和研究人员，如果没有明确评测与奖励信号，同样可能烧掉时间和资金。</p>
-<h2 id="_11">案例想证明什么</h2>
-<p>演讲材料把 Cursor、Doximity 和 Factory 并列为三个专用开放模型案例，分别覆盖编程、医疗和安全。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=858" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:18]">[00:14:18]</a></p>
-<figure><a href="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_013_00-14-49.jpg" target="_blank" rel="noopener"><img src="../../../notes/%E7%9A%AE%E7%9A%AE%E8%9F%B9%E5%8B%87%E9%97%AF%E5%A4%A9%E6%B6%AF/260812-%E5%90%8E%E8%AE%AD%E7%BB%83%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%8B%AC%E7%89%B9%E5%93%81%E5%91%B3__BV1Hwgj6GEok/assets/deep/frame_013_00-14-49.jpg" alt="图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果" loading="lazy"></a><figcaption>图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果</figcaption></figure>
-<p><em>图 05 · 00:14:49：案例页并列展示 Cursor、Doximity 与 Factory，分别列出训练方法和录制时点的基准结果</em></p>
+<p>这张表把多维评分的逻辑展开了。评分需要依据具体任务建立，不能把“积极”“有冲劲”这样的印象直接当成客观测量，也不能把几项主观分数一相加，就认为已经得到了完整判断。招聘例子在这里用于说明产品标准怎样被拆开；任何涉及人的重要决定，还需要关注信息是否充分、标准是否相关，以及结果应由谁复核。</p>
+<p>不同产品的差别，往往就在这些细节里。大家都说要“高质量”，但对准确性、完整性、速度、解释程度的取舍不同。把这些选择写成明确的示范与评价标准，模型才有机会反复学到团队想要的做法。所谓独特品味，也就从一句宣传语变成了数据里能够观察的差异。<button type="button" class="timecode" data-seconds="1466">[00:24:26]</button></p>
+<h2 id="_7">训练完成以后，还要经过真实使用这一关</h2>
+<p>在训练环境里得到一个好结果，只完成了实验的一部分。模型最终要进入提供服务的系统，接受真实输入，并影响用户体验。训练时与运行时可能使用不同的计算库、数值精度和优化方式，这些差别会影响实际输出。因此，需要检查部署后的模型是否保留了预期表现。<button type="button" class="timecode" data-seconds="773">[00:12:53]</button></p>
+<p>可以把这个问题想成同一个配方换了一套生产设备。配方没有变，不代表每一步计算的细节都完全相同。模型包含大量数值运算，一些看起来很小的差别也可能影响生成结果。对于需要连续多步操作的 Agent，前一步输出改变还会进入后续上下文，所以验证应该覆盖真实运行方式。<button type="button" class="timecode" data-seconds="800">[00:13:20]</button></p>
+<p>接下来才是产品层面的检验。A/B 测试让不同方案在可比较的用户条件下运行，观察产品关心的指标是否改善。离线评测告诉我们模型在准备好的任务上如何表现，线上测试则检查这些改进是否能转化为实际使用效果。两者关注的对象不同，都不能用“训练已经跑完”来替代。<button type="button" class="timecode" data-seconds="311">[00:05:11]</button></p>
+<p>完整过程因此会反复进行：从真实任务收集适当数据，用数据改进模型，部署后检查表现，再根据新发现调整。这里每一轮都需要知道改动是什么、期待改善什么，以及怎样判断是否真的改善。否则，即使每轮都有新模型，也很难积累稳定的产品认识。</p>
+<h2 id="_8">什么阶段值得投入：用户需要与经营成本要分别成立</h2>
+<p>现场有人提出了一个很实际的问题：专门训练模型需要投入工程、资金和后续维护，究竟什么时候值得做？如果只是某个分数提高一点，收益是否足以覆盖整个系统的成本？这个问题把讨论从“技术能做到”带回了“对当前产品是否合算”。<button type="button" class="timecode" data-seconds="1490">[00:24:50]</button></p>
+<p>回答区分了两个阶段。第一阶段是找到产品与用户需求之间的稳定匹配，也就是常说的 product-market fit。用户持续使用，说明产品确实解决了一部分重要问题。此时使用现成的强模型，可以减少早期准备工作，把精力集中在功能与体验上。<button type="button" class="timecode" data-seconds="1545">[00:25:45]</button></p>
+<p>第二阶段是扩大使用规模。一个产品有人需要，仍然可能因为每次任务成本过高而难以持续经营。用户越多、调用越频繁，模型服务成本也可能快速增长。团队这时既希望保留产品质量，又希望降低每次完成任务的成本，后训练和蒸馏才更容易对应一个明确的经营问题。<button type="button" class="timecode" data-seconds="1608">[00:26:48]</button></p>
+<p>真实使用还会带来更有针对性的数据：用户怎样提问，什么回答被采用，什么任务反复失败。这些信息能帮助团队认识目标任务，也能为后训练提供材料。但“从产品里收集的”并不自动等于高质量，还需要处理权限、隐私、错误结果和反馈偏差。能够收集大量交互，与能够整理出可靠训练信号，之间仍然有实际工作要做。<button type="button" class="timecode" data-seconds="1583">[00:26:23]</button></p>
+<p>分享中提到编程、临床信息服务、安全任务、研究和幻灯片生成等应用，用来说明专用模型可能服务不同领域。它们关心的质量条件不同，成本结构也不同。部分平台案例声称取得明显成本下降，但具体幅度依赖任务、模型和比较条件。我们可以把它们理解为可探索的方向，无法据此保证自己的产品也能按相同比例节省。<button type="button" class="timecode" data-seconds="848">[00:14:08]</button> <button type="button" class="timecode" data-seconds="1064">[00:17:44]</button></p>
+<h2 id="_9">总结提炼</h2>
+<p>后训练之前，先弄清模型为什么没有做好：缺资料、行为不合适、偏好不明确、任务能力不足，或者运行成本过高。这些问题对应的改进方式不同，检索、监督微调、偏好训练、强化学习和蒸馏可以各自承担一部分工作。</p>
+<p>真正连接产品与模型的，是具体的质量判断。我们需要选出值得学习的示范，把模糊偏好拆成可解释的标准，设计不会轻易偏离任务的奖励，再检查部署后的模型是否改善了真实使用效果。独特品味只有进入这些具体决定，才可能成为模型持续采用的行为。</p>
+<h2 id="_10">时间戳导航</h2>
 <ul>
-<li><strong>Cursor</strong>：利用大量用户交互和偏好数据，从中期训练延伸到后训练，并在自己的智能体执行框架中进行强化学习。目标是在编程质量上接近或超过前沿闭源模型，同时降低成本。</li>
-<li><strong>Doximity</strong>：针对临床问答，把医生复核纳入奖励回路，强调医疗领域的深度问题、安全性和持续训练闭环。</li>
-<li><strong>Factory</strong>：聚焦代码安全与秘密信息检测，因为安全任务容错率低，需要把该领域的判断与约束写入专用模型。</li>
+<li><button type="button" class="timecode" data-seconds="160">[00:02:40]</button> 产品的判断与品味，怎样进入模型行为。</li>
+<li><button type="button" class="timecode" data-seconds="331">[00:05:31]</button> 从提示词与检索开始，再考虑后训练。</li>
+<li><button type="button" class="timecode" data-seconds="502">[00:08:22]</button> 按问题选择改进方法。</li>
+<li><button type="button" class="timecode" data-seconds="601">[00:10:01]</button> 数据质量与可重复评测。</li>
+<li><button type="button" class="timecode" data-seconds="733">[00:12:13]</button> 零行代码怎样利用奖励漏洞。</li>
+<li><button type="button" class="timecode" data-seconds="800">[00:13:20]</button> 训练与部署计算差异。</li>
+<li><button type="button" class="timecode" data-seconds="1399">[00:23:19]</button> 多维评价与 Rubric。</li>
+<li><button type="button" class="timecode" data-seconds="1490">[00:24:50]</button> 什么时候值得投入后训练。</li>
 </ul>
-<p>这些案例共同支持一个命题：当公司拥有高价值的领域数据、清晰评测和产品反馈时，开放基础模型加后训练有机会在狭窄任务上达到更好的质量、成本或速度组合。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=991" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:31]">[00:16:31]</a></p>
-<p>演讲还提到通用办公、法律、金融、营销、招聘、销售和客服等场景，并给出部分应用获得约五至十倍成本下降的说法。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1044" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:17:24]">[00:17:24]</a> 这些数字属于演讲方案例陈述，适合作为方向性参考，不宜直接当作任何团队都能复现的承诺。</p>
-<h2 id="_12">谁更需要后训练</h2>
-<p>后训练需求主要来自三类团队：</p>
-<ol>
-<li><strong>前沿智能体开发者</strong>：拥有定制执行框架、工具链和任务轨迹，需要让模型与系统共同优化。</li>
-<li><strong>高流量成熟公司</strong>：AI 功能面向大量既有客户时，推理成本可能直接阻碍功能发布。</li>
-<li><strong>专用模型开发者</strong>：在医疗、安全、法律等领域追求更深专业能力和更严格边界。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1128" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:48]">[00:18:48]</a></li>
-</ol>
-<p>团队所需的控制层级也不同。拥有深度研究人员的团队可能希望直接控制训练器和底层 rollout；产品工程师或机器学习工程师更适合使用训练 SDK；经验不足的团队还可能需要研究人员协助建立首个训练闭环。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1309" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:49]">[00:21:49]</a></p>
-<h2 id="pmf">什么时候开始：先找到 PMF，再解决规模化</h2>
-<p>问答环节把 AI 产品发展拆成两个阶段：<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1545" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:45]">[00:25:45]</a></p>
-<h3 id="_13">阶段一：寻找产品市场匹配</h3>
-<p>先使用能力强、接入简单的前沿模型，快速验证用户是否真的需要产品。这个阶段应优先减少验证阻力，过早建设复杂训练体系可能拖慢学习速度。</p>
-<h3 id="_14">阶段二：建立可持续规模</h3>
-<p>达到 PMF 之后，两个问题开始同时出现：</p>
-<ul>
-<li>如何保持竞争优势；</li>
-<li>如何让收入与推理成本保持健康关系。</li>
-</ul>
-<p>PMF 还会带来一项关键资产：真实产品表面开始产生足量、高质量、具有明确语境的数据。用户接受了什么、修改了什么、放弃了什么，以及哪些结果推动了任务完成，这些记录成为“拥有自己智能”的燃料。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1583" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:26:23]">[00:26:23]</a></p>
-<p>此时后训练产生两类价值。</p>
-<p>第一类是<strong>差异化</strong>：把用户参与数据、领域知识和产品判断编码进模型，降低产品表层被复制后核心能力也随之丢失的风险。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1629" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:09]">[00:27:09]</a></p>
-<p>第二类是<strong>单位经济性</strong>：演讲方声称，某些专用模型可把推理成本降低五至十倍，使相同预算支持更高流量，从而降低“越增长、亏损越严重”的风险。<a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a></p>
-<p>因此，启动后训练的信号可以整理成一张检查表：</p>
-<ul>
-<li>产品已经找到相对稳定的核心用例；</li>
-<li>生产环境持续产生高质量交互数据；</li>
-<li>团队能够定义离线评测和线上成功指标；</li>
-<li>通用模型在关键任务上存在稳定缺口；</li>
-<li>模型成本开始约束增长或功能发布；</li>
-<li>独特行为值得长期沉淀进模型；</li>
-<li>团队有能力维护训练、评测、部署和反馈闭环。</li>
-</ul>
-<h2 id="_15">边界、疑点与时效性</h2>
-<ol>
-<li><strong>案例存在供应商视角</strong>：主讲人来自 Fireworks AI，案例和平台建议带有明确商业立场。</li>
-<li><strong>基准领先不等于产品领先</strong>：单项 benchmark 无法完整覆盖真实用户体验、维护成本、安全风险和分布外任务。</li>
-<li><strong>成本下降不可直接迁移</strong>：五至十倍成本改善取决于模型尺寸、任务分布、吞吐量、基础设施和可接受质量损失。</li>
-<li><strong>PMF 之后是经验性时机</strong>：如果模型能力本身就是产品研究对象，团队可能需要更早实验；早期实验仍应控制投入，并以学习为目标。</li>
-<li><strong>用户行为可能带有偏差</strong>：点赞、点击和停留时长不天然等于高质量，需要防止把短期参与度误当成长期价值。</li>
-<li><strong>奖励函数永远不完整</strong>：能够被测量的指标只是目标的一部分，必须持续检查奖励黑客、分布漂移和意外副作用。</li>
-<li><strong>自动转写含不确定术语</strong>：逐字稿中的部分模型名、公司名和基准名识别不稳定；本文只保留上下文足以支持的核心含义。</li>
-<li><strong>时效信息需按录制时点理解</strong>：模型版本、基准排名、成本和行业趋势都可能在发布后快速变化。</li>
-</ol>
-<h2 id="_16">时间戳导航</h2>
-<ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=36" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:36]">[00:00:36]</a> Lin Qiao 自我介绍与后训练主题</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=90" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:30]">[00:01:30]</a> AI 开发压缩人力、时间与专业门槛</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a> 公司差异来自判断、品味与信念</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=243" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:03]">[00:04:03]</a> “智能源于数据”与专用数据的重要性</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=311" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:11]">[00:05:11]</a> 模型服务、A/B 测试和反馈闭环</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=331" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:31]">[00:05:31]</a> Prompt、RAG、SFT、偏好与 RL 的演进路径</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=502" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:22]">[00:08:22]</a> 按问题类型选择训练方法</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=610" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:10]">[00:10:10]</a> 数据质量优先及产品团队的责任</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=669" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:09]">[00:11:09]</a> 把主观判断转化为系统评测</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=733" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:13]">[00:12:13]</a> 零行代码与奖励黑客案例</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=781" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:01]">[00:13:01]</a> 训练结果必须接受产品指标检验</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=858" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:18]">[00:14:18]</a> Cursor 等专用模型案例</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1128" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:48]">[00:18:48]</a> 三类后训练使用者</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1218" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:18]">[00:20:18]</a> PMF 后专用模型可能大量出现</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1399" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:19]">[00:23:19]</a> 奖励是代码与多维评分规则</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1545" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:25:45]">[00:25:45]</a> PMF 与规模化是两个阶段</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1629" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:27:09]">[00:27:09]</a> 后训练保护差异化能力</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Hwgj6GEok/?t=1680" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:28:00]">[00:28:00]</a> 成本下降与规模经济</li>
-</ul>
-<h2 id="_17">复习与行动清单</h2>
-<ul>
-<li>[ ] 用一句话写清当前模型最重要的产品缺口。</li>
-<li>[ ] 判断缺口属于动态事实、格式行为、产品品味、可评分能力或推理成本。</li>
-<li>[ ] 从真实生产流量中收集成功、失败、修正和放弃样本。</li>
-<li>[ ] 由产品人员与领域专家共同筛选高质量样本。</li>
-<li>[ ] 在训练前建立基线评测、发布门槛与安全底线。</li>
-<li>[ ] 把“感觉好”拆成多维评分 rubric。</li>
-<li>[ ] 检查每个奖励是否存在投机取巧路径。</li>
-<li>[ ] 从最轻的方法开始实验，保留清晰对照组。</li>
-<li>[ ] 验证训练环境与服务环境的一致性。</li>
-<li>[ ] 将离线分数与真实产品指标连接起来。</li>
-<li>[ ] 达到 PMF 后，同时评估差异化价值和单位经济性。</li>
-<li>[ ] 让每次线上交互继续产生下一轮可训练的数据与奖励信号。</li>
-</ul></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_11">复习时保留这两个判断</h2>
+<p>如果模型的答案不好，先说明它具体缺了什么，再说准备采用哪项技术。能够把“缺少动态事实”和“拿到资料却没有按要求回答”分开，就已经避免了不少无效尝试。</p>
+<p>如果一个奖励指标越来越好，再问用户真正要的结果有没有同时变好。零行代码没有编译错误，却没有完成编程任务。把这两个结果分开看，是理解评测与奖励设计的一条重要线索。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "260812-后训练：如何保持你的独特品味", "duration": "28:28", "src": "", "poster": "../assets/frames/BV1Hwgj6GEok-00533.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

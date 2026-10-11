@@ -1,136 +1,324 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>这才是UI设计该有的“呼吸感” · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI 的“呼吸感”在哪里：沿着六个界面看空间、主次和状态 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ui">UI 的“呼吸感”在哪里：沿着六个界面看空间、主次和状态</h1>
+    <div class="meta"><span>UXUI良制品</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV15LKH6PETX/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#ui">这才是UI设计该有的“呼吸感”</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">时间戳导航</a></li>
-<li><a href="#_3">核心问题与推理主线</a></li>
-<li><a href="#1">1. 先给主任务足够大的舞台</a></li>
-<li><a href="#2">2. 让组件之间保留可识别的边界</a></li>
-<li><a href="#3">3. 临时界面出现时，保留上下文并建立焦点</a></li>
-<li><a href="#4">4. 用状态样式表达交互，不靠堆叠说明文字</a></li>
-<li><a href="#5">5. 信息密集页面依靠分区和行距保持从容</a></li>
-<li><a href="#6">6. 淡化非当前内容，让页面具备景深</a></li>
-<li><a href="#_4">具体案例与画面细节</a></li>
-<li><a href="#_5">边界、疑点与时效性</a></li>
-<li><a href="#_6">复习与行动清单</a></li>
+<li><a href="#ui">UI 的“呼吸感”在哪里：沿着六个界面看空间、主次和状态</a><ul>
+<li><a href="#_1">视频会诊：先让人看清正在交谈的对象</a></li>
+<li><a href="#ai">AI 助手：把“选一种功能”与“输入请求”分开</a></li>
+<li><a href="#_2">两张图表卡片：每个问题先拥有自己的区域</a></li>
+<li><a href="#_3">表单协作：边框、光标和名字各自回答一个问题</a></li>
+<li><a href="#_4">表格：信息多的时候，用稳定的排列帮助阅读</a></li>
+<li><a href="#_5">地图：背景保留地理关系，标记承担关注点</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV15LKH6PETX" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>补充 · 既有学习稿</span></div><article data-lesson="BV15LKH6PETX"><h1 id="ui">这才是UI设计该有的“呼吸感”</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV15LKH6PETX.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV15LKH6PETX" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV15LKH6PETX-00004.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV15LKH6PETX&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV15LKH6PETX/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV15LKH6PETX"><h1>UI 的“呼吸感”在哪里：沿着六个界面看空间、主次和状态</h1>
 <blockquote>
-<p><strong>上传者</strong>：UXUI良制品<br>
-<strong>时长</strong>：01:37<br>
-<strong>视频链接</strong>：https://www.bilibili.com/video/BV15LKH6PETX/<br>
-<strong>视频 ID</strong>：BV15LKH6PETX<br>
-<strong>总结强度</strong>：standard<br>
-<strong>证据来源</strong>：10 张时间戳画面；元数据显示未检测到语音。以下内容以画面观察为依据，关于设计意图与交互效果的部分均作谨慎推断。画面采样间隔约 10 秒，不能据此还原每一段完整动效。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV15LKH6PETX/">这才是UI设计该有的“呼吸感”</a><br>
+UP 主：UXUI良制品 · 时长：1 分 37 秒 · 阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>这组 UI 案例共同呈现出一种“呼吸感”：让内容拥有足够的留白、层级间有明确距离、状态变化获得独立舞台，并借由柔和的光影、圆角和渐隐来减轻界面的压迫感。</p>
-<h2 id="_2">时间戳导航</h2>
+<p>有些界面放了不少东西，看起来却很从容；另一些界面功能不多，仍然让人觉得拥挤。仔细看，差别往往出现在内容之间：哪些东西被放在一起，哪些东西需要拉开距离，哪个对象应该先被注意到，以及正在操作的位置是否足够清楚。</p>
+<p>我们可以把“呼吸感”理解为观察这些关系的一种说法。它与空白有关，也与主次、边界和强调方式有关。下面沿着几个具体界面来看：每张画面中，内容怎样安排，我们的视线又可以怎样顺着这些安排移动。</p>
+<h2 id="_1">视频会诊：先让人看清正在交谈的对象</h2>
+<p>第一张界面把医生的视频放在中心，几乎占据整个工作区域。顶部仍然有 Dashboard、Patients、Appointments 等导航，底部也有通话控制，但这些按钮都靠近画面边缘，自身面积很小。左下角的另一个通话画面同样保持较小尺寸，没有把主画面分割成许多等大的区域。<button type="button" class="timecode" data-seconds="4">[00:00:04]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00004.jpg" data-caption="交谈对象占据主要面积，顶部导航、底部工具和左下角小窗围绕主画面安排。">
+    <img src="../assets/frames/BV15LKH6PETX-00004.jpg" loading="lazy" alt="视频截图 01，00:00:04：交谈对象占据主要面积，顶部导航、底部工具和左下角小窗围绕主画面安排。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="4.000">图 01 · 00:00:04</button><span>交谈对象占据主要面积，顶部导航、底部工具和左下角小窗围绕主画面安排。</span></figcaption>
+</figure>
+<p>这种安排先交代了当前任务：我们正在与一个人交谈。其他功能依然可以找到，却没有要求用户先阅读一整屏工具再开始交流。主画面与辅助控件之间的面积差别，已经表达了一部分优先顺序。</p>
+<p>也要留意，轻盈外观有自己的取舍。部分控件用了半透明背景，视觉上不容易把画面切碎，但视频背景会变化，按钮文字的辨认仍然重要。把工具放轻一些，可以减少干扰；工具本身也需要保持可发现、可识别。这里值得学习的是怎样分配注意力，不能仅仅照搬透明效果。</p>
+<h2 id="ai">AI 助手：把“选一种功能”与“输入请求”分开</h2>
+<p>AI Assistant 面板里有四张功能卡片，分别对应写作、销售分析、欺诈识别和广告分析。它们按照两列排列，每张卡片都有图标、名称和周围空间。下方另有一条输入框，附件、语音和发送入口也都在这条区域里。<button type="button" class="timecode" data-seconds="14">[00:00:14]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00014.jpg" data-caption="四个预设功能与下方输入区域分组排列，Sales Insight 卡片和输入框通过蓝色轮廓显示当前状态。">
+    <img src="../assets/frames/BV15LKH6PETX-00014.jpg" loading="lazy" alt="视频截图 02，00:00:14：四个预设功能与下方输入区域分组排列，Sales Insight 卡片和输入框通过蓝色轮廓显示当前状态。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="14.000">图 02 · 00:00:14</button><span>四个预设功能与下方输入区域分组排列，Sales Insight 卡片和输入框通过蓝色轮廓显示当前状态。</span></figcaption>
+</figure>
+<p>我们可以先看功能名称，知道助手能帮忙处理哪一类事情；也可以把视线移到下面，直接输入请求。卡片之间的间隔帮助我们分辨四个入口，卡片组与输入框的距离又把两类操作分开。空白因此有了具体作用：它在告诉我们哪些东西属于一组，哪一部分是接下来输入的地方。</p>
+<p>蓝色也有明确对象。选中的 Sales Insight 卡片出现蓝色轮廓，输入框沿边缘使用同类强调，发送按钮则是一块实色。其他卡片保持较安静的边界。读者可以沿着这些变化判断当前关注位置，无需给每个控件都加一行状态说明。</p>
+<h2 id="_2">两张图表卡片：每个问题先拥有自己的区域</h2>
+<p>另一张画面把 Visitors by Device 与 Trend Analysis 并排放置。左侧用环形图表达组成关系，右侧用一条曲线表达变化趋势。两张卡片的标题都在上方，图形位于下面，卡片之间有明显间隔。<button type="button" class="timecode" data-seconds="24">[00:00:24]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00024.jpg" data-caption="组成与趋势被放在两张独立卡片中，标题、图形和卡片边缘之间都保留了空间。">
+    <img src="../assets/frames/BV15LKH6PETX-00024.jpg" loading="lazy" alt="视频截图 03，00:00:24：组成与趋势被放在两张独立卡片中，标题、图形和卡片边缘之间都保留了空间。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="24.000">图 03 · 00:00:24</button><span>组成与趋势被放在两张独立卡片中，标题、图形和卡片边缘之间都保留了空间。</span></figcaption>
+</figure>
+<p>我们不用在同一个图形里同时寻找所有答案。想看组成，就看左边；想看趋势，就看右边。标题与图形相互靠近，让人知道这个图在回答哪个问题；两张卡片之间更大的距离，则提醒我们这是两个可以分别阅读的对象。圆角和浅背景让外观柔和，分组关系让内容容易辨认。</p>
+<p>不过，这张画面适合观察图形布局，不能据此精确解释业务数据。右侧曲线没有完整坐标刻度，左侧也缺少逐项类别说明。页面要承担实际分析任务时，需要根据问题补上单位、时间范围或图例。空白应当帮助阅读已有信息，关键含义仍然要表达清楚。</p>
+<h2 id="_3">表单协作：边框、光标和名字各自回答一个问题</h2>
+<p>表单例子里，上方是 Company name 文本框，下方是 Category 下拉选择。输入框中有文字光标，下拉列表已经展开，其中一项带有浅色底纹。两个带名字的彩色指针分别出现在不同区域，让人看到协作者所在的位置。<button type="button" class="timecode" data-seconds="43">[00:00:43]</button></p>
+<figure class="evidence-figure" id="evidence-frame-04">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00043.jpg" data-caption="文本框、展开的分类列表和具名指针共同呈现编辑位置，颜色与轮廓帮助区分不同对象。">
+    <img src="../assets/frames/BV15LKH6PETX-00043.jpg" loading="lazy" alt="视频截图 04，00:00:43：文本框、展开的分类列表和具名指针共同呈现编辑位置，颜色与轮廓帮助区分不同对象。">
+    <span class="frame-stamp">视频画面 / 04</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="43.000">图 04 · 00:00:43</button><span>文本框、展开的分类列表和具名指针共同呈现编辑位置，颜色与轮廓帮助区分不同对象。</span></figcaption>
+</figure>
+<p>这里同时出现了几类信息：字段是什么、哪里可以输入、有哪些选项、别人正在看哪里。这些信息就放在相应对象附近。文字光标靠近输入内容，下拉项留在分类字段下方，名字跟着指针走，读者可以就近理解各个信号。</p>
+<p>“空间够用”在这种界面里尤其具体。选项需要有自己的行，协作者标签需要容得下名字，焦点边框也要与相邻对象分开。如果各种状态都挤在一起，我们就要先辨认哪些标记属于哪个控件。保留适当距离，能让这些关系在画面上直接成立。</p>
+<h2 id="_4">表格：信息多的时候，用稳定的排列帮助阅读</h2>
+<p>理赔记录表格的局部包含项目说明、日期、金额和状态等内容。项目沿着固定列排列，每一行都有相近高度，浅色分隔线把相邻记录区分开。阅读者可以先找到某一行，再沿着那一行查看其他字段，也可以沿状态列向下比较。<button type="button" class="timecode" data-seconds="63">[00:01:03]</button></p>
+<figure class="evidence-figure" id="evidence-frame-05">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00063.jpg" data-caption="固定列与清楚行距组织多条记录，Pending、Paid、Denied 同时使用文字与不同颜色表达状态。">
+    <img src="../assets/frames/BV15LKH6PETX-00063.jpg" loading="lazy" alt="视频截图 05，00:01:03：固定列与清楚行距组织多条记录，Pending、Paid、Denied 同时使用文字与不同颜色表达状态。">
+    <span class="frame-stamp">视频画面 / 05</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="63.000">图 05 · 00:01:03</button><span>固定列与清楚行距组织多条记录，Pending、Paid、Denied 同时使用文字与不同颜色表达状态。</span></figcaption>
+</figure>
+<p>黄色 Pending、绿色 Paid、红色 Denied 帮助我们快速注意到状态差异，文字则说明颜色所代表的含义。图标与分隔线也在提供线索，但它们没有使用同样强的对比。强调因此保留了主次：先让需要辨别的状态醒目，其他结构帮助把记录排清楚。</p>
+<p>这个例子说明，信息量较大时仍然可以有从容的阅读节奏。表格无需把每条内容拆成巨大卡片，稳定的行列本身就能提供秩序。我们可以观察行距是否足够、同类字段是否对齐、颜色是否有具体含义，再决定还有哪里需要调整。</p>
+<h2 id="_5">地图：背景保留地理关系，标记承担关注点</h2>
+<p>最后一张地图页面使用很浅的蓝色描绘世界地图，在少量位置放上颜色更深的圆形数值标记。标题和简短说明位于上方，地图提供位置背景，数值点成为更醒目的阅读对象。<button type="button" class="timecode" data-seconds="92">[00:01:32]</button></p>
+<figure class="evidence-figure" id="evidence-frame-06">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15LKH6PETX-00092.jpg" data-caption="浅蓝地图保留地理轮廓，较深的数值标记在宽松分布中成为视觉重点。">
+    <img src="../assets/frames/BV15LKH6PETX-00092.jpg" loading="lazy" alt="视频截图 06，00:01:32：浅蓝地图保留地理轮廓，较深的数值标记在宽松分布中成为视觉重点。">
+    <span class="frame-stamp">视频画面 / 06</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="92.000">图 06 · 00:01:32</button><span>浅蓝地图保留地理轮廓，较深的数值标记在宽松分布中成为视觉重点。</span></figcaption>
+</figure>
+<p>背景与标记的对比很容易看出来。我们需要地图帮助理解位置，却不需要每条地理细节都同样醒目。降低底图的视觉重量，把强调留给标记，能够让两者各自承担任务。标记之间也保留了距离，没有在同一块区域里互相遮挡。</p>
+<p>圆点突出之后，数值的含义也需要清楚。地理位置能够告诉我们“在哪里”，数字究竟统计什么、采用哪个时间范围，还需要相应的文字说明。视觉强调让数据容易被注意到，内容说明让数据能够被正确理解。</p>
+<h2 id="_6">总结提炼</h2>
+<p>这几个界面提供了一条直观的观察路径：先找主任务，再看内容如何分组，接着看当前状态如何被强调。空白、边框、颜色与位置共同表达这些关系。它们的作用可以在具体对象之间看出来。</p>
+<table>
+<thead>
+<tr>
+<th>观察对象</th>
+<th>可以留意的具体关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视频会诊</td>
+<td>主画面与辅助操作的面积差别</td>
+</tr>
+<tr>
+<td>AI 助手</td>
+<td>预设功能组与自由输入区域的距离</td>
+</tr>
+<tr>
+<td>图表卡片</td>
+<td>每个标题与对应图形的归属</td>
+</tr>
+<tr>
+<td>协作表单</td>
+<td>字段、选项、光标和协作者位置</td>
+</tr>
+<tr>
+<td>多行表格</td>
+<td>行列秩序与有限的状态强调</td>
+</tr>
+<tr>
+<td>地图页面</td>
+<td>位置背景与数值标记的对比</td>
+</tr>
+</tbody>
+</table>
+<p>外观舒适与使用清楚需要一起考虑。浅色、透明和简化图形能够减轻画面重量，必要文字、数据含义和操作状态仍然应该容易辨认。把这个平衡放回实际任务中，才容易判断一块空白或一种强调到底有没有帮助。</p>
+<h2 id="_7">时间导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:04]">[00:00:04]</a> 医疗视频会诊界面：大画面承载主任务，控件退到边缘。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=14" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:14]">[00:00:14]</a> AI Assistant：卡片栅格与输入框分层。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=24" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:24]">[00:00:24]</a> 数据概览：两个图表卡片之间留出明显呼吸区。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a> 移动端日历：弹层覆盖后仍保留任务上下文。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a> 表单选择：焦点描边、下拉面板与协作指针同时出现。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 健康保险仪表盘：模块被大块留白组织为清晰区域。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=63" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:03]">[00:01:03]</a> 表格局部：行高、分隔线与状态色承担阅读秩序。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=72" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:12]">[00:01:12]</a> 明细页：大面积淡化背景，强调当前导航状态。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=82" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:22]">[00:01:22]</a> 融资结构图：中心图形周围保留宽阔空域。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=92" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:32]">[00:01:32]</a> 地图展示：信息点稀疏分布，避免地图沦为噪声背景。</li>
+<li><button type="button" class="timecode" data-seconds="4">[00:00:04]</button> 视频会诊中的主画面与边缘控件。</li>
+<li><button type="button" class="timecode" data-seconds="14">[00:00:14]</button> AI 助手的功能卡片与输入区域。</li>
+<li><button type="button" class="timecode" data-seconds="24">[00:00:24]</button> 两张独立图表卡片。</li>
+<li><button type="button" class="timecode" data-seconds="43">[00:00:43]</button> 输入、下拉选择与协作者指针。</li>
+<li><button type="button" class="timecode" data-seconds="63">[00:01:03]</button> 表格的行列与状态色。</li>
+<li><button type="button" class="timecode" data-seconds="92">[00:01:32]</button> 地图背景与数值标记。</li>
 </ul>
-<h2 id="_3">核心问题与推理主线</h2>
-<p>从画面序列可观察到，视频并未将“呼吸感”收窄为单一的留白技巧。它呈现的是一套组合关系：</p>
-
-<code class="language-text">空间留白
-  + 清晰主次
-  + 低干扰的容器与边界
-  + 对状态变化的聚焦
-  = 更从容的视觉节奏
-</code>
-<p>这里的关键在于：留白本身不直接等于舒适。留白需要服务于任务层级。主任务要有足够大的视觉面积；次级操作要靠近相关对象；临时状态要出现得明确，同时避免把原有上下文完全抹去。</p>
-<h2 id="1">1. 先给主任务足够大的舞台</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=4" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:04]">[00:00:04]</a> 的远程医疗界面把医生的视频画面放在中央，占据绝大部分窗口。顶部导航、右上角操作、底部通话工具条均以较小尺寸贴近边缘。画面中的背景和控件使用半透明、低对比处理，视觉注意力自然集中到人物脸部这一主任务上。</p>
-<p>可见事实：导航项、录制入口、通知与头像都存在，但它们不与视频主体争夺面积。<br>
-谨慎推断：这是一种以空间比例建立优先级的方式；用户首先能理解“正在会诊”，再处理工具与设置。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_001_00-00-04.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_001_00-00-04.jpg" alt="图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。" loading="lazy"></a><figcaption>图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。</figcaption></figure>
-<p><em>图 01 · 00:00:04：中央视频画面占据主要面积，导航和通话工具以半透明小控件退到窗口边缘。</em></p>
-<p>这也提示一个实用判断：当页面只有一个明确核心任务时，优先扩大任务对象，避免为了“信息齐全”把所有能力放到同一视觉权重上。</p>
-<h2 id="2">2. 让组件之间保留可识别的边界</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=14" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:14]">[00:00:14]</a> 的 AI Assistant 将四个功能入口置于两列卡片中，下方另设一条独立的输入区域。功能卡片内部有大号图标、简短名称和充裕内边距；输入框以蓝色描边突出当前焦点，附件、语音和发送按钮沿右侧排列。</p>
-<p>可见事实：功能选择区和输入区之间有明确纵向间隔，控件未彼此贴紧。<br>
-谨慎推断：这种分组有助于用户区分“选择预设能力”和“直接输入请求”两类动作。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_002_00-00-14.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_002_00-00-14.jpg" alt="图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。" loading="lazy"></a><figcaption>图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。</figcaption></figure>
-<p><em>图 02 · 00:00:14：四张功能卡片与下方输入框分成两层，焦点输入框用蓝色轮廓独立突出。</em></p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=24" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:24]">[00:00:24]</a> 的数据卡片进一步说明，呼吸感不需要依赖巨大页面。两个并列卡片各自拥有标题、角标图标与图形主体；图表周围留出空白，尤其环形图的中心保持干净，折线图也未塞入密集坐标和标签。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_003_00-00-24.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_003_00-00-24.jpg" alt="图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。" loading="lazy"></a><figcaption>图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。</figcaption></figure>
-<p><em>图 03 · 00:00:24：两个数据卡片之间留有宽间距，图形周围保留空白，标题与图表形成清楚层次。</em></p>
-<p>可复用的检查方式：</p>
-<ul>
-<li>同一组组件内部距离应稳定。</li>
-<li>两个不同模块之间的距离，应大于模块内部元素的距离。</li>
-<li>图表、按钮和输入框要有可感知的“安全边界”，避免视觉元素贴着容器边缘。</li>
-</ul>
-<h2 id="3">3. 临时界面出现时，保留上下文并建立焦点</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a> 展示一个移动端“Room cleaning”任务编辑界面。日期选择器位于页面中部，以浮层形式覆盖原表单；背景字段仍可隐约识别。右侧还展示了独立日历弹窗与协作者列表，左侧是提醒时间和任务分类面板。</p>
-<p>可见事实：日历弹层使用白色面板、圆角、阴影和浅色背景遮罩；当前选中的“18”以蓝色圆形强调。<br>
-谨慎推断：画面意在表达一种渐进式操作状态——用户正在处理日期，却仍能感知它属于当前任务编辑流程。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_004_00-00-34.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_004_00-00-34.jpg" alt="图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。" loading="lazy"></a><figcaption>图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。</figcaption></figure>
-<p><em>图 04 · 00:00:34：日期选择器以居中浮层覆盖任务表单，背景字段仍隐约可见，已选日期以蓝色圆点标识。</em></p>
-<p>这种做法的重点是“焦点转移”：弹层需要足够醒目，让用户知道当前该操作哪里；背景信息仍应保留适量可见性，帮助用户理解自己从哪里进入、操作完成后会回到哪里。</p>
-<h2 id="4">4. 用状态样式表达交互，不靠堆叠说明文字</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=43" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:43]">[00:00:43]</a> 的表单画面同时呈现文本输入、下拉选择、多人协作。上方“Company name”输入框有深蓝焦点描边和文本光标；下方“Category”下拉框以青色描边显示激活状态；下拉列表中，“Marketing”所在行有灰色悬停底色。右侧出现带名字的协作指针标签。</p>
-<p>可见事实：不同状态以边框颜色、行底色、光标和指针标记区分。<br>
-谨慎推断：界面将“正在编辑”“当前焦点”“候选项悬停”“另一位协作者的位置”拆成可迅速扫读的视觉信号。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_005_00-00-43.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_005_00-00-43.jpg" alt="图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。" loading="lazy"></a><figcaption>图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。</figcaption></figure>
-<p><em>图 05 · 00:00:43：输入焦点、下拉展开、悬停选项和协作指针同时以不同轮廓与颜色呈现。</em></p>
-<p>值得注意的是，状态反馈也需要“呼吸空间”。焦点描边、标签和悬停底色各占一个明确层次；若同时出现过多强色边框、动效与提示气泡，用户反而难以判断当前真正需要回应的状态。</p>
-<h2 id="5">5. 信息密集页面依靠分区和行距保持从容</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=53" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:53]">[00:00:53]</a> 的保险仪表盘包含会员信息、计划卡片、累计金额图、筛选器与理赔表格，信息量明显增大。画面仍通过大块区域切分：顶部导航独立成深色横栏；“Active Plans”作为一组横向卡片；下方再分为左侧统计和右侧理赔明细。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_006_00-00-53.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_006_00-00-53.jpg" alt="图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。" loading="lazy"></a><figcaption>图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。</figcaption></figure>
-<p><em>图 06 · 00:00:53：仪表盘以顶部导航、计划卡片、累计图和理赔表格分区组织，模块之间保留大面积空白。</em></p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=63" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:03]">[00:01:03]</a> 放大到表格局部后，能看到每一行拥有较充足高度，图标、理赔名称、日期、金额、状态与操作按钮沿固定列排列。浅色分隔线存在，但对比度较低；“Pending”“Paid”“Denied”使用黄、绿、红显示差异。</p>
-<p>可见事实：表格用对齐、行距、细分隔线和有限状态色建立秩序。<br>
-谨慎推断：在高密度信息中，呼吸感来自稳定的节奏与克制的强调，未必来自把信息删到很少。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_007_00-01-03.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_007_00-01-03.jpg" alt="图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。" loading="lazy"></a><figcaption>图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。</figcaption></figure>
-<p><em>图 07 · 00:01:03：表格通过较高行距、固定列对齐、浅色分隔线和少量状态色维持可读节奏。</em></p>
-<h2 id="6">6. 淡化非当前内容，让页面具备景深</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=72" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:12]">[00:01:12]</a> 的保险明细页中，顶部“Eligibility”导航项被圆形高亮强调；页面主体整体呈浅淡状态，仍可辨认个人资料、筛选控件和理赔记录。基于单帧画面，无法确认这是否为实际转场中的渐隐阶段，或是视频后期叠加的展示效果。</p>
-<p>可见事实：当前导航有更高对比和清晰边界，其他区域明显更淡。<br>
-谨慎推断：这种对比构成了“前景—背景”的景深关系，可用于引导注意力进入当前步骤。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_008_00-01-12.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_008_00-01-12.jpg" alt="图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。" loading="lazy"></a><figcaption>图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。</figcaption></figure>
-<p><em>图 08 · 00:01:12：顶部 Eligibility 处于高亮状态，页面主体被显著淡化，形成前景与背景的层级关系。</em></p>
-<p>在实际设计中，应谨慎使用大范围模糊或降低对比：若背景内容仍需阅读或操作，过度淡化会损害可用性。适合降低背景权重的场景包括弹层、引导、焦点切换与过渡状态。</p>
-<h2 id="_4">具体案例与画面细节</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=82" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:22]">[00:01:22]</a> 的“Funding Structure”页面使用非常宽松的构图：标题位于上方中央，环形图置于页面中部，彩色环段与说明线散布在外围，中心和四周都留有大量白色空间。窗口外层的蓝紫渐变背景与内层白色内容面形成明确分层。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_009_00-01-22.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_009_00-01-22.jpg" alt="图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。" loading="lazy"></a><figcaption>图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。</figcaption></figure>
-<p><em>图 09 · 00:01:22：环形融资结构图置于宽阔白色画布中央，标题、引线和色块之间都保留大量空域。</em></p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV15LKH6PETX/?t=92" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:32]">[00:01:32]</a> 的“Testimonials”地图页面同样使用低密度分布。标题、说明文字和浅蓝世界地图占据背景，少数蓝色圆点标记承载数值；标记彼此相距较远，地图轮廓也使用很淡的蓝色。</p>
-<p>可见事实：地图作为承载层，数值节点被控制在少量且明显的位置。<br>
-谨慎推断：通过降低底图存在感、限制标记数量和保留空白，信息点更容易成为视觉焦点。</p>
-<figure><a href="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_010_00-01-32.jpg" target="_blank" rel="noopener"><img src="../../../notes/UXUI%E8%89%AF%E5%88%B6%E5%93%81/%E8%BF%99%E6%89%8D%E6%98%AFUI%E8%AE%BE%E8%AE%A1%E8%AF%A5%E6%9C%89%E7%9A%84%E2%80%9C%E5%91%BC%E5%90%B8%E6%84%9F%E2%80%9D__BV15LKH6PETX/assets/standard/frame_010_00-01-32.jpg" alt="图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。" loading="lazy"></a><figcaption>图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。</figcaption></figure>
-<p><em>图 10 · 00:01:32：浅蓝世界地图作为低对比背景，少量蓝色数值点稀疏分布，焦点集中在数据标记上。</em></p>
-<h2 id="_5">边界、疑点与时效性</h2>
-<ul>
-<li>该视频未检测到语音字幕，因此无法确认作者对“呼吸感”的原始定义、评价标准或具体设计规则。</li>
-<li>画面仅为 10 个时间点采样。可观察到静态 UI 状态与构图，不能确认任意两个画面之间的真实动效曲线、时长、触发条件或完整操作路径。</li>
-<li>多个案例带有视频水印和展示性背景，部分淡化、模糊、倾斜及渐变效果可能属于视频呈现方式，未必是产品界面的原生交互效果。</li>
-<li>文中关于“帮助理解”“引导注意力”等表述是基于画面结构的谨慎设计推断，不构成用户测试结论。</li>
-</ul>
-<h2 id="_6">复习与行动清单</h2>
-<ul>
-<li>[ ] 先写下每个页面唯一的主任务，确认它是否拥有最大的视觉面积。</li>
-<li>[ ] 检查模块间距是否大于模块内部间距，避免所有元素等距挤在一起。</li>
-<li>[ ] 为输入、悬停、选中、禁用和协作状态分配清晰且数量受控的视觉信号。</li>
-<li>[ ] 设计弹层时，确认焦点内容突出，同时仍保留足够的来源上下文。</li>
-<li>[ ] 审视表格和数据图：行高、对齐、图表空白与状态色能否建立稳定节奏。</li>
-<li>[ ] 对大面积模糊、淡化和渐变做可读性检查，尤其关注文字对比度与操作可达性。</li>
-<li>[ ] 复看问题：页面中的每一块留白，究竟在服务层级、分组、聚焦，还是只是在填补空缺？</li>
-</ul></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_8">回看时的三个问题</h2>
+<p>看一个页面时，你首先注意到哪个对象？这个对象是否与页面当前的主要任务有关？</p>
+<p>在 AI 助手和表格两个例子中，内容的数量与排列方式有什么不同？它们分别依靠什么让你分清对象？</p>
+<p>哪些细节减轻了画面重量，哪些细节保留了必要含义？如果继续减少文字或对比，最先可能影响哪一项使用需求？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "这才是UI设计该有的“呼吸感”", "duration": "01:37", "src": "", "poster": "../assets/frames/BV15LKH6PETX-00004.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

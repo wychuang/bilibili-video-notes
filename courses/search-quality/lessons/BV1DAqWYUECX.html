@@ -1,46 +1,318 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>对话负责商量，工作区负责交付 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>对话负责商量，工作区负责修改：AI 产品为什么走向同一种界面 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">对话负责商量，工作区负责修改：AI 产品为什么走向同一种界面</h1>
+    <div class="meta"><span>左右横眺</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1DAqWYUECX/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">对话负责商量，工作区负责交付</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">聊完之后，还剩多少活？</a></li>
-<li><a href="#_4">信息放在哪里，会改变我怎样思考</a></li>
-<li><a href="#ai">AI 放进旧流程，也需要让人看见变化</a></li>
-<li><a href="#_5">迁移练习：改一份回答的交付方式</a></li>
+<li><a href="#ai">对话负责商量，工作区负责修改：AI 产品为什么走向同一种界面</a><ul>
+<li><a href="#_1">从执行代码，到把生成结果放在眼前</a></li>
+<li><a href="#_2">看得见以后，还需要改得准</a></li>
+<li><a href="#cursor">Cursor 为什么也可以被拿来写文章</a></li>
+<li><a href="#ai_1">笔记里的 AI，多了一份已经积累的背景</a></li>
+<li><a href="#_3">如果思路会分叉，画布可以怎样帮助我们</a></li>
+<li><a href="#_4">侧栏助手也在回答同一个问题</a></li>
+<li><a href="#ai_2">从模型长出产品，与给已有产品加入 AI</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">时间导航</a></li>
+<li><a href="#_7">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1DAqWYUECX" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>拓展 · 视频学习笔记</span></div><article data-lesson="BV1DAqWYUECX"><div class="provenance">来源：左右横眺 · <a href="https://www.bilibili.com/video/BV1DAqWYUECX/" target="_blank" rel="noopener">BV1DAqWYUECX 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">对话负责商量，工作区负责交付</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1DAqWYUECX.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1DAqWYUECX" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1DAqWYUECX-00135.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1DAqWYUECX&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1DAqWYUECX/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1DAqWYUECX"><h1>对话负责商量，工作区负责修改：AI 产品为什么走向同一种界面</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1DAqWYUECX/">左右横眺｜AI 产品形态交汇的背后：Artifacts, Canvas, Cursor…</a>；全片约 13 分钟。以下按视频录制时的产品形态讨论，旧版功能限制不代表当前状态。</p>
+<p>来源：AI 产品形态交汇的背后：Artifacts, Canvas, Cursor…【趋势总结 1】<br>
+UP 主：左右横眺 · 12 分 56 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1DAqWYUECX/</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>当任务需要反复修改一个东西时，把最终产物留在稳定的工作区里，比让用户在聊天记录中不断翻找更顺手。</p>
-<h2 id="_3">聊完之后，还剩多少活？</h2>
-<p>我让 AI 写一封邮件，它给出一整段文字。我想改第二段，又得到一封新邮件。几轮下来，哪个版本最好？哪些句子已经确认？最后还要复制到邮件软件，重新整理格式。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a></p>
-<p>这里的成本是“从得到回答，到真正完成任务”之间的距离。视频把几个产品放在一起比较，看的正是它们怎样缩短这段距离。</p>
-<p>Artifacts 把聊天和生成结果分开：一边讨论，一边看网页或文档。Canvas 把文档放到中心，允许围绕局部内容修改。Cursor 将模型放进编辑器，文件、选中代码与修改位置天然提供了上下文。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=170" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:50]">[00:02:50]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:00]">[00:04:00]</a></p>
-<p>这些界面最有用的共同点，是让我清楚地知道：<strong>我现在在改什么，改到了哪里，接下来该确认什么。</strong></p>
-<h2 id="_4">信息放在哪里，会改变我怎样思考</h2>
-<p>同样有一个输入框，实际任务可以相差很远。已有笔记提供个人背景；围绕原始资料提问，重点是查证与学习；可编辑的画布，重点是修改与交付。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=320" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:20]">[00:05:20]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=370" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:10]">[00:06:10]</a></p>
-<p>无限画布又提供另一种结构：一个问题可以长出几条分支，各自展开，再回头比较。视频用 Flowith 的节点式界面展示这类探索方式。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=435" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:15]">[00:07:15]</a></p>
-<p>因此，选择界面前可以先问自己：我是在查一个答案，打磨同一份作品，还是比较几条路线？任务不同，合适的组织方式也不同。把所有任务都塞进一条长聊天，会让上下文和版本越来越难追踪。</p>
-<h2 id="ai">AI 放进旧流程，也需要让人看见变化</h2>
-<p>视频后半段讨论侧栏助手以及在既有软件中加入 AI。现有文件、操作习惯和业务入口都有价值，用户无须为一次生成迁移整个工作过程。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=540" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:00]">[00:09:00]</a></p>
-<p>但“已有产品加一个按钮”只是开始。以下是我用于产品分析的补充判断：</p>
+<p>我们在聊天窗口里让 AI 写一段内容，拿到结果以后，工作往往还没有完成。文章要复制进文档，代码要移到编辑器，图表要放进报告。发现某一处不满意，再回到聊天窗口解释修改要求，等新结果出来，又要判断哪些部分变了、哪些内容需要重新搬过去。AI 已经帮我们生成了东西，使用它却仍然有不少来回。</p>
+<p>这段距离，是许多 AI 产品开始改变界面形态的原因。聊天很适合提出要求和讨论，但持续修改一份作品，还需要一个稳定的地方容纳它。Artifacts、Canvas、Cursor，以及一些笔记和画布产品，都在尝试让用户与 AI 围绕同一个对象合作。<button type="button" class="timecode" data-seconds="42">[00:00:42]</button></p>
+<p>这里讨论的是 2024 年末的产品形态。早期版本的具体功能与限制会继续变化，但它们面对的设计问题很清楚：用户正在改什么，AI 看到了哪些内容，修改结果怎样呈现，以及人在哪里继续接手。</p>
+<h2 id="_1">从执行代码，到把生成结果放在眼前</h2>
+<p>早期代码解释器提供了一类能力：把文件、代码和数据放进受限制的运行环境，让模型通过执行程序完成分析，并产出图表或其他结果。受限制的运行环境通常称为沙箱，它给程序提供可工作的空间，同时规定能够访问和操作的范围。<button type="button" class="timecode" data-seconds="85">[00:01:25]</button></p>
+<p>这个方向解决的是“模型提出的处理方法能否真正执行”。如果用户上传表格，模型可以写出分析代码并取得运行结果，用户不必自己复制代码到另一套环境里执行。不过，能够算出结果，与能够顺畅地继续编辑结果，又是不同的问题。</p>
+<p>Artifacts 突出了可视化预览。代码、文档、网页和 SVG 图形等产物，可以在独立区域中呈现。用户一边提出要求，一边看生成内容，不必总从聊天消息中辨认最终结果。SVG 是一种用形状与路径描述图像的格式，因此一份代码也可以直接对应可见的图形。<button type="button" class="timecode" data-seconds="110">[00:01:50]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1DAqWYUECX-00135.jpg" data-caption="左侧保留对话说明，右侧独立呈现像素风格的贝壳图形，生成结果从聊天消息中分离出来。">
+    <img src="../assets/frames/BV1DAqWYUECX-00135.jpg" loading="lazy" alt="视频截图 01，00:02:15：左侧保留对话说明，右侧独立呈现像素风格的贝壳图形，生成结果从聊天消息中分离出来。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="135.000">图 01 · 00:02:15</button><span>左侧保留对话说明，右侧独立呈现像素风格的贝壳图形，生成结果从聊天消息中分离出来。</span></figcaption>
+</figure>
+<p>这次分离很重要。对话记录的是协商过程，其中可能包含问题、解释和多次修改；工作区呈现的是当前产物。用户可以继续讨论，又不必把每一段讨论都当成作品的一部分。两种内容各有位置，注意力也更容易回到正在完成的东西上。</p>
+<h2 id="_2">看得见以后，还需要改得准</h2>
+<p>可视化预览让结果更直观，却不必然带来精确编辑。早期 Artifacts 的一种限制，是用户选中内容后仍要回到聊天里描述修改，无法像普通编辑器那样直接处理所有细节。AI 理解要求时如果扩大了修改范围，就可能连带改变用户已经满意的部分。<button type="button" class="timecode" data-seconds="175">[00:02:55]</button></p>
+<p>例如，一个人只想调整一小段文字，理想的操作是让这段文字成为明确的修改对象。若只能重新说“把刚才那段稍微改一下”，系统还要判断“刚才那段”指什么、“稍微”允许改多少。界面没有提供的定位信息，就需要用户在语言里补上。</p>
+<p>Canvas 进一步把文档或代码放到中心。聊天退到辅助位置，模型能力则通过选区和具体操作进入编辑过程。用户的关注点从“AI 下一条会回复什么”，转向“这份文档现在怎样了”。<button type="button" class="timecode" data-seconds="191">[00:03:11]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1DAqWYUECX-00200.jpg" data-caption="纵向工具栏把 Suggest edits 等能力做成可见入口，AI 功能开始围绕正在编辑的对象组织。">
+    <img src="../assets/frames/BV1DAqWYUECX-00200.jpg" loading="lazy" alt="视频截图 02，00:03:20：纵向工具栏把 Suggest edits 等能力做成可见入口，AI 功能开始围绕正在编辑的对象组织。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="200.000">图 02 · 00:03:20</button><span>纵向工具栏把 Suggest edits 等能力做成可见入口，AI 功能开始围绕正在编辑的对象组织。</span></figcaption>
+</figure>
+<p>但有按钮仍然不够。左右横眺指出，当时的一些修改操作缺少清楚的变化反馈：用户能看到内容在变，却未必知道具体改了多少。精确协作还需要让人理解修改范围和结果。预览、直接操作、执行环境、变化反馈，分别解决不同困难，不能用一个“有工作区”的标签概括全部体验。<button type="button" class="timecode" data-seconds="221">[00:03:41]</button></p>
+<h2 id="cursor">Cursor 为什么也可以被拿来写文章</h2>
+<p>Cursor 从另一个方向接近同一个问题。它首先是代码编辑器，文件、光标位置、选中的片段和项目目录，本来就有明确的组织方式。AI 进入其中以后，可以围绕当前代码进行补全、修改和解释，也可以在侧栏讨论思路。<button type="button" class="timecode" data-seconds="253">[00:04:13]</button></p>
+<p>这使上下文提供变得更自然。普通聊天需要用户把相关代码复制过去，再解释它来自哪里；编辑器已经知道当前打开哪个文件，也能让用户指定其他文件或文档作为参考。人仍然需要确认选中了正确资料，但交代背景的动作减少了。<button type="button" class="timecode" data-seconds="282">[00:04:42]</button></p>
+<p>为什么有人会用它写文章？因为一些基本操作是相通的。代码文件可以换成文字材料，续写与改写也需要知道当前位置和上下文；侧栏负责讨论，编辑器负责保留当前稿件。这个用途揭示了界面组织的可迁移性，并不意味着所有写作者都适合使用代码编辑器。<button type="button" class="timecode" data-seconds="310">[00:05:10]</button></p>
+<p>决定体验的，是作品与协作怎样安排。只要任务需要反复打磨同一份内容，固定的编辑区域、明确的选区和可以引用的材料，就可能有帮助。产品最初属于哪一个类别，并没有完全限定这些关系可以服务哪些工作。</p>
+<h2 id="ai_1">笔记里的 AI，多了一份已经积累的背景</h2>
+<p>笔记软件本来就保存了用户的文档、想法与知识。加入 AI 以后，问答、总结、翻译和改写这些功能看起来不新鲜，但它们可以直接利用已有材料。用户不必每次都重新介绍背景，也更容易把新产物放回原来的知识组织方式中。<button type="button" class="timecode" data-seconds="333">[00:05:33]</button></p>
+<p>Notion AI 的例子说明，功能价值不仅来自一次调用有多聪明，也来自调用发生在哪里。如果我们本来就在某份笔记里工作，能够就地处理相关内容，可能比切换到一个独立聊天网站更顺手。丰富的内容格式和组件，也为结果提供了更多承载方式。</p>
+<p>这里还要区别两类产品目标。NotebookLM 当时更强调围绕导入资料进行问答和内容转换，资料是需要阅读和引用的对象；腾讯 ima 则把搜索、知识库与可编辑笔记放在一起，更强调把外部资料与个人创作接起来。<button type="button" class="timecode" data-seconds="379">[00:06:19]</button></p>
+<p>两者都可能有知识库问答，却不因此成为同一种工具。阅读一份来源文档，重点是理解它写了什么；编辑自己的笔记，重点还包括决定保留什么、怎样重新组织和表达。一个对象承担来源，另一个对象承担创作结果，允许的操作与需要保留的边界自然不同。</p>
+<table>
+<thead>
+<tr>
+<th>当前任务</th>
+<th>主要对象</th>
+<th>协作时最需要弄清什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阅读和理解资料</td>
+<td>导入的来源文档</td>
+<td>回答依据哪份材料、哪一处内容</td>
+</tr>
+<tr>
+<td>修改文章或代码</td>
+<td>当前可编辑稿件</td>
+<td>修改哪部分，其他部分是否保留</td>
+</tr>
+<tr>
+<td>整理个人知识</td>
+<td>已有笔记与新材料</td>
+<td>新内容怎样与原有知识相连</td>
+</tr>
+<tr>
+<td>探索多条思路</td>
+<td>多个问题或方案分支</td>
+<td>各分支怎样展开，又怎样相互引用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">如果思路会分叉，画布可以怎样帮助我们</h2>
+<p>文档适合逐段展开一条讲述，但头脑风暴经常同时存在多条路线。我们可能先提出一个问题，得到几个方向，再分别追问其中两条。如果全部内容都进入同一条聊天记录，读者要不断记住每段回答属于哪个方向，也很难把几个结果并排比较。</p>
+<p>Flowith 尝试把这些内容放到无限画布上，通过节点展开。一个问题可以继续产生后续内容，节点之间也可以引用与发散。思路的分支因此获得空间上的位置，不再只能依赖聊天的先后顺序来组织。<button type="button" class="timecode" data-seconds="443">[00:07:23]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1DAqWYUECX-00472.jpg" data-caption="旅行主题的不同资料卡片分布在画布上，各组内容保持独立位置，便于同时保留多个探索方向。">
+    <img src="../assets/frames/BV1DAqWYUECX-00472.jpg" loading="lazy" alt="视频截图 03，00:07:52：旅行主题的不同资料卡片分布在画布上，各组内容保持独立位置，便于同时保留多个探索方向。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="472.000">图 03 · 00:07:52</button><span>旅行主题的不同资料卡片分布在画布上，各组内容保持独立位置，便于同时保留多个探索方向。</span></figcaption>
+</figure>
+<p>画布提供了另一种可能，也会带来新的整理要求。节点越来越多以后，哪些属于同一主题、哪些已经完成、哪些值得继续，都需要可理解的组织方式。空间自由有助于展开，不能自动保证关系清楚。它更适合需要比较和探索的过程，最终要形成连续文章时，仍然可能需要回到线性的表达。</p>
+<p>左右横眺把这些产品概括为“AI 白板”：为人和 AI 提供共同的工作空间。这个称呼强调一种相似的设计方向，既包括文档式编辑器，也包括更自由的画布。它是一种分析视角，具体产品仍然有不同目标。<button type="button" class="timecode" data-seconds="490">[00:08:10]</button></p>
+<h2 id="_4">侧栏助手也在回答同一个问题</h2>
+<p>浏览器里的侧栏助手，看起来可能与编辑器相差很远，但它也把一个正在处理的对象放在主体位置。主体是网页，AI 在旁边帮助解释、总结或讨论。用户不用先离开当前资料，再建立一次完全独立的对话。<button type="button" class="timecode" data-seconds="566">[00:09:26]</button></p>
+<p>这让 Copilot，也就是“副驾驶”的含义更具体了。人继续在熟悉的环境里做事，AI 取得必要上下文，在需要的位置提供帮助。合作的重点是减少表达和切换成本，同时让用户保留对结果的理解与控制。</p>
+<p>如果一项功能必须靠很复杂的提示词才能用好，那么它对熟练用户可能有价值，对普通用户却仍有门槛。把选择对象、指定操作和查看结果做进界面，能够替用户承担一部分原本需要用语言反复说明的工作。这也是为什么产品设计会影响人们实际用出的能力。<button type="button" class="timecode" data-seconds="589">[00:09:49]</button></p>
+<h2 id="ai_2">从模型长出产品，与给已有产品加入 AI</h2>
+<p>这些界面变化背后，还有两条不同的产品路径。一条从模型能力出发，逐步增加文档、执行环境和工作区；另一条从已有软件出发，把 AI 放进用户已经熟悉的文件、笔记或网页工作中。<button type="button" class="timecode" data-seconds="614">[00:10:14]</button></p>
+<p>前一条路径可以围绕新的模型能力重新设计体验，但需要逐步补齐具体工作中的细节。后一条路径拥有已有的内容、用户习惯和操作环境，也要判断 AI 怎样进入其中才真正有用。简单添加一个聊天按钮，并不保证用户原来的困难就得到解决。</p>
+<p>左右横眺在当时的分析里认为，模型公司会更主动地开发面向用户的产品，应用公司也会持续吸收 AI 能力，双方可能越来越接近。他对竞争与商业压力的判断属于那个阶段的观察，不能仅凭几款产品相似，就断定哪家公司最终占据优势。<button type="button" class="timecode" data-seconds="638">[00:10:38]</button></p>
+<p>更稳定的一点是，界面点子容易被学习，持续把体验做好需要更多工作。生成结果如何保留、修改如何确认、资料怎样组织，每一处都可能影响用户是否愿意继续使用。一个先出现的形式能够吸引注意，长期价值还需要在具体任务里不断完善。<button type="button" class="timecode" data-seconds="707">[00:11:47]</button></p>
+<h2 id="_5">总结提炼</h2>
+<p>这些产品的共同变化，是让用户与 AI 围绕一个明确对象合作。对话承担商量，工作区保留产物；编辑器让修改位置更明确，知识工具提供已有资料，画布则允许多个方向同时展开。</p>
+<p>不同能力仍然需要分别看待。能预览，不代表能精确修改；能生成代码，不代表已经运行；能引用资料，也不代表可以改写来源。界面越清楚地呈现这些关系，人越容易知道自己正在做什么。</p>
+<p>我们理解一个 AI 产品时，可以先看任务：是阅读资料、打磨作品，还是探索方案？再看它怎样安排对象、上下文和操作。这样更容易判断一个新界面究竟减少了哪些负担。</p>
+<h2 id="_6">时间导航</h2>
 <ul>
-<li>改写后，能否看见具体差异？</li>
-<li>只改选中的一段，会不会顺手改坏其他段落？</li>
-<li>我能否撤销、保留旧版，再比较两版？</li>
-<li>引用的资料与生成的结论，能否分开检查？</li>
-<li>最后导出的文件，能否在原来的软件里继续编辑？</li>
+<li><button type="button" class="timecode" data-seconds="42">[00:00:42]</button> 聊天结果与实际工作之间的切换成本。</li>
+<li><button type="button" class="timecode" data-seconds="85">[00:01:25]</button> 代码执行环境解决什么问题。</li>
+<li><button type="button" class="timecode" data-seconds="110">[00:01:50]</button> Artifacts 把产物与聊天分开。</li>
+<li><button type="button" class="timecode" data-seconds="191">[00:03:11]</button> Canvas 将编辑对象放到中心。</li>
+<li><button type="button" class="timecode" data-seconds="253">[00:04:13]</button> Cursor 的编辑器与上下文组织。</li>
+<li><button type="button" class="timecode" data-seconds="333">[00:05:33]</button> 个人笔记为 AI 提供已有背景。</li>
+<li><button type="button" class="timecode" data-seconds="379">[00:06:19]</button> 阅读来源与编辑笔记的产品差别。</li>
+<li><button type="button" class="timecode" data-seconds="443">[00:07:23]</button> Flowith 的节点式画布。</li>
+<li><button type="button" class="timecode" data-seconds="566">[00:09:26]</button> 浏览器侧栏与副驾驶式协作。</li>
+<li><button type="button" class="timecode" data-seconds="614">[00:10:14]</button> 两条不同的 AI 产品路径。</li>
 </ul>
-<p>这些问题比“界面像哪个热门产品”更接近真实交付质量。视频中的商业竞争预测可以作为当时的观点阅读，不必把它当成今天的市场事实。<a class="timecode" href="https://www.bilibili.com/video/BV1DAqWYUECX/?t=600" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:00]">[00:10:00]</a></p>
-<h2 id="_5">迁移练习：改一份回答的交付方式</h2>
-<p>找一段需要反复修改的搜索回答，例如“比较三个工具并给出选择理由”。只画一个简陋页面：左侧放原始资料与引用，中央放对比表，右侧放当前修改指令。</p>
-<p>然后走一遍任务：“只更新第二个工具的价格，其他判断保持不变。”记录用户需要确认的内容，以及系统必须保留的状态。能把这次局部修改说清楚，就已经开始从聊天功能走向任务产品了。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_7">回看时的三个问题</h2>
+<p>为什么把生成结果从聊天记录里分离出来，会改变修改体验？如果只能看预览、仍无法精确指定修改，哪一部分困难还在？</p>
+<p>同样带知识库问答，阅读原始资料与编辑个人笔记有什么不同？哪些内容应当保留来源身份，哪些内容可以作为自己的稿件修改？</p>
+<p>面对需要比较的三条研究路线，一条长聊天与一张节点画布各自有哪些好处？等探索结束、准备写成文章时，组织方式又可能怎样变化？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "AI产品形态交汇的背后：Artifacts, Canvas, Cursor...【趋势总结1】", "duration": "12:56", "src": "", "poster": "../assets/frames/BV1DAqWYUECX-00135.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

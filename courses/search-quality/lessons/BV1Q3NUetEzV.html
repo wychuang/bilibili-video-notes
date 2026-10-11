@@ -1,100 +1,343 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>找到“长得像”的句子，为什么仍然答错？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>找到意思相近的句子，为什么仍然答错？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">找到意思相近的句子，为什么仍然答错？</h1>
+    <div class="meta"><span>果粒奶优有果粒</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Q3NUetEzV/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">找到“长得像”的句子，为什么仍然答错？</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">推理主干</a></li>
-<li><a href="#1">1. “像”至少有几种不同意思</a></li>
-<li><a href="#2">2. 相似度高，仍然可能找错人</a></li>
-<li><a href="#3">3. 加上重排、图谱，问题会自动消失吗？</a></li>
-<li><a href="#4">4. 回到数据，先把关系分清楚</a></li>
-<li><a href="#_4">边界、疑点与时效性</a></li>
-<li><a href="#_5">时间戳导航</a></li>
-<li><a href="#_6">复习与行动清单</a></li>
+<li><a href="#_1">找到意思相近的句子，为什么仍然答错？</a><ul>
+<li><a href="#embedding">先看懂 embedding 在做什么</a></li>
+<li><a href="#_2">国王与女王很接近，统治者却可能更能指向同一对象</a></li>
+<li><a href="#_3">对象、时间、地点和动作，都有容易被抹平的差异</a></li>
+<li><a href="#_4">人名只差一点，关系却已经属于另一个人</a></li>
+<li><a href="#_5">加上重排序以后，哪一步判断发生了变化</a></li>
+<li><a href="#_6">图谱和混合检索，也要回到它们实际增加的能力</a></li>
+<li><a href="#_7">直接把长文交给模型，也仍然要检查它读懂了什么</a></li>
+<li><a href="#_8">回到维修手册，先弄清常见说法之间是什么关系</a></li>
+<li><a href="#_9">总结提炼</a><ul>
+<li><a href="#_10">一句话抓住核心</a></li>
+<li><a href="#_11">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_12">时间戳导航</a></li>
+<li><a href="#_13">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1Q3NUetEzV" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1Q3NUetEzV"><div class="provenance">来源：果粒奶优有果粒 · <a href="https://www.bilibili.com/video/BV1Q3NUetEzV/" target="_blank" rel="noopener">BV1Q3NUetEzV 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">找到“长得像”的句子，为什么仍然答错？</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Q3NUetEzV.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><button class="done" data-done="BV1Q3NUetEzV" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Q3NUetEzV-00240.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Q3NUetEzV&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Q3NUetEzV/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Q3NUetEzV"><h1>找到意思相近的句子，为什么仍然答错？</h1>
 <blockquote>
-<p>原视频：Embedding 正在摧毁你的 RAG？？ · 果粒奶优有果粒 · 约 26 分钟。本文保留案例，并单独检查其中推论的边界。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1Q3NUetEzV/">果粒奶优有果粒｜Embedding 正在摧毁你的 RAG？？</a> · 25 分 54 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p><strong>向量距离可以帮我缩小搜索范围，但距离近的材料，未必包含当前问题需要的那条事实。</strong></p>
-<h2 id="_3">推理主干</h2>
-<p>问题要求特定事实 → 检索器按某种相似性排序 → 相近概念混入 → 生成模型拿着偏掉的证据回答 → 我需要回到业务里的“相关”究竟指什么。</p>
-<p>想象我要查某位国王的母亲。找到一篇同名国王的传记，看上去比找到一张陌生的家谱更“相关”；但真正能回答问题的，可能恰好是家谱里的那一行。这个区别决定了检索系统能否交付正确答案。</p>
-<h2 id="1">1. “像”至少有几种不同意思</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=28" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:28]">[00:00:28]</a> embedding 把文本编码成数值向量。它的用途是让计算机可以比较文本之间的关系；它不会自动替我定义业务问题里的正确答案。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=227" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:47]">[00:03:47]</a> 原视频用 king、queen、ruler 做对照：国王与王后在语境中经常一起出现，都属于皇室角色，所以它们可能获得较高的相似度。可是当任务要求找一个可以指代国王的词时，ruler 这种“统治者”的表达可能更有用。</p>
-<figure><a href="../assets/frames/BV1Q3NUetEzV-00240.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1Q3NUetEzV-00240.jpg" alt="画面并排展示 king 与 queen、ruler 的分数及完整句子的比较；这些数字属于这次示例。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=240&amp;p=1" target="_blank" rel="noopener">[00:04:00]</a> 画面并排展示 king 与 queen、ruler 的分数及完整句子的比较；这些数字属于这次示例。</figcaption></figure>
-<p>这里容易混淆两件事：共同出现、属于同一话题，能够产生相近的表示；满足特定问题的条件，还需要检查身份、关系和限定词。原视频口述及自动字幕里的个别英文释义不准确，ruler 在这个语境下应理解为“统治者”。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=377" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:17]">[00:06:17]</a> 之后的例子把问题拆成四类：对象是什么、发生在何时、位于何处、采取什么动作。猫与狗都属于常见宠物，但猫的属性问题可能更需要猫科动物的资料；两个数字外形接近的年份，也可能指向完全不同的时期。</p>
-<p>我应当问的具体问题是：<strong>当前检索器是否保住了任务真正敏感的差异？</strong> 对维修手册来说，这可能是零件型号；对政策问答来说，是适用地区和生效日期；对人物查询来说，是同名消歧。后面这些属于迁移例子。</p>
-<h2 id="2">2. 相似度高，仍然可能找错人</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=587" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:47]">[00:09:47]</a> 原视频引用了一个阿方索二世与阿方索七世的回答混淆案例，并比较名字和关系词变化后的相似度。</p>
-<p>这个案例值得记住的部分是：问题中的实体身份很关键。把“谁的母亲”里的“谁”弄错，剩下的语言再流畅也无法补救。</p>
-<p>但仅凭输出错误，无法反推出模型训练集中究竟包含了谁、遗漏了谁。原视频对训练语料的解释属于推测，没有展示可以验证内部训练数据的证据。公开学习笔记应把“观察到混淆”与“已经知道内部原因”分开。</p>
-<p>同样，某两个短语的向量得分，也不能直接当作事实正确率。要评价检索器，需要准备真实问题、相关文档标注，并统计它在整组任务上的表现。</p>
-<h2 id="3">3. 加上重排、图谱，问题会自动消失吗？</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=783" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:03]">[00:13:03]</a> 后半段依次讨论重排、知识图谱、混合检索和长上下文。可迁移的问题意识是：多加一个组件，需要检查它是否真的修复了当前错误。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=992" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:16:32]">[00:16:32]</a> 原视频引用不同研究的分数，表达对一些方案表现的怀疑。这里必须保留一个边界：不同论文的任务、数据集、模型和指标未必可比。某项测试得分较低，无法独立证明重排或图谱整体无效。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 复杂组合还会带来延迟。我的优化目标至少有两项：用户拿到的答案是否更可靠，以及等待和资源成本是否值得。堆叠组件如果没有消融实验，就很难知道改善来自哪里。</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1260" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:00]">[00:21:00]</a> 长上下文可以让模型读更多内容，但“放得进去”与“能稳定找对并利用”是两个需要分别测试的能力。读入更多材料，也会增加无关信息和冲突证据的处理负担。</p>
-<h2 id="4">4. 回到数据，先把关系分清楚</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:43]">[00:22:43]</a> 最后的建议是先结合业务缩小范围，再做向量匹配。<a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1381" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:01]">[00:23:01]</a> 用到的关系包括同义、上下位、整体与部分。</p>
-<figure><a href="../assets/frames/BV1Q3NUetEzV-01400.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1Q3NUetEzV-01400.jpg" alt="关系表列出同义、上下位、整体与部分，提醒我先确定任务所需的语义关系。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1400&amp;p=1" target="_blank" rel="noopener">[00:23:20]</a> 关系表列出同义、上下位、整体与部分，提醒我先确定任务所需的语义关系。</figcaption></figure>
-<p>这些关系对应不同的检索需求：</p>
+<p>我们想查一位国王的经历，系统很快找到几段皇室相关的文字，其中一段在讲女王，另一段在讲统治者。它们都没有离开这个话题，看上去也都有用。但我们真正需要知道的是：哪一段在说我们要找的那个人，哪一段包含回答问题所需的事实？“与皇室有关”只能帮助缩小范围，还没有完成最后这个判断。</p>
+<p>这个区别，正是理解向量检索局限的入口。RAG 会先找资料，再让语言模型参照资料回答。假如前面找来的段落只在主题上接近，人物、时间或关系却对不上，后面的模型就可能拿着不合适的材料组织答案。我们接下来沿着几个具体例子看：相似度究竟帮我们判断了什么，又有哪些判断仍然需要保留下来。<button type="button" class="timecode" data-seconds="124">[00:02:04]</button></p>
+<h2 id="embedding">先看懂 embedding 在做什么</h2>
+<p>Embedding 通常译作“嵌入”，可以先理解为把一段文字转换成一组数字。许多数字放在一起形成一个向量，计算机就能通过这些向量比较文字之间的关系。不同词语或句子的向量会分布在一个空间里；按照模型学到的表示方式，某些相近的内容会落得更近。检索时，系统把问题也转换成向量，再寻找与它接近的文档片段。<button type="button" class="timecode" data-seconds="18">[00:00:18]</button></p>
+<p>king、queen、man、woman 是一种常见的入门示意。国王与女王都属于皇室角色，男人与女人之间又有另一种差别。借助这些词，我们可以想象文字中存在多种关系，向量表示可能把其中一些关系保留下来。不过，真正的 embedding 通常有许多维度，不能把每一维都简单命名为“性别”或“皇室”。这幅直觉图帮助我们认识关系，不要求我们把实际模型当成只有两条坐标轴的小地图。<button type="button" class="timecode" data-seconds="77">[00:01:17]</button></p>
+<p>检索得到的“相似度”也需要放回这个过程理解。它是按选定计算方法比较两个表示后得到的分数，并没有直接写着“这段话有多少概率正确回答问题”。比如某段话得分 0.73，不能解释成它有 73% 的事实正确率。计算机完成的是表示之间的比较；问题中的人名是否一致、某个条件是否满足，仍然要通过内容来判断。</p>
+<h2 id="_2">国王与女王很接近，统治者却可能更能指向同一对象</h2>
+<p>在使用 text-embedding-3-small 的一组短词比较中，king 与 queen 的相似度为 0.59，king 与 ruler 的相似度为 0.53。前一组更高，并不难理解：国王和女王经常出现在相近语境，也都属于皇室角色。但假如我们正在读某位国王的经历，后文改用 ruler，也就是“统治者”，很可能仍在指这个人；换成 queen，则通常需要重新确认说的是谁。<button type="button" class="timecode" data-seconds="172">[00:02:52]</button></p>
+<p>“哪个词和 king 最像”需要放回具体任务中判断。关系有好几种：同属皇室是一种关系，在当前上下文中指向同一人又是一种关系。检索问题要求哪种关系，决定了什么材料更有用。ruler 的含义比 king 更宽，并不能在所有句子里完全互换；但它提醒我们，某种宽泛的主题接近，未必比当前任务需要的指代关系更重要。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Q3NUetEzV-00240.jpg" data-caption="上方比较 king 与 queen、ruler 的短词分数；下方把查询和两段完整句子放在一起，女王句子为 0.73，统治者句子为 0.72。">
+    <img src="../assets/frames/BV1Q3NUetEzV-00240.jpg" loading="lazy" alt="视频截图 01，00:04:00：上方比较 king 与 queen、ruler 的短词分数；下方把查询和两段完整句子放在一起，女王句子为 0.73，统治者句子为 0.72。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="240.000">图 01 · 00:04:00</button><span>上方比较 king 与 queen、ruler 的短词分数；下方把查询和两段完整句子放在一起，女王句子为 0.73，统治者句子为 0.72。</span></figcaption>
+</figure>
+<p>再把词放进完整句子。问题询问一位在十五世纪领导战斗、统一土地的国王。一段候选写女王谈到丈夫如何领导战斗、带来和平；另一段写统治者带领部队并统一土地。两段都有战斗、土地和十五世纪这些内容，所以得到很接近的分数，分别为 0.73 和 0.72。完整句子增加了信息，却没有让分数自动完成“这一段是否回答了眼前问题”的判断。<button type="button" class="timecode" data-seconds="332">[00:05:32]</button></p>
+<p>这里要仔细读两段实际说了什么。女王那段提到了丈夫的战事，它也可能包含相关线索，不能仅凭出现 queen 就把整段判成无关。我们需要继续确认丈夫是否就是问题中的国王，哪些经历得到支持。这个例子最有用的地方，是让我们看到排序分数与事实判断之间的距离：两个分数只差 0.01，系统仍需要弄清人物和事件的对应关系。</p>
+<h2 id="_3">对象、时间、地点和动作，都有容易被抹平的差异</h2>
+<p>先看对象。cat 与 dog 经常一起出现在宠物话题中，因此它们可能很接近。但如果我们问的是猫的某种属性，资料中“猫科动物”这个更大的类别也可能有用。猫与狗的共同生活场景，和猫属于猫科动物的分类关系，提供的是两种不同线索。究竟需要哪一种，要由问题决定。<button type="button" class="timecode" data-seconds="378">[00:06:18]</button></p>
+<p>即便找到上位类别，也还要确认属性能否用于具体对象。“猫科动物具有某种共同特征”，与“老虎在某个环境里的具体表现”，不能不加区分地移到家猫身上。类别关系能帮助我们扩大寻找范围，却不能替每条事实完成适用性判断。因此，检索的目标可以更具体：找到可能有关的类别知识，同时保留当前到底在问哪种动物这个条件。</p>
+<p>时间的例子用到了 1900s、1800s 与“二十世纪”。如果上下文用 1900s 泛指二十世纪，那么“二十世纪”可能更接近任务所需的时期，1800s 的字形接近却无法满足这个条件。英文中的 1900s 也可能特指 1900 至 1909 年，所以实际查询还得依据上下文确认范围。年份写得相似，与年份范围一致，需要分别处理。<button type="button" class="timecode" data-seconds="458">[00:07:38]</button></p>
+<p>地点也是同样的道理。香港和上海都可能出现在繁荣城市、经济活动等相近语境中，因此有较高的主题相关性。但要回答香港的某件事，我们仍然需要香港的资料，或能够确定指向香港的别称。另一个城市再相似，也不能直接替代这个地点。地点例子提醒我们：检索可以利用共性找线索，最终回答必须守住问题指定的对象。<button type="button" class="timecode" data-seconds="492">[00:08:12]</button></p>
+<p>动作的例子更贴近日常。查询是 bake a cake，候选可能包括烤馅饼，也可能包括制作巧克力蛋糕。前一种与查询共享烘烤方式，后一种保留了蛋糕这个对象，却换了表达动作的词。如果任务重视制作对象，巧克力蛋糕可能更符合要求；如果任务正在比较烘烤工艺，馅饼资料也可能有用。我们得先知道用户究竟想解决什么，才能解释一个排序是否合适。<button type="button" class="timecode" data-seconds="538">[00:08:58]</button></p>
 <table>
 <thead>
 <tr>
-<th>关系</th>
-<th>直观例子</th>
-<th>要检查什么</th>
+<th>问题里需要保留的差异</th>
+<th>相似表示可能抓住什么</th>
+<th>还需要读懂什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>同义或别名</td>
-<td>剃须刀、刮胡刀</td>
-<td>换一种说法，能否找到同一对象</td>
+<td>猫的属性</td>
+<td>猫与狗同属常见宠物话题</td>
+<td>当前属性属于哪类动物，能否用于猫</td>
 </tr>
 <tr>
-<td>上下位</td>
-<td>动物与狗</td>
-<td>广义知识是否适用于具体对象</td>
+<td>某一时期</td>
+<td>年代写法接近</td>
+<td>起止年份是否符合问题</td>
 </tr>
 <tr>
-<td>整体与部分</td>
-<td>汽车与方向盘</td>
-<td>问部件时，能否定位到相关章节</td>
+<td>香港的具体事件</td>
+<td>香港与上海有相似城市主题</td>
+<td>材料是否在说同一个地点</td>
 </tr>
 <tr>
-<td>身份与条件</td>
-<td>人名、型号、日期</td>
-<td>看似相近的对象是否被混为一谈</td>
+<td>制作蛋糕</td>
+<td>烘烤方式或食物主题相近</td>
+<td>问题重视对象、方法还是其他条件</td>
 </tr>
 </tbody>
 </table>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1477" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:37]">[00:24:37]</a> 维修手册的例子提醒我：最值得构造的评测样本，往往就在实际业务的常见说法和容易混淆的对象里。</p>
-<h2 id="_4">边界、疑点与时效性</h2>
-<p>本篇依据自动字幕重构；模型名、论文表格数字应回到画面核对。文章没有复现原视频实验，也不接受标题隐含的“embedding 导致所有 RAG 失败”这一泛化结论。</p>
-<p>补充核对：GraphRAG 官方将其描述为利用图结构和社区摘要支持检索与综合的方法。比较时应对齐具体查询任务，不能由某个任务的单项分数宣布所有场景的优劣。<a href="https://microsoft.github.io/graphrag/">GraphRAG 官方说明</a></p>
-<h2 id="_5">时间戳导航</h2>
+<p>看完这几组例子，我们不必得出“向量完全不理解含义”这样的结论。向量已经捕捉到一些有用关系，问题在于这些关系未必与当前任务的优先顺序一致。我们需要把“相关”说得更精确：与哪个对象有关，满足哪个条件，能够支持哪项回答。</p>
+<h2 id="_4">人名只差一点，关系却已经属于另一个人</h2>
+<p>人物问答把这个问题推得更明显。阿方索二世与阿方索七世的名字接近，但“他的母亲是谁”中的“他”一旦换了人，答案就已经换了问题。无论关于另一位国王的回答写得多完整，都不能弥补身份错误。名字中的数字、拼写和所属王国，看起来只是几个字符，却可能决定整条事实属于谁。<button type="button" class="timecode" data-seconds="581">[00:09:41]</button></p>
+<p>这里比较了带有母亲关系词的人名短语，以及只有人名的短语。错误人名加上相同关系词，也可能得到很高的相似度，因为句子中很多部分仍然接近。可对这项查询来说，人物身份是必须满足的条件，无法靠其他词语接近来补偿。我们可以把它想成一道有前提的问答：先确定是哪位国王，再查他的母亲。第一步没有成立，第二步就失去对象。<button type="button" class="timecode" data-seconds="704">[00:11:44]</button></p>
+<p>这还带来一个理解模型错误时的提醒。看到模型把两个人混淆，我们能确认的是输出混淆；无法仅凭这一个结果，就知道它的训练资料里究竟出现了谁、漏掉了谁。关于训练语料导致错误的解释可以作为猜测，但还需要更多依据。对我们当前的检索问题，最直接可检查的仍然是：输入写的是谁，候选写的是谁，最后回答把关系连到了谁身上。</p>
+<p>增加文字长度也不会自动保住身份。长段落可能包含更多背景，同时也出现更多人名和关系。要解决混淆，需要正确处理这些关系。只把“读得更多”当成保证，就可能让同一个错误在更长的文字里继续存在。<button type="button" class="timecode" data-seconds="783">[00:13:03]</button></p>
+<h2 id="_5">加上重排序以后，哪一步判断发生了变化</h2>
+<p>一种常见改进是重排序。初步向量检索先选出候选，重排序模型再把问题与候选内容放到一起比较，试着判断哪个更有帮助。相比把问题和文档分别编码后只比较向量，这一步有机会更细地考察词语之间的联系。对于前面的人名、关系词和限定条件，联合比较可能提供更丰富的判断依据。<button type="button" class="timecode" data-seconds="859">[00:14:19]</button></p>
+<p>这里讨论的一项训练思路，是先让模型学习一般对话、阅读理解和问答，再使用检索相关的数据继续训练，让它学习怎样选择候选以及利用资料作答。这说明，重排序的效果也依赖训练任务。模型要见过什么样的相关性要求，才更有机会在相似材料之间作出我们想要的区分。</p>
+<p>不过，重排序接手的仍然只是初步检索交给它的候选。真正需要的资料若压根没有进入候选，排序通常只能在现有材料里重新排列，无法凭空取回遗漏文档。即使正确资料已经在候选里，排序模型也可能把相似的人名或不满足条件的段落排到前面。我们因此需要分别问：正确资料找回了吗？找回来以后排到哪里了？<button type="button" class="timecode" data-seconds="979">[00:16:19]</button></p>
+<p>重排序研究中的某一项分数，可以展示该模型在特定测试上的表现；它无法单独证明所有重排序方法都没有作用。判断一种改进是否修复了当前问题，需要看相同数据、相同问题、相同评价方式下的前后变化。这里应保留的警觉是“增加重排序后还要检查那些具体错误”，而非把一个分数推广成对整类方法的总评。</p>
+<h2 id="_6">图谱和混合检索，也要回到它们实际增加的能力</h2>
+<p>知识图谱试着把实体和关系显式组织起来。人物、地点或物品可以成为节点，“是谁的母亲”“属于哪个组织”可以成为连接。这样一来，我们就有机会沿着关系寻找答案。它与单纯比较文字向量的侧重点不同，尤其适合把“谁和谁有什么关系”作为需要保留的信息来看。<button type="button" class="timecode" data-seconds="1061">[00:17:41]</button></p>
+<p>图谱中的关系也需要从材料中提取和维护。人名被错误合并，关系连到了另一个节点，后续沿图寻找仍然会出错。因此，图结构给我们一种表达关系的方法，同时引入了图谱构建是否准确的问题。不同图谱检索研究可能处理不同类型的提问，不能把某项任务的准确率、另一项任务的忠实度直接放在同一把尺上比较。</p>
+<p>混合检索则把多种寻找线索的办法组合起来。关键词检索保留明确名称，向量检索寻找不同说法，摘要和元数据还能提供文档主题、归属等额外信息。元数据可以理解为伴随正文保存的说明，例如文件所属类别。每种方法都可能找到其他方法漏掉的材料，但返回结果合在一起以后，仍然要决定哪些更符合当前问题。<button type="button" class="timecode" data-seconds="1168">[00:19:28]</button></p>
+<p>方法叠加还会延长处理过程。多运行一次检索、生成一次摘要或调用一次模型，用户就可能多等一段时间。如果增加了几道步骤，只让少数无关问题变好，却没有改善真正关心的人名或条件混淆，就需要重新考虑这些步骤是否值得。讨论复杂系统时，同时看回答质量和等待时间，才能知道新增能力有没有用在需要的地方。</p>
+<h2 id="_7">直接把长文交给模型，也仍然要检查它读懂了什么</h2>
+<p>当模型能够接收很长的上下文，我们可以尝试让它直接阅读更多资料，减少提前筛选造成的遗漏。这解决了一部分“资料没有机会被看见”的问题。不过，材料进入输入之后，模型还得找到有关位置，把人物、条件和结论正确联系起来。输入容量与利用资料的能力，仍然是两个需要分别观察的方面。<button type="button" class="timecode" data-seconds="1260">[00:21:00]</button></p>
+<p>这里展示的长文本测试关注的是：随着输入变长，模型在同类任务上的表现如何变化。某些模型的成绩会下降，另一些模型下降不明显，也不代表分数已经足够高。这些结果属于对应模型版本与任务的表现。我们从中可以理解一项稳定的区别：允许读入多少文字，是容量；读入以后能否完成指定问题，是能力。做自己的问答系统时，需要测试后者。</p>
+<p>这样，我们就能把前面几种方案接起来。重排序增加候选之间的比较，图谱增加显式关系，混合检索增加不同寻找路径，长上下文增加可阅读范围。它们各自改变了一个环节，但都还需要面对同一个问题：用户真正要求的对象和条件，有没有在最后判断中被保留下来。</p>
+<h2 id="_8">回到维修手册，先弄清常见说法之间是什么关系</h2>
+<p>最后的建议很具体：回到实际资料，看用户通常怎样表达，以及这些表达与文档里的说法是什么关系。维修手册中，同一种东西可能被叫作剃须刀，也可能被叫作刮胡刀。若系统只认识其中一种说法，另一种问法就可能漏找。先把这些别名联系起来，再使用向量筛选相关内容，就有机会减少这类遗漏。<button type="button" class="timecode" data-seconds="1357">[00:22:37]</button></p>
+<p>同义词以外，还有上位词、下位词、整体词和部分词。动物与狗之间是类别关系：狗属于动物；汽车与车轮之间是整体和部件关系：车轮是汽车的一部分。两种关系都包含“有关联”，但它们的含义不同。狗是动物的一种，车轮却不属于“汽车的一种”。检索时保留这种区别，才知道一段广义说明能否用于具体对象，或者应该去哪个部件章节继续找。<button type="button" class="timecode" data-seconds="1390">[00:23:10]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Q3NUetEzV-01400.jpg" data-caption="关系表把同义、类别以及整体与部分分开列出；big 与 large、动物与狗、汽车与车轮，对应三种不同的联系。">
+    <img src="../assets/frames/BV1Q3NUetEzV-01400.jpg" loading="lazy" alt="视频截图 02，00:23:20：关系表把同义、类别以及整体与部分分开列出；big 与 large、动物与狗、汽车与车轮，对应三种不同的联系。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1400.000">图 02 · 00:23:20</button><span>关系表把同义、类别以及整体与部分分开列出；big 与 large、动物与狗、汽车与车轮，对应三种不同的联系。</span></figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>已有例子</th>
+<th>对查找有什么帮助</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同义或同一对象的不同叫法</td>
+<td>big 与 large；剃须刀与刮胡刀</td>
+<td>换一种表达仍能找到对应内容</td>
+</tr>
+<tr>
+<td>上位与下位类别</td>
+<td>动物与狗；水果与苹果</td>
+<td>从具体对象联系到类别知识，再检查适用条件</td>
+</tr>
+<tr>
+<td>整体与部分</td>
+<td>汽车与车轮；人体与心脏</td>
+<td>从整件对象定位到部件，或查看部件所属整体</td>
+</tr>
+</tbody>
+</table>
+<p>这些关系可以帮助构造检索规则，也可以帮助整理训练与测试样例。如果用户经常问部件，就要特别观察整机说明能否把我们带到正确部件；如果常用简称和正式名称不同，就要关注别名查询。哪一种关系最值得投入精力，取决于资料里什么问题最常出现。<button type="button" class="timecode" data-seconds="1451">[00:24:11]</button></p>
+<p>于是，“embedding 是否有用”这个宽泛问题，被拆成了可以检查的具体问题。它是否把同一对象的不同叫法联系起来？是否混淆了相似的人名？是否忽略了时间范围？我们已经知道要找哪种错误，就能比较某项改动是否真正减少了错误。向量检索仍然有帮助，而它的帮助需要放进明确的任务和资料关系中理解。<button type="button" class="timecode" data-seconds="1477">[00:24:37]</button></p>
+<h2 id="_9">总结提炼</h2>
+<h3 id="_10">一句话抓住核心</h3>
+<p>向量相似度能帮助寻找相关材料，但身份、关系、时间和条件是否满足问题，需要在检索与回答中继续检查。</p>
+<h3 id="_11">推理主干</h3>
+<p>国王与女王的主题接近，不保证指向同一人；猫与狗、年份、城市和制作动作也有类似差别。重排序、图谱、混合检索和长上下文各自增加能力，却不会自动消除这些混淆。回到实际资料，明确常见词语之间的关系，才能知道应该优化和检验什么。</p>
+<h2 id="_12">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=28" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:28]">[00:00:28]</a> embedding 的直觉。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=227" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:47]">[00:03:47]</a> 皇室相关性与指代关系。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=377" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:17]">[00:06:17]</a> 对象、时间、地点、动作四类差异。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=587" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:47]">[00:09:47]</a> 人物身份混淆。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=783" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:03]">[00:13:03]</a> 逐项审视增强组件。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1217" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:20:17]">[00:20:17]</a> 准确性与延迟的代价。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:22:43]">[00:22:43]</a> 用领域关系约束搜索。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1Q3NUetEzV/?t=1477" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:24:37]">[00:24:37]</a> 维修手册中的同义表达。</li>
+<li><button type="button" class="timecode" data-seconds="18">[00:00:18]</button> embedding 怎样把文字变成可比较的表示。</li>
+<li><button type="button" class="timecode" data-seconds="172">[00:02:52]</button> king、queen、ruler 的关系与分数。</li>
+<li><button type="button" class="timecode" data-seconds="332">[00:05:32]</button> 完整句子为什么仍需检查事实。</li>
+<li><button type="button" class="timecode" data-seconds="378">[00:06:18]</button> 对象、时间、地点和动作的区别。</li>
+<li><button type="button" class="timecode" data-seconds="581">[00:09:41]</button> 人物身份变化怎样影响关系问答。</li>
+<li><button type="button" class="timecode" data-seconds="859">[00:14:19]</button> 重排序增加了什么判断。</li>
+<li><button type="button" class="timecode" data-seconds="1061">[00:17:41]</button> 图谱与混合检索的作用及限制。</li>
+<li><button type="button" class="timecode" data-seconds="1260">[00:21:00]</button> 长文本容量与实际理解能力。</li>
+<li><button type="button" class="timecode" data-seconds="1357">[00:22:37]</button> 从维修手册中的别名和关系开始优化。</li>
 </ul>
-<h2 id="_6">复习与行动清单</h2>
-<p>迁移练习：用公开、无个人信息的产品说明书，写三对问题：别名相同、型号相近、部件与整机。为每题指定一段真正能回答它的材料，再观察“最像的段落”是否等于“有用的证据”。</p>
-<p>能够解释一条失败，并指出缺少哪个约束，比背诵检索组件名称更有价值。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_13">复习与行动清单</h2>
+<p>补充练习：选择一份公开产品说明，写两种指向同一对象的问法，再写一种只改了型号或部件的问法。分别找到能够回答它们的段落。比较时，先确认对象是否一致，再看材料有没有回答问题。你要练习的是解释一条结果为什么合适，或究竟差在哪个条件。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Embedding正在摧毁你的RAG？？", "duration": "25:54", "src": "", "poster": "../assets/frames/BV1Q3NUetEzV-00240.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

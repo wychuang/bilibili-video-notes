@@ -10,7 +10,7 @@
 
 The launcher creates a project-local `.venv`; do not install project dependencies into the workspace root. NVIDIA wheels, pip cache, HF cache, and temporary downloads remain under the F: project. `scripts\start.ps1` prepends the project-local cuDNN and cuBLAS `bin` directories only for the launched process and leaves the system PATH unchanged.
 
-The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path relative to each generated note. Keep the accompanying OFL license file with the font. The asset remains project-local on F: and is not installed into Windows.
+The offline reader loads `assets/fonts/LXGWWenKaiGBScreen.ttf` through a path relative to each generated note. Keep the accompanying OFL license file with the font. The asset remains project-local on F: and is not installed into Windows. Preserve `overflow-wrap:anywhere` on the hero title and article: uninterrupted names such as `Skill/MCP/RAG/Agent/OpenClaw` and literal source URLs otherwise overflow a 390px phone viewport. Verify with actual long titles and source blocks after fonts finish loading. Table cells keep an 8em minimum width and tables scroll horizontally on narrow screens; check long code identifiers and Chinese explanations together so one column does not collapse into two-character lines.
 
 Formula rendering is fully offline. `_markdown_to_safe_html` freezes LaTeX before Markdown and Bleach processing, converts it with `latex2mathml`, validates the resulting XML as MathML only, and reinserts the static fragment after sanitization. Keep `\[...\]`, `$$...$$`, `\(...\)`, and `$...$` support covered by tests; never add a CDN or runtime JavaScript dependency for formulas.
 
@@ -19,6 +19,12 @@ Formula rendering is fully offline. `_markdown_to_safe_html` freezes LaTeX befor
 `scripts\start.ps1` contains Chinese interface text and must remain UTF-8 with BOM so Windows PowerShell 5.1 reads it correctly. `scripts\check.ps1` runs the real 5.1 setup path as a regression check.
 
 The repository owns the canonical skill at `skills/summarize-bilibili-video/`. The launcher synchronizes its two runtime files into `CODEX_HOME`, falling back to the current user's `.codex` directory. API providers load the same `SKILL.md` as their system instruction. Keep usernames, drive-specific workspace paths, Bilibili share-tracking identifiers, credentials, cookies, and archived evidence out of committed source.
+
+Writing behavior lives in that skill only, with no separate prose template in the caller. Its default is a source-faithful teaching narrative with explicit references, developed paragraphs and a direct narrator. Necessary headings, comparison tables and procedural lists remain supported. Keep an existing product's summary, navigation and review sections while improving the explanatory body; do not turn the body into a list template. See `tests/skill_writing_acceptance.md` for independent lighter-model trials; raw candidates, skill snapshots and the review record belong in ignored `.state/skill-writing-eval/`. Deterministic tests check prompt delivery and rendering, not prose quality. Changing the skill invalidates a summary when that item is next requested; it does not rewrite the public course automatically.
+
+HTML examples must use `render_summary_html` or its collection wrapper, not replace the full learning page with `scripts/build_course.py:shell`. Preserve the player, article sections, collapsible navigation, original/source links, image lightbox and reading font. The single-video renderer accepts subtitle-only evidence with a valid Bilibili identity: it generates a lazy official iframe with an external timestamp fallback, never downloads media, and never labels absent video as archived. Bilibili's official player accepts `bvid`, `page`, `t`, and `autoplay`; generated URLs are host-restricted and omit share tracking. Browser tests must distinguish local interaction tests with a stubbed iframe from an actual network playback check. Native local and multi-part playback remain covered separately. Markdown/subtitle links are shown only for files that exist; `related_paths` can retain a course-directory entry without swapping page templates.
+
+A local installed-skill directory may be a Windows junction to the canonical project directory to keep the content on the project drive. Compare the two small UTF-8 runtime files directly when checking an installation; no separate file-hash audit is needed. Do not replace an existing installation without inspecting it and retaining a recoverable backup. This local arrangement is optional and does not change the portable default installation path.
 
 `src/bili_notes/providers.py` owns provider presets, protocol adapters, environment overrides, and Windows Credential Manager access. Codex remains the default. DeepSeek and other API providers consume timestamped transcript evidence, and the current text-only API prompt forbids screenshot markers. Provider settings live in ignored `.state/llm-settings.json`; secrets live in `keyring` or environment variables.
 
@@ -71,7 +77,9 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ### Lightweight public course / 轻量公开课程
 
-`courses/search-quality/` is a separate, intentionally public reader. It does not change the archive-first GUI workflow. The course keeps 42 new Markdown notes, reuses 9 existing public notes, and marks 3 evidence-blocked entries as pending. `scripts/build_course.py` renders committed HTML with the existing safe Markdown/MathML pipeline. Without private source metadata, a rebuild preserves the public metadata in `index.json`.
+`courses/search-quality/` is an intentionally public course. It does not change the archive-first GUI workflow. All 51 readable entries now have canonical `lessons/<BV>.md` files and full-reader HTML, including the 9 originally reused articles. The 3 evidence-blocked entries remain pending. `scripts/build_course.py` uses `render_summary_html` with safe Markdown, static MathML, online playback, part selection, frame zoom, source links, section navigation and course progress controls. Without private source metadata, a rebuild preserves the public identity and playlist metadata in `index.json`.
+
+51 篇课程稿统一以 `courses/search-quality/lessons/*.md` 为编辑入口，课程不再从旧 `notes/` 覆盖正文。三篇用户认可稿保留正文，其余稿按完整原文重写。所有页面保留总结提炼、时间导航和复习内容，章节名称可随内容自然调整。写完保存后须完整读回审校；不要把校对记录、过程说明和未确认字段塞进阅读页。Skills 规则与项目文档仍需同步。
 
 课程采集器 `scripts/course_evidence.py` 只写项目 `.state/course-evidence/`，拒绝 Windows 系统盘项目。先获取并检查字幕的 BV/CID 与时长；缺字幕时显式加 `--audio`，复用已有 small 模型进行 GPU 转写，无下载模型或 CPU 回退。每个临时音频在 `finally` 中删除。历史曾发现不匹配字幕响应，旧管线证据不再复用；有效转写元数据必须为 `pipeline_version: 2`，仍需人工检查主题与术语。
 
@@ -98,9 +106,11 @@ $env:PYTHONPATH = "$PWD\src"
 python -B scripts/check_course_browser.py
 ```
 
-原帧使用 `--frame BV:分集:秒数` 直接定位，逐张查看后才可复制到课程 assets 并登记 `inspected`。未登记标记会使构建失败。课程时间戳在构建时转换为标准 B 站地址，仅保留跳转所需的 `t` 与 `p`，无分享追踪参数。
+原帧使用 `--frame BV:分集:秒数` 直接定位，或复用本地已有归档。逐张查看并排除私人链接、凭据和无关画面后，才可复制到课程 assets 并登记 `inspected`。未登记、重复使用或超出时长的标记会使构建失败。时间戳使用完整阅读器按钮；在线播放初始为 `about:blank`，用户点击后按分集与秒数加载 B 站播放器，并同步外部回看链接，不携带分享追踪参数。
 
-The Pages workflow stages only named course files, catalog-matched lesson files, actually referenced approved images, and the named font/license. It never publishes the repository root or `.state` wholesale. CI uses standard-library `--stage-only`, requires no private evidence, and fails on missing/unsafe links or stale publication files. Run a local full rebuild after editing Markdown; CI deliberately ships the already reviewed HTML. Browser QA is scoped to loopback HTTP, uses project-local temp/download paths, and does not import a personal browser profile.
+The Pages workflow stages only named course files, catalog-matched lesson files, actually referenced approved images, and the named font/license. It never publishes the repository root or `.state` wholesale. CI uses standard-library `--stage-only`, requires no private evidence, and fails on missing/unsafe links or stale publication files. Run a local full rebuild after editing Markdown; CI deliberately ships the already reviewed HTML. Before staging a changed allowlist, inspect the exact `.state/course-site` target and move the old task-local artifact to a recoverable timestamped sibling if necessary; do not delete archives or broaden the allowlist to hide stale files.
+
+Browser QA is scoped to loopback HTTP, uses project-local temp/download paths, and does not import a personal browser profile. It checks all 51 lessons at desktop/mobile widths, image loading, formulas, navigation, 18-part selection, time/frame jumps, lightbox and progress transfer. A stub verifies the Bilibili URL-routing contract; this test does not claim third-party playback works. Check live playback separately when publishing. Do not install a browser or new dependencies just for this check.
 
 Limits: 2 GiB evidence footprint, at least 5 GiB free on the project drive, and 1 GiB published artifact. Audio cleanup affects only the current per-part temporary file; never remove existing `library/` archives to make this build pass. Course progress is localStorage only with manual JSON transfer, no tracking or server-side persistence.
 
@@ -117,6 +127,7 @@ Limits: 2 GiB evidence footprint, at least 5 GiB free on the project drive, and 
 - Keep collection media deduplicated. Reuse an existing single-part archive through `collection.json` instead of copying its source video into the collection directory.
 - Collection timestamps and frame markers must carry a part number so the offline player can switch videos before seeking.
 - Treat extracted frames as candidates. Render only frame markers that the summarizer selected after visual inspection; keep unselected candidates on disk.
+- Keep editorial provenance and audit details internal. Reader pages retain source identity, playback status and resource links, but omit transcription-engine labels, image counts and production/evidence-note sections. Explain genuine result limitations beside the claim. Use relevant inspected frames and comparison tables without replacing the full reader or compressing the narrative.
 - Bump `SUMMARY_PIPELINE_VERSION` when prompt or presentation rules change. The summary sidecar invalidates old text once, then restores normal cache reuse.
 - Update `README.md`, this file, the bundled skill, and the workspace project map when the workflow changes. Run the launcher to synchronize the installed skill.
 - Before publishing, verify that `library/`, `.cache/`, `.state/`, `.venv/`, `.env*`, logs, and editor-local settings remain ignored. Use a GitHub noreply address for commit metadata when author-email privacy matters.

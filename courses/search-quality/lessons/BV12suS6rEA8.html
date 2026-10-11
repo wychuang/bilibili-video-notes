@@ -1,122 +1,316 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 把程序写出来以后，我们怎样确认自己真的学会了 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">AI 把程序写出来以后，我们怎样确认自己真的学会了</h1>
+    <div class="meta"><span>AI技术投降派</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV12suS6rEA8/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#build-to-learnai-vibe-coding">build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">推理主干</a></li>
-<li><a href="#_3">先识别“幻觉式掌握”</a></li>
-<li><a href="#_4">从“写代码的人”变成“委托并验收的人”</a></li>
-<li><a href="#_5">四阶段：把项目做成一条学习路径</a><ul>
-<li><a href="#1">1. 立项：先明确产品和未知</a></li>
-<li><a href="#2">2. 施工：每一阶段先画图</a></li>
-<li><a href="#3">3. 通关：每阶段只保留一道关键检验题</a></li>
-<li><a href="#4">4. 笔记：让学习能跨上下文继续</a></li>
+<li><a href="#ai">AI 把程序写出来以后，我们怎样确认自己真的学会了</a><ul>
+<li><a href="#_1">先分清：今天想赶快做完，还是想借这件事学会</a></li>
+<li><a href="#ai_1">当代码可以交给 AI，我们需要建立哪些判断</a></li>
+<li><a href="#_2">立项：先把要做的东西讲明白，暂时不进入代码</a></li>
+<li><a href="#_3">施工：先看清部件之间怎样连接，再沿着关系学习</a></li>
+<li><a href="#_4">少一些连续问答，把注意力留给重要的检验</a><ul>
+<li><a href="#_5">减少考试，不等于取消亲手做</a></li>
 </ul>
 </li>
-<li><a href="#_6">两条重要的学习约束</a></li>
-<li><a href="#_7">边界、疑点与时效性</a></li>
-<li><a href="#_8">时间戳导航</a></li>
-<li><a href="#_9">复习与行动清单</a></li>
+<li><a href="#_6">学习记录留下真实概念，计划允许逐步改变</a></li>
+<li><a href="#_7">这套方法能够帮助什么，还有哪些问题没有解决</a></li>
+<li><a href="#_8">总结提炼</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV12suS6rEA8" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>核心 · 既有学习稿</span></div><article data-lesson="BV12suS6rEA8"><h1 id="build-to-learnai-vibe-coding">build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV12suS6rEA8.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><button class="done" data-done="BV12suS6rEA8" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV12suS6rEA8-00388.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV12suS6rEA8&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV12suS6rEA8/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV12suS6rEA8"><h1>AI 把程序写出来以后，我们怎样确认自己真的学会了</h1>
 <blockquote>
-<p>UP 主：AI技术投降派<br>
-时长：14:49<br>
-链接：https://www.bilibili.com/video/BV12suS6rEA8/<br>
-BV 号：BV12suS6rEA8<br>
-总结强度：standard<br>
-证据：本地逐字稿、SRT、转写元数据与审计、24 张时间戳候选画面。转写整体连续；个别专名已结合画面谨慎校正。</p>
+<p>来源：build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的“幻觉式掌握”怎么治｜UP 主：AI技术投降派｜时长：14 分 49 秒｜<a href="https://www.bilibili.com/video/BV12suS6rEA8/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>AI 可以承担代码实现，但“我是否学会”的检验必须落在判断力上：我能否判断方案可不可行、说清机制、识别边界，并验收结果。</p>
-<h2 id="_2">推理主干</h2>
-<ol>
-<li>AI 写出的程序能运行，容易让我把“看懂了过程”误当成“掌握了能力”。<br></li>
-<li>这种错觉在 AI 代写中更隐蔽：我全程看着、不断点头，却未必能在换场景后独立判断或修改。<br></li>
-<li>因此，学习目标从“自己敲出代码”转向“能委托、能追问、能验收”。<br></li>
-<li>Build to Learn 把这种目标落实为四个学习维度、四个工作阶段，以及对提问密度的刻意控制。<br></li>
-<li>这是一套值得借鉴的学习流程，实际效果与可迁移性仍需更多用户和场景验证。</li>
-</ol>
-<h2 id="_3">先识别“幻觉式掌握”</h2>
-<p>vibe coding 指用自然语言描述需求，由 AI 生成代码。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=11" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:11]">[00:00:11]</a> 真正的风险不在于代码由谁写，而在于程序运行、需求看似满足时，人很容易产生“我懂了”的感受；一旦要求自己解释为什么这样设计，或改动一个条件，能力缺口就暴露出来。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=23" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:23]">[00:00:23]</a></p>
-<p>这里的失败很隐蔽：结果成功掩盖了学习失败。传统找人代写时，人通常知道自己没有参与；AI 代写让人全程观看生成过程，反而更容易把认同每一步解释，当作真正掌握。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=203" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:23]">[00:03:23]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_005_00-02-46.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_005_00-02-46.jpg" alt="图 01 · 00:02:46：画面将“表面成功”“比代写更危险”“检验点移到判断力”并列，直接呈现运行成功与学习失败的落差。" loading="lazy"></a><figcaption>图 01 · 00:02:46：画面将“表面成功”“比代写更危险”“检验点移到判断力”并列，直接呈现运行成功与学习失败的落差。</figcaption></figure>
-<p><em>图 01 · 00:02:46：画面将“表面成功”“比代写更危险”“检验点移到判断力”并列，直接呈现运行成功与学习失败的落差。</em></p>
-<p>Build to Learn 的核心立场是：做出的产品只是学习是否发生的证据，学习本身才是目标。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=54" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:54]">[00:00:54]</a> 它以 Claude Code Skill 的形式出现，画面中的仓库页和说明卡显示，该项目主体是 Markdown 规则文档，强调的是行为流程与教学约束。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=66" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:06]">[00:01:06]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_003_00-01-32.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_003_00-01-32.jpg" alt="图 02 · 00:01:32：画面展示 GitHub 仓库页及“一个 Claude Code 技能，全是 Markdown”的说明，支撑其以规则文档驱动流程的定位。" loading="lazy"></a><figcaption>图 02 · 00:01:32：画面展示 GitHub 仓库页及“一个 Claude Code 技能，全是 Markdown”的说明，支撑其以规则文档驱动流程的定位。</figcaption></figure>
-<p><em>图 02 · 00:01:32：画面展示 GitHub 仓库页及“一个 Claude Code 技能，全是 Markdown”的说明，支撑其以规则文档驱动流程的定位。</em></p>
-<h2 id="_4">从“写代码的人”变成“委托并验收的人”</h2>
-<p>这套方法不要求人手写全部代码，却要求人承担委托人的职责：把工作交给 AI，同时判断交付是否可靠。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=225" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:45]">[00:03:45]</a> 可以把它理解成装修：我未必亲自砌墙、布线，但必须知道要验什么、哪里可能出问题。</p>
-<p>旧的学习坐标偏向语法、API 与调试熟练度；在 AI 能快速实现代码的情境下，项目把学习重心改为四项：</p>
+<p>你让 AI 帮忙写一个网页，看着它创建文件、解释代码、修复报错，最后按下运行按钮，页面真的出现了。每一步好像都看懂了，也能跟着点头。可是过一会儿，想自己改动其中一部分，却发现不知道该从哪个文件开始。东西确实做出来了，自己对它的理解却没有跟着长出来。<button type="button" class="timecode" data-seconds="4">[00:00:04]</button></p>
+<p>这种落差很容易被成功的结果遮住。请别人代写时，我们通常知道实现过程由对方负责；与 AI 一起做时，我们全程参与对话，选择过方案，也确认过很多步骤，于是更容易觉得自己已经掌握了。build-to-learn 关心的就是这个问题：怎样把做项目的过程组织成一次真正的学习，让最终产物同时帮助我们检验理解。<button type="button" class="timecode" data-seconds="152">[00:02:32]</button></p>
+<h2 id="_1">先分清：今天想赶快做完，还是想借这件事学会</h2>
+<p>build-to-learn 以一套 Claude Code 技能规则的形式组织学习。这里的技能可以理解为提供给 AI 的工作说明，约定它什么时候解释、什么时候实现、什么时候等待学习者操作。它改变的是 AI 带人做项目的方式，不能凭一个技能名称就保证每个人获得相同学习效果。这里讨论的是这套规则所提出的学习安排。<button type="button" class="timecode" data-seconds="64">[00:01:04]</button></p>
+<p>如果目标只是尽快拿到一个能用的工具，把实现交给 AI 可能已经符合需求。但如果目标包括理解技术，那么交付程序和检查学习就必须同时发生。程序能运行，只能说明某些功能在当前条件下实现了；我们能否解释它为什么运行、条件变化后会怎样，仍然需要另外了解。把这两个目标说清楚，就能够避免完成一项以后，误以为另一项也自动完成。</p>
+<p>这套安排把学习者称为“委托人”：代码可以由 AI 编写，学习者负责提出需求、理解方案、观察结果和验收。装修房子是一个容易进入的类比。业主未必亲自砌墙、布线，但需要知道自己要求的空间怎样被实现，哪些现象说明施工存在问题。类比帮助我们理解责任分工，真正进入技术学习后，仍要回到具体部件和真实名称。<button type="button" class="timecode" data-seconds="222">[00:03:42]</button></p>
+<h2 id="ai_1">当代码可以交给 AI，我们需要建立哪些判断</h2>
+<p>第一项是可行性。准备做一个产品时，先了解现有技术能支持什么、哪些目标受到限制。假如连某种能力已经存在都不知道，想法可能过早停住；反过来，如果把不可靠的能力当成随时可用，项目又可能建立在错误前提上。了解可行性，帮助我们决定哪些部分可以直接尝试，哪些部分需要先做小范围验证。<button type="button" class="timecode" data-seconds="279">[00:04:39]</button></p>
+<p>第二项是机制，也就是一件事怎样经过几个环节成为结果。一个按钮按下以后，数据去了哪里，哪个程序处理了它，结果又怎样回到页面。我们无需在起步时掌握全部实现细节，但要能顺着基本过程走一遍。否则，AI 给出一个方案时，我们只能看措辞是否流畅，很难判断其中有没有漏掉关键步骤。</p>
+<p>第三项是边界。一个功能可能在示例数据上运行正常，条件改变之后却出现问题。理解边界，就是知道它依赖哪些前提，以及什么情况下容易失败。第四项是验收：AI 说完成以后，我们看什么、操作什么，才能知道需求确实得到满足。边界让我们想到该试哪些情况，验收则把这些判断落实到可以观察的结果上。<button type="button" class="timecode" data-seconds="292">[00:04:52]</button></p>
+<table>
+<thead>
+<tr>
+<th>要建立的判断</th>
+<th>它回答的问题</th>
+<th>缺少这一项时容易发生什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可行性</td>
+<td>有哪些技术能帮助完成目标？</td>
+<td>不敢尝试已有能力，或对未知能力作过高承诺。</td>
+</tr>
+<tr>
+<td>机制</td>
+<td>从输入到结果，实际经过什么？</td>
+<td>只能接受方案描述，难以发现其中跳过的环节。</td>
+</tr>
+<tr>
+<td>边界</td>
+<td>哪些条件改变后，功能可能出错？</td>
+<td>只看到一次成功，就以为任何情况下都可靠。</td>
+</tr>
+<tr>
+<td>验收</td>
+<td>怎样观察和测试，确认任务完成？</td>
+<td>把 AI 的“已完成”当成唯一判断依据。</td>
+</tr>
+</tbody>
+</table>
+<p>这四项关注点不意味着语法、接口和调试从此没有价值。它们给出了这套学习安排的优先顺序：先建立足以判断项目的理解，再按实际困难继续深入。做不同技术工作需要的深度仍然不同，能委托完成一个小项目，与能够独立维护复杂系统，也不能用同一把尺子衡量。</p>
+<p>学习深度因此可以用三个具体问题观察：看到方案时，能否说出它为什么可靠或哪里值得怀疑；出现故障时，能否把问题定位到大致环节；宣布完成时，能否设计合适的检查。回答得上来，说明当前项目中的理解已经有了一定支撑。换到不同场景之后能否继续作出判断，还需要新的实践。<button type="button" class="timecode" data-seconds="308">[00:05:08]</button></p>
+<h2 id="_2">立项：先把要做的东西讲明白，暂时不进入代码</h2>
+<p>整个学习过程从立项开始。AI 先与学习者讨论产品：给谁使用，在什么情况下使用，遇到没有网络之类的情况希望怎样处理。每次只问一个问题，并提供少量具体选项，帮助一个尚不熟悉技术的人表达需求。此时，如果过早讨论框架和实现细节，可能会把真正的使用问题挤到后面。<button type="button" class="timecode" data-seconds="344">[00:05:44]</button></p>
+<p>接下来，把想法拆成几块能力，用容易理解的语言命名，并区分当前已经具备的能力、可以借助的现成技术、明显限制和仍不确定的部分。学习者还会先猜一猜哪一块最难。这个猜测会留下来，等实际做过之后再比较。猜错不需要被当成失败，它让人看见自己的直觉为什么改变，以及原先忽略了什么条件。<button type="button" class="timecode" data-seconds="363">[00:06:03]</button></p>
+<p>立项结束前，需要确认产品的一句话描述、使用场景、完成标准、学习深度，以及第一阶段准备做什么。只有这些意思已经理解一致，才进入实现。它的价值在于把“做成什么”和“学到什么”提前放到桌面上。后面即使出现一个很漂亮的结果，也可以回到起点检查，这是否真的符合最初需要。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV12suS6rEA8-00388.jpg" data-caption="立项、施工、通关与笔记分别承担明确目标、理解实现、检查掌握和保存学习结果的职责。">
+    <img src="../assets/frames/BV12suS6rEA8-00388.jpg" loading="lazy" alt="视频截图 01，00:06:28：立项、施工、通关与笔记分别承担明确目标、理解实现、检查掌握和保存学习结果的职责。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="388.000">图 01 · 00:06:28</button><span>立项、施工、通关与笔记分别承担明确目标、理解实现、检查掌握和保存学习结果的职责。</span></figcaption>
+</figure>
+<h2 id="_3">施工：先看清部件之间怎样连接，再沿着关系学习</h2>
+<p>每个实现阶段开始时，AI 先画一张结构图。图里只放少量主要部件，规则把上限设为七个，并标出哪些来自上一阶段、哪些是这次新增的。箭头则说明数据怎样流动。这个数量是控制当前讲解复杂程度的设计选择，不必把七当成所有项目都必须遵守的认知定律。<button type="button" class="timecode" data-seconds="403">[00:06:43]</button></p>
+<p>图画出来之后，讲解就能沿着具体连接展开。例如正在解释从一个部件到另一个部件的过程时，学习者可以看到起点、终点，以及它们在整体中的位置。代码当然还会有细节，但这些细节有了可以放置的地方。遇到报错时，也更容易先问属于哪一段过程，再逐渐检查内部实现。</p>
+<p>这种方式还让项目逐步增长的过程更清楚。如果新阶段只增加一两个部件，我们就能够把已经理解的部分与新的部分连接起来。读者无需每次重新面对一整个陌生系统。结构图持续充当学习地图，具体运行现象则帮助我们检验图里的关系是否真的发生。</p>
+<h2 id="_4">少一些连续问答，把注意力留给重要的检验</h2>
+<p>build-to-learn 提出“应答预算”，指学习者在一个阶段里愿意认真停下来回答问题的次数有限。AI 如果每解释一个小步骤都问“你理解了吗”，前几次可能促进思考，后面却容易变成机械确认。对话看起来很积极，真实理解却未必继续增加，甚至连重要的问题也开始随手应付。<button type="button" class="timecode" data-seconds="477">[00:07:57]</button></p>
+<p>因此，这套规则把正式的学习检验集中在每阶段的通关题上，施工过程中更多采用直接解释、给出问题后同时解释答案，或者邀请学习者亲自操作。立项仍然需要确认产品选择，实际操作仍然需要反馈，所以“一个阶段一题”限制的是正式考试密度，并不意味着整个过程只发生一次交流。<button type="button" class="timecode" data-seconds="508">[00:08:28]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV12suS6rEA8-00500.jpg" data-caption="右侧区分了“施工期不连续考试”和“通关集中检验”，同时保留亲自运行、点击和观察结果。">
+    <img src="../assets/frames/BV12suS6rEA8-00500.jpg" loading="lazy" alt="视频截图 02，00:08:20：右侧区分了“施工期不连续考试”和“通关集中检验”，同时保留亲自运行、点击和观察结果。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="500.000">图 02 · 00:08:20</button><span>右侧区分了“施工期不连续考试”和“通关集中检验”，同时保留亲自运行、点击和观察结果。</span></figcaption>
+</figure>
+<p>通关题的重点是判断，往往会给出一个没有原样教过的新需求，要求学习者说明思路。如果只记住刚才答案的句子，就容易在条件变化后卡住；如果理解部件的职责与限制，就有机会把已有知识迁移过去。一道经过选择的问题，可以比反复确认“懂了吗”更接近真实掌握，不过它仍然只是当前阶段的检查，不能保证以后永远不会忘记。<button type="button" class="timecode" data-seconds="435">[00:07:15]</button></p>
+<h3 id="_5">减少考试，不等于取消亲手做</h3>
+<p>运行命令、点击按钮、观察结果这些动作仍然交给学习者。AI 可以先准备好环境，告诉我们操作哪里，然后等待实际反馈。我们做完，再描述看到了什么，AI 接着解释现象与机制的关系。这个停顿把学习者重新放回项目中，使自己有机会把文字中的过程与屏幕上的结果联系起来。<button type="button" class="timecode" data-seconds="564">[00:09:24]</button></p>
+<p>习惯了让 AI 一口气做完所有事情的人，可能把这种等待误认为程序卡住。理解这套学习安排后，就知道暂停有时是交接操作的信号。区别在于，学习者此时究竟需要做一个明确动作，还是系统真的遇到了故障；好的引导应当把等待的原因和下一步说清楚，避免让人自己猜测。<button type="button" class="timecode" data-seconds="595">[00:09:55]</button></p>
+<p>有些练习还会故意设置会失败的条件，让我们先看到问题，再理解为什么失败。这里值得保留的是可控试验：预期会发生什么、实际发生什么，两者之间的差别值得观察。它应当发生在能够承受失败的练习环境里，不能为了教学去破坏真实数据。亲自遇到一次边界，可能帮助记忆，但也需要后续解释把现象与原因接起来。<button type="button" class="timecode" data-seconds="617">[00:10:17]</button></p>
+<h2 id="_6">学习记录留下真实概念，计划允许逐步改变</h2>
+<p>这套规则对比喻比较克制。新概念第一次出现时，可以借一个熟悉情境帮助进入；继续学习和保存笔记时，就回到真实技术名称。举例说，用柜台工作的方式帮助理解事件循环，可能让人暂时有印象。但如果后面一直只说“柜台”，再看文档里的“事件循环”时，就未必能与此前学到的内容对应。类比与概念之间的连接需要及时建立。<button type="button" class="timecode" data-seconds="642">[00:10:42]</button></p>
+<p>未来计划也保持一定弹性。靠近当前的阶段要具体，因为马上要做；更远的部分可以先写得简略，等实际遇到需求和困难后再展开。学习者在过程中可能发现，原先以为容易的地方需要补基础，原先计划深入的内容暂时没有用处。让计划随这些信息调整，有助于把学习与实际理解保持联系。<button type="button" class="timecode" data-seconds="684">[00:11:24]</button></p>
+<p>自动保存的记录分成三种。学习地图帮助 AI 或后续对话了解当前进度；学习记录面向学习者，保存图解、解释和自测问题；能力库则把跨项目可以复用的理解积累下来。三者面对的使用场景不同：一个负责续接，一个负责回看，一个负责下一次项目中的迁移。实际能否在其他设备或新对话里接上，仍取决于这些文件是否被带过去并正确读取。<button type="button" class="timecode" data-seconds="446">[00:07:26]</button></p>
+<h2 id="_7">这套方法能够帮助什么，还有哪些问题没有解决</h2>
+<p>如果只是赶着完成一项交付，教学流程可能反而占用时间。build-to-learn 允许学习者明确要求直接完成任务，退出学习安排。这个选择很重要：当下目标可以改变，工具不需要把每一次使用都强行变成课程。只要知道自己选择的是交付效率，就不会把减少的学习过程误算成已经获得的能力。<button type="button" class="timecode" data-seconds="707">[00:11:47]</button></p>
+<p>在介绍时，这还是一个规模较小的项目，已有规则的细致程度，不能代替对大规模学习效果的验证。它以 Claude Code 技能形式提供，转到其他工具时，规则是否能够同样执行，也需要实际适配与检查。因此，可以认真理解它提出的交互设计，同时保留对具体效果的判断空间。<button type="button" class="timecode" data-seconds="735">[00:12:15]</button></p>
+<p>更深一层的问题，是判断力怎样形成。代码主要由 AI 编写时，学习者仍需要足够的操作、观察和修正，才可能逐渐认识技术边界。只听解释、偶尔答一道题，未必足以支持复杂场景。build-to-learn 尝试用分阶段结构、实际操作和迁移问题来弥补这个缺口，但它能够帮助不同基础的人学到多深，仍需要更多实践来回答。<button type="button" class="timecode" data-seconds="786">[00:13:06]</button></p>
+<p>回到最初那个已经运行起来的网页，我们可以再多看一层：它给了我们一个可以观察的对象。知道这个对象由什么组成，能解释一次输入怎样走到结果，知道哪里可能出错，也知道怎样检查，才说明理解正在形成。AI 可以帮忙缩短实现过程，学习者仍需要亲自经历这些理解发生的时刻。</p>
+<h2 id="_8">总结提炼</h2>
+<p>项目运行成功与自己已经掌握，是需要分别判断的两件事。build-to-learn 把可行性、机制、边界和验收作为重要学习方向。</p>
+<p>立项先明确目标，施工用结构图连接部件，通关检查迁移理解，笔记保存进度和可复用知识。减少连续考试，可以把注意力留给实际操作和关键问题。</p>
+<p>这是一套值得理解的学习安排，效果仍取决于实践。判断力需要观察、尝试与修正，不能仅靠看过 AI 的解释来替代。</p>
+<h2 id="_9">时间导航</h2>
 <ul>
-<li><strong>可行性</strong>：有哪些技术能实现目标，哪些做不到。</li>
-<li><strong>机制</strong>：方案成立依赖怎样的因果链。</li>
-<li><strong>边界</strong>：在什么条件下会失效。</li>
-<li><strong>验收</strong>：AI 声称完成后，如何确认它真的完成。</li>
+<li><button type="button" class="timecode" data-seconds="4">[00:00:04]</button> 程序跑起来，自己却不懂的落差。</li>
+<li><button type="button" class="timecode" data-seconds="152">[00:02:32]</button> 全程点头为什么容易形成掌握错觉。</li>
+<li><button type="button" class="timecode" data-seconds="222">[00:03:42]</button> 委托实现与建立判断。</li>
+<li><button type="button" class="timecode" data-seconds="279">[00:04:39]</button> 可行性、机制、边界和验收。</li>
+<li><button type="button" class="timecode" data-seconds="344">[00:05:44]</button> 立项与五项确认。</li>
+<li><button type="button" class="timecode" data-seconds="403">[00:06:43]</button> 结构图与逐段理解。</li>
+<li><button type="button" class="timecode" data-seconds="435">[00:07:15]</button> 阶段通关与学习记录。</li>
+<li><button type="button" class="timecode" data-seconds="477">[00:07:57]</button> 应答预算与减少连续考试。</li>
+<li><button type="button" class="timecode" data-seconds="564">[00:09:24]</button> 亲自运行、点击和观察。</li>
+<li><button type="button" class="timecode" data-seconds="617">[00:10:17]</button> 可控失败与理解边界。</li>
+<li><button type="button" class="timecode" data-seconds="642">[00:10:42]</button> 从比喻回到真实技术名称。</li>
+<li><button type="button" class="timecode" data-seconds="684">[00:11:24]</button> 允许计划随学习调整。</li>
+<li><button type="button" class="timecode" data-seconds="735">[00:12:15]</button> 工具适配与学习效果的限制。</li>
+<li><button type="button" class="timecode" data-seconds="786">[00:13:06]</button> 判断力仍然需要足够实践。</li>
 </ul>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=281" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:41]">[00:04:41]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_007_00-04-00.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_007_00-04-00.jpg" alt="图 03 · 00:04:00：画面以四张卡片列出“可行性、机制、边界、验收”，并把旧坐标系标为已作废。" loading="lazy"></a><figcaption>图 03 · 00:04:00：画面以四张卡片列出“可行性、机制、边界、验收”，并把旧坐标系标为已作废。</figcaption></figure>
-<p><em>图 03 · 00:04:00：画面以四张卡片列出“可行性、机制、边界、验收”，并把旧坐标系标为已作废。</em></p>
-<p>学习是否到位，可用三个问题检验：拿到方案时我能判断是否靠谱吗？发生故障时我能定位哪一段出问题吗？AI 说完成后我能设计验收吗？三个问题能答上，才有理由把这项能力视为已掌握。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=308" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:08]">[00:05:08]</a></p>
-<h2 id="_5">四阶段：把项目做成一条学习路径</h2>
-<h3 id="1">1. 立项：先明确产品和未知</h3>
-<p>立项阶段暂时不讨论技术实现，先通过一次一个问题、每题给出具体选项的方式，明确用户、使用场景、成功标准与要解决的问题。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=347" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:47]">[00:05:47]</a> AI 会把想法拆成能力块，标出已有能力、已有技术、可能撞墙的部分与尚不确定的部分；其中一个关键动作是先猜“哪里最难”，以后真实遇到障碍时再回来核对判断。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:03]">[00:06:03]</a></p>
-<p>在写代码前，需要确认产品一句话、使用场景、成功定义、学习单位和第一架阶梯；这些未确认，AI 不开始实现。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=389" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:29]">[00:06:29]</a></p>
-<h3 id="2">2. 施工：每一阶段先画图</h3>
-<p>每个阶段开工先画一张结构图：由哪些部件组成、数据怎样流动，部件数最多七个；图中还区分旧部件和本阶段新增部件。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:43]">[00:06:43]</a> 后续解释围绕图中的一条具体连接展开，让学习者持续知道“现在在理解从 X 到 Y 的哪一段”。</p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_012_00-07-05.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_012_00-07-05.jpg" alt="图 04 · 00:07:05：画面中的四栏流程“立项、施工、通关、笔记”及“学习地图”说明，支撑阶段化学习与持续定位。" loading="lazy"></a><figcaption>图 04 · 00:07:05：画面中的四栏流程“立项、施工、通关、笔记”及“学习地图”说明，支撑阶段化学习与持续定位。</figcaption></figure>
-<p><em>图 04 · 00:07:05：画面中的四栏流程“立项、施工、通关、笔记”及“学习地图”说明，支撑阶段化学习与持续定位。</em></p>
-<h3 id="3">3. 通关：每阶段只保留一道关键检验题</h3>
-<p>通关就是考试，但每个阶段只保留一道题。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=435" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:15]">[00:07:15]</a> 它背后的设计叫“应答预算”：人愿意停下来认真回答问题的次数有限，问题过密会使回答退化为机械点头，最关键的检验也失去价值。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=483" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:03]">[00:08:03]</a></p>
-<p>项目把检验密度从“每个部件都考”逐步收缩到“整个阶段只留一次通关”，其余内容改为自答式说明，或直接保留动手操作。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=531" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:51]">[00:08:51]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_015_00-08-57.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_015_00-08-57.jpg" alt="图 05 · 00:08:57：画面展示应答预算的低容量进度条，以及“动手是学习本体，不能省”的并列规则。" loading="lazy"></a><figcaption>图 05 · 00:08:57：画面展示应答预算的低容量进度条，以及“动手是学习本体，不能省”的并列规则。</figcaption></figure>
-<p><em>图 05 · 00:08:57：画面展示应答预算的低容量进度条，以及“动手是学习本体，不能省”的并列规则。</em></p>
-<h3 id="4">4. 笔记：让学习能跨上下文继续</h3>
-<p>笔记阶段自动生成三类产物：帮助 AI 找回上下文的学习地图、供人复盘的带图学习记录，以及可跨项目积累的能力库。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=447" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:27]">[00:07:27]</a> 它们的作用是让一次学习在换电脑、换对话或间隔一段时间后仍能续上。</p>
-<h2 id="_6">两条重要的学习约束</h2>
-<p><strong>动手不能外包。</strong> AI 可以搭好环境、说明该点哪个按钮、该运行什么命令，然后停下来等我亲自执行、观察结果并反馈。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=567" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:27]">[00:09:27]</a> AI 的暂停因此可能是教学设计的一部分，提醒我从旁观转为操作。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=595" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:55]">[00:09:55]</a></p>
-<p><strong>失败可以被设计。</strong> 某些实验故意让人撞墙：先经历现象，再解释原因，记忆与判断才更有锚点。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=617" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:17]">[00:10:17]</a></p>
-<p>此外，比喻只用于新概念第一次出现；破冰后要回到正式技术名词，避免长期记住比喻却记不住概念本身。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=642" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:42]">[00:10:42]</a> 学习计划称为“阶梯”，远处阶段可以保持模糊，因为真实项目推进后计划会变化。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=684" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:24]">[00:11:24]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_018_00-10-48.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_018_00-10-48.jpg" alt="图 06 · 00:10:48：画面明确写出“比喻只用一次”与“阶梯是路标，不是合同”，支撑术语回归和计划可调整两条约束。" loading="lazy"></a><figcaption>图 06 · 00:10:48：画面明确写出“比喻只用一次”与“阶梯是路标，不是合同”，支撑术语回归和计划可调整两条约束。</figcaption></figure>
-<p><em>图 06 · 00:10:48：画面明确写出“比喻只用一次”与“阶梯是路标，不是合同”，支撑术语回归和计划可调整两条约束。</em></p>
-<h2 id="_7">边界、疑点与时效性</h2>
-<p>它服务的是愿意学习的人。若目标只是尽快交付，流程允许直接退出教学模式，让 AI 常规完成任务。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=712" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:52]">[00:11:52]</a></p>
-<p>它强依赖 Claude Code 生态；规则能否无损迁移到其他 AI 编程工具，证据不足。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=735" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:15]">[00:12:15]</a> 画面与转写还显示项目当时规模很小，只有少量星标和单人维护；这些数值属于录制时状态，不能推断当前热度或大规模效果。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=756" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:36]">[00:12:36]</a></p>
-<figure><a href="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_020_00-12-02.jpg" target="_blank" rel="noopener"><img src="../../../notes/AI%E6%8A%80%E6%9C%AF%E6%8A%95%E9%99%8D%E6%B4%BE/build-to-learn%EF%BD%9CAI%20%E5%86%99%E5%AE%8C%E4%BB%A3%E7%A0%81%E4%BD%A0%E5%8D%B4%E5%95%A5%E4%B9%9F%E6%B2%A1%E5%AD%A6%E5%88%B0%EF%BC%9Fvibe%20coding%20%E6%97%B6%E4%BB%A3%E7%9A%84_%E5%B9%BB%E8%A7%89%E5%BC%8F%E6%8E%8C%E6%8F%A1_%E6%80%8E%E4%B9%88%E6%B2%BB__BV12suS6rEA8/assets/standard/frame_020_00-12-02.jpg" alt="图 07 · 00:12:02：画面将“只适合真想学的人”“强依赖 Claude Code 生态”“未经过大规模验证”“潜在悖论”列为四项局限。" loading="lazy"></a><figcaption>图 07 · 00:12:02：画面将“只适合真想学的人”“强依赖 Claude Code 生态”“未经过大规模验证”“潜在悖论”列为四项局限。</figcaption></figure>
-<p><em>图 07 · 00:12:02：画面将“只适合真想学的人”“强依赖 Claude Code 生态”“未经过大规模验证”“潜在悖论”列为四项局限。</em></p>
-<p>最值得保留的疑问是：完全不写代码的人，主要依靠验收和回答问题，能否形成可迁移的技术认知？项目选择相信可以，但逐字稿没有提供大规模实证。<a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=786" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:06]">[00:13:06]</a> 因此，这套方法更适合作为“避免旁观式学习”的流程假设，而非已经被充分验证的通用结论。</p>
-<h2 id="_8">时间戳导航</h2>
-<ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=11" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:11]">[00:00:11]</a> vibe coding 与“程序能跑、自己却不会”的问题<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=54" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:54]">[00:00:54]</a> Build to Learn 的核心主张<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=152" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:32]">[00:02:32]</a> “幻觉式掌握”的定义<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=225" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:45]">[00:03:45]</a> 代码由 AI 写，检验转向判断力<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=281" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:41]">[00:04:41]</a> 四个新学习维度<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=308" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:08]">[00:05:08]</a> 判断是否学会的三道检验<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=347" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:47]">[00:05:47]</a> 立项阶段与五项确认<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=403" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:43]">[00:06:43]</a> 施工阶段的结构图<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=435" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:15]">[00:07:15]</a> 通关：每阶段一道题<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=483" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:03]">[00:08:03]</a> 应答预算<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=567" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:27]">[00:09:27]</a> 动手操作必须保留<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=617" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:17]">[00:10:17]</a> 故意失败的实验<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=642" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:42]">[00:10:42]</a> 比喻只用一次<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=684" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:24]">[00:11:24]</a> 阶梯是路标<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=712" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:52]">[00:11:52]</a> 适用对象与四项局限<br></li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV12suS6rEA8/?t=810" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:30]">[00:13:30]</a> 回到“人还该学什么”</li>
-</ul>
-<h2 id="_9">复习与行动清单</h2>
-<ul>
-<li>做下一个 AI 项目前，先写清：谁使用、什么场景、什么结果算完成。<br></li>
-<li>对每个关键方案都追问四件事：能否实现、为何实现、何处失效、怎样验收。<br></li>
-<li>每阶段只留一个真正需要回答的检验题，避免把反思做成机械确认。<br></li>
-<li>把运行命令、点击操作、观察结果留给自己完成，并记录现象与判断。<br></li>
-<li>用正式技术名词沉淀笔记；比喻用于开场即可。<br></li>
-<li>把学习计划当作可调整的路线图，遇到新证据就更新下一步。</li>
-</ul></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_10">回看时的三个问题</h2>
+<p>AI 写出的网页能够运行，你还需要了解哪些东西，才能独立判断一次修改是否合理？</p>
+<p>为什么连续追问“懂了吗”可能使重要的检查失效？减少问答之后，哪些操作仍然应该由学习者亲自完成？</p>
+<p>如果某个概念只记得一个生动比喻，回到实际文档时可能遇到什么困难？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "build-to-learn｜AI 写完代码你却啥也没学到？vibe coding 时代的\"幻觉式掌握\"怎么治", "duration": "14:49", "src": "", "poster": "../assets/frames/BV12suS6rEA8-00388.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

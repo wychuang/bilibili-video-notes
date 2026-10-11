@@ -10,6 +10,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qs, quote, urlsplit
 
 import bleach
 import markdown
@@ -36,7 +37,7 @@ EXECUTION_PROFILES = {
     "deep": ("gpt-5.6-sol", "high"),
 }
 
-SUMMARY_PIPELINE_VERSION = "4-static-mathml"
+SUMMARY_PIPELINE_VERSION = "7-reader-focused-illustrations"
 
 
 def _project_root() -> Path:
@@ -551,14 +552,14 @@ def _frame_figure(frame: dict[str, Any], caption: str) -> str:
     seconds = float(frame["timestamp_seconds"])
     timecode = html.escape(str(frame["timecode"]))
     source = html.escape(str(frame["relative_path"]), quote=True)
-    safe_caption = html.escape(caption.strip() or "这一帧是正文观点的直接画面证据。")
+    safe_caption = html.escape(caption.strip() or "点击画面放大查看细节。")
     part = int(frame.get("part_index") or 0)
     part_attribute = f' data-part="{part}"' if part else ""
     part_label = f"P{part:02d} / " if part else ""
     return f"""<figure class="evidence-figure" id="evidence-frame-{index:02d}">
   <button type="button" class="frame-image" data-src="{source}" data-caption="{safe_caption}">
-    <img src="{source}" loading="lazy" alt="画面证据 {index:02d}，{timecode}：{safe_caption}">
-    <span class="frame-stamp">VISUAL EVIDENCE / {part_label}{index:02d}</span>
+    <img src="{source}" loading="lazy" alt="视频截图 {index:02d}，{timecode}：{safe_caption}">
+    <span class="frame-stamp">视频画面 / {part_label}{index:02d}</span>
   </button>
   <figcaption><button type="button" class="frame-jump"{part_attribute} data-seconds="{seconds:.3f}">{part_label}图 {index:02d} · {timecode}</button><span>{safe_caption}</span></figcaption>
 </figure>"""
@@ -756,6 +757,34 @@ def _markdown_to_safe_html(
     return safe, engine.toc
 
 
+def _reader_source_urls(source: dict[str, Any]) -> tuple[str, str, int]:
+    """Build trusted Bilibili URLs without share tracking or model-supplied HTML."""
+    raw = str(source.get("source_url") or source.get("url") or "")
+    try:
+        parsed = urlsplit(raw)
+        trusted = parsed.scheme in {"http", "https"} and parsed.hostname in {
+            "www.bilibili.com", "bilibili.com", "m.bilibili.com",
+        }
+    except ValueError:
+        trusted = False
+    bvid = str(source.get("bvid") or source.get("video_id") or "")
+    if not re.fullmatch(r"BV[0-9A-Za-z]{10}", bvid):
+        match = re.fullmatch(r"/video/(BV[0-9A-Za-z]{10})/?", parsed.path) if trusted else None
+        bvid = match[1] if match else ""
+    page = 1
+    raw_page = str(source.get("requested_part") or "1")
+    if trusted:
+        raw_page = parse_qs(parsed.query).get("p", [raw_page])[0]
+    if raw_page.isascii() and raw_page.isdigit() and len(raw_page) <= 5:
+        page = max(1, int(raw_page))
+    if not bvid:
+        return "", "", page
+    canonical = f"https://www.bilibili.com/video/{bvid}/"
+    if page > 1:
+        canonical += f"?p={page}"
+    return canonical, f"https://player.bilibili.com/player.html?bvid={bvid}&page={page}&autoplay=0", page
+
+
 def render_summary_html(
     job_dir: Path,
     strength: str,
@@ -765,27 +794,34 @@ def render_summary_html(
     *,
     page_videos: list[dict[str, Any]] | None = None,
     visual_frames_override: list[dict[str, Any]] | None = None,
+    related_paths: dict[str, Path] | None = None,
+    output_path: Path | None = None,
 ) -> Path:
     notes_dir = summary_path.parent
+    html_path = output_path or notes_dir / "summary.html"
+    if html_path.parent.resolve() != notes_dir.resolve():
+        raise WorkflowError("HTML 与 Markdown 必须保存在同一目录，才能保持相对链接有效。")
+    canonical_url, online_url, source_part = _reader_source_urls(source)
     if page_videos is None:
         page_videos = [
             {
-                "part": 1,
+                "part": source_part,
                 "title": source.get("title") or "本集",
                 "duration": "",
-                "path": job_dir / str(source["source_file"]),
+                "path": job_dir / str(source["source_file"]) if source.get("source_file") else None,
             }
         ]
     videos: list[dict[str, Any]] = []
     for item in page_videos:
-        video_path = Path(item["path"])
+        video_path = Path(item["path"]) if item.get("path") else None
         poster_path = Path(item["poster"]) if item.get("poster") else None
         videos.append(
             {
                 "part": int(item.get("part") or len(videos) + 1),
                 "title": str(item.get("title") or f"第 {len(videos) + 1} 集"),
                 "duration": str(item.get("duration") or ""),
-                "src": Path(os.path.relpath(video_path, notes_dir)).as_posix(),
+                "src": Path(os.path.relpath(video_path, notes_dir)).as_posix()
+                if video_path and video_path.is_file() else "",
                 "poster": (
                     Path(os.path.relpath(poster_path, notes_dir)).as_posix()
                     if poster_path
@@ -793,7 +829,14 @@ def render_summary_html(
                 ),
             }
         )
-    visual_frames = visual_frames_override or _visual_frame_records(job_dir)
+    if not videos:
+        raise WorkflowError("缺少视频选集信息，请检查来源。")
+    online_only = all(not item["src"] for item in videos)
+    if not online_only and any(not item["src"] for item in videos):
+        raise WorkflowError("本地合集有视频缺失，请检查归档。")
+    if online_only and not online_url:
+        raise WorkflowError("本地视频不存在，且缺少有效的 B 站视频标识，无法生成播放器。")
+    visual_frames = visual_frames_override if visual_frames_override is not None else _visual_frame_records(job_dir)
     for item in visual_frames:
         item["relative_path"] = Path(os.path.relpath(item["path"], notes_dir)).as_posix()
     if len(videos) == 1 and not videos[0].get("poster") and visual_frames:
@@ -802,11 +845,18 @@ def render_summary_html(
         summary_path.read_text(encoding="utf-8"),
         visual_frames,
     )
-    selected_frame_count = content.count('class="evidence-figure"')
+    # The body title is visually hidden; its TOC entry must target the visible hero.
+    article_title = re.search(r'<h1 id="([^"]+)">', content)
+    hero_anchor = ""
+    if article_title:
+        hero_anchor = f' id="{html.escape(article_title[1], quote=True)}"'
+        content = content.replace(article_title[0], "<h1>", 1)
     title = html.escape(str(source.get("title") or "B站视频学习笔记"))
     uploader = html.escape(str(source.get("uploader") or "未知UP主"))
-    source_url = html.escape(str(source.get("source_url") or ""), quote=True)
-    provenance = html.escape(str(transcript_meta.get("source") or "unknown"))
+    source_link = (
+        f'<a href="{html.escape(canonical_url, quote=True)}" target="_blank" rel="noopener">打开原始页面</a>'
+        if canonical_url else ""
+    )
     strength_label = STRENGTH_LABELS[strength]
     is_collection = len(videos) > 1
     initial_video = html.escape(str(videos[0]["src"]), quote=True)
@@ -826,7 +876,38 @@ def render_summary_html(
     )
     playlist_json = json.dumps(videos, ensure_ascii=False).replace("</", "<\\/")
     eyebrow = "Bilibili Collection Notes" if is_collection else "Bilibili Video Notes"
-    archive_label = f"整套 {len(videos)} 集已归档" if is_collection else "源文件 SHA-256 已校验"
+    archive_label = (
+        "在线回看 · 未保存视频" if online_only
+        else f"整套 {len(videos)} 集已归档" if is_collection else "本地视频已归档"
+    )
+    resources = {
+        "Markdown 笔记": summary_path,
+        "逐字稿": job_dir / "transcript/transcript.txt",
+        "SRT 字幕": job_dir / "transcript/transcript.srt",
+        **(related_paths or {}),
+    }
+    resource_links = "".join(
+        f'<a href="{html.escape(quote(Path(os.path.relpath(path, notes_dir)).as_posix(), safe="/.-_"), quote=True)}">{html.escape(label)}</a>'
+        for label, path in resources.items() if Path(path).is_file()
+    )
+    if online_only:
+        poster = f'<img class="online-poster" src="{initial_poster}" alt="视频画面预览">' if initial_poster else ""
+        player_html = (
+            '<div id="online-start" class="online-start">'
+            f'{poster}<div class="online-start-content"><p>原视频 · 在线回看</p>'
+            '<button type="button" id="load-online-video">加载在线视频</button>'
+            '<p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div>'
+            '<iframe id="source-online-player" title="B站原视频播放器" src="about:blank" '
+            f'data-player-url="{html.escape(online_url, quote=True)}" hidden '
+            'allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>'
+            '<div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。'
+            f'<a id="online-fallback" href="{html.escape(canonical_url, quote=True)}" target="_blank" rel="noopener">在 B 站打开当前时间</a></div>'
+            f'{playlist_html}'
+        )
+        footer = "点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。"
+    else:
+        player_html = f'<video id="source-video" controls preload="metadata" src="{initial_video}" poster="{initial_poster}"></video>{playlist_html}'
+        footer = "点击截图可放大；点击时间戳可回看相应内容。"
     body_font_path = Path(__file__).resolve().parents[2] / "assets" / "fonts" / "LXGWWenKaiGBScreen.ttf"
     body_font_face = ""
     if body_font_path.is_file():
@@ -849,13 +930,14 @@ def render_summary_html(
     {body_font_face}
     :root {{ --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }}
     * {{ box-sizing:border-box; }}
+    [hidden] {{ display:none!important; }}
     html {{ scroll-behavior:smooth; }}
     body {{ margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }}
     #progress {{ position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }}
     .hero {{ padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }}
     .hero-inner {{ width:min(1040px,100%); margin:auto; }}
     .eyebrow {{ font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }}
-    .hero h1 {{ max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; }}
+    .hero h1 {{ max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }}
     .meta {{ display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }}
     .meta a {{ color:#d7f6e8; }}
     .shell {{ width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }}
@@ -866,9 +948,17 @@ def render_summary_html(
     aside ul {{ margin:0; padding-left:18px; }}
     aside a {{ color:#3d5046; text-decoration:none; }}
     aside a:hover {{ color:var(--accent); }}
+    .resource-links {{ display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }}
     main {{ min-width:0; }}
     .player {{ margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }}
     video {{ display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }}
+    #source-online-player {{ display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }}
+    .online-start {{ position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }}
+    .online-poster {{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }}
+    .online-start-content {{ position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }}
+    #load-online-video {{ padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }}
+    .online-note {{ display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }}
+    .online-note a {{ color:#a9e4ca; }}
     .part-list {{ margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }}
     .part-list-head {{ display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }}
     .part-button {{ display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }}
@@ -877,7 +967,7 @@ def render_summary_html(
     .part-number {{ color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }}
     .part-title {{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }}
     .part-duration {{ color:#799087; font:11px/1.4 ui-monospace,monospace; }}
-    article {{ padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; }}
+    article {{ padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }}
     article h1 {{ display:none; }}
     article h2 {{ margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }}
     article h3 {{ margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }}
@@ -885,7 +975,7 @@ def render_summary_html(
     article li {{ margin:.3em 0; }}
     article blockquote {{ margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }}
     article table {{ width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }}
-    article th, article td {{ padding:10px 12px; border:1px solid var(--line); text-align:left; }}
+    article th, article td {{ min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }}
     article code {{ padding:.15em .4em; border-radius:4px; background:#ece8de; }}
     article math {{ font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }}
     .math-display {{ margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }}
@@ -921,15 +1011,15 @@ def render_summary_html(
   <div id="progress"></div>
   <header class="hero"><div class="hero-inner">
     <div class="eyebrow">{eyebrow} · {strength_label}</div>
-    <h1>{title}</h1>
-    <div class="meta"><span>{uploader}</span><span>转写来源：{provenance}</span><span>正文截图：{selected_frame_count} 张</span><span>{archive_label}</span><a href="{source_url}">打开原始页面</a></div>
+    <h1{hero_anchor}>{title}</h1>
+    <div class="meta"><span>{uploader}</span><span>{archive_label}</span>{source_link}</div>
   </div></header>
   <div class="shell">
-    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content">{toc}</div></aside>
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content">{toc}</div><nav class="resource-links" aria-label="资料与入口">{resource_links}</nav></aside>
     <main>
-      <section class="player"><video id="source-video" controls preload="metadata" src="{initial_video}" poster="{initial_poster}"></video>{playlist_html}</section>
+      <section class="player" aria-label="原视频播放">{player_html}</section>
       <article>{content}</article>
-      <div class="foot">本页与原视频、字幕、关键画面和来源指纹一同保存在本地。点击画面可放大，点击时间可跳转视频。</div>
+      <div class="foot">{footer}</div>
     </main>
   </div>
   <dialog class="lightbox" id="frame-lightbox">
@@ -938,15 +1028,35 @@ def render_summary_html(
   </dialog>
   <script>
     const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
     const partVideos = {playlist_json};
     const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
     let activePart = Number(partVideos[0]?.part || 1);
     function activatePart(part, seconds = 0, autoplay = false) {{
       const selected = videoByPart.get(Number(part));
       if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {{
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      }});
+      if (onlineVideo) {{
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }}
       const seek = () => {{
         video.currentTime = Number(seconds || 0);
-        if (autoplay) video.play();
+        if (autoplay) video.play().catch(() => {{}});
       }};
       if (activePart !== Number(part)) {{
         activePart = Number(part);
@@ -954,13 +1064,13 @@ def render_summary_html(
         video.poster = selected.poster || '';
         video.load();
         video.addEventListener('loadedmetadata', seek, {{once:true}});
+      }} else if (video.readyState === 0) {{
+        video.addEventListener('loadedmetadata', seek, {{once:true}});
       }} else {{
         seek();
       }}
-      document.querySelectorAll('.part-button').forEach(button => {{
-        button.classList.toggle('active', Number(button.dataset.part) === activePart);
-      }});
     }}
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
     document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {{
       activatePart(Number(button.dataset.part), 0, false);
     }}));
@@ -976,7 +1086,7 @@ def render_summary_html(
     tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
     document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {{
       activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
-      video.scrollIntoView({{behavior:'smooth', block:'center'}});
+      document.querySelector('.player').scrollIntoView({{behavior:'smooth', block:'center'}});
     }}));
     const lightbox = document.getElementById('frame-lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
@@ -997,8 +1107,7 @@ def render_summary_html(
 </body>
 </html>
 """
-    html_path = notes_dir / "summary.html"
-    html_path.write_text(page, encoding="utf-8")
+    html_path.write_text(page, encoding="utf-8", newline="\n")
     return html_path
 
 

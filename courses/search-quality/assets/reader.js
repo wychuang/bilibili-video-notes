@@ -17,7 +17,7 @@
       if (!card.hidden) count++;
     });
     document.querySelectorAll('.module').forEach(x => { x.hidden = !x.querySelector('.lesson-card:not([hidden])'); });
-    const p = document.getElementById('progress');
+    const p = document.querySelector('.tools #progress');
     if (p) { const ids = [...document.querySelectorAll('[data-check]')].map(x => x.dataset.check); p.textContent = `已学 ${ids.filter(id => done.has(id)).length} / ${ids.length} 篇 · 当前显示 ${count} 篇`; }
     const empty = document.getElementById('empty'); if (empty) empty.hidden = count !== 0;
   };

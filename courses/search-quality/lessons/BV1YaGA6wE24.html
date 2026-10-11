@@ -1,49 +1,274 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>面对“准确率提升 25 个点”，先追问什么？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG 回答不准，先看资料有没有找到，再看答案有没有照着写 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="rag">RAG 回答不准，先看资料有没有找到，再看答案有没有照着写</h1>
+    <div class="meta"><span>AI大模型-阿水</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1YaGA6wE24/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#25">面对“准确率提升 25 个点”，先追问什么？</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">时间戳导航</a></li>
-<li><a href="#_3">把最有用的诊断留下</a></li>
-<li><a href="#_4">哪些话暂时不能照单全收</a></li>
-<li><a href="#_5">关键词</a></li>
-<li><a href="#_6">下一步</a></li>
+<li><a href="#rag">RAG 回答不准，先看资料有没有找到，再看答案有没有照着写</a><ul>
+<li><a href="#_1">找全了没有，与照着写了没有，是两把不同的尺</a></li>
+<li><a href="#_2">文档怎样切，会改变模型能看到什么</a></li>
+<li><a href="#_3">改写问题可以帮助检索，也可能悄悄改变问题</a></li>
+<li><a href="#_4">两种检索找到不同的东西，分数也不能直接当成一把尺</a></li>
+<li><a href="#_5">把时间花在确实需要细查的问题上</a></li>
+<li><a href="#_6">总结提炼</a><ul>
+<li><a href="#_7">一句话抓住核心</a></li>
+<li><a href="#_8">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_9">时间戳导航</a></li>
+<li><a href="#_10">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1YaGA6wE24" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1YaGA6wE24"><div class="provenance">来源：AI大模型-阿水 · <a href="https://www.bilibili.com/video/BV1YaGA6wE24/" target="_blank" rel="noopener">BV1YaGA6wE24 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="25">面对“准确率提升 25 个点”，先追问什么？</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1YaGA6wE24.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#search">← 02 · 搜索、检索与证据</a><button class="done" data-done="BV1YaGA6wE24" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1YaGA6wE24&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1YaGA6wE24/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1YaGA6wE24"><h1>RAG 回答不准，先看资料有没有找到，再看答案有没有照着写</h1>
 <blockquote>
-<p>原视频：面试官问：RAG 准确率怎么从 60% 提升到 85% · AI大模型-阿水 · 5 分 45 秒。快览与批判性阅读。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1YaGA6wE24/">AI大模型-阿水｜面试官问：RAG 准确率怎么从 60% 提升到 85%</a> · 5 分 45 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>先区分检索是否找回证据、回答是否忠于证据，再讨论具体改进；宣传中的提升幅度需要额外实验记录支持。</p>
-<h2 id="_2">时间戳导航</h2>
+<p>一个问答系统答错了，我们第一反应往往是换一个更强的模型。可如果回答所需的那段资料根本没有交给模型，换模型之后，它仍然看不到那段资料。反过来，资料已经找对，模型却在回答时加上没有依据的内容，继续调整检索也未必能解决问题。我们需要先把这两种情况分开，才知道下一步应该检查哪里。<button type="button" class="timecode" data-seconds="15">[00:00:15]</button></p>
+<p>RAG 的基本过程并不复杂：系统先根据问题查找相关资料，把找到的内容与问题一起交给语言模型，再由模型回答。这让我们至少能检查两个位置：查回的资料是否包含回答所需的信息，最后的答案是否忠于这些资料。标题里的“60% 到 85%”表达了一条优化路线的目标，但这些百分比没有给出完整的测试题、评分定义和各步骤对照结果。因此，下面适合学习的是怎样逐步检查系统，不能把这组数字当作照做必得的收益。</p>
+<h2 id="_1">找全了没有，与照着写了没有，是两把不同的尺</h2>
+<p>上下文召回率关注第一件事：回答这道题需要的信息，有多少进入了检索返回的内容。假如正确回答需要三个条件，系统只取回其中一个，后面的模型就缺少两个条件。出现这种情况时，我们要回到资料解析、切分、查询和检索这些步骤，看看信息在哪一步没有进入最终的候选内容。低召回说明存在漏找，但仅凭一个低分，还不能立即断定就是某个 embedding 模型出了问题。<button type="button" class="timecode" data-seconds="28">[00:00:28]</button></p>
+<p>忠实度关注第二件事：模型写出的内容，是否得到它眼前资料的支持。一个答案可能语句顺畅，却把资料没有说过的细节补了进去；也可能把“在某些条件下成立”写成“一定成立”。这时，即便相关文档已经找到，生成过程仍然需要检查。忠实度评价的是答案与所给资料的关系，资料本身是否正确和最新，还要另外确认。模型忠实复述一份过期说明，也可能给用户带来错误指引。<button type="button" class="timecode" data-seconds="44">[00:00:44]</button></p>
+<table>
+<thead>
+<tr>
+<th>检查位置</th>
+<th>我们正在问什么</th>
+<th>发现问题后先看哪里</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检索返回的资料</td>
+<td>回答所需的信息有没有被找到</td>
+<td>解析、切分、查询表达和检索结果</td>
+</tr>
+<tr>
+<td>模型生成的答案</td>
+<td>每项重要说法是否有资料支持</td>
+<td>提示词、模型对条件的处理和无依据补充</td>
+</tr>
+<tr>
+<td>资料本身</td>
+<td>这份说明是否正确、适用且没有过期</td>
+<td>来源、版本及适用范围</td>
+</tr>
+</tbody>
+</table>
+<p>第三行补充了理解前两项所需的一个区别：找到了资料、照着资料回答，与用户最终得到正确答案之间，还隔着资料是否可靠。这也说明，单独把某个分数做高，无法替代对具体失败案例的查看。</p>
+<h2 id="_2">文档怎样切，会改变模型能看到什么</h2>
+<p>为了检索，长文档通常会被分成较小的片段，叫 chunk。最容易实现的做法是按固定长度切开，达到 256 或 512 个 token 就断开；token 是模型处理文字时使用的计数单位，不能直接等同于中文字数。固定长度好管理，但句子的含义不会为了满足长度限制，恰好在边界处结束。一个关键事实的前半句和后半句被切到两边，两份片段都可能单独说不清楚。<button type="button" class="timecode" data-seconds="67">[00:01:07]</button></p>
+<p>语义感知切分试着利用句子和段落的边界，在相对完整的位置断开。这样，被找回的片段更可能带着完整条件和结论。还可以让相邻片段有一部分重叠：前一片末尾的内容，在后一片开头再保留一次。即使检索只选中了其中一片，边界附近的信息也有机会一起被带回来。重叠越多，重复存储与重复返回的内容也越多，需要根据文档和查询来权衡。<button type="button" class="timecode" data-seconds="93">[00:01:33]</button></p>
+<p>这里给出的重叠比例是 10% 到 20%，可以把它当作候选设置，而无需理解为固定标准。关键检查仍然很具体：切完后，一个事实的对象、条件和结论是否还在一起？返回某个片段时，读者能否只凭它明白正在说什么？改动前后用同一批问题比较，才能确认这种切分对当前文档有没有帮助。单凭“语义切分”这个名称，还不足以说明每个片段都已经完整。</p>
+<h2 id="_3">改写问题可以帮助检索，也可能悄悄改变问题</h2>
+<p>用户很少总是用完整、规范的句子提问。“那个怎么弄”“上次说的那个方案”都很常见。人如果参与了前面的对话，也许知道“那个”指什么；检索程序如果只拿到最后一句话，就没有这样的背景。Query 扩写会尝试利用已有上下文，把口语化提问改写成更完整的查询，让系统更容易找到对应资料。<button type="button" class="timecode" data-seconds="128">[00:02:08]</button></p>
+<p>危险也正出在“补全”这一步。用户只说“性能优化”，模型却写成“MySQL 数据库的 SQL 查询性能优化”。后面这句话确实更具体，可多出来的 MySQL 和 SQL 未必来自用户。检索按照这个新问题去找，会把其他可能的性能问题排除在外。系统之后即使找到许多高质量的数据库资料，也可能一直在认真回答另一个问题。<button type="button" class="timecode" data-seconds="149">[00:02:29]</button></p>
+<p>一种检查办法，是分别把原问题和改写结果转成向量，再计算余弦相似度。余弦相似度比较两组向量的方向，通常被用来粗略判断文字含义是否接近；如果相似度过低，就放弃改写，保留原问题。这里提出的 0.8、0.65 到 0.7 等阈值，都需要用实际数据校准。不同 embedding 模型和不同类型的问题，分数分布可能不同。<button type="button" class="timecode" data-seconds="169">[00:02:49]</button></p>
+<p>还要理解这个检查的边界：“性能优化”和“MySQL 性能优化”在主题上依然很接近，相似度较高，也无法证明新加的限定有根据。向量分数可以帮助发现明显偏离，却无法自动确认每个补充条件都来自用户。回到原问题和已有对话，检查改写究竟增加了什么，仍然很重要。这个例子最值得记住的地方，就是检索词越具体，并不总代表它越准确。</p>
+<h2 id="_4">两种检索找到不同的东西，分数也不能直接当成一把尺</h2>
+<p>向量检索擅长发现含义接近的表达。问题和文档用词不同，仍然可能被联系起来。但专有名词、代码片段、版本号往往要求精确匹配，关键词检索在这些地方很有价值。混合检索会分别运行这两条路径，把两边找到的候选内容放到一起，再决定哪些优先交给回答模型。<button type="button" class="timecode" data-seconds="197">[00:03:17]</button></p>
+<p>现在又遇到一个实际问题：两边分数的含义不同。向量检索可能给出余弦相似度，关键词检索可能给出 BM25 分数。BM25 根据查询词在文档中的出现情况等因素计算相关程度，它的数值范围与向量相似度不同。因此，我们不能看到一条结果是 8 分、另一条是 0.8 分，就直接认为前者好十倍。这两个数字来自不同的计算办法。<button type="button" class="timecode" data-seconds="221">[00:03:41]</button></p>
+<p>这里提出的方案是 LambdaMART，一种学习排序的方法。我们把 BM25 分数、向量相似度、实体是否匹配等作为特征，让模型根据已有的相关性样例学习怎样排列候选。实体匹配可以理解为问题中明确提到的对象，在候选资料中是否对应得上。学习排序需要可用的训练样例和评价方式；它提供了一种综合多路信号的办法，并不意味着每个混合检索系统都必须使用这一种排序模型。<button type="button" class="timecode" data-seconds="230">[00:03:50]</button></p>
+<h2 id="_5">把时间花在确实需要细查的问题上</h2>
+<p>如果每个问题都跑多路检索，再逐条重排序，回答时间可能变长。于是可以增加一个路由步骤：先用较轻量的方法判断当前问题适合走哪条处理路径。这里的方案给简单问题使用较快的检索流程，复杂问题再使用混合检索和重排序。路由就是把不同查询分配给不同处理方法，不需要把这个词想得很神秘。<button type="button" class="timecode" data-seconds="248">[00:04:08]</button></p>
+<p>这种分配能否有效，还要看分类是否准确。一个看起来很短的问题也可能包含关键版本号，需要精确匹配；一个很长的问题也可能只是在重复同一项需求。把复杂问题错送到简化流程，可能会损失回答质量。因此，我们需要同时观察回答效果和耗时，检查哪些问题走错了路。快速路径与深度路径的具体安排，要服从实际题目的表现。</p>
+<p>到这里，几项改动就接起来了。切分决定检索能拿到怎样的信息单元；查询改写决定我们拿什么问题去找；混合检索与排序决定哪些候选被留下；路由决定每个问题要经过哪些处理步骤。任何一步改变之后，都应回到同一批测试题，再看该找的信息有没有找全，答案有没有无依据的补充，耗时是否在可接受范围内。<button type="button" class="timecode" data-seconds="281">[00:04:41]</button></p>
+<h2 id="_6">总结提炼</h2>
+<h3 id="_7">一句话抓住核心</h3>
+<p>先区分漏找资料和无依据生成，再沿切分、问题改写、检索排序与路由逐步检查，每项改动都用实际问题验证。</p>
+<h3 id="_8">推理主干</h3>
+<p>资料没找全，模型就缺少作答条件。资料找全以后，模型仍可能添加资料没有支持的内容。优化要沿着这两个失败位置展开，同时留意改写问题造成的偏移，以及更复杂处理带来的等待时间。</p>
+<h2 id="_9">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=20" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:20]">[00:00:20]</a> 准确率低可能来自检索，也可能来自生成。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=31" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:31]">[00:00:31]</a> 用上下文召回率检查必要信息是否找回。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=44" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:44]">[00:00:44]</a> 用忠实度检查回答是否有检索内容支持。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=70" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:10]">[00:01:10]</a> 切片可能割裂句子和条件。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=142" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:22]">[00:02:22]</a> 查询改写可能擅自添加约束。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=197" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:17]">[00:03:17]</a> 混合检索与重排。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=253" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:13]">[00:04:13]</a> 按问题路由，权衡复杂度和延迟。</li>
+<li><button type="button" class="timecode" data-seconds="28">[00:00:28]</button> 用召回率和忠实度区分问题位置。</li>
+<li><button type="button" class="timecode" data-seconds="67">[00:01:07]</button> 固定长度切分为什么会拆开事实。</li>
+<li><button type="button" class="timecode" data-seconds="128">[00:02:08]</button> 用户的模糊问法与查询扩写。</li>
+<li><button type="button" class="timecode" data-seconds="149">[00:02:29]</button> “性能优化”被误改成 MySQL 查询。</li>
+<li><button type="button" class="timecode" data-seconds="197">[00:03:17]</button> 混合检索与不同分数的融合。</li>
+<li><button type="button" class="timecode" data-seconds="248">[00:04:08]</button> 按问题安排不同处理路径。</li>
+<li><button type="button" class="timecode" data-seconds="297">[00:04:57]</button> 每次修改后重新评测。</li>
 </ul>
-<h2 id="_3">把最有用的诊断留下</h2>
-<p>假设用户问“性能优化”，系统却把它改成“MySQL 数据库的 SQL 查询优化”。<a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=157" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:37]">[00:02:37]</a> 即使后面的检索十分准确，也只是在认真回答一个被改错的问题。</p>
-<p>我需要保留原始提问、改写查询、检索材料和最终回答，逐步检查：用户是否提供过 MySQL 这个条件？关键材料是否进入候选？生成时是否凭空增加结论？</p>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1YaGA6wE24/?t=83" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:23]">[00:01:23]</a> 切片边界也是一个具体失败点：限制条件留在前一片，结论留在后一片，孤立读取就可能改变含义。调整切片应针对这种真实错误，再在同一组问题上比较。</p>
-<h2 id="_4">哪些话暂时不能照单全收</h2>
-<p>字幕提出 10%—20% 重叠、相似度阈值约 0.8，以及若干固定的效果提升。这些是原视频给出的经验主张，片中没有呈现完整数据集、实验日志和消融结果，不能当作普遍适用的参数。</p>
-<p>余弦相似度校验也有局限：改写后仍然与原问题语义接近，未必保住了日期、否定词、版本号等关键条件。相似度可以作为信号，不能独立担保意图一致。</p>
-<p>“工业级一定采用混合检索”也过于绝对。简单的精确查询可能更适合数据库；某些任务用小规模文档读取就足够。要给增加组件的成本找出实际收益。</p>
-<p>最后，忠实度高只表示回答贴合所给证据；如果证据已经过时或本身错误，答案仍可能不可靠。还需要来源与事实检查。</p>
-<p>补充核对：Ragas 的 Faithfulness 检查回答中的主张能否由给定上下文支持，并不独立验证上下文本身的真实性。<a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/">指标定义</a></p>
-<h2 id="_5">关键词</h2>
-<p>召回：该找的有没有找到。忠实度：说出的内容有没有材料支持。重排：对候选重新排序。路由：按任务特点选择处理路径。</p>
-<h2 id="_6">下一步</h2>
-<p>迁移练习：挑一个公开问答，分别制造“漏掉必要文档”和“文档正确但答案加戏”两个版本。写出不同的修复办法。</p>
-<p>当你介绍一次提升时，补齐四项：同一测试集、准确率定义、改变的组件、错误与成本是否同时下降。没有做过的实验，写成计划，保留真实边界。</p></article><nav class="bottom-nav"><a href="../index.html#search">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_10">复习与行动清单</h2>
+<p>补充练习：找一个确实回答错误的问题，把原问题、返回片段和最终回答放在一起。先指出哪项必要信息缺失，或哪句话没有资料支持，再提出一项与这个错误位置有关的改动。面试时也可以沿这个顺序解释；没有亲自做过的优化和测量结果，不要写成自己的项目经历。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "面试官问：RAG准确率怎么从60%提升到85%", "duration": "05:45", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,46 +1,308 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>AI 抛硬币：一段逼真画面，究竟测到了什么？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 抛出的硬币，为什么未必一半朝上、一半朝下 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">AI 抛出的硬币，为什么未必一半朝上、一半朝下</h1>
+    <div class="meta"><span>影视飓风</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Wzjg65EM6/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#ai">AI 抛硬币：一段逼真画面，究竟测到了什么？</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">画面很像，统计规律未必一样</a></li>
-<li><a href="#_3">先规定怎样算一次有效试验</a></li>
-<li><a href="#_4">世界模型的启发与演示的边界</a></li>
-<li><a href="#_5">迁移练习：把一次演示改写成测试计划</a></li>
+<li><a href="#ai">AI 抛出的硬币，为什么未必一半朝上、一半朝下</a><ul>
+<li><a href="#_1">“随机生成”为什么不保证两个结果同样常见</a></li>
+<li><a href="#_2">模型可能学到了画面的习惯，却没有完整学到物体的变化</a></li>
+<li><a href="#_3">从一段画面走到一个能够继续观察的空间</a></li>
+<li><a href="#_4">画面可以编辑，与空间可以探索，还需要继续接起来</a></li>
+<li><a href="#250">250 台相机拍出的动态空间，说明了哪一部分已经可体验</a></li>
+<li><a href="#_5">游戏和机器人，为什么也会关心同一个问题</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1Wzjg65EM6" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1Wzjg65EM6"><div class="provenance">来源：影视飓风 · <a href="https://www.bilibili.com/video/BV1Wzjg65EM6/" target="_blank" rel="noopener">BV1Wzjg65EM6 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="ai">AI 抛硬币：一段逼真画面，究竟测到了什么？</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Wzjg65EM6.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 06 · 调研、信息源与推理</a><button class="done" data-done="BV1Wzjg65EM6" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Wzjg65EM6-00090.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Wzjg65EM6&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Wzjg65EM6/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Wzjg65EM6"><h1>AI 抛出的硬币，为什么未必一半朝上、一半朝下</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1Wzjg65EM6/">影视飓风｜在 AI 里抛硬币，概率是 50% 吗？</a>；全片约 10 分钟，包含商业合作与未来形态展望。这里把它作为实验设计与证据边界的练习材料。</p>
+<p>来源：在 AI 里抛硬币，概率是 50% 吗？｜UP 主：影视飓风｜时长：10 分 17 秒｜<a href="https://www.bilibili.com/video/BV1Wzjg65EM6/">打开视频</a>｜阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>生成“抛硬币的视频”和运行“经过验证的公平随机实验”，对应两种不同任务，结果不能直接互相代替。</p>
-<h2 id="_2">画面很像，统计规律未必一样</h2>
-<p>视频开头用相同提示词生成多次抛硬币画面，报告某些模型明显偏向一面。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a></p>
-<p>它提出了一个有趣问题：生成器学到的图像与运动模式，是否保留了我们关心的概率性质？但仅凭片中展示，还不能完整复核模型版本、各组样本量、失效样本、抽样设置与判定规则。</p>
-<p>视频把偏差归因于训练素材。这个解释可以作为假设；要证明它，还需更多对照。提示词、起始图像、生成设置，以及人工挑选可辨认画面的过程，都可能影响结果。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=120" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:00]">[00:02:00]</a></p>
-<h2 id="_3">先规定怎样算一次有效试验</h2>
-<p>下面是我为这个实验补充的验收表：</p>
-<ul>
-<li>明确“正面”是哪一面，避免各次理解不同。</li>
-<li>记录模型版本、提示词、种子与设置；没有种子控制时也如实注明。</li>
-<li>保留所有生成结果，模糊、消失、出现多枚硬币的情况单独计数。</li>
-<li>分别报告有效画面的正面比例和全体生成中的无效比例。</li>
-<li>换一种等价提示词再测试，观察结论是否稳定。</li>
-</ul>
-<p>若在相同条件下，把每次独立试验视作成功概率固定的二项试验，正面比例的估计是：</p>
+<p>一枚硬币被抛到空中，翻转几圈，落在桌上。金属反光、手指动作、落下时的碰撞都很像真实拍摄，我们自然会把现实中的经验带进去：正面和反面出现的机会，大致应该各占一半。那么，如果这段画面由 AI 生成，连续生成很多次，最后还会得到差不多的比例吗？这个看似简单的问题，恰好把“看起来真实”与“按照相应规则变化”分开了。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<p>影视飓风团队使用相同提示词，在多个模型里进行了数百次生成尝试。他们报告，其中一组大约有 70% 的结果显示数字面；另一组画面标出了大约 25% 的字面与 75% 的花面。两组结果都没有接近直觉中的一半一半，而且偏向的方向还不相同。这是团队的一次非专业测试，适合用来提出问题，不能据此认定每个模型在所有设置下都具有相同偏差。<button type="button" class="timecode" data-seconds="73">[00:01:13]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Wzjg65EM6-00090.jpg" data-caption="这一组显示约 25% 的字面和 75% 的花面；画面同时注明“非专业测试”，比例描述的是这次生成尝试。">
+    <img src="../assets/frames/BV1Wzjg65EM6-00090.jpg" loading="lazy" alt="视频截图 01，00:01:30：这一组显示约 25% 的字面和 75% 的花面；画面同时注明“非专业测试”，比例描述的是这次生成尝试。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="90.000">图 01 · 00:01:30</button><span>这一组显示约 25% 的字面和 75% 的花面；画面同时注明“非专业测试”，比例描述的是这次生成尝试。</span></figcaption>
+</figure>
+<h2 id="_1">“随机生成”为什么不保证两个结果同样常见</h2>
+<p>我们首先需要分清正在数什么。真实的抛硬币实验，涉及硬币的形状、初始朝向、抛出的力量、旋转和落地方式。把它近似看作公平硬币，还包含一个对实验条件的假设。视频生成任务则接收提示词及其他输入，输出一段画面。画面里出现一枚硬币，并不自动意味着生成过程已经模拟了现实中抛掷这枚硬币的全部条件。</p>
+<p>即使生成过程使用了随机数，也只能说明结果中存在随机变化，不能推出所有可能结果都等概率。一个随机过程完全可以经常产生一种结果，较少产生另一种结果。我们点击按钮的时间不规律，也不会替模型规定“字面和花面必须各占一半”。因此，要判断某种性质是否成立，需要直接观察或检验那种性质，不能从“用了随机生成”跳到“这是一个公平的抛硬币器”。<button type="button" class="timecode" data-seconds="89">[00:01:29]</button></p>
+<p>有限次数的实验还有自然波动。即使真正在一个公平机制下独立重复，十次里也不保证刚好出现五次正面。实验记录的正面比例，是正面次数除以有效试验次数：</p>
 <div class="math-display" aria-label="\hat p = \frac{\text{正面次数}}{\text{有效试验次数}}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>p</mi><mo>^</mo></mover><mo>=</mo><mfrac><mrow><mtext>正面次数</mtext></mrow><mrow><mtext>有效试验次数</mtext></mrow></mfrac></mrow></math></div>
-<p>有限样本即使来自公平机制，也不必恰好一半正面。报告比例时还应考虑样本量与区间估计；独立性或判定规则不满足时，需要先处理实验设计。<a href="https://itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbici.htm">NIST：二项比例的区间估计</a></p>
-<h2 id="_4">世界模型的启发与演示的边界</h2>
-<p>后半段讨论预测动作之后的变化、可交互场景，以及使用多相机重建的动态影像。<a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:00]">[00:04:00]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1Wzjg65EM6/?t=362" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:02]">[00:06:02]</a></p>
-<p>这些画面说明了不同的表示与交互方式。能移动视角，不能单独证明具有正确的动力学；多相机重建现成事件，也不同于预测未发生事件。视频中的未来展望应保留“可能”的语气。</p>
-<p>作为补充阅读，Ha 与 Schmidhuber 的 <a href="https://worldmodels.github.io/">World Models 原始研究</a>在特定强化学习环境中学习压缩表示与动态，并测试在模型内训练策略的做法。它提供的是明确实验范围内的结果，没有保证任意生成硬币都会公平。</p>
-<h2 id="_5">迁移练习：把一次演示改写成测试计划</h2>
-<p>不需要生成几百段视频。只写计划：我要验证什么性质、怎样判定、哪些结果算失败、需要保留什么证据、什么结果会推翻我的猜测。</p>
-<p>再把同一套问题用于 AI 搜索：“引用很多”究竟测的是数量、相关性，还是每条主张都获得支持？先把被测对象说清楚，后面的指标才有意义。</p></article><nav class="bottom-nav"><a href="../index.html#research">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>这里的 <span class="math-inline" aria-label="\hat p"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mover accent="true"><mi>p</mi><mo>^</mo></mover></mrow></math></span> 表示由这批结果估计出来的比例。它会受到样本量和抽样波动影响。若把试验建模为相同概率下的独立重复，还可以用二项分布方法描述估计的不确定程度；这一步依赖独立性等条件。<a href="https://itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbici.htm">NIST 的二项比例区间说明</a>介绍了这种处理。</p>
+<p>对生成视频，连“有效试验”都需要认真理解。硬币落下后若看不清、消失了，或者画面里的两面没有保持一致，就无法与清楚呈现某一面的结果完全一样地计数。我们关心的可能有两个问题：成功生成可辨认硬币的比例是多少，以及在能够辨认的结果里，两面各占多少。把它们混在一起，会让一个看起来简单的百分比承担过多含义。</p>
+<h2 id="_2">模型可能学到了画面的习惯，却没有完整学到物体的变化</h2>
+<p>训练数据是一个可能的解释。影视飓风提出，电影、广告和日常分享经常选择更容易被看清的硬币面作为落点。如果这类素材在训练数据里较多，生成模型就可能更常产生类似画面。这个解释帮助我们理解数据分布如何影响输出，但仅凭某一面的比例较高，还不能确定偏差一定由这一个因素造成。提示词、输入画面、生成设置和结果判定方式，也可能改变观察到的比例。<button type="button" class="timecode" data-seconds="130">[00:02:10]</button></p>
+<p>重要的是理解其中的学习任务。模型从许多画面中学习什么样的硬币、手势、光线和运动比较常见，再据此产生新的画面。只要观看体验足够像，我们就容易把其他性质也一并想象进去：硬币质量正确、两面面积相等、碰撞遵守相同条件、长期频率接近现实。实际上，这些性质需要分别检查。外观的一致，不会自动保证每一项运动和统计关系也一致。</p>
+<p>视觉生成还有计算成本方面的困难。生成更多高质量画面，需要持续投入计算资源；如果只为了改变观察角度，又要重新生成一段内容，前后物体的位置、样子和关系也可能发生变化。于是，影像创作者会提出进一步的愿望：能否生成一个相对稳定的空间，让我们继续在里面观察、移动和操作，而不只拿到一段已经排好的画面？<button type="button" class="timecode" data-seconds="163">[00:02:43]</button></p>
+<h2 id="_3">从一段画面走到一个能够继续观察的空间</h2>
+<p>中世纪堡垒的例子就是这种愿望的直观入口。输入对光线、大理石地板和遗迹物体的描述后，得到一个可以从不同位置观看的场景。镜头能够绕行、俯冲，观察原先视角没有覆盖的部分。对于影像制作，重要变化是场景和观察视角开始能够分开处理：空间保留下来，镜头可以继续选择去哪里看。<button type="button" class="timecode" data-seconds="195">[00:03:15]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Wzjg65EM6-00220.jpg" data-caption="堡垒场景包含连续的地面、立柱和远处开口；这类空间表示让创作者有机会继续选择观察位置。">
+    <img src="../assets/frames/BV1Wzjg65EM6-00220.jpg" loading="lazy" alt="视频截图 02，00:03:40：堡垒场景包含连续的地面、立柱和远处开口；这类空间表示让创作者有机会继续选择观察位置。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="220.000">图 02 · 00:03:40</button><span>堡垒场景包含连续的地面、立柱和远处开口；这类空间表示让创作者有机会继续选择观察位置。</span></figcaption>
+</figure>
+<p>不过，能够在空间里移动视角，与物体拥有正确的物理行为，仍需分别理解。一座看起来稳定的堡垒可以有良好的几何结构，但这并没有回答石块掉落时怎样碰撞、物体能否被推动。三维场景解决了一部分空间一致性问题；预测动作引起什么变化，还需要关于变化规律的模型。把这两件事拆开，才容易理解“世界模型”希望进一步处理什么。</p>
+<p>世界模型的一种核心用途，是根据当前状态和将要采取的动作，预测接下来可能发生的变化。以抛硬币为例，当前状态包括硬币在哪里、处于怎样的姿态；动作是手以某种方式将它抛出；预测则涉及它接下来可能到达哪里、怎样旋转和落下。模型可以对多个可能动作或未来结果进行估计，决策系统再利用这些估计选择行动。<button type="button" class="timecode" data-seconds="244">[00:04:04]</button></p>
+<p>这是一种对功能的解释，并不要求每个世界模型都显式写出硬币质量、摩擦系数和全部物理方程，也不意味着冠以这个名称的系统已经理解所有物理规律。不同研究会采用不同表示和任务范围。Ha 与 Schmidhuber 的 <a href="https://worldmodels.github.io/">World Models 研究</a>就在特定游戏环境里学习环境变化，并研究在模型生成的环境中训练行动策略。模型能帮助选择动作，是可以具体研究的能力；对任意场景都预测正确，则是范围更大的要求。</p>
+<h2 id="_4">画面可以编辑，与空间可以探索，还需要继续接起来</h2>
+<p>编辑现成影像时，我们还希望保留一部分内容，同时改变另一部分：正在讲话的人保持在画面里，背景可以变化，桌子的样子可以变化，手里拿着的物体也可以变化。困难在于修改之后，人物动作和新物体之间还需要看起来衔接自然。手仍然应该接触桌面，透明物体和流体也应该与周围画面形成合理关系。这些编辑能力改善的是创作者对画面内容的控制。<button type="button" class="timecode" data-seconds="298">[00:04:58]</button></p>
+<p>如果把这种写实程度与前面可移动视角的空间结合，就会得到一个很吸引人的设想：先得到一个动态场景，再自由选择如何拍摄它。人物和物体继续发生变化，我们可以绕到另一边、靠近一个细节，或者重新选择镜头。这里的“如果”十分重要。能够编辑二维影像、能够探索三维场景，以及能够预测物体变化，是相互有关的能力，但演示其中一项不能保证其他几项都已经完成。<button type="button" class="timecode" data-seconds="350">[00:05:50]</button></p>
+<p>这样的设想之所以让影像创作者兴奋，是因为它改变了观看与拍摄的关系。普通电影已经替观众安排好了视角；一个能够探索的动态场景，则可能让观众自己决定看谁、站在哪里。要实现这种体验，光有漂亮的一帧不够，还需要不同时间、不同位置看到的内容保持连贯。</p>
+<h2 id="250">250 台相机拍出的动态空间，说明了哪一部分已经可体验</h2>
+<p>影视飓风介绍过一次更具体的制作实践：使用 250 台相机拍摄真实演员和场景，再通过计算重建，制作一部约 35 分钟的 VR 短片。团队把这种技术称为 4D 高斯。这里可以先把“4D”理解为三维空间加上时间：人物会运动，我们也希望从不同位置观看他们的运动。<button type="button" class="timecode" data-seconds="388">[00:06:28]</button></p>
+<p>普通录像记录一个相机随时间看到的画面。多机位重建则利用许多观察角度，尝试恢复动态场景的空间表示，再从新的视角渲染影像。观众因此可以把视线从前方人物移开，去看旁边的角落，也可以改变观察位置。关于动态场景怎样以高斯表示并渲染，可以进一步阅读 <a href="https://arxiv.org/abs/2310.08528">4D Gaussian Splatting 研究</a>；具体影片采用哪些实现细节，不能仅由技术名称推定。</p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Wzjg65EM6-00441.jpg" data-caption="同一个室内情节可以从偏侧、倾斜的视角观看；人物、家具和房间共同组成可探索的动态场景。">
+    <img src="../assets/frames/BV1Wzjg65EM6-00441.jpg" loading="lazy" alt="视频截图 03，00:07:21：同一个室内情节可以从偏侧、倾斜的视角观看；人物、家具和房间共同组成可探索的动态场景。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="441.000">图 03 · 00:07:21</button><span>同一个室内情节可以从偏侧、倾斜的视角观看；人物、家具和房间共同组成可探索的动态场景。</span></figcaption>
+</figure>
+<p>这段体验确实接近“走进正在发生的场景”，但其中事件先由演员真实表演，再通过多台相机记录和重建。它说明动态影像可以摆脱单一固定视角，并没有证明系统能够凭一句提示词预测任意新事件。重建已经发生的动作，与预测从未发生过的动作，需要解决的问题不同。保留这个区别，既能看见现有技术的价值，也不会把未来愿望提前算作已经完成的能力。<button type="button" class="timecode" data-seconds="432">[00:07:12]</button></p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>它主要改变了什么</th>
+<th>仍然需要另外回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生成或编辑视频</td>
+<td>产生一段画面，修改其中的内容。</td>
+<td>运动与长期统计规律是否可靠？</td>
+</tr>
+<tr>
+<td>生成可探索场景</td>
+<td>允许从不同位置观察空间。</td>
+<td>物体受力和交互后怎样变化？</td>
+</tr>
+<tr>
+<td>多机位动态重建</td>
+<td>从多个角度观看已拍摄的动态事件。</td>
+<td>能否预测没有记录过的新动作？</td>
+</tr>
+<tr>
+<td>动作条件下的世界预测</td>
+<td>根据状态与动作估计后续变化。</td>
+<td>在哪些环境、哪些动作范围内预测有效？</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">游戏和机器人，为什么也会关心同一个问题</h2>
+<p>对游戏来说，能够继续生成并维持一个可交互世界，意味着玩家的选择可能带来更多变化。对机器人来说，重点更直接：它能否在行动之前，估计杯子会不会倒、身体是否会失去平衡。假如一个模拟环境足够接近实际任务，机器人就有机会在其中反复尝试，减少每次都必须在现实中摔倒、碰撞的成本。<button type="button" class="timecode" data-seconds="476">[00:07:56]</button></p>
+<p>这里的价值来自可以试验和获得反馈，但前提仍然是模拟环境对相关动作足够可靠。机器人在模拟里学会了某种做法，现实的重量、接触、摩擦和感知误差稍有不同，都可能影响效果。因此，从虚拟练习走到现实使用，还需要检验迁移。一个非常漂亮的场景，如果给出了错误的碰撞关系，并不能仅靠外观帮助机器人安全行动。</p>
+<p>回到开头的硬币，我们真正关心的问题已经清楚了：生成器是否保留了这个任务需要的规律。即使未来某个系统生成的两面比例更接近一半，也还要看它是否正确处理了不同初始条件。反过来，一个经过可靠设计的物理模型，在特定抛法下也不必承诺所有情境都精确 50%。公平比例、合理运动和逼真外观，是可以相关却需要分别判断的性质。理解这个区别，比仅仅记住“世界模型会更真实”更有用。<button type="button" class="timecode" data-seconds="552">[00:09:12]</button></p>
+<h2 id="_6">总结提炼</h2>
+<p>随机生成不保证所有结果等概率。AI 抛硬币的结果比例，要结合输入、样本量和结果判定理解；看起来真实的画面，也需要单独检查运动与统计规律。</p>
+<p>可探索空间、动态重建和动作预测分别解决不同问题。能换视角证明了一部分空间能力，不能直接替代对物理变化的验证。</p>
+<p>世界模型有望帮助创作、游戏和机器人试验，但可靠性取决于具体任务。未来设想应与已经展示的能力分开理解。</p>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="0">[00:00:00]</button> AI 硬币与 50% 的直觉。</li>
+<li><button type="button" class="timecode" data-seconds="73">[00:01:13]</button> 多次生成出现的偏向。</li>
+<li><button type="button" class="timecode" data-seconds="130">[00:02:10]</button> 训练素材与输出习惯。</li>
+<li><button type="button" class="timecode" data-seconds="195">[00:03:15]</button> 可探索的堡垒场景。</li>
+<li><button type="button" class="timecode" data-seconds="244">[00:04:04]</button> 根据动作预测世界变化。</li>
+<li><button type="button" class="timecode" data-seconds="298">[00:04:58]</button> 背景、桌面与物体编辑。</li>
+<li><button type="button" class="timecode" data-seconds="388">[00:06:28]</button> 多机位拍摄与动态重建。</li>
+<li><button type="button" class="timecode" data-seconds="432">[00:07:12]</button> 在场景里选择观察位置。</li>
+<li><button type="button" class="timecode" data-seconds="476">[00:07:56]</button> 游戏与机器人的应用设想。</li>
+<li><button type="button" class="timecode" data-seconds="552">[00:09:12]</button> 再看硬币：究竟验证了什么。</li>
+</ul>
+<h2 id="_8">回看时的三个问题</h2>
+<p>一个生成过程使用随机数，为什么还不能推出硬币两面等概率？</p>
+<p>可以从不同角度看一段动态场景，与能够预测一个新动作的后果，差别在哪里？</p>
+<p>如果一个模型生成的硬币恰好各有一半正面反面，这是否足以说明它掌握了抛硬币的物理规律？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "2026-06-18_世界模型_3840x2160_V02_Bilibili", "duration": "10:17", "src": "", "poster": "../assets/frames/BV1Wzjg65EM6-00090.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

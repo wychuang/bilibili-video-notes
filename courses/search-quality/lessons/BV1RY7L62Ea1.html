@@ -1,46 +1,317 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>厨房里的一米距离，怎样变成产品设计 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>厨房里的一米距离，怎样变成一个 AI 产品 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">厨房里的一米距离，怎样变成一个 AI 产品</h1>
+    <div class="meta"><span>设计师贾冲</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1RY7L62Ea1/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">厨房里的一米距离，怎样变成产品设计</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">一个真实的小麻烦，能拆出很多设计要求</a></li>
-<li><a href="#_4">先把页面之间的动作画出来</a></li>
-<li><a href="#_5">风格可以来自任务本身</a></li>
-<li><a href="#_6">等待画面也能传递有用信息</a></li>
-<li><a href="#_7">降低输入负担，也要保留纠错入口</a></li>
-<li><a href="#_8">迁移练习：做一个“场景—决定—验证”表</a></li>
+<li><a href="#ai">厨房里的一米距离，怎样变成一个 AI 产品</a><ul>
+<li><a href="#ai_1">先写清楚用户怎么走，再让 AI 写代码</a></li>
+<li><a href="#_1">一条使用条件，怎样变成具体界面要求</a></li>
+<li><a href="#_2">把页面之间的动作先画出来</a></li>
+<li><a href="#_3">视觉风格为什么要与厨房有关</a></li>
+<li><a href="#_4">先用固定内容，把界面真的走通一遍</a></li>
+<li><a href="#_5">接上真实模型以后，产品才开始处理这一次的食材</a></li>
+<li><a href="#_6">反复修不好的问题，先让实现过程变得可见</a></li>
+<li><a href="#_7">最后一个小改进：等待时，让用户知道你看到了什么</a></li>
+<li><a href="#_8">总结提炼</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1RY7L62Ea1" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1RY7L62Ea1"><div class="provenance">来源：设计师贾冲 · <a href="https://www.bilibili.com/video/BV1RY7L62Ea1/" target="_blank" rel="noopener">BV1RY7L62Ea1 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">厨房里的一米距离，怎样变成产品设计</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1RY7L62Ea1.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1RY7L62Ea1" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1RY7L62Ea1-00395.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1RY7L62Ea1&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1RY7L62Ea1/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1RY7L62Ea1"><h1>厨房里的一米距离，怎样变成一个 AI 产品</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1RY7L62Ea1/">设计师贾冲 · UX 作品集 AI 项目教程</a> · 13 分钟 · 快读。以视频中的做饭小程序为案例，不把演示项目写成读者自己的经历。</p>
+<p>来源：UX 作品集 AI 项目零基础教程：从产品思维讲到 UX 设计再到 AI coding 工作流<br>
+UP 主：设计师贾冲 · 13 分 25 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1RY7L62Ea1/</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>从具体使用场景推导界面和流程，再用可操作的原型验证；AI 帮忙实现，产品判断仍需有依据。</p>
-<h2 id="_3">一个真实的小麻烦，能拆出很多设计要求</h2>
-<p>做饭前看过教程，做到一半又忘了。手机放在厨房桌面上，离眼睛较远，还要反复找当前步骤。视频据此设计了上传买菜截图、生成菜品方案、逐步查看做法的流程。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=105" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:45]">[00:01:45]</a></p>
-<p>最有价值的细节是“阅读距离”：手机离眼睛约几十厘米到一米多，字号就要比普通近距离阅读更大；每一步单独占一屏，减少边做边找信息的负担。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=165" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:45]">[00:02:45]</a></p>
-<p>这是一条清楚的设计依据：场景约束 → 交互选择 → 可验证体验。它比“页面要高级”更容易指导实现。</p>
-<h2 id="_4">先把页面之间的动作画出来</h2>
-<p>作者先写产品文档，再用纸笔画上传、确认、生成和教程等关键页面，说明点击后发生什么。线框图成为后续修改的参照。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=220" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:40]">[00:03:40]</a></p>
-<p>先用假数据跑通前端，可以检查是否容易理解、按钮能否完成预期操作。接入真实模型后，再检验识别与生成能力，避免把视觉问题和模型问题混在同一次排查里。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=445" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:25]">[00:07:25]</a></p>
-<h2 id="_5">风格可以来自任务本身</h2>
-<p>插画采用植物记录式的手作感，深色按钮借用黑芝麻糊的颗粒质感，都是围绕厨房场景做的选择。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=325" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:25]">[00:05:25]</a></p>
-<figure><a href="../assets/frames/BV1RY7L62Ea1-00395.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1RY7L62Ea1-00395.jpg" alt="原型首页用食材手绘与深色主按钮组织视觉，核心入口只有“添加买菜截图”；风格探索与任务入口放在同一张画面中。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=395&amp;p=1" target="_blank" rel="noopener">[00:06:35]</a> 原型首页用食材手绘与深色主按钮组织视觉，核心入口只有“添加买菜截图”；风格探索与任务入口放在同一张画面中。</figcaption></figure>
-<p>这些是设计探索，尚需可读性、对比度和用户反馈验证。独特纹理不应影响按钮识别，也不能因为有个人故事就推定体验更好。</p>
-<h2 id="_6">等待画面也能传递有用信息</h2>
-<p>视频结尾反思加载动画：随机食材图标虽然好看，却与当前订单关系不大。如果展示刚识别到的食材，就能告诉用户系统看到了什么、正在处理什么。<a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=720" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:00]">[00:12:00]</a></p>
-<figure><a href="../assets/frames/BV1RY7L62Ea1-00731.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1RY7L62Ea1-00731.jpg" alt="手机上的生成等待页显示白菜插画；作者在此反思，等待画面可以进一步展示本次识别到的真实食材。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1RY7L62Ea1/?t=731&amp;p=1" target="_blank" rel="noopener">[00:12:11]</a> 手机上的生成等待页显示白菜插画；作者在此反思，等待画面可以进一步展示本次识别到的真实食材。</figcaption></figure>
-<p>这个想法可以迁移到研究助手：等待时展示已确认的问题和找到的来源，帮助用户判断是否跑偏。进度应忠于真实状态，不能用动画伪造完成度。</p>
-<h2 id="_7">降低输入负担，也要保留纠错入口</h2>
-<p>仅上传截图确实方便，但截图识别可能错，用户可能还有过敏、口味、份量或器具限制。因此可以让系统先提出方案，同时允许确认食材、修改条件和返回上一步。</p>
-<p>这是本篇补充的产品检查。个人痛点可以作为起点，是否有更多用户愿意使用，还需要真实观察与试用，不能凭自身体验直接认定需求规模。</p>
-<h2 id="_8">迁移练习：做一个“场景—决定—验证”表</h2>
-<p>选择你常用的搜索或学习页面，写三行：用户在什么条件下使用；因此需要什么设计；怎样观察它是否有效。</p>
-<p>例如手机上读长笔记，可尝试更清楚的小标题和章节返回入口，再测试能否快速找到刚才那一段。保留修改前后截图和实际观察，得到一份真实的小型体验案例。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>准备做饭时，我们常常先在手机上找一个教程，看一遍，觉得大概明白了。真正开始切菜、热锅，又忘了下一步要做什么。手机放在厨房桌面或窗台上，离眼睛有一段距离，教程里的小字不好看清，还要在长长的内容里重新找到刚才那一步。麻烦出在做饭的整个过程中，单纯多推荐几道菜，并不能把它解决。</p>
+<p>设计师贾冲从自己的这类经历出发，构思了一个小程序：用户上传买菜订单的截图，AI 识别食材，提出可以做的菜；选中一道菜以后，再进入一步一步的烹饪教程。这个想法同时涉及产品、交互、视觉与实现，很适合用来理解一个 AI 项目怎样从需求走到可操作的作品。<button type="button" class="timecode" data-seconds="112">[00:01:52]</button></p>
+<p>个人经历让问题足够具体，也让设计者有机会反复试用。它可以作为项目的起点，但还不能直接证明许多人都需要同一个产品。先把自己遇到的困难解决到什么程度说清楚，随后再观察其他人是否有相近的处境，会让作品更有说服力。</p>
+<h2 id="ai_1">先写清楚用户怎么走，再让 AI 写代码</h2>
+<p>开始时，贾冲没有立即要求工具生成页面。他先让工具整理产品文档，也就是 PRD：产品要帮助谁完成什么，用户从哪里开始，在过程中需要做哪些动作，最后得到什么结果。这里最有用的输入方式，是站在用户的位置，把一次完整使用说出来。<button type="button" class="timecode" data-seconds="53">[00:00:53]</button></p>
+<p>对于做饭小程序，这次使用从上传买菜截图开始。用户先检查上传的图片，再等待菜品方案，选择想做的一道菜，最后逐步查看做法。如果只说“做一个 AI 菜谱应用”，工具需要自行猜测这些关系；把过程说清楚以后，每个页面存在的理由就更明确了。</p>
+<p>文档也不需要一遍就完美。先用自然语言把想法说完整，再逐行阅读生成结果，补上之前没想到的使用条件。产品文档的作用，是把这些决定保存下来，让后续设计和实现始终有同一个参照。聊天里临时说过的一条要求，如果没有进入这个参照，很容易在下一轮修改中被遗忘。<button type="button" class="timecode" data-seconds="84">[00:01:24]</button> <button type="button" class="timecode" data-seconds="162">[00:02:42]</button></p>
+<p>这个项目选择减少用户输入：先让用户上传已有截图，省去逐项手打食材的动作。模型承担更多识别和组合工作，用户则能更快看到可以考虑的菜品。这个取舍与场景有关，不能推广成所有 AI 产品都应取消文字输入；当用户有额外要求，或识别发生错误时，仍然需要有办法说明和修改。</p>
+<h2 id="_1">一条使用条件，怎样变成具体界面要求</h2>
+<p>厨房里的阅读距离，让字号问题变得非常具体。手机可能放在离眼睛约六十厘米到一米多的位置，用户同时还在做别的事。平时拿在手里阅读舒服的字号，放远以后就可能看不清。因此，贾冲要求教程文字明显大于普通应用中的近距离阅读文字。<button type="button" class="timecode" data-seconds="183">[00:03:03]</button></p>
+<p>“每一步单独占一屏”也是从同一个处境推出来的。做饭的人需要迅速知道当前该做什么，不适合反复在一大段内容里寻找自己的位置。单独一屏可以把当前动作突出出来，让用户完成以后再进入下一步。它减少的是查找当前步骤的负担，并不要求把每个步骤都压缩成几个字。<button type="button" class="timecode" data-seconds="169">[00:02:49]</button></p>
+<p>用量的表达也要考虑实际条件。家常做饭时，许多人手边没有秤，用“一茶匙”“小半碗”这样的描述，可能比要求临时精确称重更方便。不过，容器大小会不同，适合这种近似表达的范围也有限。涉及烘焙、特定饮食或必须精确控制的配方时，仍需要保留明确用量，不能为了轻松而牺牲必要的准确性。<button type="button" class="timecode" data-seconds="173">[00:02:53]</button></p>
+<table>
+<thead>
+<tr>
+<th>厨房里的具体情况</th>
+<th>对应的设计选择</th>
+<th>希望减轻的负担</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>手机放得较远</td>
+<td>放大需要阅读的文字</td>
+<td>不必频繁拿起手机看清内容</td>
+</tr>
+<tr>
+<td>双手正在做饭</td>
+<td>当前步骤单独一屏</td>
+<td>减少在长教程中寻找位置</td>
+</tr>
+<tr>
+<td>已经有买菜截图</td>
+<td>直接上传图片</td>
+<td>不用逐项重新输入食材</td>
+</tr>
+<tr>
+<td>不确定图片是否齐全</td>
+<td>生成前提供图片确认页</td>
+<td>可以补充或删除输入材料</td>
+</tr>
+</tbody>
+</table>
+<p>这些选择之所以容易讨论，是因为每一项都能回到一个具体处境。别人提出不同方案时，我们可以比较它有没有更好地解决那个困难。只说“体验要高级”或“界面要简洁”，就很难知道意见分歧究竟发生在哪里。</p>
+<h2 id="_2">把页面之间的动作先画出来</h2>
+<p>产品文档说明要完成什么，接着要考虑用户怎样在页面之间移动。贾冲先拿纸笔画关键界面，从首页上传图片，到图片确认，再到生成菜品和查看教程。三张纸分别承载相邻页面及其跳转关系，重点是页面上有什么、点一下以后会发生什么。<button type="button" class="timecode" data-seconds="260">[00:04:20]</button></p>
+<p>粗略的线框图在这里已经有用。它不需要先解决所有颜色、字体和插画，就能暴露流程中的空缺：用户在哪里确认图片，生成之前能不能补充，选中菜品以后进入哪里。若这些关系尚未想清楚，漂亮的视觉稿可能只会把不完整的流程包装得更像成品。</p>
+<p>因为担心手绘内容不易识别，贾冲又结合文字说明，把纸上的草图整理成较规范的线框图，再交给实现工具。这里的文字说明很重要。图片能呈现布局，但一个按钮的行为、页面进入条件和返回关系，仍然需要说清楚。线框图与说明一起，才成为后续修改时可靠的参照。<button type="button" class="timecode" data-seconds="294">[00:04:54]</button></p>
+<p>产品文档与设计文档也要继续维护。用户流程变了，就更新流程；视觉方案定了，就记录相关要求。这样下一次让 AI 修改页面时，它能够接着已有决定工作，不必从零猜测项目的方向。<button type="button" class="timecode" data-seconds="330">[00:05:30]</button></p>
+<h2 id="_3">视觉风格为什么要与厨房有关</h2>
+<p>选择视觉风格时，贾冲提出一个检查方法：如果把这套界面换成乘地铁的小程序，感觉依旧完全合适，那么它与做饭场景的联系可能还不够强。这是他的设计判断，想检验的是视觉有没有表达当前产品的独特处境。<button type="button" class="timecode" data-seconds="223">[00:03:43]</button></p>
+<p>他为首页选择了接近工笔画与博物画的食材插画。植物的细节、手绘的质感，与食材和手作发生联系；插画主要分布在屏幕边缘，中间留给文案与上传入口。这样，用户既能感觉到一个围绕厨房展开的世界，又能直接看到下一步应该做什么。<button type="button" class="timecode" data-seconds="343">[00:05:43]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1RY7L62Ea1-00395.jpg" data-caption="食材插画围绕屏幕边缘，中间留白承载文案与“添加买菜截图”按钮，视觉氛围没有挤占主要操作入口。">
+    <img src="../assets/frames/BV1RY7L62Ea1-00395.jpg" loading="lazy" alt="视频截图 01，00:06:35：食材插画围绕屏幕边缘，中间留白承载文案与“添加买菜截图”按钮，视觉氛围没有挤占主要操作入口。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="395.000">图 01 · 00:06:35</button><span>食材插画围绕屏幕边缘，中间留白承载文案与“添加买菜截图”按钮，视觉氛围没有挤占主要操作入口。</span></figcaption>
+</figure>
+<p>深色按钮还有一个细节：背景借用了黑芝麻糊的颗粒纹理。贾冲觉得纯色填充过于光滑，希望点击的部件也带一点食物的质感，于是从黑色食物里寻找合适的视觉材料。这个选择把颜色、纹理和产品主题联系在一起，理由可以被具体说出来。<button type="button" class="timecode" data-seconds="401">[00:06:41]</button></p>
+<p>审美在这里表现为一系列选择。以前看过什么、被什么打动过、哪些感觉适合当前场景，都会进入设计。AI 可以帮助生成和实现方案，设计者仍然需要选择想保留哪种感觉。同时，纹理不能妨碍文字阅读，插画也不能让主要操作难以辨认；主题表达与实际使用，需要放在一起检查。</p>
+<h2 id="_4">先用固定内容，把界面真的走通一遍</h2>
+<p>有了产品与设计文档以后，下一阶段先实现前端交互。前端可以理解为用户直接看见和操作的部分：页面、按钮、动画，以及页面之间的切换。此时暂时使用预先准备的菜品和教程内容，不急着连接真实模型。<button type="button" class="timecode" data-seconds="459">[00:07:39]</button></p>
+<p>这样做的好处，是可以先检查用户流程本身。上传入口是否显眼，图片能不能删除或补充，点击菜品以后是否进入正确教程，都不依赖模型每次生成不同内容。如果流程还不顺畅，就先修改页面；等这些关系稳定以后，再测试模型的识别与生成能力，问题会更容易分辨。</p>
+<p>项目底部虽然有首页、收藏和厨房三个入口，当前先完成首页的核心流程。上传以后出现中转页，用户检查图片；确认以后进入生成界面，右侧显示用户图片，左侧呈现 AI 回复与菜品卡片，还可以要求换一批菜。这些步骤让“上传一张截图”逐渐成为能实际使用的产品。<button type="button" class="timecode" data-seconds="490">[00:08:10]</button></p>
+<p>等待动画也沿用了食材插画。设计构想是几个图标依次停止，最后显示相同食材，再让菜品卡片依次出现。静态图能够说明风格，动画则要通过实际运行感受节奏。为了让前端接近预期，贾冲进行了多轮调整，线框图帮助他持续指出哪个页面应该怎样变化。<button type="button" class="timecode" data-seconds="525">[00:08:45]</button> <button type="button" class="timecode" data-seconds="577">[00:09:37]</button></p>
+<h2 id="_5">接上真实模型以后，产品才开始处理这一次的食材</h2>
+<p>前端流程已经可以操作，接下来才把固定内容替换成真实能力。用户上传订单截图后，需要有模型识别图片中的食材，再生成菜品方案。这要求选用具备视觉理解能力的模型；仅能处理文字的接口，不能直接承担同样的图片任务。<button type="button" class="timecode" data-seconds="584">[00:09:44]</button></p>
+<p>在这份实现思路里，模型配合两组任务说明工作。一组负责生成菜品方案，另一组负责把选中的菜品展开成详细教程。贾冲把它们称为两个 Skill。这里可以把 Skill 理解为针对某类工作保存下来的要求和规则：希望输出什么，遵守哪些体验要求，以及怎样组织内容。<button type="button" class="timecode" data-seconds="623">[00:10:23]</button></p>
+<p>把两类工作分开，有助于保持各自的重点。选菜时，用户需要看到几种可以考虑的方案；真正开始做一道菜以后，用户需要的是清楚的步骤、用量与顺序。如果每次都要求模型同时输出所有菜品的完整教程，第一屏内容可能过多，也不符合先选择、后操作的流程。</p>
+<p>不过，模型与 Skill 只是产品的一部分。图片上传、页面状态、网络请求和错误处理，也需要由应用正确完成。一个教程看起来合理，还要继续检查它是否使用了当前食材、步骤是否完整，以及必要条件有没有遗漏。把规则写下来，能够帮助持续修改行为，却不能让生成结果天然可靠。</p>
+<h2 id="_6">反复修不好的问题，先让实现过程变得可见</h2>
+<p>调试过程中，一个有用的小技巧是：如果 AI 说已经修好，实际结果却仍然不对，先让它解释当前功能究竟怎样实现。输入从哪里进入，经过什么处理，结果怎样回到页面，都需要说清楚。随后再把实际错误放到这个过程里，找出哪一步与预期不同。<button type="button" class="timecode" data-seconds="684">[00:11:24]</button></p>
+<p>这样比连续发送“还是不对，再改”更容易提供有效信息。后一句只说明结果有问题，却没有帮助定位问题的位置。让实现过程可见，设计者即使不熟悉全部代码，也有机会发现明显的不一致，例如界面显示的仍是固定内容，或某个操作没有触发预期步骤。实际修改仍需要运行验证，模型解释得流畅也不能算作已经修复。</p>
+<p>最后把小程序放到真实手机上试用，才能继续感受字号、距离、等待时间和触控。桌面预览能发现很多问题，但厨房产品最终要面对的，仍然是手机上的实际使用。<button type="button" class="timecode" data-seconds="706">[00:11:46]</button></p>
+<h2 id="_7">最后一个小改进：等待时，让用户知道你看到了什么</h2>
+<p>手机上运行起来以后，贾冲注意到加载动画还有提升空间。等待时出现的食材虽然符合整体风格，却未必与刚上传的订单有关。用户看见一棵白菜，只能知道界面还在等待，很难据此判断系统是否识别到了自己的材料。<button type="button" class="timecode" data-seconds="727">[00:12:07]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1RY7L62Ea1-00731.jpg" data-caption="手机等待页显示白菜插画；这一版的食材图案没有明确对应当前订单，尚不能帮助用户确认识别结果。">
+    <img src="../assets/frames/BV1RY7L62Ea1-00731.jpg" loading="lazy" alt="视频截图 02，00:12:11：手机等待页显示白菜插画；这一版的食材图案没有明确对应当前订单，尚不能帮助用户确认识别结果。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="731.000">图 02 · 00:12:11</button><span>手机等待页显示白菜插画；这一版的食材图案没有明确对应当前订单，尚不能帮助用户确认识别结果。</span></figcaption>
+</figure>
+<p>他提出的下一步改进，是优先使用订单中识别到的食材。假如这次买了牛腩、大葱和蒜苗，等待时就围绕这些食材变化。这样，等待画面除了让时间不那么空白，还能传递一条具体信息：系统已经看到了哪些食材。<button type="button" class="timecode" data-seconds="739">[00:12:19]</button></p>
+<p>这仍然是待继续实现的想法，不能把当前画面当成已经具备这种反馈。它的价值在于揭示了一个细微差别：同样一段动画，可以只表达“请稍等”，也可以帮助用户理解任务正在怎样推进。要实现后一种效果，画面必须来自实际处理状态，不能在识别完成前就假装已经确认。</p>
+<h2 id="_8">总结提炼</h2>
+<p>这个项目从做饭时的具体麻烦出发，逐渐形成完整设计：截图减少输入，大字适应阅读距离，一步一屏减少查找，图片确认页保留调整机会。每个选择都能回到用户当时正在做什么。</p>
+<p>实现分成几个清楚阶段：先写产品文档，再确定流程与视觉，用固定内容走通前端，最后连接图片识别和菜谱生成。文档与线框图持续保留设计依据，真实手机使用则帮助发现新的问题。</p>
+<p>插画、按钮纹理与等待动画，让我们看到设计判断怎样进入细节。一个适合放进作品集的项目，既要呈现最终界面，也要让人理解这些选择怎样回应实际困难，以及哪些设想仍待验证。</p>
+<h2 id="_9">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="53">[00:00:53]</button> 从产品文档与用户流程开始。</li>
+<li><button type="button" class="timecode" data-seconds="112">[00:01:52]</button> 上传买菜截图的需求来源。</li>
+<li><button type="button" class="timecode" data-seconds="169">[00:02:49]</button> 一步一屏、用量和阅读距离。</li>
+<li><button type="button" class="timecode" data-seconds="223">[00:03:43]</button> 视觉风格为什么要属于厨房。</li>
+<li><button type="button" class="timecode" data-seconds="260">[00:04:20]</button> 用纸笔画页面和跳转关系。</li>
+<li><button type="button" class="timecode" data-seconds="343">[00:05:43]</button> 博物画式插画与中间留白。</li>
+<li><button type="button" class="timecode" data-seconds="401">[00:06:41]</button> 黑芝麻糊纹理的按钮。</li>
+<li><button type="button" class="timecode" data-seconds="459">[00:07:39]</button> 先用固定内容实现前端。</li>
+<li><button type="button" class="timecode" data-seconds="623">[00:10:23]</button> 图片理解、菜品方案与教程 Skill。</li>
+<li><button type="button" class="timecode" data-seconds="684">[00:11:24]</button> 先解释实现过程，再定位错误。</li>
+<li><button type="button" class="timecode" data-seconds="739">[00:12:19]</button> 让等待动画使用当前订单的食材。</li>
+</ul>
+<h2 id="_10">回看时的三个问题</h2>
+<p>手机离眼睛一米左右这件事，为什么会同时影响字号、信息量和步骤组织？如果使用地点换了，哪些设计还需要重新考虑？</p>
+<p>前端使用固定菜谱时，我们已经能检查哪些问题？哪些问题必须等真实模型接入以后才能知道？</p>
+<p>等待画面里的食材插画，在什么条件下能够帮助用户确认识别结果？如果只是随机换图，它实际传递了多少信息？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "6月30号-最终定稿", "duration": "13:25", "src": "", "poster": "../assets/frames/BV1RY7L62Ea1-00395.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

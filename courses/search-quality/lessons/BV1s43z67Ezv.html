@@ -1,158 +1,312 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>Satori Graphics｜学高阶设计思维，看这一部就够了 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>设计怎样被人理解：从第一眼看到什么，到离开后记住什么 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">设计怎样被人理解：从第一眼看到什么，到离开后记住什么</h1>
+    <div class="meta"><span>63号炼金工坊</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1s43z67Ezv/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#satori-graphics">Satori Graphics｜学高阶设计思维，看这一部就够了</a><ul>
-<li><a href="#_1">“这个好看吗？”为什么可能是个低效问题</a></li>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">核心问题与推理主线</a><ul>
-<li><a href="#1">1. 从“设计说了什么”转向“观众带着什么状态到来”</a></li>
-<li><a href="#2">2. 作品周围的体验，也在参与作品评价</a></li>
-<li><a href="#3">3. 预测性共情：设计观众几秒后的情绪</a></li>
-<li><a href="#4">4. 记忆编码：给大脑留下一件需要解决的事</a></li>
-<li><a href="#5">5. 品牌先形成声音，标志再形成形状</a></li>
-</ul>
-</li>
-<li><a href="#_4">可复用的设计检查模型</a></li>
-<li><a href="#_5">边界、疑点与时效性</a></li>
-<li><a href="#_6">时间戳导航</a></li>
-<li><a href="#_7">复习与行动清单</a><ul>
-<li><a href="#_8">立即可做</a></li>
-<li><a href="#_9">值得反复追问</a></li>
-</ul>
-</li>
+<li><a href="#_1">设计怎样被人理解：从第一眼看到什么，到离开后记住什么</a><ul>
+<li><a href="#_2">让别人看几秒，再听他按顺序说出记住了什么</a></li>
+<li><a href="#_3">同一条信息，面对的可能是两种心情</a></li>
+<li><a href="#_4">作品怎样抵达别人，也在影响别人怎么看它</a></li>
+<li><a href="#_5">看完之后，我们希望对方有什么感受</a></li>
+<li><a href="#_6">让人记住的，可能是一个刚刚看懂的关系</a></li>
+<li><a href="#_7">品牌会怎样说话，能够帮助我们决定标志长什么样</a></li>
+<li><a href="#_8">总结提炼</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">复习与实践</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1s43z67Ezv" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>核心 · 既有学习稿</span></div><article data-lesson="BV1s43z67Ezv"><h1 id="satori-graphics">Satori Graphics｜学高阶设计思维，看这一部就够了</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1s43z67Ezv.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1s43z67Ezv" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1s43z67Ezv-00288.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1s43z67Ezv&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1s43z67Ezv/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1s43z67Ezv"><h1>设计怎样被人理解：从第一眼看到什么，到离开后记住什么</h1>
 <blockquote>
-<p><strong>UP 主：</strong>63号炼金工坊<br>
-<strong>视频时长：</strong>约 10 分 08 秒<br>
-<strong>视频 ID：</strong>BV1s43z67Ezv<br>
-<strong>来源：</strong><a href="https://www.bilibili.com/video/BV1s43z67Ezv/">Bilibili 原视频</a><br>
-<strong>总结强度：</strong>deep<br>
-<strong>证据来源：</strong>英文音频的 faster-whisper 机器逐字稿、SRT 时间轴及 12 张时间戳画面。审计记录显示共 102 个语音片段、无相邻重复；以下内容以讲述为主，画面只用于还原案例和版面细节。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1s43z67Ezv/">Satori Graphics｜学高阶设计思维，看这一部就够了</a><br>
+UP 主：63号炼金工坊 · 时长：10 分 08 秒 · 阅读强度：深度</p>
 </blockquote>
-<h2 id="_1">“这个好看吗？”为什么可能是个低效问题</h2>
-<p>面对一张海报，很多设计师首先检查颜色、字体和风格。讲者在 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=25" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:25]">[00:00:25]</a> 换了一套问题：视线最先落在哪里？第二个被注意到的是什么？又有什么完全被忽略？</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_001_00-00-25.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_001_00-00-25.jpg" alt="图 01 · 00:00:25：画面把“Does this look good?”单独放大，直接呈现讲者试图替换掉的审美提问。" loading="lazy"></a><figcaption>图 01 · 00:00:25：画面把“Does this look good?”单独放大，直接呈现讲者试图替换掉的审美提问。</figcaption></figure>
-<p><em>图 01 · 00:00:25：画面把“Does this look good?”单独放大，直接呈现讲者试图替换掉的审美提问。</em></p>
-<p>这组问题把设计评价从个人喜好转向了信息接收。你原本想表达什么，与观众实际看到什么，两者之间存在一道“感知鸿沟”（perception gap）。审美判断可以因人而异，困惑、遗漏和错误的阅读顺序却能够被观察。</p>
-<p>最简单的测试是把版面展示几秒，让受试者按顺序复述记住的内容 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a>。如果对方先说出了次要信息，视觉层级可能失效；如果完全没看到行动号召，版面也没有沿预期路径引导视线。需要设计师在旁边解释才能成立的设计，至少有一部分沟通任务没有独立完成。</p>
-<h2 id="_2">一句话抓住核心</h2>
-<p><strong>高阶设计思维关注的，是设计如何进入真实情境中的人：他先看到什么、来之前是什么状态、离开后产生什么感受，以及最终记住什么。</strong></p>
-<h2 id="_3">核心问题与推理主线</h2>
-<h3 id="1">1. 从“设计说了什么”转向“观众带着什么状态到来”</h3>
-<p>能力提升后，设计师会开始考虑观众接触设计时的心理与情绪状态 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=74" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:14]">[00:01:14]</a>。同一句信息，放在慈善网站和时尚杂志中，需要面对两种完全不同的接收情境。</p>
-<p>浏览慈善网站的人可能谨慎、寻找可信线索，同时处于较为开放的情绪状态；随手翻阅时尚杂志的人更放松，通常不会投入太多分析。如果视觉语气与这一起始状态错位，观众很快就会感觉不协调。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_002_00-01-15.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_002_00-01-15.jpg" alt="图 02 · 00:01:15：画面用一条游走的虚线承托“随着能力提高而改变的思考方式”，对应从信息内容转向接收者状态的过渡。" loading="lazy"></a><figcaption>图 02 · 00:01:15：画面用一条游走的虚线承托“随着能力提高而改变的思考方式”，对应从信息内容转向接收者状态的过渡。</figcaption></figure>
-<p><em>图 02 · 00:01:15：画面用一条游走的虚线承托“随着能力提高而改变的思考方式”，对应从信息内容转向接收者状态的过渡。</em></p>
-<p>所以，设计并非只需把信息放进去，还要“调频”到观众当前所在的位置 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=118" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:58]">[00:01:58]</a>。时尚杂志中的营销广告可以使用大胆图像、强烈对比和自信清晰的字体，目标是在快速翻阅中制造短暂停顿和向往感。这里的重点较少落在完整解释，更多落在瞬间形成的感受。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_003_00-02-06.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_003_00-02-06.jpg" alt="图 03 · 00:02:06：橙色提示卡明确写出：设计需要根据受众已经处于的状态进行调校。" loading="lazy"></a><figcaption>图 03 · 00:02:06：橙色提示卡明确写出：设计需要根据受众已经处于的状态进行调校。</figcaption></figure>
-<p><em>图 03 · 00:02:06：橙色提示卡明确写出：设计需要根据受众已经处于的状态进行调校。</em></p>
-<p>一个适合在项目前期提出的问题是：</p>
-<blockquote>
-<p><strong>“这个人在遇见我的设计之前，正处于什么情绪和注意力状态？”</strong></p>
-</blockquote>
-<h3 id="2">2. 作品周围的体验，也在参与作品评价</h3>
-<p>不少设计师只盯着最终输出，却很少检查作品以什么方式抵达接收者 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=166" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:46]">[00:02:46]</a>。讲者回忆自己职业早期也有过这一阶段，后来改变关注点后，作品被感知的方式随之变化。</p>
-<p>同一个项目，可以作为没有上下文的 PDF 被随手发出，也可以通过清楚的结构和意图逐步展开；同一个文件，可以图层混乱、命名含糊，也可以组织明确，让接手者一眼知道如何使用。作品内容没有发生根本变化，专业感却已经在作品“开口”前形成 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=184" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:04]">[00:03:04]</a>。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_005_00-03-47.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_005_00-03-47.jpg" alt="图 04 · 00:03:47：手绘示意图突出“The work hasn’t changed, the perception has”，并把清晰、自信、顺畅的体验连到价值感。" loading="lazy"></a><figcaption>图 04 · 00:03:47：手绘示意图突出“The work hasn’t changed, the perception has”，并把清晰、自信、顺畅的体验连到价值感。</figcaption></figure>
-<p><em>图 04 · 00:03:47：手绘示意图突出“The work hasn’t changed, the perception has”，并把清晰、自信、顺畅的体验连到价值感。</em></p>
-<p>这也是“感知创造价值”的含义。客户支付的费用包含最终外观，也包含合作过程中感受到的信心、清晰度和顺畅程度 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a>。作品集的打开方式、提案前几秒的节奏、交付文件是否易懂，都会进入整体评价。</p>
-<p>真实观众也很少处在理想评审环境里。他可能深夜半疲惫地刷手机，屏幕亮度很低；他不会像设计师审阅 Dribbble 作品那样放大画面，逐像素检查字距 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=230" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:50]">[00:03:50]</a>。设计首先要服务普通人的有限注意力。</p>
-<h3 id="3">3. 预测性共情：设计观众几秒后的情绪</h3>
-<p>“预测性共情”（predictive empathy）指向更远一步：除了回应观众当下的感受，还要预判他在几秒后乃至当天接下来的情绪 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=263" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:23]">[00:04:23]</a>。讲者把它称为一种情绪远见。</p>
-<p>案例中的原始海报拥有高声量标题、戏剧性图像和强烈色彩，效果类似抓住观众的手臂大喊“现在就看我”。这种设计默认观众已经认同、已经感兴趣、已经与信息处于同一情绪位置，可现实中多数人尚未达到这个状态。</p>
-<p>改版策略包括：降低标题的压迫感，同时保留冲击力；增加留白；加入一句温和的安抚文案或信任符号；把色板调整到更接近安心、可信的情绪温度 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=312" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:12]">[00:05:12]</a>。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_007_00-05-29.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_007_00-05-29.jpg" alt="图 05 · 00:05:29：改版示例以柔和紫色、莲花符号、“Start Your Journey”和较大留白构成安抚与信任语气。" loading="lazy"></a><figcaption>图 05 · 00:05:29：改版示例以柔和紫色、莲花符号、“Start Your Journey”和较大留白构成安抚与信任语气。</figcaption></figure>
-<p><em>图 05 · 00:05:29：改版示例以柔和紫色、莲花符号、“Start Your Journey”和较大留白构成安抚与信任语气。</em></p>
-<p>讲者描述的预期变化是：观众感到自己被理解，压力感下降。于是，“每个设计决定都要有理由”还可以补上一问：</p>
-<blockquote>
-<p><strong>“观众离开这张设计时，我希望他带走什么情绪？”</strong></p>
-</blockquote>
-<p>讲者也主动给原始强烈版本提供了另一种解读 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=358" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:58]">[00:05:58]</a>：愤怒般的亮色和高声量字体可能代表外部混乱，模特则在混乱中寻找平静。这一反例很重要，因为它说明视觉强度没有固定答案；判断仍要回到目标情绪、叙事关系和受众情境。</p>
-<h3 id="4">4. 记忆编码：给大脑留下一件需要解决的事</h3>
-<p>“记忆编码”（memory encoding）关心设计在被划走之后还能留下什么 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=398" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:38]">[00:06:38]</a>。讲者批评一种常见现象：视觉画面可能非常光洁，却在闭眼之后迅速从记忆中消失。能被记住的设计通常包含一个可识别的概念转折。</p>
-<p>第一张案例海报以两张黑胶唱片和一张唱片封套组成心形。设计师原本可以随机散放唱片，或者采用普通角度排列；心形构图却让“音乐”转成“情感”，让“唱片”转成“浪漫” <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=435" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:15]">[00:07:15]</a>。观众识别到这一隐喻时，画面便获得了意义层的记忆支点。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_009_00-07-10.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_009_00-07-10.jpg" alt="图 06 · 00:07:10：“High Fidelity”海报用两张黑胶和斜放的唱片封套拼出心形，把音乐媒介转化为情感隐喻。" loading="lazy"></a><figcaption>图 06 · 00:07:10：“High Fidelity”海报用两张黑胶和斜放的唱片封套拼出心形，把音乐媒介转化为情感隐喻。</figcaption></figure>
-<p><em>图 06 · 00:07:10：“High Fidelity”海报用两张黑胶和斜放的唱片封套拼出心形，把音乐媒介转化为情感隐喻。</em></p>
-<p>第二张海报把衬衫、长裤和鞋摆成坐在红椅上的人体轮廓，却移除了人物本身。没有脸，也没有真实身体，只剩一个“身体形状的缺席” <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=460" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:40]">[00:07:40]</a>。画面呼应 depersonalization（人格解体／去人格化）主题，并迫使观众停下来理解这段缺席。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_010_00-08-00.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_010_00-08-00.jpg" alt="图 07 · 00:08:00：“Stuck in the Void”海报以空衣服和鞋构成坐姿，人的缺席形成需要观众解释的视觉谜题。" loading="lazy"></a><figcaption>图 07 · 00:08:00：“Stuck in the Void”海报以空衣服和鞋构成坐姿，人的缺席形成需要观众解释的视觉谜题。</figcaption></figure>
-<p><em>图 07 · 00:08:00：“Stuck in the Void”海报以空衣服和鞋构成坐姿，人的缺席形成需要观众解释的视觉谜题。</em></p>
-<p>讲者把这短暂的停顿视为记忆形成的时刻 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=487" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:07]">[00:08:07]</a>。记忆编码的关键由此显现：给观众一个稍微失衡、需要补完的东西，让设计低声提出问题，保留理解空间。</p>
-<p>这不等于故意制造晦涩。前面的“感知鸿沟”仍然有效：信息路径应当清楚，核心概念可以保留适量张力。层级混乱造成的是迷失；概念悬念带来的是主动解释。</p>
-<h3 id="5">5. 品牌先形成声音，标志再形成形状</h3>
-<p>品牌实际生活在文案、落地页、推送通知和社交媒体内容中。若设计师还不了解品牌如何说话，就直接开始设计标志，视觉探索会缺少明确边界 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=504" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:24]">[00:08:24]</a>。</p>
-<p>讲者给出了一套先于造型的练习：</p>
-<ol>
-<li>写出品牌绝不会说的五个词，用排除法建立边界。</li>
-<li>写出品牌可能频繁使用的五个词，观察其语气是尖锐直接、活泼，还是技术化。</li>
-<li>写一句品牌会发给受众的短消息：假设只能用 140 个字符自我介绍，它会怎样开口？</li>
-</ol>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_011_00-08-51.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_011_00-08-51.jpg" alt="图 08 · 00:08:51：画面把数字“5”与“品牌绝不会说的词”并置，强调先用语言禁区划定身份边界。" loading="lazy"></a><figcaption>图 08 · 00:08:51：画面把数字“5”与“品牌绝不会说的词”并置，强调先用语言禁区划定身份边界。</figcaption></figure>
-<p><em>图 08 · 00:08:51：画面把数字“5”与“品牌绝不会说的词”并置，强调先用语言禁区划定身份边界。</em></p>
-<p>完成这些练习后，语言会暴露品牌的“情绪温度”。说话大胆的品牌不适合过度怯弱的标志；表达平静的品牌也不适合充满攻击性的尖角和形状心理 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=561" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:21]">[00:09:21]</a>。标志需要与品牌的声音温度对齐。</p>
-<figure><a href="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_012_00-09-42.jpg" target="_blank" rel="noopener"><img src="../../../notes/63%E5%8F%B7%E7%82%BC%E9%87%91%E5%B7%A5%E5%9D%8A/Satori%20Graphics%EF%BD%9C%E5%AD%A6%E9%AB%98%E9%98%B6%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4%EF%BC%8C%E7%9C%8B%E8%BF%99%E4%B8%80%E9%83%A8%E5%B0%B1%E5%A4%9F%E4%BA%86__BV1s43z67Ezv/assets/deep/frame_012_00-09-42.jpg" alt="图 09 · 00:09:42：画面指出多数设计师会因“看起来很高效”而直接跳入视觉阶段，正是品牌声音容易被漏掉的环节。" loading="lazy"></a><figcaption>图 09 · 00:09:42：画面指出多数设计师会因“看起来很高效”而直接跳入视觉阶段，正是品牌声音容易被漏掉的环节。</figcaption></figure>
-<p><em>图 09 · 00:09:42：画面指出多数设计师会因“看起来很高效”而直接跳入视觉阶段，正是品牌声音容易被漏掉的环节。</em></p>
-<p>因此，品牌设计的起点可以设为声音对齐。即便标志制作精良，只要它与品牌及其受众说着不同的视觉语言，整体仍会持续带有轻微错位感 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=579" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:09:39]">[00:09:39]</a>。</p>
-<h2 id="_4">可复用的设计检查模型</h2>
-<p>可以把整段讲述压缩成一条连续检查链：</p>
-<p><strong>接触前状态 → 第一眼路径 → 接触中体验 → 离场情绪 → 记忆钩子 → 品牌声音一致性</strong></p>
+<p>做完一张海报后，我们很容易盯着颜色、字体和细节，反复问自己：这样好看吗？这个问题当然有价值，但它还没有告诉我们，别人究竟读到了什么。也许最重要的消息很安静，装饰却抢走了所有注意；也许我们想邀请对方参与，对方却完全没注意到该怎样继续。</p>
+<p>所以，评价设计时可以再问得具体一点：视线最先落在哪里？第二个被看见的是什么？哪些内容完全被忽略？我们原本想让人理解的内容，与对方实际理解的内容之间，可能存在差距。Satori Graphics 把这种差距称为 perception gap，可以理解为“表达意图与实际感知之间的差距”。<button type="button" class="timecode" data-seconds="13">[00:00:13]</button></p>
+<h2 id="_2">让别人看几秒，再听他按顺序说出记住了什么</h2>
+<p>这件事可以通过一个简单方法观察。把版面展示给别人看几秒，再请对方说出自己记住了什么，以及先后顺序。此时不急着追问小字或装饰细节，先听他怎样组织刚才看到的东西。如果他先记住了次要信息，我们就需要检查重要信息是否具有足够清楚的视觉位置。<button type="button" class="timecode" data-seconds="34">[00:00:34]</button></p>
+<p>所谓“视觉层级”，就是用大小、位置、对比和间距等安排，帮助人分辨内容的重要程度与阅读顺序。层级发挥作用时，观众不必逐项猜测哪部分最重要。如果我们希望对方看完介绍后采取某个行动，这个行动的入口也需要进入阅读路径。它虽然放在页面上，却一直没被注意到，沟通就还没有完成。</p>
+<p>这样的观察，让我们可以从“我喜欢这种风格”继续往前讨论。人们对颜色和字体的偏好会不同，但某条重要消息有没有被看见，可以通过实际反应来检查。当然，几秒测试适合检查第一印象和优先顺序，无法代替所有设计评价。复杂图表需要更长阅读，具有探索性的作品也可能有意让人停留。判断时仍然要看这张设计承担什么任务。<button type="button" class="timecode" data-seconds="63">[00:01:03]</button></p>
+<h2 id="_3">同一条信息，面对的可能是两种心情</h2>
+<p>接下来再把观众放回真实情境。一个人打开慈善网站时，可能比较谨慎，正在判断这个组织是否可信、自己的支持会用到哪里。另一个人轻松翻阅时尚杂志，可能只是随手浏览，并没有准备认真研究每条信息。两个人看到设计之前，已经带着不同的问题和注意力状态。<button type="button" class="timecode" data-seconds="74">[00:01:14]</button></p>
+<p>如果我们只关心“这张图要说什么”，很容易漏掉这种差别。慈善网站需要理解来访者的顾虑，帮助他逐步形成信任；时尚杂志中的广告则可能使用大胆的图像、强烈的对比和清楚有力的字体，在快速翻页中争取一次停顿，让人产生兴趣或向往。这些选择与观看情境有关，不能只根据设计师个人偏好决定。</p>
+<p>这里也没有“所有慈善设计必须柔和”或“所有时尚广告必须强烈”的固定答案。我们需要先提出关于受众的合理判断，再看实际沟通是否支持这个判断。重要的问题是：这个人在看到设计之前，已经在想什么、担心什么，又愿意投入多少注意力？让设计从这个起点开始，消息才比较容易被接住。<button type="button" class="timecode" data-seconds="90">[00:01:30]</button> <button type="button" class="timecode" data-seconds="131">[00:02:11]</button></p>
+<h2 id="_4">作品怎样抵达别人，也在影响别人怎么看它</h2>
+<p>同一个项目，可以通过一份没有背景说明的 PDF 发出去，也可以先让对方知道问题是什么，再沿清楚的顺序展示思路与结果。项目内容可能没有改变，接收者理解它所需的努力却不同。后一种情况下，对方更容易知道自己在看什么，以及每个选择为什么出现。<button type="button" class="timecode" data-seconds="184">[00:03:04]</button></p>
+<p>文件本身也有类似差别。打开以后，内容排列混乱、命名含糊，接手者就需要先做一轮猜测；组织清楚、名称明确，他就能更快找到要用的东西。作品集的打开方式、提案最初几秒的节奏、交付文件是否容易继续使用，都会参与整体体验。专业感在这些细小的接触中逐渐形成。</p>
+<p>这就是“感知创造价值”在这个情境中的含义。客户既在评价最终外观，也在感受合作是否清楚、是否省心，以及自己能否有把握地使用结果。我们把作品周围的体验做好，并没有凭空改变作品内容，却能减少别人理解和接手时的困难。<button type="button" class="timecode" data-seconds="219">[00:03:39]</button></p>
+<p>还要记得，真实观众很少处于设计师精细检查作品的状态。他可能深夜拿着手机，已经有些疲倦，屏幕亮度也很低。他通常不会放大页面逐像素看字距。设计面向的是这样一个注意力有限的人，重要内容需要在实际观看条件下仍然容易找到和理解。<button type="button" class="timecode" data-seconds="230">[00:03:50]</button></p>
+<h2 id="_5">看完之后，我们希望对方有什么感受</h2>
+<p>知道观众现在的状态之后，还可以多想一步：他接触这张设计几秒后，会变得更安心、更好奇，还是觉得受到催促？这里讨论的 predictive empathy，即“预测性的共情”，指的就是提前考虑这种情绪变化。它是一种设计思考方式，帮助我们把视觉选择与预期感受联系起来。<button type="button" class="timecode" data-seconds="263">[00:04:23]</button></p>
+<p>下面两版海报都围绕寻找内心平静。第一版使用鲜明的红色背景、黄色大字和较强的字体力度，人物则闭着眼，保持平静的姿态。整张画面很容易抓住注意力，但标题像在提高音量。如果来访者还没有准备投入，它也可能让人感到被催促：现在就注意我，现在就开始。<button type="button" class="timecode" data-seconds="286">[00:04:46]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1s43z67Ezv-00288.jpg" data-caption="红色背景与黄色大字形成强对比，平静的人物被较强的视觉声量包围。">
+    <img src="../assets/frames/BV1s43z67Ezv-00288.jpg" loading="lazy" alt="视频截图 01，00:04:48：红色背景与黄色大字形成强对比，平静的人物被较强的视觉声量包围。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="288.000">图 01 · 00:04:48</button><span>红色背景与黄色大字形成强对比，平静的人物被较强的视觉声量包围。</span></figcaption>
+</figure>
+<p>第二版保留人物和基本主题，换成较柔和的背景与配色，降低文字的压迫感，增加周围空间，并加入小型图形与更温和的文字安排。我们仍然能够知道它在邀请人开始一段旅程，但邀请的语气改变了。设计想让观众更容易进入一种被理解、可以放松的感受。<button type="button" class="timecode" data-seconds="312">[00:05:12]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1s43z67Ezv-00313.jpg" data-caption="较浅的背景、舒缓的文字安排和更充足的空间，共同改变了这张海报的邀请方式。">
+    <img src="../assets/frames/BV1s43z67Ezv-00313.jpg" loading="lazy" alt="视频截图 02，00:05:13：较浅的背景、舒缓的文字安排和更充足的空间，共同改变了这张海报的邀请方式。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="313.000">图 02 · 00:05:13</button><span>较浅的背景、舒缓的文字安排和更充足的空间，共同改变了这张海报的邀请方式。</span></figcaption>
+</figure>
+<p>比较时，需要把颜色、字体、留白和人物放在一起看。单独拿出一种颜色，不能保证它让所有人安心；同样，强烈的视觉也不必然有问题。第一版还可以有另一种合理解读：外界很喧闹，人物正在喧闹中找到自己的平静。这个解释保留了强烈画面，也让强烈画面与主题产生联系。<button type="button" class="timecode" data-seconds="358">[00:05:58]</button></p>
+<p>因此，两版对照真正帮助我们提出的，是“我希望观众怎样理解这些元素之间的关系”。如果目标是轻柔邀请，第二版更贴近这个方向；如果目标是表现混乱与平静的对照，第一版也有可讨论的理由。具体选择需要放回主题和受众情境，不能脱离目的给一种风格判定高低。</p>
+<h2 id="_6">让人记住的，可能是一个刚刚看懂的关系</h2>
+<p>接下来的问题是：观众离开之后，还能记住什么？一张画面可以很整洁、很熟练，却没有留下一个鲜明的意思。这里用“记忆编码”讨论设计怎样给人留下可以回想的内容，重点是观察视觉概念如何帮助理解与记忆，无需把它理解成一条保证记住的心理学公式。<button type="button" class="timecode" data-seconds="398">[00:06:38]</button></p>
+<p>先看 High Fidelity 海报。画面用了两张黑胶唱片与一张唱片封套。如果只是把这些物品排整齐，我们会知道它与音乐有关；现在，两张圆形唱片构成上方的两个弧面，斜放的封套形成下方尖角，几个物品一起拼成一颗心。我们先认出唱片，再认出心形，音乐与情感就这样联系起来。<button type="button" class="timecode" data-seconds="421">[00:07:01]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1s43z67Ezv-00427.jpg" data-caption="两张黑胶唱片与斜放的封套组合成心形，让音乐物件同时表达情感。">
+    <img src="../assets/frames/BV1s43z67Ezv-00427.jpg" loading="lazy" alt="视频截图 03，00:07:07：两张黑胶唱片与斜放的封套组合成心形，让音乐物件同时表达情感。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="427.000">图 03 · 00:07:07</button><span>两张黑胶唱片与斜放的封套组合成心形，让音乐物件同时表达情感。</span></figcaption>
+</figure>
+<p>这个构思没有增加很多解释文字，却让原来的物品多了一层意义。物品仍然是唱片，整体轮廓又让我们想到感情；两种理解可以同时存在。观众自己完成了从物品到隐喻的一步，这也给回想作品提供了明确的线索：那是一张“用唱片拼出心”的海报。</p>
+<p>再看另一张海报：椅子上有衬衫和长裤，前面摆着鞋，衣物按照一个人坐着的姿态排列，但其中没有身体，也没有脸。熟悉的坐姿与缺席的人发生了冲突，观众很容易停下来问：这个人到哪里去了？为什么衣服还留在这里？<button type="button" class="timecode" data-seconds="460">[00:07:40]</button></p>
+<figure class="evidence-figure" id="evidence-frame-04">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1s43z67Ezv-00480.jpg" data-caption="衬衫、长裤与鞋保留了坐姿，身体却缺席，形成与“Stuck in the Void”标题呼应的疑问。">
+    <img src="../assets/frames/BV1s43z67Ezv-00480.jpg" loading="lazy" alt="视频截图 04，00:08:00：衬衫、长裤与鞋保留了坐姿，身体却缺席，形成与“Stuck in the Void”标题呼应的疑问。">
+    <span class="frame-stamp">视频画面 / 04</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="480.000">图 04 · 00:08:00</button><span>衬衫、长裤与鞋保留了坐姿，身体却缺席，形成与“Stuck in the Void”标题呼应的疑问。</span></figcaption>
+</figure>
+<p>这张作品借人的缺席表达空洞与疏离的感受。它给出足够熟悉的线索，让人认出场景，又留下一个值得解释的异常。我们停下来理解这个异常，画面就更容易获得具体意义。实际能否记住、记住多久仍会因人和情境而异，不能从一张作品直接推断普遍的记忆效果。</p>
+<p>这与开头要求“减少理解差距”并不冲突。信息层级混乱，会让人连自己在看什么都不清楚；一个清楚呈现的概念悬念，则让人知道该围绕什么思考。唱片与衣服都容易识别，异常关系也集中明确，观众的注意力因此有一个可以停留的对象。</p>
+<h2 id="_7">品牌会怎样说话，能够帮助我们决定标志长什么样</h2>
+<p>最后把范围从单张海报扩大到品牌。人们接触品牌时，会读到网页、通知、宣传语和社交媒体文字。标志只是这些接触中的一个部分。如果我们只研究图形好不好看，却不知道品牌平时怎样表达，就可能做出一个精致、却与整体气质不协调的标志。<button type="button" class="timecode" data-seconds="504">[00:08:24]</button></p>
+<p>Satori Graphics 提供了一种从语言开始的练习。先写出品牌绝不会使用的五个词，再写出它可能经常使用的五个词，最后写一句它会向受众发出的简短自我介绍。这个练习不用马上画图，先让我们听见一个比较明确的声音：它是活泼的、技术性的、直接的，还是平静克制的？</p>
+<table>
+<thead>
+<tr>
+<th>先写下什么</th>
+<th>帮助我们看清什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>品牌绝不会说的五个词</td>
+<td>哪些表达超出了品牌想保持的边界</td>
+</tr>
+<tr>
+<td>品牌经常会说的五个词</td>
+<td>它习惯强调什么，表达带有什么气质</td>
+</tr>
+<tr>
+<td>一句面向受众的自我介绍</td>
+<td>这些词放进完整沟通时是否一致、自然</td>
+</tr>
+</tbody>
+</table>
+<p>语言的作用，是给视觉探索提供更明确的方向。一个说话大胆直接的品牌，如果标志显得过分迟疑，整体感受就可能不协调；一个平静温和的品牌，如果视觉充满尖锐和攻击性，也需要解释这种差异为什么存在。图形选择仍然有很多可能，但我们已经知道应该检查它与什么是否相合。<button type="button" class="timecode" data-seconds="561">[00:09:21]</button></p>
+<p>这一步也提醒我们，设计时的“忙起来”与真正理解问题并不总是同步。打开软件调整形状，很快就能看见产出；先弄清品牌怎样说话，看起来慢一些，却可能帮助后续选择减少反复。文字和视觉共同参与沟通，它们需要让人感到是在与同一个品牌接触。<button type="button" class="timecode" data-seconds="579">[00:09:39]</button></p>
+<h2 id="_8">总结提炼</h2>
+<p>理解设计，可以沿着观众的经历往前走：他带着什么状态到来，第一眼看见什么，怎样理解画面，离开后产生什么感受，又能记住什么。颜色、字体与形状的选择，都可以放回这段经历中讨论。</p>
+<p>具体例子给出了不同的观察角度。几秒测试看信息顺序；两版平静主题海报看视觉语气；唱片心形与空衣服看概念怎样产生意义；品牌用词练习则帮助文字和视觉保持一致。</p>
+<p>这些思路需要结合目标使用。强烈画面可以吸引注意，也可以表达混乱；柔和画面可以轻柔邀请，却不保证适合所有情境。把设计选择与观众的实际理解联系起来，我们才更容易知道该保留什么、调整什么。</p>
+<h2 id="_9">时间导航</h2>
 <ul>
-<li><strong>接触前状态：</strong>观众在什么设备、场景和情绪中遇到设计？</li>
-<li><strong>第一眼路径：</strong>最先、其次和完全未被看到的内容分别是什么？</li>
-<li><strong>接触中体验：</strong>文件、提案、页面或交付过程是否清楚顺畅？</li>
-<li><strong>离场情绪：</strong>观众看完后应当更安心、更兴奋、更好奇，还是更有行动意愿？</li>
-<li><strong>记忆钩子：</strong>画面里有没有一个可理解、可补完的概念转折？</li>
-<li><strong>声音一致性：</strong>视觉形状与品牌实际说话的方式是否处于同一情绪温度？</li>
+<li><button type="button" class="timecode" data-seconds="13">[00:00:13]</button> 表达意图与实际感知之间的差距。</li>
+<li><button type="button" class="timecode" data-seconds="34">[00:00:34]</button> 用短暂观看和复述检查阅读顺序。</li>
+<li><button type="button" class="timecode" data-seconds="90">[00:01:30]</button> 慈善网站与时尚杂志的观看情境。</li>
+<li><button type="button" class="timecode" data-seconds="184">[00:03:04]</button> 作品集、提案与文件打开体验。</li>
+<li><button type="button" class="timecode" data-seconds="230">[00:03:50]</button> 疲倦、低亮度手机上的真实观众。</li>
+<li><button type="button" class="timecode" data-seconds="263">[00:04:23]</button> 预想观众看完后的情绪。</li>
+<li><button type="button" class="timecode" data-seconds="286">[00:04:46]</button> 两版海报的视觉语气。</li>
+<li><button type="button" class="timecode" data-seconds="358">[00:05:58]</button> 强烈版本的另一种解读。</li>
+<li><button type="button" class="timecode" data-seconds="421">[00:07:01]</button> 黑胶唱片组成心形。</li>
+<li><button type="button" class="timecode" data-seconds="460">[00:07:40]</button> 空衣物形成的视觉疑问。</li>
+<li><button type="button" class="timecode" data-seconds="504">[00:08:24]</button> 先了解品牌怎样说话。</li>
 </ul>
-<p>这套模型的价值，在于它把“感觉不对”拆成可观察的问题。设计师仍然需要审美判断，同时还要能说明每个选择如何影响接收、情绪和记忆。</p>
-<h2 id="_5">边界、疑点与时效性</h2>
-<ul>
-<li>“如果设计需要解释，它就失败了”适合作为自检警报，不能机械地覆盖实验性艺术、复杂信息图或本身要求探索的作品。</li>
-<li>“强烈视觉会施压、柔和视觉会安抚”取决于主题、文化语境和组合关系。讲者对原海报的“混乱中寻找平静”解读，已经展示了同一形式可以承载不同叙事。</li>
-<li>逐字稿在 <a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=498" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:18]">[00:08:18]</a> 附近存在较突兀的语义跳转，因此没有替缺失的上下文补写结论。</li>
-<li>“预测性共情是 2026 年最重要的能力之一”“AI 目前无法触及这一点”“人类设计天然更有概念”等，属于讲者在录制时期的个人判断，不能当作经过验证的行业定论。</li>
-<li>机器逐字稿中存在少量明显识别错误，如 <em>Assetics</em>、<em>topography</em> 等；笔记结合上下文谨慎还原为 <em>aesthetics</em>、<em>typography</em>，未对不确定内容扩写。</li>
-</ul>
-<h2 id="_6">时间戳导航</h2>
-<ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=0" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:00]">[00:00:00]</a> 从颜色、字体和风格转向“感知鸿沟”</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=25" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:25]">[00:00:25]</a> 专业评价问题：第一眼、第二眼与完全遗漏</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=34" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:00:34]">[00:00:34]</a> 几秒记忆顺序测试与视觉层级诊断</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=74" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:14]">[00:01:14]</a> 设计应考虑观众接触时的心理状态</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=166" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:46]">[00:02:46]</a> 输出之外：作品如何抵达接收者</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=219" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:39]">[00:03:39]</a> 感知如何参与价值形成</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=263" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:23]">[00:04:23]</a> 预测性共情与“几秒后的情绪”</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=358" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:58]">[00:05:58]</a> 对高强度海报的另一种合理解读</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=398" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:38]">[00:06:38]</a> 记忆编码及其与光洁视觉的差别</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=435" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:15]">[00:07:15]</a> 黑胶唱片组成心形的概念隐喻</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=460" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:40]">[00:07:40]</a> 空衣服、人体缺席与去人格化主题</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1s43z67Ezv/?t=504" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:24]">[00:08:24]</a> 从品牌声音出发，再进入标志造型</li>
-</ul>
-<h2 id="_7">复习与行动清单</h2>
-<h3 id="_8">立即可做</h3>
-<ul>
-<li>[ ] 把当前作品展示三秒，请一位不了解项目的人按顺序复述所见。</li>
-<li>[ ] 写下目标观众遇见设计前的设备、环境、注意力和情绪状态。</li>
-<li>[ ] 检查行动号召是否真的进入了观众的阅读路径。</li>
-<li>[ ] 审视作品集、提案和源文件的打开体验、命名及结构。</li>
-<li>[ ] 为当前设计写一句“观众离开后应当感到……”。</li>
-<li>[ ] 找出画面中唯一值得记住的概念转折；若找不到，重新审视构思。</li>
-<li>[ ] 在设计标志前，先完成“五个绝不会说的词、五个常说的词、一句品牌短消息”。</li>
-</ul>
-<h3 id="_9">值得反复追问</h3>
-<ol>
-<li>我正在解决沟通问题，还是只在修饰表面？</li>
-<li>观众最先看到的内容，真的是最重要的内容吗？</li>
-<li>设计的情绪温度与观众的起始状态匹配吗？</li>
-<li>我希望观众几秒后带走什么感受？</li>
-<li>画面留下的是困惑，还是一项可被解决的悬念？</li>
-<li>如果去掉制作技巧，这个设计还剩下什么值得记住的概念？</li>
-<li>品牌的视觉形状，听起来像它平时说话的声音吗？</li>
-</ol></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_10">复习与实践</h2>
+<p>选一张你正在做或最近看过的版面，展示几秒后，请别人按顺序说出记住的内容。把这个顺序与你希望的顺序放在一起，看差距出现在什么位置。</p>
+<p>再看两版平静主题海报。你能否分别为两种视觉选择给出一个合理目的？如果观众和使用场景改变，你的选择会怎样变化？</p>
+<p>回想唱片与空衣服两个例子，各用一句完整的话说明：画面里有什么，它们之间有什么特别关系，这个关系让人想到什么。如果只能说出“很高级”或“很有创意”，可以再看一遍具体物件。</p>
+<p>为一个熟悉的品牌完成“五个绝不会说的词、五个常说的词、一句自我介绍”。随后再看它的标志，判断文字与图形是否给你一致的感受，并指出具体原因。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Satori Graphics｜学高阶设计思维，看这一部就够了", "duration": "10:07", "src": "", "poster": "../assets/frames/BV1s43z67Ezv-00288.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

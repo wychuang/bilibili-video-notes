@@ -1,48 +1,276 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>学习断了一天，下一次该从哪里开始？ · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学习中断以后，怎样重新开始？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">学习中断以后，怎样重新开始？</h1>
+    <div class="meta"><span>吴阳Leonard</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1AfSYBdEPp/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">学习断了一天，下一次该从哪里开始？</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">第一种卡住：把辛苦当成进展</a></li>
-<li><a href="#_4">第二种卡住：一天没做，就把之前全部作废</a></li>
-<li><a href="#_5">第三种卡住：一直做，却看不见进步</a></li>
-<li><a href="#_6">记录进展时，只写真实发生的事</a></li>
-<li><a href="#_7">迁移练习：给明天留一个好入口</a></li>
+<li><a href="#_1">学习中断以后，怎样重新开始？</a><ul>
+<li><a href="#_2">先分清：已经累坏了，还是暂时停下了？</a></li>
+<li><a href="#_3">凌晨四点起来，却连一页书都读不进去</a></li>
+<li><a href="#_4">停了十天，前面三个月的阅读还算数吗？</a></li>
+<li><a href="#_5">给目标留一点范围，恢复时就有地方落脚</a></li>
+<li><a href="#_6">一直在学英语，怎么还是感觉没有进步？</a></li>
+<li><a href="#_7">学习要通向一种自己愿意过的生活</a></li>
+<li><a href="#_8">总结提炼：先找到当前卡住的地方</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">复习时想一想</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1AfSYBdEPp" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><span>补充 · 视频学习笔记</span></div><article data-lesson="BV1AfSYBdEPp"><div class="provenance">来源：吴阳Leonard · <a href="https://www.bilibili.com/video/BV1AfSYBdEPp/" target="_blank" rel="noopener">BV1AfSYBdEPp 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">学习断了一天，下一次该从哪里开始？</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1AfSYBdEPp.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#learn">← 07 · 学习、表达与实践</a><button class="done" data-done="BV1AfSYBdEPp" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1AfSYBdEPp&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1AfSYBdEPp/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1AfSYBdEPp"><h1>学习中断以后，怎样重新开始？</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1AfSYBdEPp/">吴阳 Leonard｜自学 9 年血泪教训：比努力更重要的是努力的方法</a>；全片约 19 分钟，包含个人经历与“有效努力”课程推广。本文提炼可试的小动作，不把个人成效或商业课程描述当作治疗证据。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1AfSYBdEPp/">自学 9 年血泪教训：比努力更重要的是努力的方法</a> · 吴阳 Leonard · 约 19 分钟 · 深度阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>持续学习需要可恢复的安排：状态好时推进，受阻时缩小任务，中断后允许从很小的一步回来。</p>
-<h2 id="_3">第一种卡住：把辛苦当成进展</h2>
-<p>讲述者回顾为了坚持凌晨四点起床，即使前夜睡得很晚也强行起床；结果坐在书前打瞌睡，时间过去了，内容没有读进去。<a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=240" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:00]">[00:04:00]</a></p>
-<p>这个反例很直接：打卡时间只记录了动作发生，没有说明学习质量。视频随后讲到观察疲劳、尝试不同休息方式，再安排工作与休息的切换。<a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:03]">[00:06:03]</a></p>
-<p>课程中的“战斗模式”“评论模式”等是讲解框架，可以帮助描述体验，不能拿来给自己下诊断。也无需复制固定早起时刻或固定休息分钟数。</p>
-<h2 id="_4">第二种卡住：一天没做，就把之前全部作废</h2>
-<p>阅读习惯曾被连续授课和通勤打断。最难恢复的部分，除了没有时间，还有“已经失败了”的自我评价。<a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=363" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:03]">[00:06:03]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=481" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:01]">[00:08:01]</a></p>
-<p>视频提供三步处理：先注意到自己正在产生什么想法，再设一个保守目标，最后写出遇到阻碍时的具体安排。</p>
-<p>例如学习西语的保守目标缩成一句话，再把它接到一个已有的日常动作上。<a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=600" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:10:00]">[00:10:00]</a> 对本课程，可以改成下面这组安排：</p>
+<p>你原本打算今晚读书，回家以后却一直在看手机。等到准备睡觉，想起那本没翻开的书，又觉得这一天白过了。第二天想补回来，就给自己安排更长的学习时间；计划变难以后，启动起来也更费力。事情慢慢变成一个循环：想改善生活，给自己加要求，没达到要求，再用更严厉的要求补救。书没有多读几页，心里却已经为读书消耗了不少力气。</p>
+<p>吴阳的自学经历里，也有这样的循环。他离开学校后尝试阅读、学英语、拍摄和街舞，希望靠自学改变生活，后来确实积累了一些作品和经验。但在这些结果出现之前，他同样经历过想做却做不到、做了一段时间又停下的阶段。我们值得仔细看的，是他曾经怎样把学习弄得很难，以及后来哪些具体调整让他更容易继续。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button> <button type="button" class="timecode" data-seconds="126">[00:02:06]</button></p>
+<h2 id="_2">先分清：已经累坏了，还是暂时停下了？</h2>
+<p>学习不顺利时，我们很容易用一句“我不够自律”解释所有情况。可连续工作以后注意力下降，和出差几天打乱安排，遇到的是两种不同困难；每天都在练习、却感受不到进步，又是另一回事。如果一律用“再坚持一下”回应，可能会让疲劳的人继续透支，让中断的人更加自责，也让看不见进展的人继续等待一个模糊的结果。</p>
+<p>这里可以把困难分成三类。第一类是<strong>过度用力以后运转失灵</strong>：人还坐在那里，脑子已经跟不上。第二类是<strong>日常安排中断</strong>：过去能做的事，遇到忙碌、旅行或者其他变化，突然接不上了。第三类是<strong>进入平台期</strong>：行动仍在继续，变化却不够明显，让人怀疑是否还有必要投入。接下来三个经历，分别对应这三种处境。<button type="button" class="timecode" data-seconds="187">[00:03:07]</button></p>
+<p>这些分类和后面的几项练习，来自吴阳对个人经历的回顾，以及他推广的“暂停实验室·有效努力”训练产品。因此，产品的效果评价带有推广关系，个人改善也不能证明购买课程就会得到相同结果。我们可以理解每项练习怎样回应一个具体困难，同时保留对课程整体效果的判断。</p>
+<h2 id="_3">凌晨四点起来，却连一页书都读不进去</h2>
+<p>吴阳曾把凌晨四点起床当成自律的重要标志。问题出现在前一晚休息很迟的时候：有时凌晨两点才睡，四点仍然坚持起床。表面上，早起目标完成了；实际坐到书桌前，困得不断打瞌睡，半个小时过去，书里的内容几乎没有进入脑子。他花了很大的力气维持“我已经起来了”这个事实，却很难完成早起原本想做的阅读。<button type="button" class="timecode" data-seconds="251">[00:04:11]</button></p>
+<p>这个经历需要把两个目标放在一起看。早起是时间安排，读懂书里的内容才是学习结果。时间安排本来应该帮助学习，一旦睡眠被压得太少，早起就可能妨碍学习。此时继续责备自己注意力不集中，会漏掉一个很直接的条件：身体根本没有获得足够的休息。睡眠不足确实会影响学习、注意力和反应，这也是 <a href="https://www.nhlbi.nih.gov/health/sleep-deprivation">美国国立心肺血液研究所的睡眠说明</a> 强调的影响。这个例子不适合被当成凌晨四点起床的倡议。</p>
+<p>那为什么我们已经很困，还不愿意离开书桌？一种常见理由是：“坐着总比躺着强，至少说明我在努力。”这句话把休息理解成了放弃，于是眼前只剩两个选项：继续坚持，或者承认自己不行。实际上，读书的目标始终在那里，休息后再读也是达成目标的一种安排。判断要不要休息，可以回到具体状态：这一页是否反复读了几遍，读完能否说出意思，是否已经不断打哈欠。它们比坐了多久更接近此刻的学习质量。</p>
+<p>训练产品用“战斗模式”“评论模式”“行动模式”和“存在模式”描述四种体验：强迫自己继续、不断评价自己、处理眼前任务，以及暂时放下任务和评价。可以把这些名称当作观察体验的用语。它们不构成大脑只有四种工作状态的科学分类，也不能凭一个名称判断自己有什么心理问题。我们在这里需要理解的转换很朴素：发现自己已经疲劳，就允许注意力从“怎么还没做完”转向“现在怎样恢复一点精力”。<button type="button" class="timecode" data-seconds="294">[00:04:54]</button></p>
+<p>吴阳尝试过工作一小时后休息十五分钟，也尝试不同的休息方式，后来觉得散步对自己比较有效。这个安排给我们展示了一种试法：观察工作后的状态，换一种休息活动，再看回来时能否继续投入。具体时长没有必要照抄。对一个人合适的节奏，换到另一份工作或另一种身体状态下，可能就需要调整。<button type="button" class="timecode" data-seconds="363">[00:06:03]</button></p>
+<h2 id="_4">停了十天，前面三个月的阅读还算数吗？</h2>
+<p>第二个经历发生在阅读习惯已经建立以后。吴阳连续读书将近三个月，随后赶上冬季街舞课程。早上很早就要出门，通勤和教学占据了大量时间，原来的阅读安排连续十天没有接上。真正让恢复变难的，除了忙碌，还有对这次中断的解释：既然连续记录已经断掉，前面的坚持仿佛都失去了意义。<button type="button" class="timecode" data-seconds="434">[00:07:14]</button></p>
+<p>我们可以停在这个判断上想一会儿。已经读过的书、形成的理解，不会因为十天没有阅读自动消失；日历上的连续记录确实断了，过去发生过的学习却仍然存在。但当我们把连续天数当成评价自己的主要尺度，中断就容易从一件需要重新安排的事，扩大成对自己的否定。于是，打开书之前还要先处理羞愧和失望，恢复阅读就比第一次开始更困难了。</p>
+<p>这里的第一个练习叫“解套”。做法是把脑子里冒出的评价说清楚，并注意到它是一种正在出现的想法。例如，把“我又失败了”说成“我注意到，一旦连续学习中断，我就会觉得自己很失败”。两句话谈的是同一件事，后一种表达多留出了一点观察的距离：我们可以承认失望正在发生，同时继续问，今天的时间和精力允许做什么。<button type="button" class="timecode" data-seconds="542">[00:09:02]</button></p>
+<p>这个练习不要求立刻把情绪改成积极，也不需要证明中断值得高兴。它的作用很有限、也很具体：当自责占满注意力时，试着让注意力重新回到可以处理的事情上。此时过去为什么中断、今天怎样重新安排，比继续给自己打分更有助于决定下一步。能否立刻做到因人而异，偶尔仍然陷入自责，也不意味着练习再次失败。</p>
+<h2 id="_5">给目标留一点范围，恢复时就有地方落脚</h2>
+<p>心里稍微松开以后，还要解决行动本身太难的问题。假如重新开始阅读，就要求自己恢复到状态最好时的进度，那扇门仍然很窄。吴阳介绍的第二个练习，是同时设置“进取型目标”和“保守型目标”。学英语时，前者可以是学完一个章节，后者可以是认真学完一小段话。两个目标对应不同状态，让人可以在精力充足时多做，在疲劳或忙碌时完成一个较小的动作。<button type="button" class="timecode" data-seconds="585">[00:09:45]</button></p>
+<p>这里容易出现一个疑问：只学一段话，真的够吗？如果目标是今天必须完成整章备考任务，一小段当然无法替代整章。保守目标解决的是恢复入口的问题：当整章的要求让你迟迟打不开书，先完成一小段，就让今天仍然和这项学习保持联系。它对长期任务比较有用；遇到必须按时交付的事情，我们仍然要另外安排足够的时间，不能把缩小任务当成已经完成全部工作。</p>
+<p>吴阳把这个想法用到了西班牙语学习上，将保守目标设成每天一句。他报告自己更容易持续学下去，而且开始以后常常会超过一句。我们可以理解这个变化：一句话降低了开始前需要面对的工作量，开始以后是否继续，还可以根据当时状态决定。不过，保守目标最好真的是允许停下的目标。如果嘴上说一句就够，心里却规定必须再学半小时，那份降低门槛的承诺很快就会失去作用。<button type="button" class="timecode" data-seconds="639">[00:10:39]</button></p>
+<p>有了较小的目标，还有最后一个问题：一天这么忙，究竟什么时候想起那句话？第三个练习叫“执行意图”，意思是提前约定一个具体情境和相应动作，用“如果……那么……”把它们接起来。吴阳的安排是，如果晚上回家很累，就在睡前刷牙这个日常环节附近打开学习应用，读那一句西班牙语。这样，计划就从笼统的“今天还要学习”，变成了在一个容易识别的时刻完成一件明确的事。<button type="button" class="timecode" data-seconds="660">[00:11:00]</button></p>
+<p>这三步各自承担了一部分工作。注意到自责，让我们有余地思考下一步；保守目标减少下一步的工作量；执行意图再给这一步指定时间和场景。少了后面的安排，心情好转以后仍然可能忘记学习；少了前面的宽容，那个小动作也可能变成新的打卡压力。它们放在一起，才比较完整地回应了“我停下了，怎么回来”这个问题。即便如此，生病、严重疲劳或生活变故仍然可能需要直接休息，预案不应要求人无论遇到什么都必须完成。</p>
+<h2 id="_6">一直在学英语，怎么还是感觉没有进步？</h2>
+<p>第三个困难比前两个更隐蔽：每天都做了，也没有明显中断，却始终觉得自己还差很远。吴阳最初学英语，是希望以后能够旅行，并听懂国外街舞老师的课程。这个目的很具体，可一旦把评价标准写成“我的英语要变得流利”，每天的练习就很难得到清楚反馈。今天多会说一个表达，离“流利”究竟还有多远？聊了十分钟，算不算进步？没有明确的比较对象，很容易只注意到自己仍然不会的部分。<button type="button" class="timecode" data-seconds="733">[00:12:13]</button></p>
+<p>他记得一位法国街舞老师曾肯定他的英语。那句话让他意识到，自己的表达已经能够被另一个人理解，之前的努力确实产生了一些变化。这是一次对他很重要的个人经历，但我们不能安排别人恰好在最沮丧的时候说出同样的话。所以接下来的问题是：假如暂时没有这样的外部鼓励，能不能在练习本身找到更清楚的反馈？<button type="button" class="timecode" data-seconds="789">[00:13:09]</button></p>
+<p>吴阳后来把注意力放回真实交流。他给自己安排与外教一起吃饭时聊够十个来回。这里的“十个来回”不等于英语水平得了十分，它首先说明自己完成了哪一种练习：听懂对方的话，组织回应，让对话继续。为了继续聊，他会去找新的词语和表达；学过的表达能在下一次交流中用出来，又提供了更具体的变化。原来遥远的“流利”，由此和一次次可以观察的对话联系起来。<button type="button" class="timecode" data-seconds="855">[00:14:15]</button></p>
+<p>要看清这个例子，最好同时保留两种记录。一种记录行动，例如今天确实完成了十个对话来回；另一种记录能力，例如今天能够用一个新表达讲清自己的意思。行动记录可以帮助我们看到练习没有停，能力记录则帮助我们判断练习是否有用。如果永远只数完成次数，对话内容始终一样、困难始终没有处理，次数增加仍然可能掩盖问题。平台期需要鼓励，也需要与实际能力有关的反馈。</p>
+<p>训练产品把记录微小进展称为“成就清单”。放到这个英语例子里，清单可以留下真实发生的事情：今天说出了什么，在哪个话题上比过去更顺，遇到什么表达困难。它不要求把每天包装成成功的一天。没有说清的地方也能留下来，让下一次练习有一个具体对象。这样记录的价值在于，几天以后我们可以回看变化，减少只凭当天心情判断自己有没有进步。<button type="button" class="timecode" data-seconds="870">[00:14:30]</button></p>
+<p>这里还涉及“重力问题”这个比喻：有些问题像要求地球没有重力，无法靠个人努力直接改变。不过，“英语要流利”主要是一个范围很大、评价不够清楚的目标，不能因此判定英语能力无法改善。我们需要分开处理无法控制的条件和可以细化的目标。前者可能需要接受或换一个安排，后者可以继续缩小成对话、表达和理解方面的具体任务。把这两种情况混在一起，反而可能过早放弃本来可以继续学习的东西。<button type="button" class="timecode" data-seconds="832">[00:13:52]</button></p>
+<h2 id="_7">学习要通向一种自己愿意过的生活</h2>
+<p>走过这三个经历，再回头看“为什么要努力”，问题会更具体一些。早起曾经像一个需要完成的自律标志，后来吴阳更在意清晨的安静和从容；阅读曾经带着跟不上别人的焦虑，后来更能感受到从书里理解他人的乐趣；英语也逐渐和交流、旅行、接触另一种文化联系起来。行动本身没有完全变，支撑行动的理由发生了变化。<button type="button" class="timecode" data-seconds="966">[00:16:06]</button></p>
+<p>这并不意味着只要找对理由，学习就会一直愉快。练习口语仍然可能尴尬，读书仍然会遇到难懂的地方，工作繁忙也仍然会打乱安排。具体的兴趣和价值，提供的是在这些困难出现时重新衡量的依据：我还想不想获得这种能力？目前的安排是否在帮助我？如果方式已经让生活持续失衡，可不可以换一个强度或时间？我们因而能调整某项安排，同时保留对学习本身的重视。</p>
+<p>吴阳用长期自学说明了这种变化对他个人的意义。读到这里，我们不必把他的早起时间、学习年数或者职业结果当成自己的标准。更值得带走的是三个已经讲清的关系：疲劳会影响正在做的事，中断不抹去已有的学习，进展需要通过具体表现来观察。它们让“继续努力”有了可以检查和调整的内容。</p>
+<h2 id="_8">总结提炼：先找到当前卡住的地方</h2>
+<table>
+<thead>
+<tr>
+<th>当前的处境</th>
+<th>可以先检查什么</th>
+<th>对应的调整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>坐了很久，内容仍然读不进去</td>
+<td>睡眠、疲劳，以及是否只在追求坐够时间</td>
+<td>给恢复留出时间，再观察学习质量</td>
+</tr>
+<tr>
+<td>忙了几天，回来时怎么也不想打开书</td>
+<td>中断是否被解释成全部失败，恢复要求是否过高</td>
+<td>注意到自责，设一个真能停下的保守目标，约定具体开始场景</td>
+</tr>
+<tr>
+<td>每天都在练习，却始终觉得没用</td>
+<td>目标是否太模糊，记录是否只剩时长和次数</td>
+<td>回到真实任务，记录做成了什么及仍然困难的地方</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">时间导航</h2>
 <ul>
-<li>正常版：读一篇笔记，完成一个小练习。</li>
-<li>缩小版：只读核心段落，写下一个不懂的问题。</li>
-<li>返回版：中断后打开上次那篇，看一眼自己停在哪里。</li>
+<li><button type="button" class="timecode" data-seconds="251">[00:04:11]</button> 凌晨四点起床后，为什么反而读不进书。</li>
+<li><button type="button" class="timecode" data-seconds="434">[00:07:14]</button> 阅读被忙碌打断后，自责怎样妨碍恢复。</li>
+<li><button type="button" class="timecode" data-seconds="542">[00:09:02]</button> 从注意到想法，到保守目标，再到执行意图。</li>
+<li><button type="button" class="timecode" data-seconds="733">[00:12:13]</button> 英语平台期，以及十个对话来回带来的具体反馈。</li>
+<li><button type="button" class="timecode" data-seconds="966">[00:16:06]</button> 让行动重新联系到自己在意的生活。</li>
 </ul>
-<p>这是迁移示例，不要求每天连胜。很累时也可以直接休息，稍后回来；保守目标不该变成另一种惩罚。</p>
-<h2 id="_5">第三种卡住：一直做，却看不见进步</h2>
-<p>“英语要流利”太模糊，讲述者很难判断变化。后来把它换成真实交流中的具体行动，例如完成若干轮对话，再记录自己新用上的表达。<a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=722" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:12:02]">[00:12:02]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1AfSYBdEPp/?t=840" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:00]">[00:14:00]</a></p>
-<p>迁移到学习 AI，目标可以从“我要精通 Agent”改成“我能用一个例子解释工具调用失败，并写出复现步骤”。结果更小，但看得见。</p>
-<p>视频把一些模糊目标称为“重力问题”。需要区别两件事：目标暂时难衡量，与它完全不可改变，并不相同。把范围缩小、找反馈，通常比给整个目标贴上无解标签更有帮助。</p>
-<h2 id="_6">记录进展时，只写真实发生的事</h2>
-<p>“今天学了两小时”可以记录，但再补一句更有用：“我区分了检索漏召回和生成漏使用，并各找到了一个例子。”</p>
-<p>同样，发现自己没懂，也是一条有效记录：“我仍然无法解释重排序与生成的区别，下次先补这个。”这张清单帮助安排下一步，无需负责证明自己很优秀。</p>
-<h2 id="_7">迁移练习：给明天留一个好入口</h2>
-<p>今天结束时，写一张三行小纸条：下一步打开哪篇、只做哪个动作、做到哪里可以停。</p>
-<p>明天回来先照着做一次，再决定是否继续。若经常无法完成，就检查任务大小、环境与安排，逐项调整。这里提供的是低负担学习实验，不要求靠它解决所有作息或心理困扰。</p></article><nav class="bottom-nav"><a href="../index.html#learn">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_10">复习时想一想</h2>
+<p>为什么“今天完成了一次练习”和“今天能力有进步”值得分开记录？中断以后，保守目标需要满足什么条件，才不会变成另一份必须完成的大计划？把这两个问题想清楚，通常就能分辨自己是在照顾长期学习，还是只在维护一串连续记录。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "自学9年血泪教训：比努力更重要的是努力的方法", "duration": "19:07", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

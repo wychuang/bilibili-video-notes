@@ -1,87 +1,333 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>深度研究怎么验收：从一份漂亮报告往回查 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>让 AI 帮忙研究一个问题：五个 Deep Research 案例怎样逐步深入 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai-deep-research">让 AI 帮忙研究一个问题：五个 Deep Research 案例怎样逐步深入</h1>
+    <div class="meta"><span>howie和小能熊</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1WCCnYjEy4/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">深度研究怎么验收：从一份漂亮报告往回查</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">搜了一百多个网站，究竟说明什么</a></li>
-<li><a href="#_4">第一个可控制的环节：研究计划</a></li>
-<li><a href="#_5">充电头案例：泛泛介绍与实际决策差在哪里</a></li>
-<li><a href="#_6">会员案例：搜索语言会改变来源集合</a></li>
-<li><a href="#_7">专业主题案例：自信也需要证据</a></li>
-<li><a href="#_8">思维链研究案例：先找地图，再读原文</a></li>
-<li><a href="#_9">一份深度研究报告，我会这样验收</a></li>
-<li><a href="#_10">迁移练习：亲手审一份小报告</a></li>
+<li><a href="#ai-deep-research">让 AI 帮忙研究一个问题：五个 Deep Research 案例怎样逐步深入</a><ul>
+<li><a href="#_1">第一件事：把“比较几个模型”展开成能研究的问题</a></li>
+<li><a href="#_2">为什么研究计划值得在开始前看一眼</a></li>
+<li><a href="#_3">充电头案例：先知道可以比较什么，再决定买什么</a></li>
+<li><a href="#_4">会员关系案例：问题很简单，背景条件却容易悄悄变化</a></li>
+<li><a href="#_5">多巴胺案例：用自己熟悉的主题，看看报告究竟懂到了哪里</a></li>
+<li><a href="#_6">来源种类不同，能帮我们完成的工作也不同</a></li>
+<li><a href="#_7">思维链案例：一份报告可以成为进入论文的入口</a></li>
+<li><a href="#_8">从一堆材料，到自己的理解，中间还有一步</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间导航</a></li>
+<li><a href="#_11">回看时的三个问题</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1WCCnYjEy4" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1WCCnYjEy4"><div class="provenance">来源：howie和小能熊 · <a href="https://www.bilibili.com/video/BV1WCCnYjEy4/" target="_blank" rel="noopener">BV1WCCnYjEy4 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">深度研究怎么验收：从一份漂亮报告往回查</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1WCCnYjEy4.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#product">← 05 · 用户任务与产品判断</a><button class="done" data-done="BV1WCCnYjEy4" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1WCCnYjEy4-00148.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1WCCnYjEy4&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1WCCnYjEy4/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1WCCnYjEy4"><h1>让 AI 帮忙研究一个问题：五个 Deep Research 案例怎样逐步深入</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1WCCnYjEy4/">howie和小能熊 · Google Deep Research 五个案例</a> · 50 分钟 · 标准学习稿。视频发布于 2024 年，界面、价格、模型能力均按历史演示理解，本文不提供现行购买建议。</p>
+<p>来源：Google Deep Research，学习与研究利器：详细上手教程，5 个深度案例<br>
+UP 主：howie和小能熊 · 49 分 52 秒 · 深度阅读<br>
+链接：https://www.bilibili.com/video/BV1WCCnYjEy4/</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>让研究助手替你搜集与组织材料，自己掌握问题、来源选择和关键结论的验收。</p>
-<h2 id="_3">搜了一百多个网站，究竟说明什么</h2>
-<p>视频开头展示模型对比任务：助手先列研究计划，经确认后搜索，再生成带引用的报告。界面显示研究了 151 个网站。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=80" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:20]">[00:01:20]</a></p>
-<p>这个数字说明系统执行了较多检索活动，却不足以证明报告全面或可靠。来源可能重复、互相转载，也可能只覆盖容易搜到的角度。评价一份报告，要继续问：重要子问题有没有回答？关键断言是否能被原文支持？遗漏了什么？</p>
-<figure><a href="../assets/frames/BV1WCCnYjEy4-00148.jpg" target="_blank" rel="noopener"><img src="../assets/frames/BV1WCCnYjEy4-00148.jpg" alt="历史演示将研究步骤放在左侧、报告放在右侧。画面中的模型参数与上下文数字属于生成结果，尚未逐项核实，不能因排版完整就直接采用。" loading="lazy"></a><figcaption><a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=148&amp;p=1" target="_blank" rel="noopener">[00:02:28]</a> 历史演示将研究步骤放在左侧、报告放在右侧。画面中的模型参数与上下文数字属于生成结果，尚未逐项核实，不能因排版完整就直接采用。</figcaption></figure>
-<h2 id="_4">第一个可控制的环节：研究计划</h2>
-<p>直接说“研究一下某产品”，范围很容易膨胀。演示中的助手先提供计划，让用户修改后再运行。这个确认点很有价值：可以提前发现目标跑偏，减少在错误方向上的长时间搜索。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=475" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:55]">[00:07:55]</a></p>
-<p>研究计划至少应明确对象、用途、比较维度、时间范围和交付形式。例如，我需要比较两个产品的检索能力，重点是中文长问题、来源时效和引用质量，最终用于设计一次小规模评测。这样得到的报告才更可能支持下一步。</p>
-<h2 id="_5">充电头案例：泛泛介绍与实际决策差在哪里</h2>
-<p>视频让助手研究某年的特色充电头，得到氮化镓、多口输出、功率和安全等信息。对于熟悉主题，这是一张初步地图。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=700" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:40]">[00:11:40]</a></p>
-<p>若要买给自己，还要补充设备需求、接口、携带场景、预算和适用地区。技术趋势再丰富，缺了这些条件也难以选出合适产品。这是从“主题报告”走向“决策支持”要跨过的一步。</p>
-<h2 id="_6">会员案例：搜索语言会改变来源集合</h2>
-<p>作者比较 Google One、AI 会员和 YouTube 会员之间的关系。一次搜索带入了不同地区与币种，报告的重点也偏离了原问题；之后调整检索语言，再比较结果。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=850" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:14:10]">[00:14:10]</a></p>
-<p>可迁移的经验是：检索语言、地区和关键词会影响找到哪些资料。涉及海外技术时，英文官方资料可能提供更直接的证据；涉及本地政策和产品规则时，则应优先当地官方来源。</p>
-<p>不能把一次对比推成“所有英文来源都更好”。两个结果可能同时变化了搜索词、来源数量、时间和计划，没有控制这些条件，就无法把差异全部归因于语言。</p>
-<h2 id="_7">专业主题案例：自信也需要证据</h2>
-<p>视频用神经科学主题检查助手的专业内容，并将两组来源进行对比。这提醒我们：熟悉某领域的人，可能更容易发现遗漏；陌生领域里，流畅的长文更容易让人误以为自己已理解。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=1140" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:19:00]">[00:19:00]</a></p>
-<p>不过，作者的个人把握和另一个模型的赞许，都不能代替逐条验证。本篇不采用视频中关于神经递质、成瘾或健康影响的医学结论，也不把未读过的内容直接判为错误。</p>
-<p>真正可迁移的是核查过程：打开支持核心论点的原始来源，查看研究对象、方法与限制；区分研究结果、综述解释和创作者延伸。如果资料不足，就把问题留在未解决清单里。</p>
-<h2 id="_8">思维链研究案例：先找地图，再读原文</h2>
-<p>最后一个技术案例让多个搜索产品围绕思维链研究组织资料。报告能帮助发现相关论文和下一步问题，但技术细节仍需回到论文、代码与实验条件。<a class="timecode" href="https://www.bilibili.com/video/BV1WCCnYjEy4/?t=1935" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:32:15]">[00:32:15]</a></p>
-<p>这类任务的价值，常体现在减少“从哪里开始”的成本。报告应该把读者带到更可靠的材料前，而不能让读者停在一层层摘要里。</p>
-<h2 id="_9">一份深度研究报告，我会这样验收</h2>
+<p>当我们想认真了解一个问题，最耗时间的往往是这样一段过程：先搜几个关键词，打开许多网页，发现其中一部分在重复转述，另一部分又引出了新名词。等到材料越来越多，还要把相互有关的内容放到一起，弄清哪些回答了最初的问题，哪些只是看起来相关。即使每篇文章都读得懂，把它们组织成一份有用的认识，也需要不少力气。</p>
+<p>Deep Research 尝试把这段工作接过来。我们提出一个研究任务，助手先列出计划；确认或修改计划以后，它继续搜索、阅读和组织材料，最后交付带来源链接的报告。它一次处理的是一个需要多步推进的问题，所以使用体验与问一句、立即答一句的聊天有所不同。<button type="button" class="timecode" data-seconds="95">[00:01:35]</button></p>
+<p>这里的五个案例来自 2024 年末的产品使用经历：模型比较、充电头、会员关系、多巴胺知识，以及思维链研究。具体界面和套餐名称属于当时的版本。更值得理解的是五个任务分别让我们看到了什么：什么时候应该改计划，什么条件会影响材料范围，以及拿到报告以后，怎样继续形成自己的理解。</p>
+<h2 id="_1">第一件事：把“比较几个模型”展开成能研究的问题</h2>
+<p>最初的任务是比较三家公司的四个模型，要求用英文搜索，再用中文回答。如果我们自己做，大概会先找各家的介绍，再比较能力、使用场景和限制。但这些方面并不天然处在同一张表里：官方博客可能强调新能力，技术报告讨论实验，其他文章又更关心使用体验。<button type="button" class="timecode" data-seconds="129">[00:02:09]</button></p>
+<p>助手先把任务拆开。计划里有寻找相关资料、从多个方面比较、总结各自特点等步骤。这样的计划让一个笼统的要求变得可以讨论：我们可以检查它有没有把真正关心的方面写进去，也可以发现某些问题根本不适合从公开资料里得到确定答案。比如，一些模型的内部训练细节并未公开，报告再完整，也不应当自行补齐。</p>
+<p>确认计划以后，系统开始检索。界面显示访问了 151 个网站，随后生成报告，并在相应位置附上来源。这个过程最直观的收益，是把寻找材料、阅读材料、组织不同方面这几件事接了起来。过去需要我们在浏览器标签页之间反复切换的工作，现在可以先得到一份可阅读的初稿。<button type="button" class="timecode" data-seconds="157">[00:02:37]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1WCCnYjEy4-00148.jpg" data-caption="左侧按步骤展开研究计划，右侧按比较维度组织报告；计划与结果同时可见，便于检查问题有没有被回答。">
+    <img src="../assets/frames/BV1WCCnYjEy4-00148.jpg" loading="lazy" alt="视频截图 01，00:02:28：左侧按步骤展开研究计划，右侧按比较维度组织报告；计划与结果同时可见，便于检查问题有没有被回答。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="148.000">图 01 · 00:02:28</button><span>左侧按步骤展开研究计划，右侧按比较维度组织报告；计划与结果同时可见，便于检查问题有没有被回答。</span></figcaption>
+</figure>
+<p>网站数量是一次工作量的记录，不能直接当成质量分数。一百个页面可能反复引用同一条消息，十个原始来源也可能足以回答一个明确问题。对于模型比较，重要的是每项说法对应哪份材料、材料讨论哪个版本，以及比较时有没有使用相同条件。报告里的模型参数等生成内容，也需要满足这些要求，不能因界面整齐就视为已确认。</p>
+<p>这份报告还可以在 Google Docs 中打开。进入文档以后，章节目录、正文和参考链接仍然保留，可以继续修改、缩短、展开或调整表达。这样，研究结果不必停留在一段聊天消息里，它成为可以继续阅读和加工的文档。<button type="button" class="timecode" data-seconds="240">[00:04:00]</button></p>
+<h2 id="_2">为什么研究计划值得在开始前看一眼</h2>
+<p>一个任务通常有很多合理的展开方向。你问“比较几个模型”，助手可以比较价格、推理表现、开放程度，也可以花大量篇幅介绍公司背景。这些内容可能都与模型有关，但与你当前要做的决定不一定同样有关。如果等整份报告写完才发现重点错了，前面的检索就已经花在了不需要的地方。</p>
+<p>因此，计划确认是一次重要的沟通机会。我们在这里检查的，是助手准备怎样理解这个问题。没有必要为了显得专业，强行补满一长串研究要求；只要看见关键方向缺失，就可以直接说清楚。后面的会员和多巴胺案例，采用的修改就很简单：改变搜索资料所用的语言，保留中文输出。<button type="button" class="timecode" data-seconds="489">[00:08:09]</button></p>
+<p>从任务推进来看，可以把整个过程理解为下面这条示意：</p>
+<blockquote>
+<p>提出问题 → 阅读并修改计划 → 搜索与组织材料 → 阅读带来源的报告 → 围绕尚未讲清的地方继续追问。</p>
+</blockquote>
+<p>人的判断会在多个位置出现。开始时决定想了解什么，计划阶段检查方向，报告出来以后检查它是否真正解释了问题。让助手承担大量材料处理，并不要求我们放弃这些判断。恰恰因为一次能够产生更多内容，判断哪些内容值得进一步阅读变得更加重要。</p>
+<h2 id="_3">充电头案例：先知道可以比较什么，再决定买什么</h2>
+<p>第二个问题非常日常：研究 2024 年有哪些有特色的充电头。它不像学术问题那样陌生，却同样涉及许多材料。产品名称、接口数量、功率、体积和宣传卖点混在一起时，一个不熟悉充电器的人很容易不知道该先看哪一项。<button type="button" class="timecode" data-seconds="716">[00:11:56]</button></p>
+<p>助手给出的报告先整理了几类当时的产品趋势，包括氮化镓技术、多口输出、功率和安全性，再通过链接指向具体产品资料。对初次了解这个主题的人，这种结果的价值在于建立比较的起点。读完以后，我们至少知道，不同充电头之间的差异不只在品牌与价格，还涉及同时为几台设备充电、输出能力和使用场景。<button type="button" class="timecode" data-seconds="760">[00:12:40]</button></p>
+<p>但“有特色的充电头”与“最适合我的充电头”，仍然是两个问题。前一个问题寻找值得关注的特点，后一个问题还需要知道自己要充什么设备、经常在家还是随身携带，以及有没有接口和体积方面的要求。一份趋势报告能够减少最初的陌生感，却还没有替我们完成个人选择。</p>
+<p>这个案例的轻松之处，在于即使没有研究经验，也可以先提出一个具体需求，再通过报告发现自己还缺哪些条件。看到多口输出以后，可能才意识到需要同时给电脑和手机充电；看到体积差异以后，可能才明确自己更在意出门携带。研究可以随着理解逐步变得具体，无需一开始就写出完美的问题。<button type="button" class="timecode" data-seconds="802">[00:13:22]</button></p>
+<p>厂商文章适合说明自家产品声称具备哪些功能，但也带有销售目的。报告如果引用了厂商介绍，我们应当按这个来源身份来理解它。功能说明、独立测试与个人使用感受，回答的是不同问题，不能只因为都带链接就混为同一种材料。</p>
+<h2 id="_4">会员关系案例：问题很简单，背景条件却容易悄悄变化</h2>
+<p>第三个问题是弄清 Google One、AI Premium 与 YouTube Premium 的关系。小能熊的老陈已经长期使用 Google 产品，仍然需要重新梳理这些会员到底包含什么、哪些权益重叠，以及它们怎样组合。熟悉一个品牌，并不等于熟悉它后来推出的所有订阅安排。<button type="button" class="timecode" data-seconds="847">[00:14:07]</button></p>
+<p>第一次报告出现了一个很具体的不适：问题本来关注三种会员的关系，内容却花了不少篇幅谈可用地区，并使用新台币列价格。回头看来源，能看到不少来自台湾地区的网站。报告并非完全离题，但它已经替提问者选择了一个地区背景，而这个背景没有在问题里说清楚。<button type="button" class="timecode" data-seconds="929">[00:15:29]</button></p>
+<p>接下来，在计划阶段增加“使用英文搜索，用中文回答”的要求。新的报告按会员权益及相互关系展开，价格也统一到同一种货币，老陈认为整体更容易理解。这里发生的变化，不能只概括为翻译效果更好：搜索语言改变以后，进入报告的网页集合也跟着改变了。<button type="button" class="timecode" data-seconds="983">[00:16:23]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1WCCnYjEy4-01040.jpg" data-caption="研究计划明确要求查找英文官方资料和英文评论，报告则用中文解释会员关系；资料语言与阅读语言可以分别选择。">
+    <img src="../assets/frames/BV1WCCnYjEy4-01040.jpg" loading="lazy" alt="视频截图 02，00:17:20：研究计划明确要求查找英文官方资料和英文评论，报告则用中文解释会员关系；资料语言与阅读语言可以分别选择。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1040.000">图 02 · 00:17:20</button><span>研究计划明确要求查找英文官方资料和英文评论，报告则用中文解释会员关系；资料语言与阅读语言可以分别选择。</span></figcaption>
+</figure>
+<p>这给我们一个很实用的认识：提问语言、资料语言和回答语言，可以分开指定。你可以用最熟悉的中文描述需求，让助手寻找更适合该主题的英文材料，再用中文解释。这样既不需要为了搜索而勉强写一段不准确的英文，也不必把资料范围限制在自己容易阅读的语言里。<button type="button" class="timecode" data-seconds="1119">[00:18:39]</button></p>
+<p>不过，英文同样包含不同国家的页面。想比较具体会员权益时，地区、日期和套餐版本仍然要一致。某次英文报告更清楚，并不能保证所有英文结果都更可靠。对于本地政策、中文文化或某个地区的产品安排，直接使用当地的一手材料可能更合适。语言影响我们能找到什么，但它本身无法替代来源判断。</p>
+<h2 id="_5">多巴胺案例：用自己熟悉的主题，看看报告究竟懂到了哪里</h2>
+<p>前两个案例容易让人感到工具很方便，但便利与准确还需要进一步区分。一个陌生主题只要写得流畅、术语够多，就可能显得相当专业。更有辨别力的尝试，是选一个自己研究过的主题，看看助手能否回答那些已经知道容易出错的问题。<button type="button" class="timecode" data-seconds="1180">[00:19:40]</button></p>
+<p>老陈选择了多巴胺，要求介绍大脑中的多条相关通路及功能差异。他关心的难处很具体：网络文章容易把一个复杂的神经系统压缩成“多巴胺代表某一种感受”，或者简单地把两种物质放到好坏对立的位置。研究任务因此需要把讨论对象分清楚，不能只罗列一些熟悉词语。<button type="button" class="timecode" data-seconds="1234">[00:20:34]</button></p>
+<p>第一次报告使用的材料包括书评、百科、综述及书籍浓缩内容。改为英文搜索以后，来源组合发生变化，包含学术材料、大学新闻介绍和其他解释性资源。老陈认为后一份报告更接近他长期阅读所形成的认识，也能更快把相关知识放在一起。<button type="button" class="timecode" data-seconds="1294">[00:21:34]</button> <button type="button" class="timecode" data-seconds="1438">[00:23:58]</button></p>
+<p>随后，他把参考文献交给另一个模型评价，得到关于来源多样性、覆盖面和时效性的反馈。这一步可以帮助发现新的检查角度，例如参考资料是否全是同一种类型、是否遗漏近期研究。它仍然只增加了一层辅助判断：另一个模型说“不错”，并不能直接证明报告里的每一个论断都正确。<button type="button" class="timecode" data-seconds="1457">[00:24:17]</button></p>
+<p>在这个案例里，尤其要把对研究工具的评价与具体健康结论分开。老陈曾因自己不熟悉“多巴胺与视网膜”的内容而怀疑它，但不熟悉不能作为判错依据。有关视网膜多巴胺受体参与光适应的实验研究确实存在。这个具体反例提醒我们，熟悉领域能够帮助检查，个人知识范围也仍然有边界。<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6139461/">相关实验研究</a> <button type="button" class="timecode" data-seconds="1601">[00:26:41]</button></p>
+<p>同样，不能仅因某种活动和药物都涉及奖赏系统，就把它们的作用强度、风险或成瘾机制判为完全相同。美国国家药物滥用研究所区分了日常自然奖赏与药物造成的显著影响；共用部分神经机制，并不足以支持“刷短视频等同某种药物”的推论。<a href="https://irp.nida.nih.gov/wp-content/uploads/2019/12/NIDA_DrugsBrainsAddiction_2018.pdf">NIDA：Drugs, Brains, and Behavior</a> <button type="button" class="timecode" data-seconds="1724">[00:28:44]</button></p>
+<p>这并不消除案例对研究方法的启发。它让我们同时看见两件事：改变材料范围，可能显著改善一份报告；评价报告的人，也需要愿意检查自己的确定感。如果只接受符合既有认识的内容，把陌生内容一律排除，就可能漏掉真正的新知识。</p>
+<h2 id="_6">来源种类不同，能帮我们完成的工作也不同</h2>
+<p>多巴胺案例还提出了一个容易争论的问题：研究报告是否只能引用论文？对日常学习而言，一篇可靠的解释文章可能比技术论文更容易建立第一层理解；大学的研究新闻可以帮助了解问题背景；论文则能进一步交代研究对象、方法和结论。它们各有用途，无需在开始时把所有非论文材料排除。<button type="button" class="timecode" data-seconds="1532">[00:25:32]</button></p>
+<p>真正需要区分的是，某句话究竟需要什么支持。如果我们只是想知道一个领域在讨论哪些问题，一篇清楚的入门介绍可能足够。如果要声称某种机制已经得到验证，就需要走到相应研究及其具体条件。材料的可读性帮助我们进入主题，材料与结论之间的对应关系决定了我们能确信到什么程度。</p>
 <table>
 <thead>
 <tr>
-<th>维度</th>
-<th>具体检查</th>
+<th>材料类型</th>
+<th>常见用途</th>
+<th>阅读时还要问什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>目标贴合</td>
-<td>是否回答最初问题，有没有长篇偏题？</td>
+<td>官方产品资料</td>
+<td>确认产品自己的功能与规则</td>
+<td>适用于哪个版本和地区</td>
 </tr>
 <tr>
-<td>来源质量</td>
-<td>是否存在官方或原始材料，转载是否重复计算？</td>
+<td>研究论文</td>
+<td>理解具体研究怎样得到结论</td>
+<td>研究对象、方法和适用范围是什么</td>
 </tr>
 <tr>
-<td>证据支持</td>
-<td>引用打开后，是否真的支持对应结论？</td>
+<td>综述或百科</td>
+<td>认识概念之间的关系，找到后续线索</td>
+<td>关键说法引用了哪些原始研究</td>
 </tr>
 <tr>
-<td>覆盖与冲突</td>
-<td>重要方面有无遗漏，来源不一致时怎样处理？</td>
+<td>新闻或通俗解释</td>
+<td>迅速理解背景和问题的重要性</td>
+<td>有没有省略条件、夸大结论</td>
 </tr>
 <tr>
-<td>时效与范围</td>
-<td>日期、地区、产品版本是否匹配？</td>
-</tr>
-<tr>
-<td>可用性</td>
-<td>结论能否支持一个决定或下一步行动？</td>
+<td>评论与个人经验</td>
+<td>发现使用中的具体困难</td>
+<td>经验来自什么场景，能否推广</td>
 </tr>
 </tbody>
 </table>
-<p>这是基于案例整理的迁移框架，和视频中“十倍效率”“已经达到某级智能”等评价分开。效率需要同时计算人工提问、等待、阅读和核查时间。</p>
-<h2 id="_10">迁移练习：亲手审一份小报告</h2>
-<p>选一个你有一定了解、风险较低的主题。给研究助手明确任务，保留原计划与最终报告。抽查五个关键断言，逐条记录引用是否匹配、是否过时、是否夸大。</p>
-<p>再把发现的问题变成第二版计划，只修改确有证据的缺口。最后写三行：节省了哪部分工作；增加了哪些核查成本；哪些问题仍需要人工完成。这样才得到一份能复用的产品体验分析。</p></article><nav class="bottom-nav"><a href="../index.html#product">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>这张对照也解释了为什么“来源很多”只能回答部分问题。我们需要的可能是一份产品规则，助手却找到了二十篇体验文章；或者我们需要研究方法，报告给出的却都是新闻摘要。材料数量增加，并没有自动填补所需材料的类型。</p>
+<h2 id="_7">思维链案例：一份报告可以成为进入论文的入口</h2>
+<p>最后一个任务研究大语言模型中的思维链，也就是让模型以若干中间步骤组织问题解决过程的相关方法。对于刚接触这个主题的人，困难通常还没到某个公式，而是连哪些论文重要、几条研究方向怎样关联，都不清楚。<button type="button" class="timecode" data-seconds="1948">[00:32:28]</button></p>
+<p>在这个任务里，Deep Research 先制定计划，再按英文资料进行搜索和整理。老陈认为结果适合快速了解与入门，但没有把它评价得像前一个案例那样充分。他还用 Perplexity 和 ChatGPT 的搜索功能处理相近问题，比较它们找到的论文和组织方式。<button type="button" class="timecode" data-seconds="1987">[00:33:07]</button></p>
+<p>这样的比较，让“研究报告”有了一个更朴素的用途：帮助我们发现值得进一步阅读的材料。报告先把相关论文与问题摆到面前，读者再沿着链接进入原文。某篇论文解决什么困难，另一篇在什么条件下作出改进，仍然需要结合原文理解；但最初不知道从哪里开始的状态，已经得到缓解。<button type="button" class="timecode" data-seconds="2023">[00:33:43]</button></p>
+<p>这几次搜索不能据此排出三个产品的永久名次。它们使用的是当时的版本，问题表达和搜索过程也不完全相同。更有用的观察是，不同工具都可能在资料发现上提供帮助，而结果是否适合自己，要看当前问题被解释到了哪里。工具的长处需要放到实际任务里判断。</p>
+<h2 id="_8">从一堆材料，到自己的理解，中间还有一步</h2>
+<p>五个案例覆盖了不同难度，但共享着一个过程：助手先理解任务，拆出子问题，搜索并阅读材料，再把多个来源组织成报告。它帮助减少的，是寻找、筛选和初步组织大量信息的负担。<button type="button" class="timecode" data-seconds="2132">[00:35:32]</button></p>
+<p>这与我们最后形成理解，还隔着一段主动阅读。会员报告可以把权益关系列清楚，你仍然要知道自己关心的是储存空间、AI 功能还是视频服务；思维链报告可以列出研究方向，你仍然要读懂某篇论文究竟改变了哪一个步骤。报告为思考提供材料和路线，理解发生在我们把这些内容与自己的问题接起来的时候。</p>
+<p>老陈把这种合作称为人和 AI 共同发挥能力。他特别看重一个变化：过去需要大量时间才能进入的资料，现在更容易出现在普通读者面前。阅读外语材料的负担也能有所减轻，许多人可以开始研究此前觉得门槛很高的问题。<button type="button" class="timecode" data-seconds="2485">[00:41:25]</button> <button type="button" class="timecode" data-seconds="2855">[00:47:35]</button></p>
+<p>至于“十倍提升”或“已经达到某一等级智能”，属于他对产品意义的强烈评价，五个使用案例没有给出统一测量这些说法的实验。我们可以更具体地理解收益：原先用来打开网页、重复摘录和建立初步框架的时间，一部分被工具承担；省下的注意力可以用于理解难点、比较解释和阅读最重要的原文。</p>
+<h2 id="_9">总结提炼</h2>
+<p>五个案例可以串成一条逐渐深入的学习路径。模型比较让我们看到研究计划怎样组织大问题；充电头让一个陌生的购买主题变得有比较方向；会员关系揭示搜索语言和地区怎样影响结果；多巴胺案例同时暴露材料选择与评价者判断的局限；思维链研究则把报告变成进入论文的入口。</p>
+<p>最容易直接使用的做法，是把资料语言与回答语言分别说明，并在开始研究前检查计划。最需要保留的判断，是一条结论有没有被相应材料支持。工具提供的内容越丰富，越值得把注意力放在真正影响理解的几处关系上。</p>
+<p>一份有用的报告，应该让我们更清楚自己已经理解什么、还有什么值得追问。它既可以减少搜集材料的负担，也可以帮助提出下一个更好的问题。</p>
+<h2 id="_10">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="129">[00:02:09]</button> 三家公司、四个模型的比较任务。</li>
+<li><button type="button" class="timecode" data-seconds="240">[00:04:00]</button> 将报告放进 Google Docs 继续阅读和修改。</li>
+<li><button type="button" class="timecode" data-seconds="489">[00:08:09]</button> 先确认研究计划，再开始搜索。</li>
+<li><button type="button" class="timecode" data-seconds="716">[00:11:56]</button> 从充电头特点建立比较方向。</li>
+<li><button type="button" class="timecode" data-seconds="847">[00:14:07]</button> 三种会员之间的关系。</li>
+<li><button type="button" class="timecode" data-seconds="983">[00:16:23]</button> 改用英文资料、保留中文回答。</li>
+<li><button type="button" class="timecode" data-seconds="1180">[00:19:40]</button> 用熟悉的专业主题检查研究结果。</li>
+<li><button type="button" class="timecode" data-seconds="1457">[00:24:17]</button> 让另一个模型评价参考资料。</li>
+<li><button type="button" class="timecode" data-seconds="1601">[00:26:41]</button> 不熟悉的内容与错误内容需要区分。</li>
+<li><button type="button" class="timecode" data-seconds="1948">[00:32:28]</button> 思维链研究与论文发现。</li>
+<li><button type="button" class="timecode" data-seconds="2132">[00:35:32]</button> 从任务分解到综合报告。</li>
+<li><button type="button" class="timecode" data-seconds="2855">[00:47:35]</button> 人与 AI 共同研究的意义。</li>
+</ul>
+<h2 id="_11">回看时的三个问题</h2>
+<p>会员关系报告使用了你不需要的地区与货币时，应该只要求它把价格换算一下，还是先检查搜索计划里的地区条件？这两种修改分别会改变什么？</p>
+<p>面对熟悉主题，怎样利用已有知识发现问题，同时给自己尚不知道的内容留出空间？多巴胺案例里的哪处判断最能说明这种困难？</p>
+<p>研究报告已经给出十篇相关论文以后，你得到了哪些帮助？如果想真正理解其中一个方法，还需要沿着哪些内容继续读下去？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "Google Deep Research，学习与研究利器，彻底颠覆主题研究这件事：详细上手教程，5 个深度案例，全面场景介绍，10 倍提升大脑信息处理带宽", "duration": "49:52", "src": "", "poster": "../assets/frames/BV1WCCnYjEy4-00148.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,84 +1,439 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>AI 出了问题，先找到它在哪一层 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从一句“我想去云南旅行”，看懂模型、Agent 和它周围的工具 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="agent">从一句“我想去云南旅行”，看懂模型、Agent 和它周围的工具</h1>
+    <div class="meta"><span>御豪同学</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1wydDBDEuC/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#ai">AI 出了问题，先找到它在哪一层</a><ul>
-<li><a href="#_1">一句话抓住核心</a></li>
-<li><a href="#_2">从一次云南旅行咨询开始</a></li>
-<li><a href="#_3">模型：接着已有内容，预测下一段</a></li>
-<li><a href="#_4">工程：把模型接到真实世界</a></li>
-<li><a href="#workflow-agent">Workflow 与 Agent：谁决定下一步</a></li>
-<li><a href="#mcpragskill">MCP、RAG、Skill，各自补哪块能力</a></li>
-<li><a href="#_5">上下文与运行框架：信息给对，也要做对</a></li>
-<li><a href="#_6">迁移练习：给一次失败画出最短链路</a></li>
+<li><a href="#agent">从一句“我想去云南旅行”，看懂模型、Agent 和它周围的工具</a><ul>
+<li><a href="#_1">先分清三层，才知道是谁完成了哪一步</a></li>
+<li><a href="#_2">模型怎样一步一步生成一段回答</a></li>
+<li><a href="#_3">上下文比聊天框里那一句话长得多</a></li>
+<li><a href="#_4">模型需要运行环境，应用才能真正调用它</a></li>
+<li><a href="#_5">提示词怎样把任务说得更清楚</a></li>
+<li><a href="#_6">步骤已经清楚时，用工作流把它固定下来</a></li>
+<li><a href="#agent_1">下一步要根据情况决定时，Agent 有了作用</a></li>
+<li><a href="#mcp">工具多起来，MCP 帮助统一连接方式</a></li>
+<li><a href="#rag">文档很长时，RAG 帮我们按问题寻找相关部分</a></li>
+<li><a href="#skill">Skill 把反复使用的方法保存下来</a></li>
+<li><a href="#agent_2">多个 Agent 协作，还需要有人把结果接起来</a></li>
+<li><a href="#_7">从模型这一端看，许多工程安排都在改变输入</a></li>
+<li><a href="#_8">给足说明之后，还要检查任务究竟完成没有</a></li>
+<li><a href="#_9">总结提炼</a><ul>
+<li><a href="#_10">一句话抓住核心</a></li>
+<li><a href="#_11">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_12">时间戳导航</a></li>
+<li><a href="#_13">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1wydDBDEuC" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#map">← 01 · 先画清技术地图</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1wydDBDEuC"><div class="provenance">来源：御豪同学 · <a href="https://www.bilibili.com/video/BV1wydDBDEuC/" target="_blank" rel="noopener">BV1wydDBDEuC 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="ai">AI 出了问题，先找到它在哪一层</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1wydDBDEuC.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#map">← 01 · 先画清技术地图</a><button class="done" data-done="BV1wydDBDEuC" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1wydDBDEuC-00200.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1wydDBDEuC&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1wydDBDEuC/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1wydDBDEuC"><h1>从一句“我想去云南旅行”，看懂模型、Agent 和它周围的工具</h1>
 <blockquote>
-<p>来源：<a href="https://www.bilibili.com/video/BV1wydDBDEuC/">御豪同学 · AI 核心概念从头梳理</a> · 48 分钟 · 标准学习稿。用视频的三层框架串联概念，并补充容易混淆的边界。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1wydDBDEuC/">御豪同学｜AI 的核心概念从头梳理</a> · 48 分 6 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_1">一句话抓住核心</h2>
-<p>用“模型—工程—应用”三层看 AI：模型生成下一步内容，工程连接资料与行动，应用承接用户任务。</p>
-<h2 id="_2">从一次云南旅行咨询开始</h2>
-<p>我在聊天框里说“想去云南玩几天”。界面很简单，后面却可能发生很多事：理解日期与偏好，查天气，查路线，阅读攻略，再整理行程。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=144" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:02:24]">[00:02:24]</a></p>
-<p>天气过期、路线不合理、回答太长，可能来自不同环节。模型可能理解错了“下周”，工具可能用了旧缓存，产品可能没让用户确认出发地。直接贴一个“模型不行”的标签，会错过真正能改的地方。</p>
-<p>这就是三层框架的价值：</p>
+<p>你在聊天框里输入“我想去云南旅行”，随后收到一份考虑了天气、路线和攻略的建议。我们很容易把整个过程想成“模型听懂了问题，然后给出答案”。但如果天气是刚查询的，路线来自外部服务，攻略又来自网页，那么中间一定还有其他程序在工作。模型怎样知道可以使用哪些工具？工具结果怎样变成你最后读到的文字？从这个问题出发，许多容易混在一起的 AI 概念就有了位置。<button type="button" class="timecode" data-seconds="161">[00:02:41]</button></p>
+<p>先保留三个角色：模型负责根据输入生成输出，工程系统把模型、数据和工具组织起来，应用把最终能力呈现给用户。我们在网页里看到的聊天框属于应用。它后面可能只调用模型一次，也可能安排多次调用、搜索与检查。外观相似的两个聊天框，背后的处理过程可以很不一样。</p>
+<h2 id="_1">先分清三层，才知道是谁完成了哪一步</h2>
+<p>仍然用旅行问题来看。一种可能的实现是：应用收到问题后，工程系统先向模型提供可用工具的说明，让它判断是否需要查询天气。确定要查之后，再取得地点和日期范围等参数，调用真正的天气服务。天气结果返回后，系统把结果交给模型，让它组织成容易理解的建议，最后由应用显示给你。<button type="button" class="timecode" data-seconds="198">[00:03:18]</button></p>
+<p>这是一种帮助理解分工的流程，不代表每个产品都恰好分成三次模型调用。有的模型可以在一次输出中同时选择工具并填写参数，有的应用会把任务拆得更细。重要的是，选择工具、执行工具、解释结果可以由不同部分承担。模型即使能够写出一个查询请求，也还需要程序把请求送到实际服务，并把返回内容带回来。</p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1wydDBDEuC-00200.jpg" data-caption="模型、工程、应用被分成三个部分；学习箭头从模型走向应用，需求箭头从应用返回模型，表示理解技术与解决实际问题的出发点可以不同。">
+    <img src="../assets/frames/BV1wydDBDEuC-00200.jpg" loading="lazy" alt="视频截图 01，00:03:20：模型、工程、应用被分成三个部分；学习箭头从模型走向应用，需求箭头从应用返回模型，表示理解技术与解决实际问题的出发点可以不同。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="200.000">图 01 · 00:03:20</button><span>模型、工程、应用被分成三个部分；学习箭头从模型走向应用，需求箭头从应用返回模型，表示理解技术与解决实际问题的出发点可以不同。</span></figcaption>
+</figure>
+<p>学习时，我们常从模型原理开始，再了解怎样开发系统，最后接触产品。但实际需求往往从另一端出现：“帮我规划一次旅行”“把这些资料整理成可以查询的知识库”。先知道用户要完成什么，再决定需要怎样的工程和模型，比较容易避免为了使用某个新名词而增加步骤。<button type="button" class="timecode" data-seconds="316">[00:05:16]</button></p>
 <table>
 <thead>
 <tr>
-<th>层次</th>
-<th>主要职责</th>
-<th>观察问题的入口</th>
+<th>部分</th>
+<th>旅行问题里做什么</th>
+<th>仅靠它还缺什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>模型</td>
-<td>根据输入生成文本或工具调用等输出</td>
-<td>给定这些信息，能否理解并推断？</td>
+<td>理解要求，提出调用或组织建议</td>
+<td>当前天气等外部信息，以及实际执行能力</td>
 </tr>
 <tr>
-<td>工程</td>
-<td>组织上下文、执行工具、保存状态、校验结果</td>
-<td>信息送对了吗？动作执行了吗？</td>
+<td>工程系统</td>
+<td>准备输入，连接工具，保存过程，检查结果</td>
+<td>用户具体需要怎样的体验</td>
 </tr>
 <tr>
 <td>应用</td>
-<td>让用户提出需求、确认选择、使用结果</td>
-<td>用户要做什么？结果能用吗？</td>
+<td>接收要求、显示结果、让用户继续操作</td>
+<td>背后的模型与数据处理能力</td>
 </tr>
 </tbody>
 </table>
-<p>这是教学用的视角，实际系统的边界可以交叉；同一个 Agent 既有工程实现，也有面向用户的交互。</p>
-<h2 id="_3">模型：接着已有内容，预测下一段</h2>
-<p>视频用“这期视频很……”演示下一个 token 的概率分布。一次次生成并接回上下文，最终组成完整回答。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=470" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:07:50]">[00:07:50]</a></p>
-<p>可以写成：</p>
-<div class="math-display" aria-label="P(y_t\mid x,y_{&lt;t};\theta)"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mi>;</mi><mi>θ</mi><mo stretchy="false">)</mo></mrow></math></div>
-<p>这里 <span class="math-inline" aria-label="x"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 是输入，<span class="math-inline" aria-label="y_{&lt;t}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub></mrow></math></span> 是已经生成的内容，<span class="math-inline" aria-label="\theta"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>θ</mi></mrow></math></span> 是模型参数。token 是模型处理的文本单位，可能是一个字、一个词的一部分或其他片段，不能固定等同于一个汉字。</p>
-<p>输出时还要从分布中选择 token。采样策略会影响多样性，因此同样的问题可能得到不同回答。温度降低可以减少一些随机性，但不等于事实正确，也不保证整个应用每次完全一致。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=715" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:11:55]">[00:11:55]</a></p>
-<p>输入也不只有用户那一句话，还可能包括系统规则、历史对话、工具说明、检索资料。上下文窗口限制的是模型一次能处理的范围；资料“曾经出现在对话里”，不代表本轮仍被完整送入。</p>
-<h2 id="_4">工程：把模型接到真实世界</h2>
-<p>推理运行环境负责实际执行模型。提示词则描述任务、相关信息与输出要求。视频的涨跌判断例子很直白：给昨天和今天的指标，要求输出“上涨”或“下跌”。如果两天相等，规则还要补上“持平”，否则输出格式本身就在制造错误。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=795" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:13:15]">[00:13:15]</a> <a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=1100" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:18:20]">[00:18:20]</a></p>
-<p>少量示例可以帮助说明期望。复杂任务也可以拆步。但写上“三位专家一起讨论”只是一种提示方式，不能自动获得三个独立专家的真实核验。</p>
-<p>另一个边界：不同消息角色、工具结果和不可信文档应有明确区分。它们最终都进入模型处理，不意味着系统可以忽略指令层级，把文档里的命令当作用户授权。</p>
-<h2 id="workflow-agent">Workflow 与 Agent：谁决定下一步</h2>
-<p>天气提醒有固定步骤：取数据、判断、展示。可以把这些步骤写成工作流，只把需要语言理解的部分交给模型。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=1270" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:21:10]">[00:21:10]</a></p>
-<p>当下一步取决于刚查到的情况，就可能需要 Agent 循环：观察结果，决定行动，执行工具，再观察。真实产品常把固定流程和动态决策结合使用。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=1392" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:23:12]">[00:23:12]</a></p>
-<p>因此自治程度应随任务变化。发送邮件、提交订单、修改数据库等有外部影响的动作，需要权限和确认边界。能够自行选择工具，不代表可以自行扩大任务范围。</p>
-<h2 id="mcpragskill">MCP、RAG、Skill，各自补哪块能力</h2>
-<p><strong>MCP 处理连接约定。</strong> 服务端暴露能力，客户端按约定连接。它不仅是工具说明的写法；规范还涉及消息交互等内容。接入成功后，权限、参数验证和正确使用仍要由系统落实。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=1740" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:29:00]">[00:29:00]</a></p>
-<p><strong>RAG 处理外部证据的获取与使用。</strong> 长文档通常需要解析、索引和检索，选出与问题相关的部分再用于生成。RAG 可以通过 MCP 暴露成工具，两者能够组合。向量数据库是一种实现选择，并非所有 RAG 都必须有它。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=1982" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:33:02]">[00:33:02]</a></p>
-<p><strong>Skill 保存可复用的做事方法。</strong> 例如创建表格时用什么步骤、模板与检查方式。它帮助 Agent 重用经验，但通常不会直接改变模型参数；写了步骤也不等于步骤已被执行。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=2197" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:36:37]">[00:36:37]</a></p>
-<p>记忆又是另一个维度：要决定保存什么、何时读回、怎样更新和删除。外部文档库可以成为信息来源，但不应把所有记忆都简化成一个向量库。</p>
-<h2 id="_5">上下文与运行框架：信息给对，也要做对</h2>
-<p>上下文工程关心当前任务需要哪些信息、怎样压缩与排序、哪些旧内容可以移出。资料越多，噪声和费用也可能越高。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=2418" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:40:18]">[00:40:18]</a></p>
-<p>运行框架（harness）还要管理执行循环、工具、权限、状态、失败恢复与观测。视频后段强调验证和反馈：生成了代码，就运行相应测试；生成了文件，就检查文件是否存在且能打开。<a class="timecode" href="https://www.bilibili.com/video/BV1wydDBDEuC/?t=2611" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:43:31]">[00:43:31]</a></p>
-<p>这些工程词的使用范围并不总是统一。学习时抓住职责即可，无需把每个新词理解为一种彻底独立的技术。</p>
-<h2 id="_6">迁移练习：给一次失败画出最短链路</h2>
-<p>选一个 AI 回答，按“用户输入 → 实际上下文 → 工具或检索 → 候选答案 → 用户行动”写五行。标出第一个有证据支持的异常，暂时保留其他猜测。</p>
-<p>例如原回答推荐了已停业的店：先检查检索时间、来源和营业信息，再判断模型是否忽略证据。练习的目标是把批评落到一个可验证、可修改的环节。</p></article><nav class="bottom-nav"><a href="../index.html#map">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<p>这三层也帮助我们解释失败。页面按钮没有反应，需要查应用和程序；天气接口没有返回结果，需要查工具连接；结果已经给到模型，建议却把日期弄错，则要看模型输入和输出。仅用“AI 不好用”概括，会把需要检查的位置一起遮住。</p>
+<h2 id="_2">模型怎样一步一步生成一段回答</h2>
+<p>LLM 是 Large Language Model，大语言模型的缩写。这里用常见的自回归生成方式来建立直觉：给模型一段当前内容，它计算下一个 token 的概率分布，再从中选出下一项。Token 是模型处理文字的单位，可能对应一个字、一个词的一部分或其他文本片段，不能始终当成完整汉字或单词。<button type="button" class="timecode" data-seconds="411">[00:06:51]</button></p>
+<p>我们用一句很短的话感受这个过程。问题是“这期视频怎么样”，回答已经写到“这期视频”。模型接下来可能认为“很”比较合适，也可能认为“特别”合适。选出“很”以后，当前回答变成“这期视频很”，模型再次计算，下一项可能是“好”，也可能是“抽象”。已经生成的内容会参与下一步判断，所以一句话是逐步形成的。<button type="button" class="timecode" data-seconds="483">[00:08:03]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1wydDBDEuC-00550.jpg" data-caption="当前输入包括问题和已经写出的半句话；输出列出“很”“特别”等候选及示意概率。模型先给出分布，随后才选择下一个文本单位。">
+    <img src="../assets/frames/BV1wydDBDEuC-00550.jpg" loading="lazy" alt="视频截图 02，00:09:10：当前输入包括问题和已经写出的半句话；输出列出“很”“特别”等候选及示意概率。模型先给出分布，随后才选择下一个文本单位。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="550.000">图 02 · 00:09:10</button><span>当前输入包括问题和已经写出的半句话；输出列出“很”“特别”等候选及示意概率。模型先给出分布，随后才选择下一个文本单位。</span></figcaption>
+</figure>
+<p>图中的公式可以写成：</p>
+<div class="math-display" aria-label="f(x;\theta)=\hat{y}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mi>;</mi><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover></mrow></math></div>
+<p>这里不需要先学复杂数学。<span class="math-inline" aria-label="x"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 表示模型这次看到的输入，<span class="math-inline" aria-label="\theta"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>θ</mi></mrow></math></span> 表示训练得到的参数，<span class="math-inline" aria-label="\hat{y}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mover accent="true"><mrow><mi>y</mi></mrow><mo>^</mo></mover></mrow></math></span> 表示对下一项的预测分布。通常在一次普通对话生成期间，参数保持不变；随着回答不断写出，参与计算的输入内容在变化。图里的概率只是说明工作方式的示意数字，不能当作真实模型对这句话固定给出的测量值。</p>
+<p>为什么同一个问题，重复问会得到不同说法？生成时不一定永远取概率最高的一项，还可以按分布采样。Temperature，也就是温度参数，会影响采样分布的集中程度，从而影响输出的变化范围。即使某次较少见的词被选中，只要前文改变，后面的生成路线也会跟着变化。这里解释了输出差异的一项来源，并不意味着调一个参数就能保证任何系统完全重复同一答案。<button type="button" class="timecode" data-seconds="703">[00:11:43]</button></p>
+<p>这对日常聊天未必是问题，对要求稳定格式和可靠结果的任务，却值得注意。我们希望模型多次处理相同类型的输入时，重要条件不被忽略，输出能被后续程序使用。后面介绍的提示词、工作流和检查机制，都在尝试改善这类表现。</p>
+<h2 id="_3">上下文比聊天框里那一句话长得多</h2>
+<p>我们输入“我想去云南旅行”，模型实际收到的内容可能还包括系统要求、之前几轮对话、工具说明，以及刚查到的天气数据。这些共同构成当前上下文。应用会以相应格式组织它们，再交给模型。因此，用户输入很短，并不表示一次调用只处理了几个字。<button type="button" class="timecode" data-seconds="615">[00:10:15]</button></p>
+<p>上下文窗口，是模型一次能够处理的上下文长度范围。这个范围有限，处理大量内容也会增加计算与费用。如果把所有历史对话、所有工具说明和所有资料都放进去，可能很快接近限制；即使仍然放得下，模型也要在更多内容中找出与当前任务有关的部分。后面我们会看到，RAG 和上下文管理都与这项限制有关。</p>
+<p>模型参数与上下文也需要分开。参数来自训练，是模型已经学到的计算结构；上下文是当前这次任务提供的材料。把新的天气结果放进上下文，可以让模型在这次回答里使用它，并没有自动把这份天气写进模型参数。这个区别会帮助我们理解，为什么检索资料和重新训练模型是两种不同的工作。</p>
+<h2 id="_4">模型需要运行环境，应用才能真正调用它</h2>
+<p>模型文件放在硬盘里，还不会自行回答问题。推理引擎负责加载模型，并在计算设备上执行生成所需的计算。可以借用安装游戏的直觉：拥有游戏内容，还需要能够运行它的环境。对于模型，运行方式还涉及计算资源以及向其他程序提供怎样的调用入口。<button type="button" class="timecode" data-seconds="816">[00:13:36]</button></p>
+<p>有些入口是命令行，用户输入命令与模型交互；有些入口是 API，其他程序按照规定格式发送请求、接收结果。带图形界面的应用也可以建立在这些入口之上。这里用 Ollama 加本地模型作例子，说明模型怎样在个人电脑上成为可以调用的服务。推理引擎、模型本身和聊天界面各有职责，不必把它们混成同一件软件。<button type="button" class="timecode" data-seconds="854">[00:14:14]</button></p>
+<p>使用云端聊天服务时，这一层往往已经由服务方安排好，用户不需要自己选择如何加载模型。希望在本地处理个人笔记等资料时，运行环境就变成需要自己考虑的一部分。本地部署改变了数据与计算发生的位置，也带来硬件和维护要求；是否选择它，仍要回到实际任务与资源条件。</p>
+<h2 id="_5">提示词怎样把任务说得更清楚</h2>
+<p>最初我们也许只问一句话，后来希望模型承担更复杂的任务，就会开始补充角色、背景、步骤和输出要求。Prompt Engineering，即提示词工程，可以先理解为反复调整这些说明，让模型更容易形成符合任务的回答。它影响的是模型当前接收的输入，不会因为写上“你是一位专家”，就直接改变模型已经训练好的参数。<button type="button" class="timecode" data-seconds="979">[00:16:19]</button></p>
+<p>指标涨跌的例子很直观。我们希望模型比较昨天和今天的数值，然后只输出“上涨”或“下跌”。任务说明交代要比较什么，背景提供两天的数值，问题要求作出判断，输出约定则限制回答形式。少了数值，模型无从判断；少了格式要求，它可能写出一大段解释，后面的程序却只期待两个字。<button type="button" class="timecode" data-seconds="1103">[00:18:23]</button></p>
+<p>这也让我们看见，清楚的提示词应补足任务条件。如果两天数值相同，只有“上涨”和“下跌”两个选项就不够了。这个补充情形帮助检查示例的边界：输出格式可以让程序更容易处理结果，但格式本身也需要覆盖实际会发生的情况。限制得很严格，却没有给正确答案留位置，同样会制造错误。</p>
+<p>另一种方式是在输入里给出少量问答示例，称为 few-shot prompting。比如先提供“熟透的香蕉是什么颜色——黄色”这样的简单示例，让模型了解需要怎样回答。示例同时展示内容关系和表达形式，往往比只写抽象要求更具体。当然，它是否适用于后续问题，还要看任务之间是否相似。<button type="button" class="timecode" data-seconds="1178">[00:19:38]</button></p>
+<p>分步骤说明则帮助模型处理需要连续判断的任务。也可以让它比较几条候选思路，再选择更合适的路线。这里借用了 Chain of Thought 与 Tree of Thoughts 的直觉来说明逐步处理和分支比较。写一句“让三位专家讨论”，只能算提示方式；是否真的建立了多分支搜索、评价与选择，还要看程序怎样实现。我们关注的是这些安排给当前任务增加了什么帮助。</p>
+<h2 id="_6">步骤已经清楚时，用工作流把它固定下来</h2>
+<p>现在我们想根据天气给出增减衣物的建议。查询未来几天的天气、分析变化、把建议发给用户，这几步事先就知道。我们可以让程序按顺序执行，形成工作流：先调用天气数据源，再把数据交给模型分析，最后把结果显示在页面或发送出来。<button type="button" class="timecode" data-seconds="1280">[00:21:20]</button></p>
+<p>在这个流程里，查询和发送可以由普通程序完成，不需要每一步都让模型重新决定。模型参与的是适合它处理的部分，例如把几天的气温与降水情况整理成易读建议。把确定步骤交给确定程序，有助于减少不必要的模型调用，也让我们更容易知道每一步期待得到什么。</p>
+<p>工作流不要求所有步骤都简单。它可以有条件分支，也可以在某一步失败后重试。这里最需要抓住的特点，是主要处理路径由开发者事先安排。用户发来请求，系统沿已经设计好的路径走。这适合流程比较明确的任务，也方便逐步检查结果。<button type="button" class="timecode" data-seconds="1337">[00:22:17]</button></p>
+<h2 id="agent_1">下一步要根据情况决定时，Agent 有了作用</h2>
+<p>很多任务无法提前把所有步骤写死。分析一个陌生问题时，可能先读资料，读完才发现需要查询另一份文件；也可能某个工具没有结果，需要换一种办法。我们希望模型根据当前情况决定下一步使用什么工具、寻找什么信息，这就走向了 Agent，也常译作智能体。<button type="button" class="timecode" data-seconds="1377">[00:22:57]</button></p>
+<p>一个常见 Agent 系统会包含任务说明、模型、记忆和工具。任务说明告诉它要完成什么；模型参与判断下一步；记忆保留之前的对话、操作或结果；工具让它接触外部数据并执行操作。这里的“记忆”通常需要程序保存和重新提供，并不意味着模型在每次对话后都重新训练了一遍。<button type="button" class="timecode" data-seconds="1468">[00:24:28]</button></p>
+<p>天气助理可以同时说明这些部分。工具查询未来三天的天气，记忆保留查到的数据和当前任务，模型根据气温与降水变化形成建议，任务说明则约定它负责怎样帮助用户。这个例子仍然包含明确步骤，因此工作流与 Agent 可以组合使用：外层保留必要顺序，局部让模型判断怎样分析或选择工具。<button type="button" class="timecode" data-seconds="1625">[00:27:05]</button></p>
+<p>完全放任模型自行决定所有事情，会增加不确定性。实际系统常给它限定范围，让关键检查和执行次序保持明确，同时允许它在范围内调整策略。两种形式的区别更适合放在“哪些决定提前写好、哪些决定留给模型”上理解，无法仅凭产品名字是否带 Agent，就判断它有多少自主性。<button type="button" class="timecode" data-seconds="1576">[00:26:16]</button></p>
+<table>
+<thead>
+<tr>
+<th>同一项天气任务</th>
+<th>工作流侧重什么</th>
+<th>Agent 侧重什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取得信息</td>
+<td>事先安排调用哪个数据源</td>
+<td>根据当前任务选择可用工具</td>
+</tr>
+<tr>
+<td>分析过程</td>
+<td>按固定步骤交给模型处理</td>
+<td>根据已有结果决定是否补查或调整</td>
+</tr>
+<tr>
+<td>执行边界</td>
+<td>用程序规定路径与条件</td>
+<td>在程序允许的范围内作出下一步判断</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mcp">工具多起来，MCP 帮助统一连接方式</h2>
+<p>只有一个天气工具时，我们可以单独说明它怎样调用。工具越来越多，又要在多个应用或 Agent 中复用时，重复写适配和介绍就变成负担。MCP，即 Model Context Protocol，提供一套模型应用与工具、数据服务通信的协议。支持该协议的客户端，可以按共同方式发现并调用服务提供的能力。<button type="button" class="timecode" data-seconds="1719">[00:28:39]</button></p>
+<p>仍然看天气工具。只给一个接口地址，模型未必知道需要哪些参数。工具说明应写清：它按指定日期范围查询某个地点，输入包括起止日期和地点，输出中哪些字段表示气温、哪些表示降水概率。日期格式和概率范围这样的细节，也会影响模型能否把参数填对、把返回结果读对。<button type="button" class="timecode" data-seconds="1843">[00:30:43]</button></p>
+<table>
+<thead>
+<tr>
+<th>天气工具需要说明的内容</th>
+<th>为什么需要它</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>名称与用途</td>
+<td>帮助模型判断当前任务是否需要它</td>
+</tr>
+<tr>
+<td>地点和起止日期</td>
+<td>确定查询的对象与范围</td>
+</tr>
+<tr>
+<td>参数格式</td>
+<td>让实际程序能够接收输入</td>
+</tr>
+<tr>
+<td>返回字段与含义</td>
+<td>避免把温度、概率等数据混淆</td>
+</tr>
+</tbody>
+</table>
+<p>在客户端与服务端的分工中，MCP Client 负责代表应用通信，MCP Server 提供工具或数据访问能力。统一协议有助于复用连接方式，但工具本身是否可靠、模型是否填写正确、操作是否获得许可，仍然需要另外保证。MCP 也无法自动判断某份长文档中哪一段与问题相关，这会引出下一项能力。<button type="button" class="timecode" data-seconds="1934">[00:32:14]</button></p>
+<h2 id="rag">文档很长时，RAG 帮我们按问题寻找相关部分</h2>
+<p>假设 Agent 要服务客户，它可能需要读取历史记录，也需要参考服务流程和协议。把所有文档完整放进每次输入，既占空间，也让模型反复处理无关内容。我们希望根据当前问题，只把相关部分取出来。RAG 就把检索与生成接在一起：先找资料，再让模型据此处理任务。<button type="button" class="timecode" data-seconds="1996">[00:33:16]</button></p>
+<p>一种常见实现是把文档按章节或内容切成片段，用 embedding 模型为片段建立向量表示，再存入可检索系统。提问时，用对应模型表示查询，搜索相近片段，并取回原文。Embedding 帮助把不同措辞联系起来；检索结果是否完整、是否真的适用，仍然需要检查，不能把“相似”直接当成“正确”。<button type="button" class="timecode" data-seconds="2089">[00:34:49]</button></p>
+<p>在这张 Agent 结构图中，短期记忆保存近期对话与临时结果，较长文档在需要时通过 RAG 读取。这是一种有用的组织方式，并不表示所有长期记忆都必须用 RAG 实现。可以先记住它们解决的问题：短期记录帮助接住当前任务，外部检索帮助取得没有常驻在输入里的资料。<button type="button" class="timecode" data-seconds="2162">[00:36:02]</button></p>
+<p>MCP 与 RAG 因此可以配合。MCP 规定应用怎样调用某个检索服务，RAG 相关实现决定资料怎样被找到并用于生成。一个解决连接与通信，一个组织资料查找与使用，它们有机会出现在同一次工具调用中。</p>
+<h2 id="skill">Skill 把反复使用的方法保存下来</h2>
+<p>现在 Agent 有工具，也能读资料，但每次创建 Excel 文件时，仍然可能需要重新规划怎样做。我们可以把这类反复使用的方法单独保存：什么时候适用、输入是什么、按哪些步骤处理、最后应得到什么文件。Skill 就提供这样一种可复用的任务说明与资源组织方式。<button type="button" class="timecode" data-seconds="2195">[00:36:35]</button></p>
+<p>Excel 是一个很好的例子。工作中要把数据写入表格，生活中也可能用表格整理旅行开销，两种任务共享创建和处理 Excel 的能力。Skill 可以把共同方法保留下来，应用到不同场景；具体数据和用途则由当前任务提供。这样就不必每次在聊天里重新解释同一套要求。<button type="button" class="timecode" data-seconds="2220">[00:37:00]</button></p>
+<p>常见入口文件叫 SKILL.md。里面可以说明适用条件、操作步骤和结果约束，也可以指向需要的脚本或模板。Agent 在获准使用且任务匹配时读取这些内容，把它们纳入当前处理过程。写好一份 Skill 并没有修改模型参数，它增加的是可被读取和执行的方法说明。方法是否被理解、是否正确执行，仍然需要看实际结果。<button type="button" class="timecode" data-seconds="2262">[00:37:42]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1wydDBDEuC-02350.jpg" data-caption="Agent 结构把 Prompt、Skill、模型、短期记忆、RAG 与 MCP 连接放在一起；每块分别提供任务要求、做法、判断、历史、资料和外部操作能力。">
+    <img src="../assets/frames/BV1wydDBDEuC-02350.jpg" loading="lazy" alt="视频截图 03，00:39:10：Agent 结构把 Prompt、Skill、模型、短期记忆、RAG 与 MCP 连接放在一起；每块分别提供任务要求、做法、判断、历史、资料和外部操作能力。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="2350.000">图 03 · 00:39:10</button><span>Agent 结构把 Prompt、Skill、模型、短期记忆、RAG 与 MCP 连接放在一起；每块分别提供任务要求、做法、判断、历史、资料和外部操作能力。</span></figcaption>
+</figure>
+<p>工具与 Skill 的差别也可以从 Excel 例子理解。工具提供执行某项操作的能力，例如写入文件；Skill 描述在这类任务中怎样组织操作、保留什么格式、检查什么结果。一份 Skill 可以使用多个工具，同一个工具也可以出现在不同 Skill 中。先认清这项关系，就不容易把任何工具接口都叫作 Skill，或把一份说明当作已经运行完成的结果。</p>
+<h2 id="agent_2">多个 Agent 协作，还需要有人把结果接起来</h2>
+<p>任务较复杂时，可以让不同 Agent 承担不同角色，分别完成其中一部分，再由一个 Agent 或明确的工作流汇总结果。这个安排类似团队协作：各部分有各自的任务，最后需要形成一份完整交付。它可以利用分工，但分工本身还没有解决结果之间怎样衔接的问题。<button type="button" class="timecode" data-seconds="2379">[00:39:39]</button></p>
+<p>我们需要知道每个角色接收什么、交出什么，以及谁检查它与其他部分是否一致。多个模型给出相同意见，也不自动说明意见正确，它们可能共享相似的错误。因此，多 Agent 可以成为一种组织形式，却不能仅凭角色数量多就保证质量。是否需要这样的安排，仍然看任务是否真的适合拆开，以及汇总能否保留重要关系。</p>
+<h2 id="_7">从模型这一端看，许多工程安排都在改变输入</h2>
+<p>回到前面的公式。角色要求、工具说明、查询到的文档、历史记录和 Skill 步骤，都会以相应形式进入某次模型输入，影响接下来的生成。底层模型在调用时依然根据当前内容计算输出；外部系统不断准备新的内容、执行动作，再把结果带回来。这种组织当前输入的工作，就是理解 Context Engineering，即上下文工程的一条主线。<button type="button" class="timecode" data-seconds="2422">[00:40:22]</button></p>
+<p>上下文工程比写一次提示词覆盖得更广。它不仅关心任务怎样描述，也关心哪份资料应该在此刻出现，哪些历史仍然有用，工具结果要保留到什么程度。目标是让模型获得完成眼前判断所需的信息。输入越长不一定越好，关键是内容是否准确、相关，是否出现在需要它的那一步。<button type="button" class="timecode" data-seconds="2517">[00:41:57]</button></p>
+<p>内容持续增加，也会接近上下文长度限制并增加成本。这里讨论了使用命令行工具或直接 API 的一些做法：在适合的任务里，可以减少反复放入冗长工具描述的负担。是否比某种 MCP 接入节省，需要比较实际说明长度、调用方式和返回结果，无法仅根据接口名字确定。更简短的输入若省掉必要含义，也可能让模型更容易犯错。<button type="button" class="timecode" data-seconds="2550">[00:42:30]</button></p>
+<h2 id="_8">给足说明之后，还要检查任务究竟完成没有</h2>
+<p>我们努力改善输入，希望模型输出合适答案。但答案看起来合理，仍然需要验证。可以借用做数学题的经验：推导得到一个结果后，再把结果代回条件，检查是否满足要求。对于 Agent，检查可能针对文件是否生成、查询是否保留条件、工具是否执行成功，以及最后的答复是否与结果一致。<button type="button" class="timecode" data-seconds="2620">[00:43:40]</button></p>
+<p>Harness Engineering 在这里强调围绕模型建立执行、验证和反馈机制。工具失败或返回超时，系统需要知道怎样处理；生成结果不满足要求，需要有明确反馈；任务完成后，需要有依据判断是否可以结束。这个词在不同实现中覆盖的范围会有差异，可以先把它理解为支撑 Agent 稳定运行的外部安排。它增加可靠性检查，无法让任何模型从此绝不出错。<button type="button" class="timecode" data-seconds="2667">[00:44:27]</button></p>
+<table>
+<thead>
+<tr>
+<th>需要考虑的方面</th>
+<th>可以问的具体问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统结构</td>
+<td>哪些步骤固定，哪些决定交给模型</td>
+</tr>
+<tr>
+<td>工具设计</td>
+<td>工具说明是否清楚，输入和返回怎样处理</td>
+</tr>
+<tr>
+<td>外部资料</td>
+<td>文档怎样整理，什么时候提供给模型</td>
+</tr>
+<tr>
+<td>失败处理</td>
+<td>查询失败、执行错误或超时后怎么办</td>
+</tr>
+<tr>
+<td>安全限制</td>
+<td>哪些输入、输出和操作需要检查或禁止</td>
+</tr>
+<tr>
+<td>观察与评价</td>
+<td>怎样看到执行过程，怎样判断结果是否合格</td>
+</tr>
+<tr>
+<td>产品体验</td>
+<td>用户要解决什么，哪里需要确认或继续操作</td>
+</tr>
+</tbody>
+</table>
+<p>这七个方面把开头的三层又连起来了。用户只说“我想去云南旅行”，应用需要让他容易表达需求，工程需要准备资料、调用工具并检查结果，模型则参与理解和组织建议。要得到稳定可用的产品，几部分都要工作。以后遇到新的 AI 名词，可以先问它解决的是哪一个具体问题，再把它放进这条过程里理解。<button type="button" class="timecode" data-seconds="2694">[00:44:54]</button></p>
+<h2 id="_9">总结提炼</h2>
+<h3 id="_10">一句话抓住核心</h3>
+<p>模型负责生成，工程负责把模型与资料、工具和检查组织起来，应用负责让用户完成任务；Agent、RAG、MCP 与 Skill 分别参与其中不同的工作。</p>
+<h3 id="_11">推理主干</h3>
+<p>从旅行建议出发，我们先分清模型、工程与应用。模型根据当前上下文逐步生成，提示词让任务要求更清楚。工作流安排固定步骤，Agent 在允许范围内决定后续动作。MCP 连接工具，RAG 查找资料，Skill 保存可复用方法。上下文工程安排模型此刻看到什么，外部执行与验证机制继续检查事情是否做成。</p>
+<h2 id="_12">时间戳导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="161">[00:02:41]</button> 云南旅行建议背后的三层分工。</li>
+<li><button type="button" class="timecode" data-seconds="411">[00:06:51]</button> 大语言模型与逐步生成。</li>
+<li><button type="button" class="timecode" data-seconds="615">[00:10:15]</button> 上下文中还包含哪些内容。</li>
+<li><button type="button" class="timecode" data-seconds="816">[00:13:36]</button> 推理引擎怎样让模型运行。</li>
+<li><button type="button" class="timecode" data-seconds="979">[00:16:19]</button> 提示词怎样描述任务与输出。</li>
+<li><button type="button" class="timecode" data-seconds="1280">[00:21:20]</button> 天气建议的固定工作流。</li>
+<li><button type="button" class="timecode" data-seconds="1377">[00:22:57]</button> Agent 的判断、记忆和工具。</li>
+<li><button type="button" class="timecode" data-seconds="1719">[00:28:39]</button> MCP 与工具复用。</li>
+<li><button type="button" class="timecode" data-seconds="1996">[00:33:16]</button> 长文档与 RAG。</li>
+<li><button type="button" class="timecode" data-seconds="2195">[00:36:35]</button> Excel 能力怎样保存为 Skill。</li>
+<li><button type="button" class="timecode" data-seconds="2379">[00:39:39]</button> 多 Agent 的分工与汇总。</li>
+<li><button type="button" class="timecode" data-seconds="2422">[00:40:22]</button> 从输入看上下文工程。</li>
+<li><button type="button" class="timecode" data-seconds="2620">[00:43:40]</button> 为什么还需要验证与失败处理。</li>
+</ul>
+<h2 id="_13">复习与行动清单</h2>
+<p>沿用天气助理即可。先说清查询数据、分析变化和发送建议分别由哪一部分完成，再设想天气查询失败会怎样影响结果。接着看上面的七项问题，挑出这次失败真正需要处理的两项。能够说明输入、动作和结果怎样接上，比一次背完所有缩写更有帮助。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "v6", "duration": "48:06", "src": "", "poster": "../assets/frames/BV1wydDBDEuC-00200.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

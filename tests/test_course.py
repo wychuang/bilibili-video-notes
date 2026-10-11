@@ -28,19 +28,21 @@ class CourseTests(unittest.TestCase):
         self.assertEqual(54, len(ids))
         self.assertEqual(51, sum(e["ready"] for e in self.index))
         self.assertEqual(PENDING, {e["bvid"] for e in self.index if not e["ready"]})
-        self.assertEqual(42, len(list((COURSE / "lessons").glob("*.md"))))
+        self.assertEqual(51, len(list((COURSE / "lessons").glob("*.md"))))
         for e in self.index:
             self.assertEqual(e["ready"], (COURSE / "lessons" / f"{e['bvid']}.html").is_file())
 
-    def test_new_notes_have_teaching_core_and_exercise(self):
+    def test_new_notes_have_substantive_timestamped_content(self):
         for p in (COURSE / "lessons").glob("*.md"):
             text = p.read_text(encoding="utf-8")
             with self.subTest(note=p.name):
-                self.assertIn("## 一句话抓住核心", text)
-                self.assertIn("练习", text)
                 self.assertRegex(text, r"\[(?:P\d+ )?\d{2}:\d{2}:\d{2}\]")
                 self.assertGreater(len(text), 700)
                 self.assertNotRegex(text, r"不是[^\n。！？]{0,150}而是")
+                self.assertNotRegex(text, r"并非[^\n。！？]{0,150}而是")
+                self.assertNotRegex(text, r"证据说明|制作说明|字幕纠错|截图挑选|自我验收")
+                metadata = next(e for e in self.index if e["bvid"] == p.stem)
+                builder.validate_article(text, metadata)
 
     def test_all_local_links_and_images_resolve(self):
         for p in COURSE.rglob("*.html"):
@@ -51,7 +53,7 @@ class CourseTests(unittest.TestCase):
             parser.feed(text)
             for raw in parser.urls:
                 parts = urlsplit(raw)
-                if parts.scheme in {"https", "http"} or raw.startswith("#"):
+                if raw == "about:blank" or parts.scheme in {"https", "http"} or raw.startswith("#"):
                     continue
                 with self.subTest(page=p.name, link=raw):
                     self.assertFalse(parts.scheme)
@@ -59,19 +61,27 @@ class CourseTests(unittest.TestCase):
                     self.assertTrue(target.is_file())
                     self.assertTrue(any(target.is_relative_to(base.resolve()) for base in (COURSE, ROOT / "notes", ROOT / "assets/fonts")))
 
-    def test_timestamps_are_real_links_and_keep_part(self):
+    def test_full_reader_preserves_timestamps_parts_and_course_controls(self):
         for p in (COURSE / "lessons").glob("*.html"):
             text = p.read_text(encoding="utf-8")
             with self.subTest(note=p.name):
                 self.assertNotRegex(text, r"&lt;button[^<]*timecode")
-                self.assertNotIn("<button type=\"button\" class=\"timecode\"", text)
-                parser = builder.Links(); parser.feed(text)
-                timestamps = [u for u in parser.urls if "bilibili.com/video/" in u and "?t=" in u]
-                self.assertTrue(timestamps)
-                self.assertTrue(all(p.stem in u for u in timestamps))
+                self.assertIn('<button type="button" class="timecode"', text)
+                self.assertIn('id="source-online-player"', text)
+                self.assertIn(f'bvid={p.stem}', text)
+                self.assertIn('id="online-fallback"', text)
+                self.assertIn('class="toc-toggle"', text)
+                headings = re.findall(r'<h[23][^>]*>(.*?)</h[23]>', text, re.S)
+                self.assertTrue(any('总结提炼' in h for h in headings), f'Missing summary section: {p.name}')
+                self.assertTrue(any(re.search(r'时间(?:戳)?导航', h) for h in headings), f'Missing time navigation: {p.name}')
+                self.assertTrue(any(re.search(r'复习|回看时', h) for h in headings), f'Missing review section: {p.name}')
+                self.assertIn(f'data-done="{p.stem}"', text)
+                self.assertIn(f'href="{p.stem}.md"', text)
+                self.assertNotIn('transcript/', text)
+                self.assertNotIn('.state/', text)
         memory = (COURSE / "lessons/BV1Vegf6nEag.html").read_text(encoding="utf-8")
-        parser = builder.Links(); parser.feed(memory)
-        self.assertTrue(any(parse_qs(urlsplit(u).query).get("p") == ["17"] for u in parser.urls))
+        self.assertRegex(memory, r'class="timecode"[^>]*data-part="17"')
+        self.assertEqual(18, memory.count('class="part-button'))
 
     def test_math_and_sanitization(self):
         target = COURSE / "lessons/BV1ojfDBSEPv.html"
@@ -79,7 +89,7 @@ class CourseTests(unittest.TestCase):
         result, _ = builder.render(text, target.with_suffix(".md"), target, target.stem)
         self.assertIn("<math", result)
         self.assertNotIn("<script", result)
-        self.assertIn("?t=13", result)
+        self.assertIn('data-seconds="13"', result)
         self.assertNotIn("math-fallback", result)
         self.assertIn("<mover>", result)
 
@@ -90,12 +100,20 @@ class CourseTests(unittest.TestCase):
 
     def test_all_reviewed_frames_are_used(self):
         frames = json.loads((COURSE / "assets/frames.json").read_text(encoding="utf-8"))
-        self.assertEqual(13, len(frames))
+        self.assertGreaterEqual(len(frames), 16)
         for record in frames:
             self.assertTrue(record["inspected"])
             self.assertTrue((COURSE / "assets" / record["file"]).is_file())
             page = (COURSE / "lessons" / f"{record['bvid']}.html").read_text(encoding="utf-8")
             self.assertIn(record["file"], page)
+
+    def test_timestamps_are_bounded_and_collections_require_part(self):
+        metadata = {"bvid": "BV1AbCdEfGhJ", "pages": [
+            {"part": 1, "duration_seconds": 10}, {"part": 2, "duration_seconds": 20}]}
+        builder.validate_article("[P02 00:00:15]", metadata)
+        for text in ("[00:00:05]", "[P03 00:00:05]", "[P01 00:00:15]", "[P01 00:60:00]"):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                builder.validate_article(text, metadata)
 
     def test_public_content_has_no_private_identifiers(self):
         private = re.compile(r"(?:[A-Za-z]:[\\/]Projects[\\/]|C:[\\/]Users[\\/]|file:///|SESSDATA\s*[:=]|bili_jct\s*[:=]|vd_source=|spm_id_from=|watchlater_cfg=|-----BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9]{20,})", re.I)

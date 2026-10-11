@@ -1,50 +1,295 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light"><meta name="description" content="搜索、Agent 与回答质量的中文学习笔记。基于视频证据，保留时间戳、边界和练习。">
-<title>后训练入门：示范、比较与反馈 · 搜索与 Agent 质量</title><link rel="stylesheet" href="../assets/reader.css"><script src="../assets/reader.js" defer></script></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html">问题 / 证据 / 判断</a><span>SEARCH & AGENT FIELDNOTES</span></header>
-<main id="main" class="reading-shell"><aside><a href="../index.html">课程目录</a><div class="toc">
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>模型已经学过很多知识，为什么还需要后训练？ · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">模型已经学过很多知识，为什么还需要后训练？</h1>
+    <div class="meta"><span>林禾Link</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1GN3Z6LE73/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
 <ul>
-<li><a href="#_1">后训练入门：示范、比较与反馈</a><ul>
-<li><a href="#_2">一句话抓住核心</a></li>
-<li><a href="#_3">时间戳导航</a></li>
-<li><a href="#_4">把三个方法放在同一个问题上</a></li>
-<li><a href="#_5">为什么“答得像样”可能还不够</a></li>
-<li><a href="#_6">边界与必要校正</a></li>
-<li><a href="#_7">下一步</a></li>
+<li><a href="#_1">模型已经学过很多知识，为什么还需要后训练？</a><ul>
+<li><a href="#_2">从“能续写”走到“会回应要求”</a></li>
+<li><a href="#sft">SFT：先给出一份值得学习的回答</a></li>
+<li><a href="#dpo">DPO：对同一个问题，比较哪份回答更值得保留</a></li>
+<li><a href="#_3">在线强化学习：让当前模型尝试，再依据结果调整</a></li>
+<li><a href="#grpo">GRPO 怎样用一组回答作比较</a></li>
+<li><a href="#_4">明明有搜索工具，模型为什么仍然直接作答</a></li>
+<li><a href="#_5">改善一项能力，也要看其他能力有没有受影响</a></li>
+<li><a href="#_6">总结提炼</a><ul>
+<li><a href="#_7">一句话抓住核心</a></li>
+<li><a href="#_8">推理主干</a></li>
+</ul>
+</li>
+<li><a href="#_9">时间戳导航</a></li>
+<li><a href="#_10">复习与行动清单</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<button class="done" data-done="BV1GN3Z6LE73" type="button">标记学过</button><p class="aside-note">时间戳打开 B 站。图片可点击查看原尺寸。</p></aside><div><div class="lesson-top"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><span>核心 · 视频学习笔记</span></div><article data-lesson="BV1GN3Z6LE73"><div class="provenance">来源：林禾Link · <a href="https://www.bilibili.com/video/BV1GN3Z6LE73/" target="_blank" rel="noopener">BV1GN3Z6LE73 原视频</a> · 基于本地字幕／转写；自动识别可能有误。正文中的“迁移练习／补充判断”与原视频主张分开标注。</div><h1 id="_1">后训练入门：示范、比较与反馈</h1>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1GN3Z6LE73.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 03 · 评测、品味与数据</a><button class="done" data-done="BV1GN3Z6LE73" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1GN3Z6LE73&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1GN3Z6LE73/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1GN3Z6LE73"><h1>模型已经学过很多知识，为什么还需要后训练？</h1>
 <blockquote>
-<p>原视频：正式版性能暴涨，DeepSeek 究竟做了什么？模型后训练又是什么？ · 林禾Link · 约 10 分钟。本文只保留可解释的方法框架，厂商内部原因和性能宣传不作已证实事实。</p>
+<p>来源：<a href="https://www.bilibili.com/video/BV1GN3Z6LE73/">林禾Link｜正式版性能变化与模型后训练</a> · 10 分 13 秒 · 深度阅读</p>
 </blockquote>
-<h2 id="_2">一句话抓住核心</h2>
-<p>预训练给模型语言与知识基础，后训练通过示范和反馈调整它在具体任务中的行为；评价与数据质量直接影响调整方向。</p>
-<h2 id="_3">时间戳导航</h2>
+<p>问一个模型“法国的首都是哪里”，我们希望它直接回答问题。但一个主要通过大量文本续写训练得到的基座模型，可能把这句话当成一份问答题目清单的开头，接着写出更多类似问题。它未必缺少关于巴黎的知识，却没有稳定地采用我们期望的助手行为：识别提问、给出答案，在缺少信息时说明情况。<button type="button" class="timecode" data-seconds="107">[00:01:47]</button></p>
+<p>这就引出了后训练。预训练让模型从大量资料中学习语言规律和广泛能力；后训练继续调整模型，使它更善于按照任务要求工作。模型的参数数量和整体结构可以保持不变，参数的具体取值却在训练中改变，所以表现仍然可能发生明显变化。观察一个新版本时，只看模型有多大，还不足以知道它在对话或工具任务中会怎样行动。</p>
+<p>关于某个 DeepSeek 版本究竟使用了哪些训练数据、哪些具体改动带来多少提升，需要对应的训练说明和实验结果才能判断。版本前后的总分差异无法单独回答这些问题。下面我们把注意力放在可以讲清的机制上：后训练怎样利用示范、偏好和奖励，影响模型以后更容易产生什么回答。</p>
+<h2 id="_2">从“能续写”走到“会回应要求”</h2>
+<p>把预训练类比为广泛阅读，可以帮助我们理解它为何能积累很多语言与知识模式。但大量资料里不仅有优质回答，也有提问清单、小说、争论和各种不同写法。给定一句问题，继续写什么取决于模型学到的分布和当前上下文。能够生成相关文字，与始终采用合适的助手方式，还存在距离。<button type="button" class="timecode" data-seconds="128">[00:02:08]</button></p>
+<p>后训练会向模型提供更具体的任务信号。例如，用户给了指令，要遵循哪些要求；一轮对话结束后，怎样理解下一轮追问；需要最新信息时，怎样使用可用工具；不适合回答的内容，怎样妥善处理。这些都涉及行为选择。它们也可能影响推理与解题表现，因此后训练并不限于修改语气或把答案排得更整齐。<button type="button" class="timecode" data-seconds="183">[00:03:03]</button></p>
+<p>可以继续借用岗前培训的比喻。一个人读过很多书，开始工作后仍要学习怎样完成具体职责。比喻到这里就够了：模型并没有人的经历和意图，我们实际做的是用训练数据与评价信号更新参数，让符合要求的输出更容易出现。接下来三种方法，主要区别就在于给模型什么信号，以及用什么方式推动这种变化。</p>
+<h2 id="sft">SFT：先给出一份值得学习的回答</h2>
+<p>SFT 是 Supervised Fine-Tuning，监督微调。我们准备一批任务输入，以及希望模型学会的回答，让模型在训练中提高生成这些回答的可能性。对聊天任务，可以把它理解为“看到这样的用户要求，接下来应怎样回应”。在常见的指令微调设置中，主要针对答案部分计算训练损失，也就是衡量模型预测与示范回答之间的差异。<button type="button" class="timecode" data-seconds="240">[00:04:00]</button></p>
+<p>示范的重要性在于，它同时教内容和行为。某条回答是否回应了问题，是否保留了条件，是否有适当的解释，都会成为学习材料的一部分。如果示范本身绕远路、编造细节或不遵守要求，训练也可能把这些习惯带给模型。因此，整理数据时需要看完整问答，不能只把条数增加当作质量提升。</p>
+<p>这里强调了高质量、多样化数据的价值。多样化意味着模型能接触不同类型的输入和要求，避免只熟悉少数固定问法；高质量则要求示范确实值得模仿。少量优质数据在一些条件下可能胜过大量混杂数据，但这种比较依赖任务和训练设置，不能推成任何情况下“小数据一定更好”。真正要检查的是，这些数据是否覆盖了我们希望模型学会的行为。<button type="button" class="timecode" data-seconds="260">[00:04:20]</button></p>
+<p>SFT 很适合用来建立最初的助手行为，因为它直接展示目标样子。不过，一份标准回答通常只是若干合理回答中的一种。模型原本可能用 A、B、C 三种方式把事情讲清楚，我们提供的示范却采用 D 方式。训练会把它往 D 推，这可以学到新能力，也可能改变原先已有的表现。于是，训练后的检查还需要覆盖其他重要任务。<button type="button" class="timecode" data-seconds="494">[00:08:14]</button></p>
+<h2 id="dpo">DPO：对同一个问题，比较哪份回答更值得保留</h2>
+<p>有些任务很难写出唯一标准答案，但我们可以比较两份回答。它们面对同一个问题，一份更符合要求，另一份有明显不足。DPO 是 Direct Preference Optimization，直接偏好优化，使用这样的偏好对来调整模型，使它相对于较差回答，更倾向于较好的回答。<button type="button" class="timecode" data-seconds="278">[00:04:38]</button></p>
+<p>这里的“好”和“差”需要有清楚含义。比如我们希望改善身份说明、多语言回答或安全行为，就需要构造能反映这些要求的比较。训练不会自动知道标注人员偏爱某份回答的真正原因，它看到的是哪份被选中。如果被选中的回答碰巧总是更长，或者总带着某个词，模型可能学到表面关联，而没有学会我们实际重视的条件。</p>
+<p>常见 DPO 设置还会使用冻结的参考模型，作为比较当前模型变化的基准。冻结表示训练中不更新这份参考模型的参数。它参与训练目标，帮助约束偏好调整；不能把它理解成一个保证模型永远不会偏离任务的独立裁判。数据中的偏好是否可靠、训练更新是否合适，都仍然影响结果。<button type="button" class="timecode" data-seconds="293">[00:04:53]</button></p>
+<p>这种方法与 SFT 的区别，可以先从信号形式理解。SFT 给一份示范，主要教“可以这样回答”；DPO 给两份回答的优先关系，主要教“面对这个问题，优先选择这种回答”。两者都可以使用预先准备的数据，也都需要检查训练后是否真正改善了目标行为。</p>
+<h2 id="_3">在线强化学习：让当前模型尝试，再依据结果调整</h2>
+<p>在线强化学习又换了一种获得训练样本的方式。先给当前模型一批问题，让它自己生成回答或执行轨迹，然后对这些尝试评分，再根据奖励信号更新模型。更新后模型的行为会变化，后续再由新的模型继续尝试。这样，训练过程使用的是不断变化的当前模型所产生的样本。<button type="button" class="timecode" data-seconds="311">[00:05:11]</button></p>
+<p>“在线”在这里不等于用户每发一句话，产品就在后台立即更新模型。它强调训练时的采样与当前模型相联系。用户反馈可以成为训练材料的来源之一，但是否收集、如何获得使用许可、怎样清洗和纳入训练，属于另一组具体安排。一次点赞也不会自动变成一次实时参数更新。</p>
+<p>奖励可以由不同方式给出。一种是奖励模型：先根据人类偏好等数据训练一个评分模型，再用它评价候选回答。另一种是可验证奖励，例如数学题的最终结果可以核对，代码可以运行测试。后者让某些任务有更直接的评价依据，但测试覆盖不全时，通过测试仍然可能遗漏问题。奖励检查到什么，模型就主要受到什么信号的影响。<button type="button" class="timecode" data-seconds="329">[00:05:29]</button></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>主要训练信号</th>
+<th>模型怎样学习</th>
+<th>特别需要留意什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT</td>
+<td>任务与示范回答</td>
+<td>提高生成示范的可能性</td>
+<td>示范是否正确、充分且多样</td>
+</tr>
+<tr>
+<td>DPO</td>
+<td>同一任务下的偏好回答对</td>
+<td>提高较好回答相对较差回答的倾向</td>
+<td>偏好是否来自真正重要的差异</td>
+</tr>
+<tr>
+<td>在线强化学习</td>
+<td>当前模型尝试后的奖励</td>
+<td>根据新尝试的得分继续调整</td>
+<td>奖励是否代表真实目标，有没有捷径</td>
+</tr>
+</tbody>
+</table>
+<p>三种方法可以在一套训练过程中组合使用。例如，先通过示范建立基本行为，再使用偏好或奖励继续优化。表格帮助分清每种信号从哪里来，不要求把它们理解为只能三选一。</p>
+<h2 id="grpo">GRPO 怎样用一组回答作比较</h2>
+<p>GRPO 是 Group Relative Policy Optimization，组相对策略优化。它的一个重要思路是：对同一个问题生成一组回答，分别取得奖励，再根据组内的相对表现估计哪些尝试更值得鼓励。这样，训练获得了一个参照——这份回答相对同组其他回答表现怎样。<button type="button" class="timecode" data-seconds="340">[00:05:40]</button></p>
+<p>先看为什么需要参照。单独知道一个回答得了某个分数，还需要判断它相对于当前模型通常能做到的水平是好是差。在常见 PPO 训练中，会使用价值模型估计相关的预期收益。GRPO 使用同组回答的奖励统计来构造相对信号，从而可以省去单独的价值模型。这是两种训练安排在资源与估计方式上的一项区别。<button type="button" class="timecode" data-seconds="350">[00:05:50]</button></p>
+<p>省去价值模型可以减少一部分资源开销，但生成一组回答本身也有成本。组的大小、奖励的区分能力和训练稳定性，都会影响实际效果。如果同组回答全部得到一样的奖励，这一组就缺少能区分相对好坏的信号。因此，理解 GRPO 时可以先抓住组内比较，无需把“同一问题生成许多答案”直接等同于自动提升。</p>
+<p>回答级别的相对奖励参与模型参数的更新，具体更新还受训练目标及其他约束影响。模型没有把奖励数字直接记在每个词上；我们是在通过训练改变以后产生相应行为的倾向。这样理解，才能把一个回答的得分与整个模型在训练后的变化联系起来。</p>
+<h2 id="_4">明明有搜索工具，模型为什么仍然直接作答</h2>
+<p>工具调用是理解奖励设计的好例子。我们让模型查询天气或最新资料，希望它使用外部工具取得当前信息。但如果训练时直接回答更容易拿到高分，工具调用却因为耗时、格式错误或返回失败受到惩罚，模型就可能越来越倾向于跳过工具。它拥有工具入口，仍然不代表训练出来的行为会在合适时机使用它。<button type="button" class="timecode" data-seconds="413">[00:06:53]</button></p>
+<p>这里描述的是一种可能机制。实际看到模型没有搜索，还可能涉及工具说明、上下文、调用格式或产品限制，不能仅凭一次行为就断定训练奖励出了问题。但这个例子能让我们理解一项关键关系：奖励所鼓励的行为，与用户真正需要的结果，有时并不一致。用户需要最新答案，评分却偏爱更快、更短的直接回应，模型就可能学到这种捷径。</p>
+<p>工具任务的后训练因此需要关心多个环节：什么时候应该调用，选择哪个工具，参数怎样填写，结果回来后怎样继续处理。只奖励最后一段文字写得像答案，可能没有检查中间是否真的取回了正确资料。对于 Agent，这些过程会直接影响任务能否完成，无法只靠聊天语气判断质量。<button type="button" class="timecode" data-seconds="454">[00:07:34]</button></p>
+<p>关于某个模型版本是否专门通过这一方式获得提升，只能视具体材料作判断。我们在这里能带走的是奖励设计与行为之间的关系，以及面对失败时可以查看哪些环节。</p>
+<h2 id="_5">改善一项能力，也要看其他能力有没有受影响</h2>
+<p>SFT 让模型学习外部给定的示范，在线强化学习则更多从当前模型产生的尝试中筛选和调整。后者可以鼓励模型在已经会产生的候选中找到更好的做法，因此有时能减少过于生硬的模仿带来的改变。但这是一种训练直觉，不能推出在线强化学习天然不会损害其他能力。<button type="button" class="timecode" data-seconds="528">[00:08:48]</button></p>
+<p>两种训练都会更新参数，结果都受数据、目标和更新幅度影响。某项基准提高以后，仍需要检查其他任务是否退步。比如工具调用更积极了，还要看它是否在无需查询的问题上过度调用；回答变得更简短了，也要看必要条件有没有被省掉。评价训练效果，要让目标行为和这些可能的代价一起进入检查范围。</p>
+<p>用户反馈可以帮助发现真实场景里的成功与失败，再用于改进数据或评价方式。更多使用可能带来更多反馈，但反馈是否代表实际需求、是否获得适当使用许可、是否经过可靠处理，同样重要。数据数量增加之后，仍需要把它转化成有意义的学习信号，模型才有机会从中受益。<button type="button" class="timecode" data-seconds="567">[00:09:27]</button></p>
+<h2 id="_6">总结提炼</h2>
+<h3 id="_7">一句话抓住核心</h3>
+<p>后训练通过示范、偏好和奖励继续调整模型，让它更容易按要求行动；模型大小不变，也可能产生明显不同的行为。</p>
+<h3 id="_8">推理主干</h3>
+<p>预训练带来广泛的语言与知识能力，后训练进一步塑造助手行为。SFT 展示目标回答，DPO 比较回答优先级，在线强化学习评价当前模型的尝试。GRPO 使用同组回答作相对比较。无论哪种方式，都要检查学习信号是否鼓励了真正需要的行为，并观察其他能力是否受到影响。</p>
+<h2 id="_9">时间戳导航</h2>
 <ul>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=104" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:01:44]">[00:01:44]</a> 预训练与后训练的入门类比。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=236" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:03:56]">[00:03:56]</a> 监督微调 SFT：学习示范答案。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=274" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:04:34]">[00:04:34]</a> DPO：从回答之间的偏好学习。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=311" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:11]">[00:05:11]</a> 在线强化学习：生成、评价、更新。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=347" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:05:47]">[00:05:47]</a> GRPO 的组内相对比较直觉。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=416" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:56]">[00:06:56]</a> 奖励可能影响工具调用行为。</li>
-<li><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=485" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:08:05]">[00:08:05]</a> 比较不同学习方式时的分布问题。</li>
+<li><button type="button" class="timecode" data-seconds="107">[00:01:47]</button> 有知识与按助手方式回答之间的区别。</li>
+<li><button type="button" class="timecode" data-seconds="183">[00:03:03]</button> 后训练希望改善哪些行为。</li>
+<li><button type="button" class="timecode" data-seconds="240">[00:04:00]</button> SFT 与示范质量。</li>
+<li><button type="button" class="timecode" data-seconds="278">[00:04:38]</button> DPO 与偏好数据。</li>
+<li><button type="button" class="timecode" data-seconds="311">[00:05:11]</button> 在线强化学习与奖励来源。</li>
+<li><button type="button" class="timecode" data-seconds="350">[00:05:50]</button> GRPO 的组内比较。</li>
+<li><button type="button" class="timecode" data-seconds="413">[00:06:53]</button> 工具有了却不调用的可能原因。</li>
+<li><button type="button" class="timecode" data-seconds="494">[00:08:14]</button> 学习新行为与保留已有能力。</li>
+<li><button type="button" class="timecode" data-seconds="567">[00:09:27]</button> 真实反馈怎样参与后续改进。</li>
 </ul>
-<h2 id="_4">把三个方法放在同一个问题上</h2>
-<p>假设任务是回答一条需要最新资料的问题。以下是为学习构造的例子：</p>
-<p>SFT 给出一份合格示范：先获取必要信息，引用足够的证据，再简洁回答。训练让模型更倾向于生成这种示范中的行为。</p>
-<p>偏好数据给出同一个问题的两份回答，以及明确的比较理由：一份引用了过期资料，另一份找到了当前适用信息。在这种数据基础上，DPO 等方法可以学习偏好的方向。</p>
-<p>在线强化学习则让当前模型产生输出，再由可验证规则或评分模型给出反馈。循环能探索不同回答，但评价规则如果错误，也会把系统推向错误目标。</p>
-<h2 id="_5">为什么“答得像样”可能还不够</h2>
-<p><a class="timecode" href="https://www.bilibili.com/video/BV1GN3Z6LE73/?t=416" target="_blank" rel="noopener" aria-label="在 B 站打开 [00:06:56]">[00:06:56]</a> 原视频提出一个工具调用案例：系统可能直接凭旧知识回答，跳过应当使用的搜索。它猜测奖励设计可能偏爱更快或更便宜的回答，从而产生不理想行为。</p>
-<p>这是合理的诊断假设之一，仍需检查实际轨迹与训练证据。类似表现也可能来自缺失工具、权限错误、工具描述不清或运行失败，不能仅凭最终回答就断定训练原因。</p>
-<p>产品策略与数据工作在这里的作用很清楚：定义哪些任务必须依赖最新资料；哪些可直接回答；如何判断一次工具调用确实带来了有用证据。</p>
-<h2 id="_6">边界与必要校正</h2>
-<p>SFT、DPO 和在线 RL 都涉及参数更新。在线 RL 不保证其他能力不退化；SFT 也没有一个脱离任务的“高质量少量样本必胜海量数据”公式。泛化、能力保持和成本都需要实测。</p>
-<p>GRPO 可先理解成对同一问题的一组输出作相对评价，减少对独立价值模型的依赖。这个概念来自 DeepSeekMath；具体训练目标比“所有 token 一起加减分”的口语类比更精细。<a href="https://arxiv.org/abs/2402.03300">DeepSeekMath 原论文</a></p>
-<p>仅凭模型价格、预览版发布或用户点赞按钮，无法确认某厂商如何使用用户数据、奖励模型或在线训练。原视频把这些串成一个商业与技术解释，本笔记将其保留为推测，避免把猜测当作内部事实。</p>
-<h2 id="_7">下一步</h2>
-<p>迁移练习：用同一个公开问题写一份合格示范，再写一对优劣回答。比较理由限定为可检查的事实，例如“遗漏适用条件”，不要只写“更专业”。</p>
-<p>完成后追问：我的标准会不会奖励无谓的长回答？有没有把语气自信误当成证据充分？这就是后训练数据与评测之间的联系。</p></article><nav class="bottom-nav"><a href="../index.html#evaluate">回到本章，继续学习 →</a></nav></div></main><footer>个人学习用的批评、比较与重构笔记 · 原视频与截图版权归原作者 · 不提供原视频或完整逐字稿下载<br>笔记离线可读，时间戳链接需联网。学习进度仅存在当前浏览器，可手动导出迁移。</footer></body></html>
+<h2 id="_10">复习与行动清单</h2>
+<p>沿用查天气的例子，分别想一想：如果提供 SFT 示范，示范应展示哪些动作；如果比较两份回答，怎样判断哪个更符合用户需求；如果设计奖励，怎样避免模型不查询也拿到高分。你不需要写训练代码，先把这三种学习信号区分清楚即可。</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "正式版性能暴涨，Deepseek究竟做了什么？模型后训练又是什么？", "duration": "10:13", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>
