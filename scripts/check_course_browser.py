@@ -67,6 +67,7 @@ def check_flow(page, browser, base, site, chosen, route_request):
     assert page.evaluate('window.atlas.selected').startswith('ai/')
     page.go_back()
     page.wait_for_function('window.atlas.selected === "ai"')
+    page.wait_for_function('Object.keys(window.atlas.scene.state).every(k => Math.abs(window.atlas.scene.state[k] - window.atlas.scene.target[k]) < 0.01)')
     page.screenshot(path=str(QA / 'atlas-route-1440.png'))
     page.locator('[data-action=overview]').click()
     page.locator('#atlas-stage').hover(position={'x': page.viewport_size['width'] // 2, 'y': page.viewport_size['height'] // 2})
@@ -91,6 +92,7 @@ def check_flow(page, browser, base, site, chosen, route_request):
     result.click()
     assert page.evaluate('window.atlas.selected').endswith('/' + chosen)
     assert page.locator(f'#inspector [data-done="{chosen}"]').is_checked()
+    page.wait_for_function('Object.keys(window.atlas.scene.state).every(k => Math.abs(window.atlas.scene.state[k] - window.atlas.scene.target[k]) < 0.01)')
     page.screenshot(path=str(QA / 'atlas-lesson-1440.png'))
     link = page.locator('#inspector .primary-link')
     assert link.get_attribute('href') == f'lessons/{chosen}.html'
