@@ -8,6 +8,7 @@ on:
       - 'notes/**'
       - 'assets/fonts/**'
       - 'scripts/build_course.py'
+      - 'scripts/build_learning_flow.py'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 

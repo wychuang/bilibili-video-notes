@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 AI 工作台做量化研究：从任务描述到回测复盘 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="ai">用 AI 工作台做量化研究：从任务描述到回测复盘</h1>
+    <div class="meta"><span>无名游资</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Ztpj6qErh/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#ai">用 AI 工作台做量化研究：从任务描述到回测复盘</a><ul>
+<li><a href="#_1">先把目标和规则讲清楚</a></li>
+<li><a href="#_2">把研究结果做成能读的报告</a></li>
+<li><a href="#_3">回测先看输入有没有缺</a></li>
+<li><a href="#_4">多模型与共享文档的试验</a></li>
+<li><a href="#_5">任务历史、模型能力与个人判断</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Ztpj6qErh.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← Agent 的过程与交付</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1Ztpj6qErh" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Ztpj6qErh&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Ztpj6qErh/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Ztpj6qErh"><h1>用 AI 工作台做量化研究：从任务描述到回测复盘</h1>
+<blockquote>
+<p><strong>原视频标题</strong>：切身感受到了Agent的强大，传统知识博主已经失业了，只是你还没刷到相关视频，想要人生更上一层楼，必须拥抱 AI。分享一下 0 基础 做项目的经验吧。<br>
+<strong>上传者</strong>：无名游资<br>
+<strong>时长</strong>：47:59<br>
+<strong>来源</strong>：<a href="https://www.bilibili.com/video/BV1Ztpj6qErh/">Bilibili 视频页</a><br>
+<strong>总结强度</strong>：standard</p>
+</blockquote>
+<h2 id="_1">先把目标和规则讲清楚</h2>
+<p>这次分享围绕一个 AI 工作台展开：用户可以交给它文字任务，也可以让它使用连接器读取行情、登录网页、处理本机文件或生成报告。上传者展示的内容包括量化回测、交易员发言整理、市场复盘和图表页面。开头还提到自己测试的 11 个策略中，只有一个在他的回测里盈利；这只是他对自己那组测试的描述，视频没有提供足以复算的策略和数据条件。<button type="button" class="timecode" data-seconds="18">[00:00:18]</button></p>
+<p>对话时，第一件事是决定本轮让 AI 做什么。界面里有回答、计划等模式；按上传者的使用经验，想快速问答时选“回答”，任务需要电脑操作或调用工具时再启用相应模式。连接器则负责给任务提供数据或软件入口，例如读取股票行情。模式和连接器会影响 AI 能否看到需要的信息，也会改变它要执行的动作。<button type="button" class="timecode" data-seconds="213">[00:03:33]</button></p>
+<p>接下来要给任务一个明确目标，并把必须遵守的规则说出来。上传者以模拟 A 股研究为例，先让模型在 10 万元虚拟资金的设定下提出交易计划，随后补充要遵守交易规则，不能假设涨停时仍能买入等不现实成交条件。他后来发现，限制 AI 只能选几只股票或强制买入，会让问题变成“按我规定的方式做”；他更想观察模型能否自己形成计划，同时要求它说明约束和理由。<button type="button" class="timecode" data-seconds="588">[00:09:48]</button></p>
+<p>这类任务描述可以拆成三部分：要回答的目标、可使用的数据或工具、不能违反的规则。例如，“分析今天市场涨跌原因，汇总多平台观点并生成报告”说明了输出目标；“只用本次对话中的资料”“标出信息来源”则能限制信息范围。上传者还会把已验证过的提示词复制到文档里，方便日后继续迭代。对正在摸索的模型，他的经验是多轮补充和纠错很常见；更强的模型可能只需较简短的要求，这属于他对当时模型的使用感受。<button type="button" class="timecode" data-seconds="1021">[00:17:01]</button></p>
+<h2 id="_2">把研究结果做成能读的报告</h2>
+<p>一个反复出现的任务，是把分散的市场信息整理成 HTML 报告。上传者给模型的要求包括汇总当日指数涨跌、热点、不同平台的观点和后市判断，再做成可浏览的页面。第一版信息很多，却把利空与利好颜色标反了。这个小错误说明报告的排版做出来了，不代表细节已经核对；页面中的数据和颜色仍要逐项检查。<button type="button" class="timecode" data-seconds="1122">[00:18:42]</button></p>
+<p>他对一份情绪周期报告的修改，展示了怎样把反馈写得更具体。第一版把内容做成卡片，视觉上显得拥挤；他要求把亏损风险和理论误区放到前面，再依据内容重新设计页面，让信息变成一条纵向滚动的因果关系图。之后他补充调整顺序、位置和样式，直到结构更适合阅读。关键要求落在“读者先看什么、内容之间是什么关系、页面该怎么呈现”，模型才有机会改变信息结构，而不只是换一套颜色。<button type="button" class="timecode" data-seconds="1205">[00:20:05]</button></p>
+<p>另一项任务是分析“AI 发展很快，相关公司股价是否也会同步增长”。上传者给模型三个小时整理资料和设计分镜，最后形成报告及视频草稿。报告用铁路建设、互联网光缆等历史基础设施投资作类比：技术确实有长期用途，参与建设的公司却未必获得相同幅度的利润或股价回报。上传者认为，这能帮助区分“技术重要”与“投资回报必然很高”两件事；报告内容是模型整理出的论证，具体历史数据和结论仍需核查。<button type="button" class="timecode" data-seconds="1535">[00:25:35]</button></p>
+<h2 id="_3">回测先看输入有没有缺</h2>
+<p>上传者也把网络上流传的一种策略交给 AI，要求按历史数据回测并画出收益曲线。策略文本里缺少资金金额、交易费用或换手率等关键条件，模型没有一次性补齐这些问题，用户后来还得继续追问。历史回测的结果取决于这些输入：仓位、成本和交易条件换了，结果也可能变化。报告里的曲线看起来完整，仍需要检查它实际用了哪些数据和假设。<button type="button" class="timecode" data-seconds="1305">[00:21:45]</button></p>
+<p>还有一项尚未完成的模拟盯盘任务。模型起初没有实时行情入口，后来用户补上行情连接器，让它运行以 10 万元虚拟资金为基础的模拟策略。上传者要求先回测策略，不立即启动持续盯盘；模型运行了一个多小时，给出胜率 57% 至 60%、盈亏比约 1.8、最大回撤约 10% 的估算，但上传者明确说任务还没做好。它们是一次未完成流程中的模型输出，不能当成经过独立验证的策略表现或交易建议。<button type="button" class="timecode" data-seconds="1950">[00:32:30]</button></p>
+<p>这个过程还暴露出任务执行的时间和资源成本。另一项本机工具排查运行近一个小时后中断，用户发“继续”让它接着做；网页数据抓取又触发了平台风控，采集任务因此耗时更久。长任务需要连接器、访问权限和运行时间，也可能被网站限制或中途停止。把任务拆成若干目标、在运行后检查它是否拿到正确的数据，比只看最后生成的报告更有帮助。<button type="button" class="timecode" data-seconds="1822">[00:30:22]</button></p>
+<h2 id="_4">多模型与共享文档的试验</h2>
+<p>为了比较不同的投资分析角度，上传者让几个 AI 扮演不同角色，例如巴菲特或科斯托兰尼，并把一份共享文档当作“会议室”。每个角色把自己的介绍和判断追加到文档里，用户再让它们阅读彼此的意见，继续写交易计划。这个方法实际展示的是多个模型或角色共享同一份文字记录；角色名称本身不能证明回答等同于这些投资者的真实方法，也不能代替对数据和推理的核查。<button type="button" class="timecode" data-seconds="2255">[00:37:35]</button></p>
+<p>他还用类似的迭代方式完善数据图表：先让 AI 汇总实盘比赛选手的操作模式，再要求把不同选手的曲线放在同一张图上，并叠加指数；随后补充鼠标悬停弹窗、一键播放、侧边信息面板和 0.25 倍速等交互。这里最有用的操作细节是把“哪里不满意、想增加什么、触发后应该怎样表现”逐次告诉模型。报告结构或交互第一次没做好时，可以指出具体差异，再看新版本是否按要求变化。<button type="button" class="timecode" data-seconds="1704">[00:28:24]</button></p>
+<p>模型还会读取登录后的网页来汇总选手发言。相关页面要先由用户登录，模型才能拿到需要的数据；一次采集触发风控后，上传者要求任务吸取经验并减慢后续操作。整理出的表格列出不同选手采用的风格，例如连板接力、短周期波段或隔日热点交易。视频里的分类来自模型对当时数据的整理，不能据此判断哪种模式更适合其他人。<button type="button" class="timecode" data-seconds="1704">[00:28:24]</button></p>
+<h2 id="_5">任务历史、模型能力与个人判断</h2>
+<p>长对话会逐渐占用上下文，工作台可能压缩此前内容。上传者建议一个对话窗口尽量围绕一个任务，这样不相关的内容较少挤在一起；需要了解前一项任务时，再开一个窗口提问。他还说，模型差异会体现在完成时间、成本和结果质量上，但视频里的版本名、价格和比较都对应录制时的个人体验，不能作为今天的选型结论。<button type="button" class="timecode" data-seconds="1376">[00:22:56]</button></p>
+<p>分享者把提示词和工具使用经验放在“AI 会不会替代知识博主”的宏观讨论中。他的判断是，模型能快速汇总资料、生成图表和视频草稿，传统内容创作者面对的工作方式会变化；他也认为模型未来可能承担更复杂的研究任务。这些是他的个人观点。视频中最具体的证据仍是上述几项生成和回测案例，且其中有模型出错、输入缺失、运行中断和任务尚未完成的情况。<button type="button" class="timecode" data-seconds="2754">[00:45:54]</button></p>
+<h2 id="_6">总结提炼</h2>
+<p>这些案例展示了 AI 工作台如何结合对话、连接器、网页数据和本机工具，生成市场报告、策略回测与图表。较可复用的做法是先说明目标和规则，再逐轮检查数据、假设、结构与输出。案例中的回测数字、选股分析和模型比较属于录制时的个人试验，尚不能代表稳定的投资表现。</p>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="18">[00:00:18]</button> 量化回测与 11 个策略的个人测试</li>
+<li><button type="button" class="timecode" data-seconds="213">[00:03:33]</button> 模式、连接器和行情数据</li>
+<li><button type="button" class="timecode" data-seconds="588">[00:09:48]</button> 用目标和规则约束模拟任务</li>
+<li><button type="button" class="timecode" data-seconds="1122">[00:18:42]</button> 市场复盘报告与颜色错误</li>
+<li><button type="button" class="timecode" data-seconds="1205">[00:20:05]</button> 依据内容重做报告结构</li>
+<li><button type="button" class="timecode" data-seconds="1305">[00:21:45]</button> 历史策略回测缺失的输入</li>
+<li><button type="button" class="timecode" data-seconds="1535">[00:25:35]</button> AI 产业发展与股价报告</li>
+<li><button type="button" class="timecode" data-seconds="1704">[00:28:24]</button> 选手数据整理、风控与图表迭代</li>
+<li><button type="button" class="timecode" data-seconds="1950">[00:32:30]</button> 尚未完成的模拟盯盘任务</li>
+<li><button type="button" class="timecode" data-seconds="2255">[00:37:35]</button> 多角色共享文档与盘前计划</li>
+<li><button type="button" class="timecode" data-seconds="2754">[00:45:54]</button> 上传者对 AI 与知识创作的个人判断</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>一个模拟策略任务为什么需要明确数据入口、交易规则和不能成交的条件？</li>
+<li>报告中的回测曲线出现时，还要检查哪些输入和假设？</li>
+<li>这段分享里的哪些结果属于模型输出或个人试验，不能直接当成已验证表现？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "studio_video_1791701416336", "duration": "47:59", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,69 +1,1309 @@
 {
-  "title": "搜索与 Agent 质量：从问题到证据",
-  "subtitle": "把回答看明白，把问题定位准，把改进做成可验证的结果。",
+  "title": "视频学习笔记：从问题到理解",
+  "subtitle": "从 AI、产品和研究出发，把学习、工作与生活中的问题慢慢弄明白。",
   "modules": {
-    "map": "01 · 先画清技术地图",
-    "search": "02 · 搜索、检索与证据",
-    "evaluate": "03 · 评测、品味与数据",
-    "agent": "04 · Agent 的过程与交付",
-    "product": "05 · 用户任务与产品判断",
-    "research": "06 · 调研、信息源与推理",
-    "learn": "07 · 学习、表达与实践"
+    "map": "先画清技术地图",
+    "search": "搜索、检索与证据",
+    "evaluate": "评测、品味与数据",
+    "agent": "Agent 的过程与交付",
+    "companion": "桌面助手与日常协作",
+    "engineering": "软件工程与架构",
+    "product": "用户任务与产品判断",
+    "design": "设计与表达",
+    "research": "调研、信息源与推理",
+    "knowledge": "知识管理",
+    "learn": "学习、表达与实践",
+    "career": "职业与成长",
+    "finance": "经济与财务",
+    "home": "家庭与日常",
+    "wellbeing": "身心与生活",
+    "culture": "文化与作品"
   },
   "videos": [
-    {"bvid":"BV1wydDBDEuC","module":"map","priority":"核心","reason":"区分模型、检索、工具、上下文和运行框架，建立后续归因的地图。"},
-    {"bvid":"BV1ojfDBSEPv","module":"map","priority":"补充","reason":"用另一组具体例子辨清相邻概念，检查自己能否讲清区别。"},
-    {"bvid":"BV1Q3NUetEzV","module":"search","priority":"核心","reason":"检查向量相似度与任务相关性之间的差距。"},
-    {"bvid":"BV1nR376UENq","module":"search","priority":"核心","reason":"理解检索反馈循环及其成本与终止条件。"},
-    {"bvid":"BV1eX5t6rEn7","module":"search","priority":"核心","reason":"比较不同知识获取路线，避免把所有问题套进同一架构。"},
-    {"bvid":"BV12nRzYPEiK","module":"search","priority":"核心","reason":"认识结构化查询与文本检索的适用边界。"},
-    {"bvid":"BV1YaGA6wE24","module":"search","priority":"补充","reason":"练习追问准确率的分母、测试集和改进归因；标题指标需核对。"},
-    {"bvid":"BV1i5H5ejE5r","module":"search","priority":"补充","reason":"用技术栈案例连接检索流程，工具版本以录制时为准。"},
-    {"bvid":"BV1vr421K7od","module":"search","priority":"拓展","reason":"把资料解析、检索排序、引用核查与用户下一步行动连起来。"},
-    {"bvid":"BV1Pmux6zEqQ","module":"evaluate","priority":"核心","reason":"复用完整 Rubric 合集，理解开放任务的评价标准与奖励。","reuse":true},
-    {"bvid":"BV1Hwgj6GEok","module":"evaluate","priority":"核心","reason":"复用品味与后训练笔记，把偏好转成可表达的判断标准。","reuse":true},
-    {"bvid":"BV1MRMnz1EGW","module":"evaluate","priority":"核心","reason":"理解数据格式、样本构造与数据质量检查。"},
-    {"bvid":"BV1GN3Z6LE73","module":"evaluate","priority":"核心","reason":"建立后训练的直觉；性能宣传与机制解释分开看。"},
-    {"bvid":"BV1vQ3ozPEPB","module":"evaluate","priority":"拓展","reason":"补齐监督微调与偏好优化的原理，供需要技术深度时查阅。"},
-    {"bvid":"BV1PedUBSEGC","module":"evaluate","priority":"拓展","reason":"理解教师与学生共同生成训练数据的研究思路及适用条件。"},
-    {"bvid":"BV18Uu36rEbu","module":"agent","priority":"核心","reason":"把 Agent 失败落到可观察的循环、工具和上下文管理。"},
-    {"bvid":"BV1aW3V6WEsT","module":"agent","priority":"补充","reason":"通过极简框架辨认运行层的必要职责。"},
-    {"bvid":"BV1VPT2zQE2p","module":"agent","priority":"核心","reason":"把工具调用质量拆成可测试的行为。"},
-    {"bvid":"BV1JsEc6DEdt","module":"agent","priority":"补充","reason":"理解沙箱、权限边界和执行安全如何影响产品质量。"},
-    {"bvid":"BV1Vegf6nEag","module":"agent","priority":"拓展","reason":"系统了解记忆的写入、检索、更新及失效风险；逐集标注覆盖。"},
-    {"bvid":"BV1ja95BKE6J","module":"agent","priority":"补充","reason":"比较单 Agent 与多 Agent 的工程取舍，不把热度当效果。"},
-    {"bvid":"BV1dcRqYuECf","module":"agent","priority":"拓展","reason":"从最小实现观察模型、检索和工具接口如何衔接。"},
-    {"bvid":"BV1Rz4iz1Exz","module":"agent","priority":"补充","reason":"理解基础设施和最终用户体验之间的关系。"},
-    {"bvid":"BV1WCCnYjEy4","module":"product","priority":"核心","reason":"用具体研究任务分析深度搜索的输出与交互，界面按录制版本理解。"},
-    {"bvid":"BV1RY7L62Ea1","module":"product","priority":"补充","reason":"把需求、交互和原型串成可验证的项目叙事。"},
-    {"bvid":"BV1YvMy6iE1r","module":"evaluate","priority":"核心","reason":"用真实任务定义评价标准，选择高价值案例，沿链路定位失败。"},
-    {"bvid":"BV1RywNeNEry","module":"product","priority":"核心","reason":"把工业设计中的产品分析迁移到 AI 产品判断。"},
-    {"bvid":"BV1SM411d7Kp","module":"product","priority":"补充","reason":"对照早期 AIGC 产品观点，区分长期方法和历史判断。"},
-    {"bvid":"BV1Q7AjzdEQn","module":"product","priority":"核心","reason":"识别原型走向真实可用产品时的缺口。"},
-    {"bvid":"BV1DAqWYUECX","module":"product","priority":"拓展","reason":"观察对话、画布和产物之间的交互关系。"},
-    {"bvid":"BV16V6iY3EJj","module":"product","priority":"拓展","reason":"理解 GUI、API 与人机协作的边界。"},
-    {"bvid":"BV1fGtFzHEUd","module":"product","priority":"补充","reason":"从办公任务观察上手成本、产物质量和产品入口。"},
-    {"bvid":"BV1s43z67Ezv","module":"product","priority":"核心","reason":"复用信息层级与感知差异的设计方法，迁移到回答呈现。","reuse":true},
-    {"bvid":"BV15LKH6PETX","module":"product","priority":"补充","reason":"复用留白与信息分组案例，改善学习稿与回答的阅读负担。","reuse":true},
-    {"bvid":"BV1bLMX6HE7b","module":"product","priority":"补充","reason":"复用设计与 AI 协作案例，练习明确质量标准。","reuse":true},
-    {"bvid":"BV1pC4y1P7dR","module":"research","priority":"核心","reason":"理解公开信息检索的问题拆解、关键词和交叉验证。"},
-    {"bvid":"BV1pF411f7yD","module":"research","priority":"核心","reason":"用快速调研方法把陌生问题转成证据清单。"},
-    {"bvid":"BV1XXk7YUEsS","module":"research","priority":"补充","reason":"对照调研方法的后续版本，提炼可复用步骤。"},
-    {"bvid":"BV1xr6GB5EnH","module":"research","priority":"补充","reason":"主动选择信息源，减少二手信息和营销噪声。"},
-    {"bvid":"BV11JNn6mESN","module":"research","priority":"补充","reason":"建立低负担的一手信息获取习惯。"},
-    {"bvid":"BV1gZz8BYE3r","module":"research","priority":"拓展","reason":"补充因果推理，避免把相关性或一次效果当成有效改进。"},
-    {"bvid":"BV1Wzjg65EM6","module":"research","priority":"补充","reason":"用直观实验练习区分语言输出、随机机制与测试设计。"},
-    {"bvid":"BV1sWDFBeERQ","module":"research","priority":"补充","reason":"把调研与真实决策相连，辨认必要的信息缺口。"},
-    {"bvid":"BV1GcGX6iEUG","module":"research","priority":"补充","reason":"研究用 AI 学习陌生领域的方法与验证成本。"},
-    {"bvid":"BV12suS6rEA8","module":"learn","priority":"核心","reason":"复用 build-to-learn，防止做完产物却无法独立解释。","reuse":true},
-    {"bvid":"BV1AfSYBdEPp","module":"learn","priority":"补充","reason":"从自学经验中提炼练习与反馈方式。"},
-    {"bvid":"BV1KXLq64E8V","module":"learn","priority":"补充","reason":"练习保留自己的问题意识与判断。"},
-    {"bvid":"BV177mqBpEqW","module":"learn","priority":"补充","reason":"提炼可操作的学习循环，避免只收藏不练习。"},
-    {"bvid":"BV1h8DYBzErB","module":"learn","priority":"补充","reason":"学习如何讲清项目选择、行动和可核验的结果。"},
-    {"bvid":"BV1hubZ6WEfU","module":"learn","priority":"补充","reason":"把真实面试复盘用作自查，不把个人经历当统一招聘标准。"},
-    {"bvid":"BV1ST421k7LP","module":"learn","priority":"补充","reason":"通过面试对比观察表达与信息匹配。"},
-    {"bvid":"BV15cg96BERq","module":"learn","priority":"补充","reason":"复用技术实习准备方法，挑选与产品策略方向相通的部分。","reuse":true},
-    {"bvid":"BV1Qfg56sEfb","module":"learn","priority":"补充","reason":"复用轻量项目管理案例，保持任务与验收标准可见。","reuse":true},
-    {"bvid":"BV1XnuH66EzS","module":"agent","priority":"拓展","reason":"复用长访谈，了解自进化与反馈循环的研究背景。","reuse":true}
-  ]
+    {
+      "bvid": "BV1ojfDBSEPv",
+      "module": "map",
+      "priority": "补充",
+      "reason": "用另一组具体例子辨清相邻概念，检查自己能否讲清区别。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1VZWc6dECG",
+      "module": "map",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "初学者如何从具体任务理解模型、智能体、上下文和结果验证？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1wydDBDEuC",
+      "module": "map",
+      "priority": "核心",
+      "reason": "区分模型、检索、工具、上下文和运行框架，建立后续归因的地图。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1XRa56CELL",
+      "module": "map",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "动画怎样呈现提示词经过模型的过程？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1eX5t6rEn7",
+      "module": "search",
+      "priority": "核心",
+      "reason": "比较不同知识获取路线，避免把所有问题套进同一架构。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1Q3NUetEzV",
+      "module": "search",
+      "priority": "核心",
+      "reason": "检查向量相似度与任务相关性之间的差距。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV12nRzYPEiK",
+      "module": "search",
+      "priority": "核心",
+      "reason": "认识结构化查询与文本检索的适用边界。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1YaGA6wE24",
+      "module": "search",
+      "priority": "补充",
+      "reason": "练习追问准确率的分母、测试集和改进归因；标题指标需核对。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1i5H5ejE5r",
+      "module": "search",
+      "priority": "补充",
+      "reason": "用技术栈案例连接检索流程，工具版本以录制时为准。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1nR376UENq",
+      "module": "search",
+      "priority": "核心",
+      "reason": "理解检索反馈循环及其成本与终止条件。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1vr421K7od",
+      "module": "search",
+      "priority": "拓展",
+      "reason": "把资料解析、检索排序、引用核查与用户下一步行动连起来。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1YvMy6iE1r",
+      "module": "evaluate",
+      "priority": "核心",
+      "reason": "用真实任务定义评价标准，选择高价值案例，沿链路定位失败。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1mant62EsH",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "评测 Agent 时怎样检查检索、工具执行及最终结果？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Pmux6zEqQ",
+      "module": "evaluate",
+      "priority": "核心",
+      "reason": "复用完整 Rubric 合集，理解开放任务的评价标准与奖励。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1o87764Ebs",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样把对 agent 的手工验收变成另一个 coding agent 可以执行的回归验证闭环？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1GN3Z6LE73",
+      "module": "evaluate",
+      "priority": "核心",
+      "reason": "建立后训练的直觉；性能宣传与机制解释分开看。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1MRMnz1EGW",
+      "module": "evaluate",
+      "priority": "核心",
+      "reason": "理解数据格式、样本构造与数据质量检查。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1Hwgj6GEok",
+      "module": "evaluate",
+      "priority": "核心",
+      "reason": "复用品味与后训练笔记，把偏好转成可表达的判断标准。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1vQ3ozPEPB",
+      "module": "evaluate",
+      "priority": "拓展",
+      "reason": "补齐监督微调与偏好优化的原理，供需要技术深度时查阅。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1u7hQ6rEQB",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "交叉熵如何从编码长度出现，并联系到语言模型预测与蒸馏？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV15ZH36UEBg",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "大模型后训练与一组实际 Agent 任务分别能说明什么？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1phaq6bEyQ",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样用具体任务比较 agent 的结果、交互体验与费用？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1PedUBSEGC",
+      "module": "evaluate",
+      "priority": "拓展",
+      "reason": "理解教师与学生共同生成训练数据的研究思路及适用条件。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1k8nH69ERR",
+      "module": "evaluate",
+      "priority": "拓展",
+      "reason": "完整内容暂不可读，先保留原视频入口。",
+      "title": "九年了！你和我说注意力层根本不存在！？【NeurIPS'26】",
+      "uploader": "Lau博士的云组会",
+      "duration_seconds": 736,
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Cgxk6dEm7",
+      "module": "evaluate",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "两次越界修改和其他工作体验，如何支撑 Rayawa 对 6.1 Sol 的个人评价？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV18Uu36rEbu",
+      "module": "agent",
+      "priority": "核心",
+      "reason": "把 Agent 失败落到可观察的循环、工具和上下文管理。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1VPT2zQE2p",
+      "module": "agent",
+      "priority": "核心",
+      "reason": "把工具调用质量拆成可测试的行为。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1JsEc6DEdt",
+      "module": "agent",
+      "priority": "补充",
+      "reason": "理解沙箱、权限边界和执行安全如何影响产品质量。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Rz4iz1Exz",
+      "module": "agent",
+      "priority": "补充",
+      "reason": "理解基础设施和最终用户体验之间的关系。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Vegf6nEag",
+      "module": "agent",
+      "priority": "拓展",
+      "reason": "系统了解记忆的写入、检索、更新及失效风险；逐集标注覆盖。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1ja95BKE6J",
+      "module": "agent",
+      "priority": "补充",
+      "reason": "比较单 Agent 与多 Agent 的工程取舍，不把热度当效果。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1boHx61Epz",
+      "module": "agent",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何把可重复工作整理成 skill，再组合为可以验证的工作流？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1a5sZ6LEN3",
+      "module": "agent",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "场景感知分镜怎样用低分辨率切镜、分镜总览和时间码清单支持视频查询？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1aW3V6WEsT",
+      "module": "agent",
+      "priority": "补充",
+      "reason": "通过极简框架辨认运行层的必要职责。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1dcRqYuECf",
+      "module": "agent",
+      "priority": "拓展",
+      "reason": "从最小实现观察模型、检索和工具接口如何衔接。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1XnuH66EzS",
+      "module": "agent",
+      "priority": "拓展",
+      "reason": "复用长访谈，了解自进化与反馈循环的研究背景。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1sapm6KE2q",
+      "module": "agent",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "REA 如何把传统逆向工具接入 agent，演示又揭示了反编译与模型推断的边界？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Ztpj6qErh",
+      "module": "agent",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "长任务中如何组合目标描述、数据连接、模型执行与逐轮核查，避免把报告外观误当成结果可靠？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1oUuJ6CE5t",
+      "module": "agent",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "如何把录音整理需求讲成具有输入、输出与验证步骤的任务？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1uNxq6RERM",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "把陪伴角色、模型连接和插件功能分开，理解 QQ 桥接怎样收发消息。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1REx46NEc4",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "怎样配置桌面 Harness 的模型、工作区、模式和权限，并用插件组合成课程助手？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1S6xY65Eey",
+      "module": "companion",
+      "priority": "补充",
+      "strength": "deep",
+      "reason": "沿五层记忆设计理解近期对话、外部档案、检索和压缩如何配合。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1zLx76jEyn",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "从创建 Bot 实例到选择检索模型，口播给出的部署顺序和取舍是什么？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1S3nQ6EEDf",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样配置模型 API、Bot 与 QQ 桥接，再调整人格、表情和群聊回复？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Uinz6CENd",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "该扩展如何通过截图、控件定位和连续动作操作桌面窗口？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Fg4c6zEGV",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这份改版插件怎样扩展主动互动、动态发布和跨设备记忆恢复？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1cge56aEtC",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "多个职责明确的 bot 如何通过外部数据和任务交接协作？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1dXYs6UEMs",
+      "module": "companion",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "云端电脑和多个 bot 怎样围绕同一任务协作？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV154426xEha",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何把 AI 编程任务从模糊需求推进到可验证的产品？",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1CXet6gE6X",
+      "module": "engineering",
+      "priority": "核心",
+      "strength": "standard",
+      "reason": "跟着选课程序拆开接口、业务规则和数据库，理解依赖倒置为何能减少修改。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1Q6bH6xEZS",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "HTTP 请求无状态时，文字实验室如何维护并区分浏览器会话？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1kcH16REf7",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "AI 应用从需求到实现再到维护，怎样安排人与工具的协作？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1mRn66JERc",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "AI 提高代码产出后，如何分别处理错误、业务上下文与发布责任？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1izn76wEkG",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "轻量数据库客户端怎样用按需驱动扩展数据源，并限制 AI 的数据库操作？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV18Pxv6mEUH",
+      "module": "engineering",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "短片怎样展示跨设备工作区？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1RY7L62Ea1",
+      "module": "product",
+      "priority": "补充",
+      "reason": "把需求、交互和原型串成可验证的项目叙事。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1irHx6dEEf",
+      "module": "product",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "如何让 AI 通过追问帮助明确第一版产品需求？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Q7AjzdEQn",
+      "module": "product",
+      "priority": "核心",
+      "reason": "识别原型走向真实可用产品时的缺口。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1DAqWYUECX",
+      "module": "product",
+      "priority": "拓展",
+      "reason": "观察对话、画布和产物之间的交互关系。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1SM411d7Kp",
+      "module": "product",
+      "priority": "补充",
+      "reason": "对照早期 AIGC 产品观点，区分长期方法和历史判断。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV16V6iY3EJj",
+      "module": "product",
+      "priority": "拓展",
+      "reason": "理解 GUI、API 与人机协作的边界。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1fGtFzHEUd",
+      "module": "product",
+      "priority": "补充",
+      "reason": "从办公任务观察上手成本、产物质量和产品入口。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1xyp96HEGS",
+      "module": "product",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "北大知道怎样集中分散的校园活动信息，并帮助用户按类别、学科和日期查找？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1scx76dEtR",
+      "module": "product",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "如何把常用提示、邮件、录音和术语资料放进一个可检索并能复用的工作台？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1WCCnYjEy4",
+      "module": "product",
+      "priority": "核心",
+      "reason": "用具体研究任务分析深度搜索的输出与交互，界面按录制版本理解。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1RywNeNEry",
+      "module": "product",
+      "priority": "核心",
+      "reason": "把工业设计中的产品分析迁移到 AI 产品判断。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1s43z67Ezv",
+      "module": "design",
+      "priority": "核心",
+      "reason": "复用信息层级与感知差异的设计方法，迁移到回答呈现。",
+      "reuse": true,
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV15LKH6PETX",
+      "module": "design",
+      "priority": "补充",
+      "reason": "复用留白与信息分组案例，改善学习稿与回答的阅读负担。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1hTnb6XE6d",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "画面中的方向、尺度和节奏如何形成视觉张力？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1UEaq6qEZt",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "页面加载、转场与滚动交互的术语如何对应到用户实际看到的变化？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1QqHK6oEVY",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "Impeccable 怎样把产品理解、视觉探索和设计审查连成一套网页生成流程？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV14mn36aEy6",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "Oil UI 的 Harness 插件整合了哪些设计指引、页面检查能力和子 agent 工作流？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1bLMX6HE7b",
+      "module": "design",
+      "priority": "补充",
+      "reason": "复用设计与 AI 协作案例，练习明确质量标准。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1JvaW6JEMb",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "不同动态风格如何组织画面？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1ApaH6SEXu",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "同一房间怎样比较材质和光线？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1CoxY6YE4y",
+      "module": "design",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这款浏览器扩展怎样重做 B 站主要页面的阅读与交互体验？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1pF411f7yD",
+      "module": "research",
+      "priority": "核心",
+      "reason": "用快速调研方法把陌生问题转成证据清单。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV15KhK6HEJ5",
+      "module": "research",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "从梁祝兴趣追到民国戏曲舞台，学会沿关键词、参考文献和旧报刊寻找问题的来路。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1GKpX6bEA2",
+      "module": "research",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "把宽泛兴趣变成具体问题，顺着综述与引用关系找到值得阅读的研究。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1U9nB6GEjY",
+      "module": "research",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "从选题和入门材料开始，安排阅读、整理证据，并把研究接回日常生活。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1XXk7YUEsS",
+      "module": "research",
+      "priority": "补充",
+      "reason": "对照调研方法的后续版本，提炼可复用步骤。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1gZz8BYE3r",
+      "module": "research",
+      "priority": "拓展",
+      "reason": "补充因果推理，避免把相关性或一次效果当成有效改进。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1hmxj6vEYa",
+      "module": "research",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "Lean 如何把证明构造与内核检查分开，并让大型数学形式化工作按依赖关系复用和协作？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1xYar6CEoG",
+      "module": "research",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这个研究 Agent 架构如何呈现角色分工？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1pC4y1P7dR",
+      "module": "research",
+      "priority": "核心",
+      "reason": "理解公开信息检索的问题拆解、关键词和交叉验证。",
+      "start": false,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1xr6GB5EnH",
+      "module": "research",
+      "priority": "补充",
+      "reason": "主动选择信息源，减少二手信息和营销噪声。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV11JNn6mESN",
+      "module": "research",
+      "priority": "补充",
+      "reason": "建立低负担的一手信息获取习惯。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Wzjg65EM6",
+      "module": "research",
+      "priority": "补充",
+      "reason": "用直观实验练习区分语言输出、随机机制与测试设计。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1sWDFBeERQ",
+      "module": "research",
+      "priority": "补充",
+      "reason": "把调研与真实决策相连，辨认必要的信息缺口。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1GcGX6iEUG",
+      "module": "research",
+      "priority": "补充",
+      "reason": "研究用 AI 学习陌生领域的方法与验证成本。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1VnHp6CEVD",
+      "module": "knowledge",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "用一次会面记录看懂属性、模板、链接和回顾如何让笔记有多个入口。",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1LDnv6mESx",
+      "module": "knowledge",
+      "priority": "补充",
+      "strength": "quick",
+      "reason": "在 Obsidian 中把笔记连回视频时间点，用截图、书签和标签找回讲题与操作。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV14fbG6pEKL",
+      "module": "knowledge",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "团队如何从 AI 会话中发现、分享和维护可复用经验？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1z9Hw68ER9",
+      "module": "knowledge",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何把个人日记组织成可查看、可按语义检索并能跨设备使用的 AI 记忆？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1JHJD6fEU8",
+      "module": "knowledge",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "如何在长文的整体结构与逐段细读之间切换，同时核对 AI 回答？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV12Zhm6oE6m",
+      "module": "knowledge",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "动画怎样用熟悉的形象呈现群论？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV12suS6rEA8",
+      "module": "learn",
+      "priority": "核心",
+      "reason": "复用 build-to-learn，防止做完产物却无法独立解释。",
+      "reuse": true,
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1w6Ha6QEUY",
+      "module": "learn",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何用摸底、路径规划和持续反馈组织 AI 辅助学习？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1ofhq6jE28",
+      "module": "learn",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "自学助手如何根据目标和基础生成课程与实践任务？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1qNYC6eEMj",
+      "module": "learn",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样用多视角提问组织陌生领域学习，并通过测验和解释检查理解？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1uQ8E6LE6G",
+      "module": "learn",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样通过具体语句检查 AI 辅助写作中的重复表达和内容质量？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV177mqBpEqW",
+      "module": "learn",
+      "priority": "补充",
+      "reason": "提炼可操作的学习循环，避免只收藏不练习。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1AfSYBdEPp",
+      "module": "learn",
+      "priority": "补充",
+      "reason": "从自学经验中提炼练习与反馈方式。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1KXLq64E8V",
+      "module": "learn",
+      "priority": "补充",
+      "reason": "练习保留自己的问题意识与判断。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1h8DYBzErB",
+      "module": "learn",
+      "priority": "补充",
+      "reason": "学习如何讲清项目选择、行动和可核验的结果。",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Qfg56sEfb",
+      "module": "learn",
+      "priority": "补充",
+      "reason": "复用轻量项目管理案例，保持任务与验收标准可见。",
+      "reuse": true,
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV12jad6DEfK",
+      "module": "learn",
+      "priority": "拓展",
+      "reason": "完整内容暂不可读，先保留原视频入口。",
+      "title": "【一飞冲天】这可能是 AI 时代最重要的技能！如何有效去除信息噪音？不被核弹炸死",
+      "uploader": "飞天闪客",
+      "duration_seconds": 1041,
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1FkaD6bEVL",
+      "module": "learn",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "发现异常后，怎样形成并检查一个新的解释？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV15cg96BERq",
+      "module": "career",
+      "priority": "补充",
+      "reason": "复用技术实习准备方法，挑选与产品策略方向相通的部分。",
+      "reuse": true,
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1ST421k7LP",
+      "module": "career",
+      "priority": "补充",
+      "reason": "通过面试对比观察表达与信息匹配。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1hubZ6WEfU",
+      "module": "career",
+      "priority": "补充",
+      "reason": "把真实面试复盘用作自查，不把个人经历当统一招聘标准。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1DYDvB5E2A",
+      "module": "career",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "从第一篇论文的实验与投稿经历，理解发表对研究能力、毕业和求职的不同意义。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1QHsX6NEUL",
+      "module": "career",
+      "priority": "补充",
+      "strength": "standard",
+      "reason": "跟着一位运营三年的收入、开销和工作经历，算清高薪背后的时间与选择。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1RAHx6QEth",
+      "module": "career",
+      "priority": "补充",
+      "strength": "quick",
+      "reason": "看两位实习生怎样权衡转正与秋招，以及实习经历能带来哪些具体机会。",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1aZpi6UEF6",
+      "module": "career",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "计算机岗位如何分层，技能错配和初级入口变化怎样影响毕业生？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1AjH96mEoo",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何用到期收益和复制组合理解看涨期权的价值，并看清杠杆与时间价值的影响？",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1GWnU6CEA8",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "54万元如何由生活预算、卖出看跌期权现金流与保证金备用金推算出来，哪些假设会使这套方案失效？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1q9xi6AE6X",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "投资者如何从跟随估值表定投，逐步建立资产配置规则，并将个股仓位集中到自己认为看得懂的企业？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1qQsX6yEQz",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "货币、需求和供给周期如何构成大宗商品上涨的条件链？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1eaaL6EEZT",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "久留美的盈利目标、胜率逻辑与杠杆风险是否匹配？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1qAsZ6XE8R",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "歌曲画面怎样呈现上证指数时间线？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1ZKxC6EEnV",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "动画怎样展示币安热钱包事件的资产流向？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1N6gD65EMz",
+      "module": "finance",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "特朗普 2025 年度申报中不同种类的收入、企业融资和资产估值应如何区分？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1yCLb6hE4b",
+      "module": "home",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何从家庭成员的日常动作、兴趣和成长阶段出发，安排公共空间、收纳与可复用家具？",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1Anhw6xEYN",
+      "module": "home",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何把家具的材料、结构、坐感、交付服务和促销规则拆开比较，并正确理解商家公布的成本与售价？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1CpHW6cECQ",
+      "module": "home",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何结合录制时行情、性能、用途与二手卡风险理解显卡推荐等级？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1V2bU6TEyh",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "气馁削弱行动时，如何从外部评价转向可选择的下一步，并建立多来源的成长支持？",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV19Mh76UEMe",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "当睡眠、饮食、压力和运动彼此牵动时，怎样找到容易开始的改变点并从中断中恢复？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1kbpu69ECw",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "怎样把一次表现与自我价值分开，并逐步练习在紧张时继续表达？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1Rgpi6DEhX",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "自卑如何在环境差异、被排斥与关系支持中形成并变化？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1bcYd6dEVH",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "努力除了满足外部的学习和工作要求，还可以指向什么？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1NKaV6bE7a",
+      "module": "wellbeing",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "均值优化怎样连接模型训练、平台推荐和社会对个人差异的筛选？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1q8ea6rEEt",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "deep",
+      "reason": "理想社会面对远方的压迫时如何介入，同时避免替他者和自身公众做主？",
+      "start": true,
+      "flow_role": "主线"
+    },
+    {
+      "bvid": "BV1d5b16hEiK",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "standard",
+      "reason": "如何从人物处理问题的方式，分析故事对生活经验的掌握，并据此认识创作者自己的长处？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1qoht6dExu",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "完结长篇的设定、成长节奏和后期收束，分别怎样影响追读体验？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1erah6tEeh",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "表达者为何担心一段直播讨论被剪辑后失去上下文？",
+      "start": false,
+      "flow_role": "专题"
+    },
+    {
+      "bvid": "BV1ucaK6UEHR",
+      "module": "culture",
+      "priority": "拓展",
+      "reason": "视频目前不可用，暂留入口。",
+      "title": "暂不可用的视频",
+      "uploader": "",
+      "duration_seconds": null,
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV18Kxv6jETs",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段《星游记》前传电影启动预告传达了什么？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1B7nr6eEvj",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "视频如何将菲欧妮的医疗造型、重生能力与角色处境联系起来？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1o84y1u7Xh",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段残局短片如何呈现拆包配合与夸张解说？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV12ehq6YE9p",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段直播闲聊的笑点如何从一个书名展开？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1wKx465EtE",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段电影预告展示了什么？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1meYP63Eq5",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段背景播放片段呈现什么画面？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1ksa96qEkp",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这段预告实际呈现了哪些内容？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV177xJ6XESZ",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "第五集怎样用旅行和校园日常呈现学生会角色之间的关系？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1ADxJ6cEtx",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "这份第五话上传包含哪些内容，观看时需要注意什么？",
+      "start": false,
+      "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1vna36gEPc",
+      "module": "culture",
+      "priority": "拓展",
+      "strength": "quick",
+      "reason": "创作者怎样把对动画角色的喜爱包装成个人投资挑战？",
+      "start": false,
+      "flow_role": "细节"
+    }
+  ],
+  "updated": "2026-11-05"
 }

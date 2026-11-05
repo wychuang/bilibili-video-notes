@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从30万日元到两千万：久留美的FX首单为何像赌博 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="30fx">从30万日元到两千万：久留美的FX首单为何像赌博</h1>
+    <div class="meta"><span>做多中国的好人豆子</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1eaaL6EEZT/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#30fx">从30万日元到两千万：久留美的FX首单为何像赌博</a><ul>
+<li><a href="#_1">胜率高，不等于总体能赚钱</a></li>
+<li><a href="#_2">满仓、高杠杆和五分钟周期叠在一起</a></li>
+<li><a href="#_3">动画与漫画的首笔结果</a></li>
+<li><a href="#_4">总结提炼</a></li>
+<li><a href="#_5">时间导航</a></li>
+<li><a href="#_6">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1eaaL6EEZT.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#finance">← 经济与财务</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1eaaL6EEZT" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1eaaL6EEZT-00197.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1eaaL6EEZT&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1eaaL6EEZT/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1eaaL6EEZT"><h1>从30万日元到两千万：久留美的FX首单为何像赌博</h1>
+<blockquote>
+<p><strong>来源</strong>：【FX战士久留美】锐评久留美首次交易行为，专业交易者角度解析久留美动画<br>
+<strong>UP 主</strong>：做多中国的好人豆子　<strong>时长</strong>：11 分 53 秒　<strong>链接</strong>：https://www.bilibili.com/video/BV1eaaL6EEZT/　<strong>阅读强度</strong>：standard</p>
+</blockquote>
+<p>久留美攒下30万日元，准备开始做外汇交易。FX（外汇保证金交易）是根据汇率变化买入或卖出货币，希望在价格变化后获利。动画里的久留美知道汇率会受国际局势和经济影响，准确预测很难；豆子接着追问：如果她不认为自己能预测市场，究竟靠什么方法获得稳定收益？<button type="button" class="timecode" data-seconds="38">[00:00:38]</button></p>
+<p>杠杆是用一部分本金控制更大规模的交易仓位。这样，汇率只动一点，盈亏也会按放大的仓位计算；价格朝相反方向变化时，亏损同样被放大。杠杆提高了潜在收益和损失的速度，并不会自动替交易者找到正确方向或创造稳定优势。<a href="https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/foreign">外汇保证金与杠杆的基础说明</a></p>
+<h2 id="_1">胜率高，不等于总体能赚钱</h2>
+<p>久留美的思路是少赚一点来提高胜率，同时把止盈点设得近、止损点放得远。止盈点是达到预定盈利时离场，止损点是亏损达到预定范围时退出。这样安排，很多次小盈利有机会遮住偶尔的大亏，但关键还要看平均每次赚多少、亏多少，以及交易成本。假如每次盈利都很小、止损却吞掉多次盈利，即使多数交易获胜，累计结果也可能为负。<button type="button" class="timecode" data-seconds="174">[00:02:54]</button></p>
+<p>用一组简化数字就能看清这个关系。假设十笔交易中八笔各赚100元，两笔各亏500元；先不计手续费：</p>
+<table>
+<thead>
+<tr>
+<th>结果</th>
+<th>次数与金额</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>盈利</td>
+<td>8次 × 100元</td>
+<td>+800元</td>
+</tr>
+<tr>
+<td>亏损</td>
+<td>2次 × 500元</td>
+<td>−1,000元</td>
+</tr>
+<tr>
+<td>总结果</td>
+<td>胜率80%</td>
+<td>−200元</td>
+</tr>
+</tbody>
+</table>
+<p>这组数字只是解释胜率与盈亏幅度的关系，并非角色的实际账户记录。八次“猜对”仍然抵不过两次大亏；判断一套方法时，要把获胜频率和每次输赢的金额一起看。</p>
+<p>她还计划从30万日元做到两千万日元，约为本金的66倍，并打算用杠杆更高的海外平台。这里出现了目标与方法之间的落差：小幅盈利来增加胜率，与短期做到66倍回报，要求的风险和持续表现完全不同。杠杆会放大仓位相对本金的规模，汇率小幅波动也会造成较大的盈亏；杠杆越高，能承受的反向波动就越小。<button type="button" class="timecode" data-seconds="197">[00:03:17]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1eaaL6EEZT-00197.jpg" data-caption="点评把30万本金与2,000万目标并列，展示“小额盈利”与目标规模之间的落差。">
+    <img src="../assets/frames/BV1eaaL6EEZT-00197.jpg" loading="lazy" alt="视频截图 01，00:03:17：点评把30万本金与2,000万目标并列，展示“小额盈利”与目标规模之间的落差。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="197.000">图 01 · 00:03:17</button><span>点评把30万本金与2,000万目标并列，展示“小额盈利”与目标规模之间的落差。</span></figcaption>
+</figure>
+<p>豆子用“优势”来检验这项策略：交易者凭什么长期赚到钱？他指出，久留美没有解释自己的判断比市场其他参与者强在哪里，也没有给出能持续重复的交易方法。短时间赚钱或某一笔交易获利，只能说明那次结果为正，无法证明方法长期具有优势。目标如果真能通过一个策略稳定实现，资金从30万扩大到两千万之后，理论上还可以继续复制；因此，66倍的短期目标远超“赚点小钱”的描述。<button type="button" class="timecode" data-seconds="222">[00:03:42]</button></p>
+<p>豆子进一步把交易结果拆成长期条件：如果一套方法扣除成本后持续有正收益，仓位大小会影响承担的风险；如果方法本身长期为负，缩小仓位也不能把它变成盈利策略。这是他用来反驳“只要控制仓位就能控制风险”的理由。风险大小可以管理，策略是否有优势仍要单独回答。<button type="button" class="timecode" data-seconds="285">[00:04:45]</button></p>
+<h2 id="_2">满仓、高杠杆和五分钟周期叠在一起</h2>
+<p>片中久留美选择100倍以上的杠杆，并把本金全部投入。豆子提醒，重仓意味着账户几乎没有空间承受价格反向波动；一旦波动触及保证金限制，平台可能强制平仓，损失会很快逼近全部本金。具体平仓点要看平台规则和交易品种，片段没有提供这些细节，因此不能把某个精确亏损幅度套到所有FX账户上。<button type="button" class="timecode" data-seconds="389">[00:06:29]</button></p>
+<p>交易图使用五分钟K线，每根K线概括五分钟内价格变化。豆子据此指出，久留美在短短一根K线的时间里就承受很大心理压力。高杠杆把小幅波动放大，密集盯盘又让她迅速面对账面盈亏变化；二者叠加，让交易更像在短时间里押上全部本金。豆子拿澳门赌场的赌客作对比：他觉得即使是赌性很强的人，也未必会每五分钟把全部身家压上。<button type="button" class="timecode" data-seconds="424">[00:07:04]</button></p>
+<p>片中还出现五分钟赚到一千元人民币的交易结果，之后谈到汇率换算。单次盈利容易让人把短期收益和长期能力连在一起；豆子的批评针对的是风险结构与持续方法，不是把这次盈利当作整个账户的表现。看交易动画时，区分某一笔赚了多少钱、这套方法长期是否有优势、以及本金可能承受多大回撤，才能听清他为何仍然批评久留美的选择。<button type="button" class="timecode" data-seconds="495">[00:08:15]</button></p>
+<h2 id="_3">动画与漫画的首笔结果</h2>
+<p>豆子提到，漫画里的久留美第一次交易赚到了钱，动画先行版则加入原创情节来制造悬念。他觉得动画改写更贴近现实：按久留美当时表现出的知识和高风险操作，第一次交易若遇到不利波动，亏损更符合风险结构。这里讨论的是角色设定与剧情改编；一次戏剧化盈利不能证明她的做法可靠，一次亏损也不能单独说明所有短线交易都会亏钱。<button type="button" class="timecode" data-seconds="624">[00:10:24]</button></p>
+<p>豆子还注意到，久留美觉得持续赚钱很枯燥，却有很强的执行力。他据此提出另一种个人看法：这样的人若愿意花几年学习、准备专业资格或发展工作技能，或许能通过职业收入逐步接近目标，不必寄望于一次短期暴利。这个建议来自对角色性格的解读；能否实现仍取决于个人能力、选择和现实条件。<button type="button" class="timecode" data-seconds="654">[00:10:54]</button></p>
+<h2 id="_4">总结提炼</h2>
+<p>这段点评关注的核心，是久留美的目标、胜率逻辑与风险承担能否相互匹配。小盈利配合更大的止损，未必形成正收益；100倍杠杆、满仓操作与五分钟交易周期叠加，会让小幅波动迅速影响本金。动画与漫画首次交易结果的不同，服务于戏剧情节，也让观众看见角色策略与现实风险之间的距离。</p>
+<h2 id="_5">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="38">[00:00:38]</button> 久留美准备的30万日元与FX定义</li>
+<li><button type="button" class="timecode" data-seconds="174">[00:02:54]</button> 小盈利、高胜率与远近止盈止损</li>
+<li><button type="button" class="timecode" data-seconds="197">[00:03:17]</button> 30万到两千万的目标与杠杆选择</li>
+<li><button type="button" class="timecode" data-seconds="285">[00:04:45]</button> 长期交易优势与对手方问题</li>
+<li><button type="button" class="timecode" data-seconds="389">[00:06:29]</button> 100倍以上杠杆和全仓风险</li>
+<li><button type="button" class="timecode" data-seconds="424">[00:07:04]</button> 五分钟K线与快速承受盈亏变化</li>
+<li><button type="button" class="timecode" data-seconds="495">[00:08:15]</button> 五分钟交易结果片段</li>
+<li><button type="button" class="timecode" data-seconds="624">[00:10:24]</button> 动画原创情节与漫画首笔盈利差异</li>
+<li><button type="button" class="timecode" data-seconds="654">[00:10:54]</button> 执行力、长期准备与角色目标</li>
+</ul>
+<h2 id="_6">复习</h2>
+<ol>
+<li>为什么高胜率仍可能无法弥补小额盈利和大额止损之间的差距？</li>
+<li>100倍杠杆、满仓和五分钟周期分别怎样改变久留美面对的风险？</li>
+<li>豆子如何比较漫画和动画对首次交易结果的处理？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【FX战士久留美】锐评久留美首次交易行为，专业交易者角度解析久留美动画", "duration": "11:53", "src": "", "poster": "../assets/frames/BV1eaaL6EEZT-00197.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

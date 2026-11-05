@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>给桌面 AI 加记忆：外部档案、主动检索与空闲压缩 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">给桌面 AI 加记忆：外部档案、主动检索与空闲压缩</h1>
+    <div class="meta"><span>无想sama</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1S6xY65Eey/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#ai">给桌面 AI 加记忆：外部档案、主动检索与空闲压缩</a><ul>
+<li><a href="#_1">聊天聊久了，为什么还会忘</a></li>
+<li><a href="#_2">第一层：把旧记忆放进本地档案</a></li>
+<li><a href="#_3">第二层：保留正在进行的对话</a></li>
+<li><a href="#_4">第三层：让反复出现的内容更容易留下</a></li>
+<li><a href="#_5">第四层：听到线索时，再去翻旧记录</a></li>
+<li><a href="#_6">工具也可以按需查说明书</a></li>
+<li><a href="#_7">第五层：给角色留一份有限的自我笔记</a></li>
+<li><a href="#_8">把压缩安排在对话空闲时</a></li>
+<li><a href="#qq">最后把 QQ 启动步骤收拢起来</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间导航</a></li>
+<li><a href="#_11">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1S6xY65Eey.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#companion">← 桌面助手与日常协作</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1S6xY65Eey" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1S6xY65Eey&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1S6xY65Eey/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1S6xY65Eey"><h1>给桌面 AI 加记忆：外部档案、主动检索与空闲压缩</h1>
+<blockquote>
+<p><strong>原视频标题</strong>：目前全网大肥鱼记忆链最详细优化方案，详细架构梳理<br>
+<strong>上传者</strong>：无想sama<br>
+<strong>时长</strong>：18:58<br>
+<strong>来源</strong>：<a href="https://www.bilibili.com/video/BV1S6xY65Eey/">Bilibili 视频页</a><br>
+<strong>总结强度</strong>：deep</p>
+</blockquote>
+<h2 id="_1">聊天聊久了，为什么还会忘</h2>
+<p>假设我们把一个桌面 AI 接到 QQ，让它长期陪聊或帮忙做事。聊过的事情越来越多，系统每次都要把一部分历史带进新一轮对话；历史太长时，系统又可能压缩上下文。无想sama把这里的难题归为三件事：持续调用模型会花钱，历史消息需要保存，压缩上下文后还要尽量接得上刚才的话。<button type="button" class="timecode" data-seconds="9">[00:00:09]</button></p>
+<p>如果所有历史一直留在上下文里，每轮请求都要带着越来越多的旧内容；如果把太多内容压成摘要，往日细节又可能变得难以想起。因此，设计重点不只在“记下来”，还在于哪些信息随当前对话保留、哪些可以放到外部，以及真正需要回忆时如何找回来。无想sama从这几个实际困难出发，逐步搭出一条记忆链。</p>
+<h2 id="_2">第一层：把旧记忆放进本地档案</h2>
+<p>第一层是外部记忆库。无想sama设想把整理后的历史保存成电脑文件夹中的内容，让记忆可以打包带走，也可以建立索引。所谓索引，可以先理解成一份查找线索：上下文不必一直装着每段旧对话，只要保留“有这份旧记录，想起来时该去哪里找”的路径。<button type="button" class="timecode" data-seconds="42">[00:00:42]</button></p>
+<p>他的流程是让桥接程序在设定的时间发出整理指令，由 AI 整理记忆，再把结果写进本地档案。这样一来，当前对话里可以少放一些旧内容；当对话遇到需要回忆的事情时，提示词再告诉 AI 记忆库的位置和可用的查找工具。这里的关键关系是“保存”与“想起”分开：文件留在外部，当前上下文里保留检索线索。<button type="button" class="timecode" data-seconds="74">[00:01:14]</button></p>
+<p>换成使用者能看到的指令，提示词可以让 AI 知道：一段旧经历可能仍保存在档案里，即使眼前的对话没有带着那段原文，也可以按索引路径找回它。AI 需要的线索包括档案在哪里，以及用哪个工具查找。<button type="button" class="timecode" data-seconds="93">[00:01:33]</button> 这就像把整柜文件从桌面移开，只在手边留一张目录；聊天时不用反复携带所有旧对话，但需要时仍有一条回去查阅的路。</p>
+<p>这套安排也有实际边界：档案存在磁盘上，并不等于 AI 每轮都能自动想起里面的内容。它还需要知道何时去查、用什么路径查，以及查到的记录是否真与当前问题有关。设计者把索引和检索也纳入记忆链，正是因为单有一堆保存下来的文件，还不能完成回忆。</p>
+<h2 id="_3">第二层：保留正在进行的对话</h2>
+<p>接着看 QQ 的消息如何到达模型。无想sama描述的链路是：用户在 QQ 发送消息，qq bridge 接收并转给桌面 AI，再把 AI 的回复送回 QQ。他说 bridge 会保留几段对话摘要，让当前消息和先前几轮历史一起进入处理流程；这样，哪怕中途需要压缩上下文，近期对话仍有机会保持连贯。<button type="button" class="timecode" data-seconds="119">[00:01:59]</button></p>
+<p>这也是为什么桥接摘要和外部档案承担不同任务。摘要保留最近几轮对话的大意，让当前问题有一个近处的前文；外部档案则保存较早、可能暂时用不到的记录，等出现线索时再查。压缩上下文时，摘要可以让对话从旧内容过渡到新内容；基础历史提示仍由桌面 AI 自己处理，外部记忆链则负责扩充它能找回的范围。<button type="button" class="timecode" data-seconds="155">[00:02:35]</button></p>
+<p>在这层之下，他还把桌面 AI 自己的历史压缩和历史提示词视作基础记忆模式：系统继续带着近期聊天，或把较长历史压成更短的版本。外部记忆是对此的补充，不能简单替代正在进行的对话。比如，你刚问了一个后续问题，AI 需要知道“这件事”指刚才哪句话；如果把所有近期上下文都拿走，只留一个通往旧档案的路径，当前对话仍可能接不上。<button type="button" class="timecode" data-seconds="172">[00:02:52]</button></p>
+<h2 id="_4">第三层：让反复出现的内容更容易留下</h2>
+<p>第三层是带权重的长期记忆。无想sama用艾宾浩斯遗忘曲线来介绍这个想法，随后把机制说得比较直白：给历史消息附上权重，初始时权重相同；后来反复出现的相似内容增加权重，长期没有再出现的内容降低权重。权重下降到一定程度，内容就归档；经常被提及的内容，则可能继续留在历史提示词里，甚至进入人格提示词。<button type="button" class="timecode" data-seconds="195">[00:03:15]</button></p>
+<p>例如，一个偏好若在多次聊天里反复出现，系统可以把它当成较重要的信息，在之后的对话里继续带上；一条只出现过一次、后来没有再被提及的细节，则可能逐渐退出当前记忆。这样做的目的，是把有限上下文留给更常用的内容，同时把较少出现的旧记录放进外部档案。要把这条思路做成可执行的规则，还需要确定权重怎样变化、何时归档，以及相似消息怎样合并。</p>
+<h2 id="_5">第四层：听到线索时，再去翻旧记录</h2>
+<p>外部档案要真正帮上忙，还得有触发检索的时机。无想sama把第四层称作 record 或 recall 检索：我们可以自己设置一些提示词，例如“还记得吗”这类在生活对话里容易引出旧事的表达。当这类线索出现时，系统调用检索工具，去外部库找相关记录，再把找到的内容放回当前对话。<button type="button" class="timecode" data-seconds="252">[00:04:12]</button></p>
+<p>这个过程可以拆成三步：先从当前说法判断“可能需要回忆”；接着按索引到外部记录中查找，并结合记录时间定位；最后把查到的内容带回眼前的对话中。模型当前上下文里可能没有那段旧经历，档案却还保留着它。只要查找结果确实相关，AI 就有机会自然接续；这能改善记忆体验，但仍取决于触发词、索引、档案内容和检索结果是否合适。<button type="button" class="timecode" data-seconds="289">[00:04:49]</button></p>
+<p>他不打算让系统每轮都检索，因为每次调用工具都要消耗额外上下文来描述工具本身。工具说明越长，查询成本越高。检索因此只在特定语境或检测到特定提示词时触发，目的是把查找开销留给真的需要回忆的对话。<button type="button" class="timecode" data-seconds="326">[00:05:26]</button></p>
+<p>这样，第三层和第四层各自分担一部分工作：权重变化决定哪些常出现的信息适合留在提示词里，触发检索则负责把暂时不在上下文中的旧内容找回来。前者偏向持续保留，后者按问题临时查找。两者配合时，常用信息无需每次重新翻档案，较少出现的细节也仍有机会在恰当问题下被唤回。</p>
+<h2 id="_6">工具也可以按需查说明书</h2>
+<p>记忆之外，无想sama还把同一种“外部保存、需要时查找”的思路用在工具上。他担心桌面 AI 每轮都把所有可用工具的说明书塞进上下文，会带来较多提示文本；他估计仅工具说明就可能达到数万 token。<button type="button" class="timecode" data-seconds="357">[00:05:57]</button> token 是模型处理文本时使用的计量单位，输入得越多，通常越要考虑请求时间和费用。不过，具体数量和费用取决于工具、模型和计费方式，这里应把“数万”看作他的估计。</p>
+<p>他的取舍是只把每轮都需要的常驻工具留在上下文，例如接收消息、注入历史提示、结束对话所需的工具；文件访问、搜索等功能性工具则放在外部工具库。提示词告诉 AI：如果眼下没有所需工具，可以先按路径查找工具目录，再打开对应说明，了解用法后再执行任务。<button type="button" class="timecode" data-seconds="409">[00:06:49]</button></p>
+<p>照这个顺序，一项搜索任务可以是：AI 先判断自己需要搜索工具；它发现当前上下文没有该工具的完整说明，于是查看工具目录；目录给出说明书位置后，它再读说明，弄清调用方式，最后才开始搜索。<button type="button" class="timecode" data-seconds="446">[00:07:26]</button> 每一步多了一次查找和阅读，常用工具会比直接调用稍慢；好处是没有搜索需求的闲聊轮次不必一直带着整份搜索手册。</p>
+<p>外部工具目录与记忆档案都放在上下文之外，但目录回答“我有什么工具、怎样调用”，记忆档案回答“过去发生过什么、到哪里查”。系统提示词需要把各自的位置和查找办法说清楚，AI 才能在需要时取回说明或旧对话。这样既避免把所有材料预先塞进每轮，也让用户可以分别整理工具能力与历史记录。</p>
+<p>无想sama认为，两种方式在完成任务时看起来差不多，按需查找则能避免每轮都注入大段暂时用不到的说明。<button type="button" class="timecode" data-seconds="475">[00:07:55]</button> 他估计这样每轮可能省下好几万 token；实际省量还要看哪些工具常用、说明有多长以及缓存和计费规则。</p>
+<h2 id="_7">第五层：给角色留一份有限的自我笔记</h2>
+<p>前四层主要保存和找回用户与 AI 之间发生过什么。无想sama另外提出一个问题：如果角色的所有内容都来自用户设定和历史对话，经历了上下文压缩之后，角色自己在互动中形成的变化是否也会消失？他的第五层叫 self note，也就是自我笔记：AI 不定期写下对自身状态的叙述，记录它如何理解自己和最近的经历。<button type="button" class="timecode" data-seconds="549">[00:09:09]</button></p>
+<p>这份笔记由 AI 自己决定何时写、写什么，并设有最多 40 条的上限；写满后，若要再记录，就得删去较早内容。设计者把上限用来区分“角色状态的记录”和“无限增长的记忆库”：用户对话的细节由前几层的档案和索引保存，自我笔记则保持有限，记录角色当前如何叙述自己。<button type="button" class="timecode" data-seconds="620">[00:10:20]</button></p>
+<p>于是，档案回答的是“过去发生过什么”，self note 关注的则是“角色目前怎样描述自己”。新笔记出现时，旧笔记可能被删掉；这让角色状态保持一个有限的窗口，也意味着它不会完整保存每次自述。它和用户记忆之间有联系，但用途不同：历史信息可以进入可查找的外部库，自我笔记则参与角色提示和连续感。<button type="button" class="timecode" data-seconds="652">[00:10:52]</button></p>
+<p>无想sama希望，这能让角色不只重复一张固定角色卡，也能在长期互动中延续它自己写下的状态。他也承认这可能只是一个愿望，实际作用未必很大。<button type="button" class="timecode" data-seconds="747">[00:12:27]</button> 因此，self note 适合被理解成一种角色设计：系统生成并保存自我描述，后续再把它作为上下文使用。它本身不能证明 AI 产生了人类意义上的自我意识，也不能保证角色会按预期成长。</p>
+<p>他预期，这五层合在一起，即使重新开一个聊天窗口，角色也能带着外部记忆与自我笔记继续对话，让人不至于觉得它完全陌生。<button type="button" class="timecode" data-seconds="796">[00:13:16]</button> 这是他希望获得的连续感；能否实现，仍取决于新对话是否正确接上外部档案、提示词和笔记。</p>
+<h2 id="_8">把压缩安排在对话空闲时</h2>
+<p>上下文压缩要减少历史长度，也可能让正在进行的聊天停顿。无想sama说，如果交谈过程中途压缩，当前请求可能多等几十秒；压缩后的新历史和压缩前不同，后续请求还可能无法沿用原有缓存。他据此反对“上下文每增长一点就立刻压缩”的做法，认为频繁改写历史会增加开销。<button type="button" class="timecode" data-seconds="809">[00:13:29]</button></p>
+<p>他还提过把阈值压缩控制在约 30% 的想法。这个比例需要和前面说的预设上下文阈值一起理解，单看 30% 还不足以复现设置。他认为重复前缀的缓存有助于降低费用；压缩改变历史后可能降低命中，实际仍按服务计费。<button type="button" class="timecode" data-seconds="877">[00:14:37]</button></p>
+<p>他提出的方案叫空闲压缩：对话结束超过 30 分钟，而且上下文已经超过设定阈值时，由第三方接入桥上的定时器发出提醒，让 AI 开始整理。压缩之前，AI 先挑出近期重要消息保存下来，也可以写 self note；这些步骤完成后，再压缩当前上下文。目标是让用户正在聊天时不被压缩打断，同时把重要内容和检索路径留在后续上下文里。<button type="button" class="timecode" data-seconds="943">[00:15:43]</button></p>
+<p>条件是同时满足“空闲已超过 30 分钟”和“上下文已超过阈值”。只满足其中一项时，这个方案还不会触发整理。比如上下文虽长但聊天仍在继续，就暂缓压缩；即便空闲时间够长，若上下文尚未超过设定阈值，也没有必要立即整理。定时器由桥接程序负责观察空闲时长和发送提醒，桌面 AI 再执行保存、写笔记与压缩的工作。<button type="button" class="timecode" data-seconds="947">[00:15:47]</button></p>
+<p>整理动作有先后：先挑出近期重要的聊天记录，留进相应的记忆位置；如果角色此时需要写自我笔记，也先完成那一步；之后才压缩仍留在当前上下文里的历史。压缩完成后，新一轮对话继续使用精简过的近期内容，并靠外部档案的检索路径找更早的信息。这样设计，是要避免压缩直接抹掉刚刚需要保留的内容，同时把整理工作放到用户暂停聊天之后。<button type="button" class="timecode" data-seconds="975">[00:16:15]</button></p>
+<h2 id="qq">最后把 QQ 启动步骤收拢起来</h2>
+<p>记忆链之外，具体配置还要回到日常使用：把桌面 AI 接进 QQ，通常需要依次启动模型软件、SnowLuma、qq bridge 和 QQ，再确认中间 HTTP 连接。无想sama觉得这些步骤繁琐，于是把启动入口集成到桌面 AI 的悬浮窗设置里，点一次启动后，由程序建立与 SnowLuma 的连接。<button type="button" class="timecode" data-seconds="1033">[00:17:13]</button></p>
+<p>他说明，电脑重启后还要重新确认桌面 AI 当前使用的端口，因为端口可能发生变化；在后端设置里更新端口后稍等，程序的看门狗会刷新连接，随后桥接即可建立。<button type="button" class="timecode" data-seconds="1090">[00:18:10]</button> 这给出了一个具体的操作条件：集成入口减少了重复启动步骤，但仍依赖端口信息正确。它是无想sama当时的个人集成方式，不代表每一种安装都使用相同的软件名称、端口规则或启动界面。</p>
+<h2 id="_9">总结提炼</h2>
+<p>这套五层思路把近期上下文、长期档案、权重筛选、按需检索和有限的角色自述分开处理；压缩则安排在对话空闲后先保存重要信息，再整理当前上下文。</p>
+<h2 id="_10">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="9">[00:00:09]</button> 费用、记忆与上下文三个问题</li>
+<li><button type="button" class="timecode" data-seconds="42">[00:00:42]</button> 本地外部记忆库与检索路径</li>
+<li><button type="button" class="timecode" data-seconds="119">[00:01:59]</button> QQ bridge 摘要和基础上下文</li>
+<li><button type="button" class="timecode" data-seconds="195">[00:03:15]</button> 带权重的长期记忆</li>
+<li><button type="button" class="timecode" data-seconds="252">[00:04:12]</button> 提示词触发回忆</li>
+<li><button type="button" class="timecode" data-seconds="357">[00:05:57]</button> 工具说明书按需读取</li>
+<li><button type="button" class="timecode" data-seconds="549">[00:09:09]</button> self note 与有限条数</li>
+<li><button type="button" class="timecode" data-seconds="809">[00:13:29]</button> 压缩、缓存与费用的关系</li>
+<li><button type="button" class="timecode" data-seconds="943">[00:15:43]</button> 空闲压缩的触发条件和预处理</li>
+<li><button type="button" class="timecode" data-seconds="1033">[00:17:13]</button> QQ 启动集成与端口更新</li>
+</ul>
+<h2 id="_11">复习</h2>
+<ol>
+<li>为什么“本地保存了旧记忆”还不足以让 AI 自动回忆？检索链还需要哪些环节？</li>
+<li>反复出现的消息和长期没有重现的消息，在这套权重设计中会走向哪里？</li>
+<li>按需读取工具说明，换来了什么额外步骤，又希望减少什么开销？</li>
+<li>空闲压缩触发前，为什么要先保存近期重要消息并允许写 self note？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "目前全网大肥鱼记忆链最佳优化方案，详细架构梳理", "duration": "18:58", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

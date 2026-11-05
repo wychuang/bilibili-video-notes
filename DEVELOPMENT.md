@@ -30,6 +30,8 @@ A local installed-skill directory may be a Windows junction to the canonical pro
 
 ## Commands
 
+Keep literal currency tickers such as `$TRUMP` in inline code, or escape the dollar sign. Two unprotected dollar signs in prose can be interpreted as inline math. Review the rendered article after editing financial content; ordinary code spans remain protected from formula parsing.
+
 ```powershell
 # Install or refresh the isolated environment
 .\scripts\start.ps1 -SetupOnly
@@ -77,9 +79,9 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ### Lightweight public course / 轻量公开课程
 
-`courses/search-quality/` is an intentionally public course. It does not change the archive-first GUI workflow. All 51 readable entries now have canonical `lessons/<BV>.md` files and full-reader HTML, including the 9 originally reused articles. The 3 evidence-blocked entries remain pending. `scripts/build_course.py` uses `render_summary_html` with safe Markdown, static MathML, online playback, part selection, frame zoom, source links, section navigation and course progress controls. Without private source metadata, a rebuild preserves the public identity and playlist metadata in `index.json`.
+`courses/search-quality/` is an intentionally public course. It does not change the archive-first GUI workflow. All 141 readable entries now have canonical `lessons/<BV>.md` files and full-reader HTML, including the 9 originally reused articles. The 6 evidence-blocked entries remain pending. `scripts/build_course.py` uses `render_summary_html` with safe Markdown, static MathML, online playback, part selection, frame zoom, source links, section navigation and course progress controls. Without private source metadata, a rebuild preserves the public identity and playlist metadata in `index.json`.
 
-51 篇课程稿统一以 `courses/search-quality/lessons/*.md` 为编辑入口，课程不再从旧 `notes/` 覆盖正文。三篇用户认可稿保留正文，其余稿按完整原文重写。所有页面保留总结提炼、时间导航和复习内容，章节名称可随内容自然调整。写完保存后须完整读回审校；不要把校对记录、过程说明和未确认字段塞进阅读页。Skills 规则与项目文档仍需同步。
+141 篇课程稿统一以 `courses/search-quality/lessons/*.md` 为编辑入口，课程不再从旧 `notes/` 覆盖正文。三篇用户认可稿保留正文，其余稿按完整原文重写。所有页面保留总结提炼、时间导航和复习内容，章节名称可随内容自然调整。写完保存后须完整读回审校；不要把校对记录、过程说明和未确认字段塞进阅读页。Skills 规则与项目文档仍需同步。
 
 课程采集器 `scripts/course_evidence.py` 只写项目 `.state/course-evidence/`，拒绝 Windows 系统盘项目。先获取并检查字幕的 BV/CID 与时长；缺字幕时显式加 `--audio`，复用已有 small 模型进行 GPU 转写，无下载模型或 CPU 回退。每个临时音频在 `finally` 中删除。历史曾发现不匹配字幕响应，旧管线证据不再复用；有效转写元数据必须为 `pipeline_version: 2`，仍需人工检查主题与术语。
 
@@ -110,9 +112,17 @@ python -B scripts/check_course_browser.py
 
 The Pages workflow stages only named course files, catalog-matched lesson files, actually referenced approved images, and the named font/license. It never publishes the repository root or `.state` wholesale. CI uses standard-library `--stage-only`, requires no private evidence, and fails on missing/unsafe links or stale publication files. Run a local full rebuild after editing Markdown; CI deliberately ships the already reviewed HTML. Before staging a changed allowlist, inspect the exact `.state/course-site` target and move the old task-local artifact to a recoverable timestamped sibling if necessary; do not delete archives or broaden the allowlist to hide stale files.
 
-Browser QA is scoped to loopback HTTP, uses project-local temp/download paths, and does not import a personal browser profile. It checks all 51 lessons at desktop/mobile widths, image loading, formulas, navigation, 18-part selection, time/frame jumps, lightbox and progress transfer. A stub verifies the Bilibili URL-routing contract; this test does not claim third-party playback works. Check live playback separately when publishing. Do not install a browser or new dependencies just for this check.
+Browser QA is scoped to loopback HTTP, uses project-local temp/download paths, and does not import a personal browser profile. It checks every readable lesson in the current index at desktop/mobile widths, image loading, formulas, navigation, 18-part selection, time/frame jumps, lightbox and progress transfer. A stub verifies the Bilibili URL-routing contract; this test does not claim third-party playback works. Check live playback separately when publishing. Do not install a browser or new dependencies just for this check.
 
 Limits: 2 GiB evidence footprint, at least 5 GiB free on the project drive, and 1 GiB published artifact. Audio cleanup affects only the current per-part temporary file; never remove existing `library/` archives to make this build pass. Course progress is localStorage only with manual JSON transfer, no tracking or server-side persistence.
+
+### Learning flow and covers / 学习脉络与封面
+
+`scripts/build_learning_flow.py` derives six routes, sixteen topic branches and three shared starting concepts from the public catalog and index. `catalog.json` owns topic placement, `start` picks, `flow_role` and reading order; these are editorial relationships, not automatically inferred prerequisites. When adding material, read the article and place it where it helps the reader. Preserve the original 51 entries and their URLs.
+
+`flow.html` loads local `assets/flow-data.js`, `flow.js` and `flow.css`; it works under both HTTP and `file://` without a package install or CDN. Original covers are small WebP files named by video identity. Staging allows only catalog-matched covers and referenced inspected frames. Ready card covers and titles open the full reader; pending cards keep a source link and a text fallback. The original directory and flow view share the `search-quality-course-v1` progress store.
+
+Validate route/branch selection, search, back navigation, cover failures, keyboard access, shared progress, pause and reduced-motion behavior. Animations pause in hidden tabs. Check desktop, tablet and phone layouts, then run the full-reader browser checks; keep QA output under ignored `.state/`.
 
 ### Original archive workflow
 

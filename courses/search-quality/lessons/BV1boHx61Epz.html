@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>把经验做成 Skill：从视频初剪到团队工作流 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="skill">把经验做成 Skill：从视频初剪到团队工作流</h1>
+    <div class="meta"><span>卡尔的AI沃茨</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1boHx61Epz/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#skill">把经验做成 Skill：从视频初剪到团队工作流</a><ul>
+<li><a href="#_1">一套工作流有哪些部分</a></li>
+<li><a href="#_2">找现成工具：先把视频问题说具体</a></li>
+<li><a href="#_3">把初剪经验封装，先拿一段口播试</a></li>
+<li><a href="#_4">办公系统：把信息、文档和日程连起来</a></li>
+<li><a href="#35-ai">串联技能：一副假设的 35 克 AI 眼镜</a></li>
+<li><a href="#_5">批量运行以后，还要看它是否正常工作</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1boHx61Epz.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#agent">← Agent 的过程与交付</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1boHx61Epz" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1boHx61Epz-00556.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1boHx61Epz&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1boHx61Epz/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1boHx61Epz"><h1>把经验做成 Skill：从视频初剪到团队工作流</h1>
+<blockquote>
+<p>原标题：去了趟影视飓风分享了我的AI工作流！<br>
+UP 主：卡尔的AI沃茨<br>
+时长：35 分 30 秒<br>
+链接：https://www.bilibili.com/video/BV1boHx61Epz/<br>
+阅读强度：标准</p>
+</blockquote>
+<p>一个可重复的任务，能否把经验记录下来，让智能体下次按同一套方法完成？这次分享从本地视频初剪入手，依次经历寻找现成 skill、整理自己的方法、组合多个 skill，以及批量运行。案例给出了具体的输入和结果，也展示了初剪识别不干净后如何修订。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<h2 id="_1">一套工作流有哪些部分</h2>
+<p>在分享的用法里，agent 接收任务并安排步骤，模型参与理解和生成，skill 保存处理一类任务的说明及可能用到的脚本。MCP 等连接方式可以让工具访问外部服务；规则文件可以记录何时使用哪些流程。各产品的具体支持、权限和配置不同，需要按实际环境检查。<button type="button" class="timecode" data-seconds="195">[00:03:15]</button></p>
+<p>开场的 AI 新闻例子要求整理过去 24 小时值得关注的信息，按阅读偏好排序，写入飞书文档并列出来源。文档中的来源和筛选理由让读者能回头核对。它能节省整理步骤，但来源是否可靠、摘要是否准确，仍需检查原始材料。<button type="button" class="timecode" data-seconds="60">[00:01:00]</button></p>
+<h2 id="_2">找现成工具：先把视频问题说具体</h2>
+<p>假设一场躲猫猫拍摄有大量不同机位素材，人工逐段查找费时，上传所有视频又有成本。需求是先在本地找到值得看的候选片段。搜索从“本地视频”扩大到“视频”，再根据了解到的处理工具改搜 FFmpeg，得到一批候选 skill。<button type="button" class="timecode" data-seconds="310">[00:05:10]</button></p>
+<p>接着请 agent 比较候选说明：是否支持批量处理、是否包含视频索引和抽帧、怎样定位片段。下载量可以帮助发现候选，不能证明安全或适用；安装前还应核对来源、脚本、依赖与权限。agent 给出的比较也需要结合实际文件和小样本验证。<button type="button" class="timecode" data-seconds="371">[00:06:11]</button></p>
+<p>一次测试选取约 20 分钟视频：每 15 秒抽一帧，找出画面里至少三人的位置，剪出该时刻前后各 15 秒，集中保存。结果中有抽帧、命中截图、剪辑清单和片段；示例查看的一张截图框出了三个人。<button type="button" class="timecode" data-seconds="452">[00:07:32]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1boHx61Epz-00556.jpg" data-caption="识别框给出候选人物与置信度，剪辑者可以据此回到这一时刻检查场景。">
+    <img src="../assets/frames/BV1boHx61Epz-00556.jpg" loading="lazy" alt="视频截图 01，00:09:16：识别框给出候选人物与置信度，剪辑者可以据此回到这一时刻检查场景。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="556.000">图 01 · 00:09:16</button><span>识别框给出候选人物与置信度，剪辑者可以据此回到这一时刻检查场景。</span></figcaption>
+</figure>
+<p>这里“画面里有三人”只是筛选条件，不能保证他们正在追逐；每 15 秒抽样也可能错过短暂事件。所得材料适合交给剪辑者复查，单个命中案例不能证明整批素材都检索完整。清单和截图的重要作用是让人能找到对应时间并检查。<button type="button" class="timecode" data-seconds="530">[00:08:50]</button></p>
+<h2 id="_3">把初剪经验封装，先拿一段口播试</h2>
+<p>新的需求是把本地视频整理成可继续编辑的素材：识别静音、重复口播和无效片段，同时尽量保留主要信息。方案组合 FFmpeg、Whisper 生成的带时间文字，以及画面变化检测，形成候选剪辑决策表。可用工具与运行速度取决于电脑环境，实际费用和效果也要单独测量。<button type="button" class="timecode" data-seconds="637">[00:10:37]</button></p>
+<p>把方案整理成一个本地视频剪辑 skill，提供保守、平衡和激进模式，再用一段有反复重录和停顿的口播测试。演示中的原片为 176 秒，自动初剪后 95 秒，报告列出 24 段剪辑区间、原因和时间范围。<button type="button" class="timecode" data-seconds="804">[00:13:24]</button></p>
+<p>播放结果后，开头部分重复录制已被剪掉，较短停顿在平衡模式下有所保留；但多次重录的识别仍偏保守，语音段过长，结果不够干净。于是更新 skill 的处理逻辑。这个过程说明，报告和成片都要看：有表格可解释，并不代表每一处剪辑都符合创作意图。<button type="button" class="timecode" data-seconds="905">[00:15:05]</button></p>
+<p>分享给团队前，补充使用条件、输入文件路径、输出内容、模式参数、依赖和出错处理，并提供一个最小示例。有人只想处理静音，有人更关注重复口播，可以通过参数选择。不同电脑上还需重新确认依赖和结果，保留原始素材以便复查。<button type="button" class="timecode" data-seconds="938">[00:15:38]</button></p>
+<h2 id="_4">办公系统：把信息、文档和日程连起来</h2>
+<p>飞书案例提出一组连续任务：总结群聊过去 24 小时的信息，整理选题相关资料，准备会议和文档，并通知相关人员。执行过程中，智能体先整理文档，发送消息前出现确认；随后展示了日程、会议链接、任务清单及资料文档。<button type="button" class="timecode" data-seconds="1061">[00:17:41]</button></p>
+<p>这里需要区分读取和写入：查看群聊与通讯录已经涉及信息访问；创建日程、发送消息会影响其他人。演示中出现一次发送确认，实际权限与确认行为取决于具体应用和配置，应核对收件人、内容及访问范围，不能由一次确认推断所有操作都已受到保护。<button type="button" class="timecode" data-seconds="1141">[00:19:01]</button></p>
+<h2 id="35-ai">串联技能：一副假设的 35 克 AI 眼镜</h2>
+<p>第三阶段以假设产品为例，先生成品牌长文，再整理出短广告语，例如“35 克，把 AI 带进日常”。设定中的重量和功能是创作输入，不能当作经过测量的真实产品参数。天平和羽毛成为贯穿视觉素材的表达。<button type="button" class="timecode" data-seconds="1234">[00:20:34]</button></p>
+<p>接着根据文案生成多张海报和眼镜视图，选取画面组成短片分镜：黑色背景中出现天平、羽毛和问号，随后引出眼镜与标语。生成素材可帮助讨论方向，正式使用前仍需审阅文字、画面细节以及涉及的事实。<button type="button" class="timecode" data-seconds="1383">[00:23:03]</button></p>
+<p>口播版本再加入透明背景的文字动画，用 FFmpeg 与原视频合成，并提出“文字不要遮挡人脸”的要求。最后把广告视频、海报与标语交给网页制作流程，展示首屏、视频和产品场景，并查看桌面与移动端截图。每一步的输出都成为下一步输入，重要的是交接时说清素材路径、要求和检查标准。<button type="button" class="timecode" data-seconds="1568">[00:26:08]</button></p>
+<p>当流程逐渐稳定，可把触发条件、调用顺序与偏好写入适用的规则文件，供后续任务读取；新会话实际能否读取，取决于工具配置和作用范围。<button type="button" class="timecode" data-seconds="1815">[00:30:15]</button></p>
+<h2 id="_5">批量运行以后，还要看它是否正常工作</h2>
+<p>最后一个例子收集 B 站和小红书相关内容及评论，整理用户对 agent 和 skill 的常见疑问，生成调研文档，并保存样本信息。演示报告耗时约 22 分钟；结果反映所选平台、时间和样本，不能代表所有用户，也需要核对采集范围、原始评论及平台规则。<button type="button" class="timecode" data-seconds="1891">[00:31:31]</button></p>
+<p>定时任务可能遇到额度耗尽、网络中断或远程电脑重启。分享者使用另一个工具排查没有回复的服务，询问任务是否仍在运行。自动化越多，越需要知道输出在哪里、失败时如何发现、什么情况下需要人工介入。<button type="button" class="timecode" data-seconds="2007">[00:33:27]</button></p>
+<h2 id="_6">总结提炼</h2>
+<p>从本地视频查找开始：定义画面条件，搜索并比较工具，用短片验证；再把剪辑规则、输入输出与依赖整理成可分享的 skill。多个 skill 可以沿文案、海报、视频和网页串联，稳定后再考虑批量与定时。</p>
+<h2 id="_7">时间导航</h2>
+<p>寻找视频工具 <button type="button" class="timecode" data-seconds="286">[00:04:46]</button>；抽帧初剪 <button type="button" class="timecode" data-seconds="452">[00:07:32]</button>；口播测试与修订 <button type="button" class="timecode" data-seconds="804">[00:13:24]</button>；办公系统 <button type="button" class="timecode" data-seconds="1061">[00:17:41]</button>；品牌素材 <button type="button" class="timecode" data-seconds="1234">[00:20:34]</button>；批量调研与排障 <button type="button" class="timecode" data-seconds="1891">[00:31:31]</button>。</p>
+<h2 id="_8">复习</h2>
+<p>每 15 秒抽一帧会漏掉什么？把你的流程分享给同事，需要写清哪些输入和依赖？自动生成的调研报告怎样回到原始证据？</p></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "去了趟影视飓风分享了我的AI工作流！", "duration": "35:30", "src": "", "poster": "../assets/frames/BV1boHx61Epz-00556.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大宗商品超级周期：一条关于货币、需求与供给的推演 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">大宗商品超级周期：一条关于货币、需求与供给的推演</h1>
+    <div class="meta"><span>Mask的小酒馆</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1qQsX6yEQz/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">大宗商品超级周期：一条关于货币、需求与供给的推演</a><ul>
+<li><a href="#_2">两轮历史周期：货币、需求和供给如何叠加</a></li>
+<li><a href="#_3">当下推演依赖哪些前提</a></li>
+<li><a href="#_4">为什么价格可能分批传导</a></li>
+<li><a href="#_5">把周期判断当作条件链，而非收益承诺</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1qQsX6yEQz.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#finance">← 经济与财务</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1qQsX6yEQz" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1qQsX6yEQz-00145.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1qQsX6yEQz&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1qQsX6yEQz/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1qQsX6yEQz"><h1>大宗商品超级周期：一条关于货币、需求与供给的推演</h1>
+<blockquote>
+<p>来源：<strong>大宗商品的超级周期要来了</strong>｜UP 主：Mask的小酒馆｜时长：13:39｜<a href="https://www.bilibili.com/video/BV1qQsX6yEQz/">Bilibili 原视频</a>｜阅读强度：standard</p>
+</blockquote>
+<p>黄金、铜、石油、天然气、化肥和粮食的价格，可能会被同一轮经济力量依次推动吗？视频给出的判断是：大宗商品超级周期已经开始，原因可从三个方向理解——货币与美元、实体需求、供给扩张速度。演讲者把当下与 1970 年代、2000 年代的商品上涨阶段作比较，再推演贵金属、工业金属、能源、化工和农产品可能出现的先后次序。<button type="button" class="timecode" data-seconds="9">[00:00:09]</button></p>
+<p>这是一套宏观市场推演。文中价格、预测和供需数字均按演讲者引用的时间与口径转述；它们用于理解推演条件，不构成个人化投资建议或收益保证。</p>
+<h2 id="_2">两轮历史周期：货币、需求和供给如何叠加</h2>
+<p>演讲者先回到 1971 年。布雷顿森林体系下，美元按每盎司黄金 35 美元兑换，其他货币再与美元挂钩；这个安排限制了美元发行。美国越战期间财政支出增加，黄金储备难以支撑更多美元。1971 年 8 月，尼克松政府关闭黄金兑换窗口，美元与黄金脱钩。视频引用的历史价格是：油价从每桶约 3 美元升至 1980 年前后的约 36 美元，黄金从每盎司 35 美元涨到 1980 年 1 月约 850 美元。演讲者把货币约束减弱视为上涨的重要背景，同时也承认这十年间出现过两次石油危机。<button type="button" class="timecode" data-seconds="138">[00:02:18]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1qQsX6yEQz-00145.jpg" data-caption="布雷顿森林体系示意图把美元、黄金与其他货币的关系放在一起。">
+    <img src="../assets/frames/BV1qQsX6yEQz-00145.jpg" loading="lazy" alt="视频截图 01，00:02:25：布雷顿森林体系示意图把美元、黄金与其他货币的关系放在一起。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="145.000">图 01 · 00:02:25</button><span>布雷顿森林体系示意图把美元、黄金与其他货币的关系放在一起。</span></figcaption>
+</figure>
+<p>这段历史提供的机制是：当货币购买力下降、石油金属和农作物的供给又难以快速增加，以美元标价的商品可能变贵。油价上涨还处在两次石油危机的背景下，因此这段历史不能单由货币变化解释。</p>
+<p>第二个例子是 2000 至 2011 年。视频把这一轮拆成三根支柱。第一是货币：互联网泡沫和“9·11”事件之后，美联储降息，2003 至 2004 年利率一度维持在 1%，次贷危机期间又降到接近零，美元指数随之走弱。第二是需求：中国加入世贸组织后进入高速工业化和城镇化阶段，盖楼、修路、建设工厂都需要钢铁、铜、铝、水泥和石油。第三是供给：大宗商品价格低迷的 1990 年代，矿业投资不足；需求在 2000 年后快速上升时，新矿的建设速度赶不上消费增长。<button type="button" class="timecode" data-seconds="293">[00:04:53]</button></p>
+<p>演讲者举例称，2008 年 7 月原油达到每桶 147 美元；铜价从 2002 年每吨约 1,500 美元升到 2011 年超过 10,000 美元，黄金也从每盎司约 250 美元升到约 1,900 美元。供给有建设周期：矿价低迷时投资减少，需求转强后也需要多年才能形成新产能，短期供需因此更容易错位。<button type="button" class="timecode" data-seconds="318">[00:05:18]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1qQsX6yEQz-00325.jpg" data-caption="城市建设、道路与工厂共同构成工业化阶段的原材料需求。">
+    <img src="../assets/frames/BV1qQsX6yEQz-00325.jpg" loading="lazy" alt="视频截图 02，00:05:25：城市建设、道路与工厂共同构成工业化阶段的原材料需求。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="325.000">图 02 · 00:05:25</button><span>城市建设、道路与工厂共同构成工业化阶段的原材料需求。</span></figcaption>
+</figure>
+<h2 id="_3">当下推演依赖哪些前提</h2>
+<p>视频认为，政府债务增加会让货币政策面临两难：削减支出或提高偿债压力，可能带来经济冲击；持续借新债又会扩大债务负担。演讲者据此推断，政府会倾向于继续发行债务和增加流动性，美元购买力因此承压。随后，他把商品视为稀缺实物资产，认为资金会流向黄金、铜、石油和粮食等品类。<button type="button" class="timecode" data-seconds="38">[00:00:38]</button></p>
+<p>债务水平高本身不能决定政策选择，也不能说明新增资金一定流入大宗商品。演讲者引用的美国债务、利息支出和美联储资产负债表数据对应录制时的口径；这条推演还依赖货币政策偏宽松、美元走弱和投资者愿意配置商品等条件。<button type="button" class="timecode" data-seconds="61">[00:01:01]</button></p>
+<p>演讲者提出的第二个当下变量是资产安全。俄罗斯央行外汇储备在俄乌冲突后遭冻结，使部分国家重新衡量将储备放在外国金融机构中的风险。视频援引的央行购金数字称，2022 至 2024 年全球央行每年净买入黄金超过 1,000 吨，2025 年约 850 吨；另引用欧洲央行报告，称 2025 年底黄金约占全球官方储备的 27%，高于美国国债和欧元的占比。演讲者据此认为，部分新兴经济体若提高黄金储备比例，可能增加官方买盘。这是“资产安全担忧持续、储备配置继续调整”的条件性推演，买入规模和时点仍取决于各国实际决策。<button type="button" class="timecode" data-seconds="193">[00:03:13]</button></p>
+<p>第三个变量是需求结构。上一轮主要由中国工业化拉动，这一轮则被视频归因于 AI 数据中心、新能源汽车、光伏、风电和电网升级。电动车、发电输电设施和数据中心配套线路都需要铜。视频引用的估计称，一个 100 兆瓦数据中心约需 4,700 吨铜，当年数据中心铜需求约 47.5 万吨；新铜矿从发现到投产平均约 17 年，全球铜矿供应增速约 1.4%，多家机构预计精炼铜会出现缺口。前两项是项目和年度需求估计，后两项涉及矿业周期与供应预测；涨价推演要成立，仍需实际建设达到预期且新矿不能及时补上供给。<button type="button" class="timecode" data-seconds="365">[00:06:05]</button></p>
+<p>视频再把货币、美元、实体需求和供给限制合并为四项条件，并据此判断新一轮周期已经具备基础。数据中心建设放缓、新矿投产快于预期、利率或美元走势改变、经济活动减弱，都会削弱这条推演中的价格压力。<button type="button" class="timecode" data-seconds="426">[00:07:06]</button></p>
+<h2 id="_4">为什么价格可能分批传导</h2>
+<p>在视频的次序里，贵金属最先响应金融预期。黄金和白银交易广泛，容易被投资者用来表达对通胀、美元和资产安全的判断。视频引用的黄金行情从 2022 年初每盎司约 1,800 美元开始，期间升至更高水平，也经历短时回落；演讲者提醒，历史上的上涨阶段同样出现过超过 20% 的回调。这个例子说明，即使一个人相信长期供需逻辑，价格路径仍可能剧烈波动，回调本身不能证明周期继续或结束。<button type="button" class="timecode" data-seconds="450">[00:07:30]</button></p>
+<p>第二步是工业金属。经济活动、基建、电动车和电网扩建会增加铜铝需求。铜矿开发周期长，使短期新增供给较难跟上突然增加的需求。铝则同时受成本与需求影响：视频称能源成本约占铝生产成本的四成，电价上升会抬高生产成本；新能源汽车轻量化、光伏支架、建筑门窗和航空航天也是它的需求来源。若冶炼厂受损，供应还可能短时收缩。铜、铝、锌、镍和铅并不会因此同步同幅上涨，具体差异仍看各自的库存、产能、消费用途和替代关系。<button type="button" class="timecode" data-seconds="524">[00:08:44]</button></p>
+<p>第三步是能源。工厂、运输和数据中心运转会消耗能源。视频认为，疫情前批准的油田项目投产、欧佩克逐步放松减产，使近期供应看起来较宽松；但 2020 年后上游投资减少，老油田产能释放完后，新增供应可能放慢。若需求继续增长、投资恢复仍慢，供给可能转紧。霍尔木兹海峡是另一风险变量：演讲者用冲突期间油气运输受阻、油价上涨和储备释放的案例，说明地缘事件可能迅速影响现货供应。<button type="button" class="timecode" data-seconds="592">[00:09:52]</button></p>
+<p>天然气在这套逻辑里同时承担能源和电力调峰角色。风电、光伏发电量随天气变化，低风、无日照时需要其他电源补足，天然气发电是可快速调整的方式之一。演讲者认为，新能源扩张不一定让天然气需求消失；若 LNG 设施受损、供应恢复需要数年，短期缺口可能延续。电网、储能、其他电源和 LNG 产能都会影响结果。<button type="button" class="timecode" data-seconds="667">[00:11:07]</button></p>
+<p>最后才轮到化工和农产品。石油是乙烯、丙烯等石化产品的上游原料，相关成本可以传到农药和农膜；天然气则是合成氨、尿素等氮肥的重要原料和燃料。视频称天然气占氮肥生产成本的七成以上。肥料、农药、农膜和柴油成本上升后，农户要在之后的种植季采购投入品；最终粮价还要看播种、产量和库存，因此传导晚于能源价格。<button type="button" class="timecode" data-seconds="692">[00:11:32]</button></p>
+<p>视频还对比中国与日本：它认为国内储备粮、最低收购价和进口配额会缓冲国际粮价向餐桌传导；日本则出现过超市大米价格显著上涨的阶段。这个对照强调政策与市场结构会改变终端价格，农产品最后传导也不代表所有国家的消费者会受到同样冲击。视频给出的日本米价、国际尿素和化肥指数数字，都是特定时间与市场范围的记录，需同具体统计口径一起理解。<button type="button" class="timecode" data-seconds="737">[00:12:17]</button></p>
+<h2 id="_5">把周期判断当作条件链，而非收益承诺</h2>
+<p>整段推演可以压缩为：债务和货币预期影响美元与资金配置；实体产业带动金属和能源需求；矿山、油田和 LNG 项目建设周期较长，供给调整落后；能源和化工成本再传到化肥、种植成本和部分粮食价格。上一环节可能影响下一环节，但每一步都要经过需求、库存、政策、生产周期和替代供给的检验。</p>
+<p>视频结尾把“踩中周期”说成改变财富的重要机会，同时提醒别追涨杀跌。阅读这条逻辑时，可以分别检查货币、需求和供给的证据，再看商品之间的传导时间、地区政策与回调幅度。<button type="button" class="timecode" data-seconds="769">[00:12:49]</button></p>
+<h2 id="_6">总结提炼</h2>
+<ul>
+<li>演讲者用货币预期、实体需求和供给响应周期解释大宗商品历史上涨，并将其与当下类比。</li>
+<li>当下推演依赖债务继续扩大、储备配置偏向黄金、AI 与新能源需求增长、矿山和能源供给受限等条件。</li>
+<li>他设想的传导顺序是贵金属、工业金属、能源、化工与农产品；各品类的实际节奏仍取决于库存、政策和供需。</li>
+<li>每个品类的上涨仍需对应条件成立，价格路径也会受政策、库存与周期扰动。</li>
+</ul>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="38">[00:00:38]</button> 债务、货币扩张与商品价格的基本推演</li>
+<li><button type="button" class="timecode" data-seconds="138">[00:02:18]</button> 1971 年美元与黄金脱钩后的商品价格变化</li>
+<li><button type="button" class="timecode" data-seconds="193">[00:03:13]</button> 储备安全与央行购金逻辑</li>
+<li><button type="button" class="timecode" data-seconds="293">[00:04:53]</button> 2000—2011 年货币、需求和供给三项因素</li>
+<li><button type="button" class="timecode" data-seconds="365">[00:06:05]</button> AI、新能源、电网需求与铜矿供应周期</li>
+<li><button type="button" class="timecode" data-seconds="450">[00:07:30]</button> 贵金属、工业金属、能源、化工和农产品的假设顺序</li>
+<li><button type="button" class="timecode" data-seconds="692">[00:11:32]</button> 能源成本传到化肥与粮食的时间差</li>
+<li><button type="button" class="timecode" data-seconds="769">[00:12:49]</button> 把周期判断当作条件链来阅读</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>2000—2011 年的上涨推演分别依赖哪些货币、需求和供给条件？</li>
+<li>为什么铜矿与农业生产的周期会让供需压力分阶段显现？</li>
+<li>视频提出的四波传导顺序，各自还依赖哪些可能变化的条件？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "大宗商品的超级周期要来了", "duration": "13:39", "src": "", "poster": "../assets/frames/BV1qQsX6yEQz-00145.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

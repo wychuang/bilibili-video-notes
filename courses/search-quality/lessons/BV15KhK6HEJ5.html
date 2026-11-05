@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>对一个题目感兴趣，怎么找到它的来路？ · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">对一个题目感兴趣，怎么找到它的来路？</h1>
+    <div class="meta"><span>盛堪白</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV15KhK6HEJ5/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">对一个题目感兴趣，怎么找到它的来路？</a><ul>
+<li><a href="#_2">从大词出发，把研究方向拆开</a></li>
+<li><a href="#_3">把兴趣缩小，再沿参考文献寻找</a></li>
+<li><a href="#_4">找到当时的材料，也寻找更早的版本</a></li>
+<li><a href="#_5">从人物与材料连接过去和现在</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV15KhK6HEJ5.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 调研、信息源与推理</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV15KhK6HEJ5" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV15KhK6HEJ5-00340.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV15KhK6HEJ5&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV15KhK6HEJ5/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV15KhK6HEJ5"><h1>对一个题目感兴趣，怎么找到它的来路？</h1>
+<blockquote>
+<p>原标题：如果我对一个东西感兴趣，我要怎么找到它的谱系？<br>
+UP 主：盛堪白<br>
+时长：24 分 59 秒<br>
+链接：https://www.bilibili.com/video/BV15KhK6HEJ5/<br>
+阅读强度：标准</p>
+</blockquote>
+<p>假如你很喜欢梁祝，想把它写成论文，第一反应可能是去数据库搜索“梁祝”。结果会出来许多论文：有的讨论民间传说，有的讨论戏曲，还有电影、电视剧和其他改编。你把感兴趣的文章一篇篇下载下来，却仍然不知道自己究竟想回答什么问题。老师说“题目太大”，难处就在这里：兴趣给了我们方向，距离一个可以研究的问题还有一段路。<button type="button" class="timecode" data-seconds="21">[00:00:21]</button></p>
+<p>盛堪白以自己查找梁祝资料的经历，介绍怎样从宽泛兴趣逐渐找到研究对象。她把要寻找的“谱系”分成三处：现在有哪些人从哪些角度研究；更早的文本和材料在哪里；从早期到现在经历了哪些变化，中间有哪些值得追问的人、作品和节点。这三处可以反复往返：读到一篇当代论文，可能顺着参考文献回到旧报刊；看到旧报刊，又可能发现新的检索词。<button type="button" class="timecode" data-seconds="214">[00:03:34]</button></p>
+<h2 id="_2">从大词出发，把研究方向拆开</h2>
+<p>“梁祝”是一个好起点，因为它能把相关资料聚拢起来；它也同时指向太多对象。我们想知道的是故事在不同地区的流传，还是不同剧种怎样改编，或者某个时代的舞台演出？这些问题使用的材料和观察角度都不同。刚开始不知道自己喜欢哪一部分，可以先容许关键词宽一点，用搜索结果认识这片范围。<button type="button" class="timecode" data-seconds="278">[00:04:38]</button></p>
+<p>在知网检索“梁祝”，可以看相关度、发表时间等排序，也可以留意侧边列出的主题。盛堪白曾逐页翻看并下载感兴趣的论文，但材料多并不自动带来结构：即使缩到核心论文，仍有许多文章需要分辨。搜索结果给我们一堆入口，接下来的工作是识别这些入口分别通向什么问题。<button type="button" class="timecode" data-seconds="334">[00:05:34]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15KhK6HEJ5-00340.jpg" data-caption="检索时把人物、作品或主题拆成关键词，再调整搜索范围。">
+    <img src="../assets/frames/BV15KhK6HEJ5-00340.jpg" loading="lazy" alt="视频截图 01，00:05:40：检索时把人物、作品或主题拆成关键词，再调整搜索范围。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="340.000">图 01 · 00:05:40</button><span>检索时把人物、作品或主题拆成关键词，再调整搜索范围。</span></figcaption>
+</figure>
+<p>一个做法是把大词周围共同出现的词拆出来。围绕梁祝，民间文学、民俗学可能关注传说和版本变化；文艺研究可能关注情节母题和叙事；艺术传播可以看戏曲、电影等不同形式；比较文学则可能把它和其他作品并置。这里的“母题”可以理解为故事中反复出现、能够拿来比较的情节或元素。诸如“十八相送”“楼台相会”、越剧，以及与《罗密欧与朱丽叶》的比较，都可以成为继续寻找的线索。<button type="button" class="timecode" data-seconds="422">[00:07:02]</button></p>
+<p>AI 工具能帮助初步列出这些方向，有的还把分类画成思维导图，供人观察一个大问题可能怎样分叉。但分类看上去完整，并不保证用到的文献重要或结论正确。盛堪白提到自己见过工具从很边缘的材料得出概括。更可靠的用法是把输出当作待核对的词表：拿一个研究方向或关键词回到数据库，找到文章，读原文后再判断分类是否贴合。<button type="button" class="timecode" data-seconds="459">[00:07:39]</button> <button type="button" class="timecode" data-seconds="594">[00:09:54]</button></p>
+<h2 id="_3">把兴趣缩小，再沿参考文献寻找</h2>
+<p>随着阅读推进，兴趣本身也会变化。盛堪白起初对古典文献、宝卷和说唱文本感兴趣，后来发现自己更想了解民国时期梁祝在舞台上的呈现。这样，原来的大词多了时间和材料范围：从有关梁祝的一切，收窄到一个时期的戏曲舞台。这个范围仍可以继续细分，但已经让下一轮查找有了方向。<button type="button" class="timecode" data-seconds="632">[00:10:32]</button></p>
+<p>再围绕这个较小的方向看研究，可以接触戏曲史、不同地方剧种的改编、当时留下的文本，以及越剧与女性身份和社会文化的联系。她还在豆瓣找到一部梁祝戏剧文本汇编，先看目录，注意到其中有明代传奇和地方剧种的文本。看目录的作用，是先弄清一本书收了哪些材料，再判断哪些部分值得深入读；书目线索仍需回到书本身核对。<button type="button" class="timecode" data-seconds="678">[00:11:18]</button></p>
+<p>缩小范围以后，也要记得换词。盛堪白特别关注一篇研究二十世纪五十年代梁祝热与越剧流行的论文；如果检索时始终要求结果包含“民国”，就可能漏掉这篇有启发的文章。时间词帮助减少无关结果，也会把不含该词的材料排除在外。可以围绕人物、剧种、年代、演出和传播等不同角度变换组合，看看每次找到了什么、漏掉了什么。<button type="button" class="timecode" data-seconds="758">[00:12:38]</button></p>
+<p>找到一篇真正相关的论文后，不妨留意它的参考文献。参考文献让我们看到作者讨论这个问题时使用过哪些资料，也为继续追查提供书名、文章和报刊线索。盛堪白从相关文章的参考资料中看到民国报刊，接下来便转去找当时的报道和演出信息。这里的关键动作是沿着一篇具体文章往外走，逐项辨认那些材料与自己的问题有什么关系。<button type="button" class="timecode" data-seconds="816">[00:13:36]</button></p>
+<h2 id="_4">找到当时的材料，也寻找更早的版本</h2>
+<p>研究当时的舞台，除了后来的研究论文，还可以找当时留下的报刊和唱词。盛堪白举出自己使用浙江公共图书馆数据库的经验：在全国报刊索引的入口里搜索“梁祝”“越剧”，找到《梁祝哀史》相关的越剧唱词，并注意到袁雪芬的名字。打开扫描资料后，可以直接阅读其中的唱词，再回到自己的问题，观察它与舞台呈现有什么关系。数据库馆藏和访问条件会变化，使用时要以相应图书馆当前提供的入口为准。<button type="button" class="timecode" data-seconds="875">[00:14:35]</button> <button type="button" class="timecode" data-seconds="960">[00:16:00]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV15KhK6HEJ5-00963.jpg" data-caption="旧报纸检索结果按日期列出与越剧《梁祝》有关的报道，便于继续回到具体史料。">
+    <img src="../assets/frames/BV15KhK6HEJ5-00963.jpg" loading="lazy" alt="视频截图 02，00:16:03：旧报纸检索结果按日期列出与越剧《梁祝》有关的报道，便于继续回到具体史料。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="963.000">图 02 · 00:16:03</button><span>旧报纸检索结果按日期列出与越剧《梁祝》有关的报道，便于继续回到具体史料。</span></figcaption>
+</figure>
+<p>另一条线索通向早期文本。以“梁山伯”为词搜索古籍资料，可以找到民国时期的《梁山伯宝卷》等材料。找到一个历史版本，给比较提供了具体对象；它本身还不能证明就是故事的最早原点。接下来需要继续看版本的年代、内容和相关研究，才能进一步讨论不同文本之间的关系。资料平台让读者更容易接触到过去难找的材料，阅读和辨别仍然需要自己完成。<button type="button" class="timecode" data-seconds="1008">[00:16:48]</button></p>
+<p>关键词发生偏差时，结果也可能偏离问题。盛堪白想查的是宁波一带关于梁祝的地方传说，尤其记得一个区分蝴蝶颜色的细节；提问时却误写成了“民歌”。工具提供了报告和检索结果表，里面有一些地方传说，却没有找到她真正想找的那条材料。这个例子提醒我们先检查自己问的是什么，再逐项核对结果是否属于所要的材料类型。即便修改了关键词，能否找到具体文献仍要看资料范围和检索结果。<button type="button" class="timecode" data-seconds="1103">[00:18:23]</button></p>
+<h2 id="_5">从人物与材料连接过去和现在</h2>
+<p>知道当代研究，也见到较早的文本之后，还可以追问它们之间发生了什么。前面报刊材料里出现的袁雪芬，就是一条人物线索。围绕这个名字继续寻找，可以接触书籍、资料汇编和回忆等不同材料。不同材料回答的问题不一样：研究论文可能提供对某个问题的解释，回忆和其他记录则可能提供关于人物或现场的细节；阅读时要注意材料形成的时间、作者和视角。<button type="button" class="timecode" data-seconds="1218">[00:20:18]</button></p>
+<p>盛堪白还提到使用读秀查书，以及在公众号搜索“梁祝”“五十年代”，发现相关研究文章和个人回忆。对于舞台研究，除了文字和唱词，也可以留意相关音频、视频。它们能让我们从更多角度接近演出，但一段回忆或一份转发材料的具体年代、出处仍需要继续核实。这样，新的材料又会给出新的名字、时期和关键词，让查找继续往前走。<button type="button" class="timecode" data-seconds="1264">[00:21:04]</button> <button type="button" class="timecode" data-seconds="1342">[00:22:22]</button></p>
+<h2 id="_6">总结提炼</h2>
+<ul>
+<li>先从宽泛兴趣认识研究方向，再结合时间、材料和自己的问题缩小范围。</li>
+<li>AI 生成的分类和关键词适合用来继续搜索；具体论断需要回到可核对的文献。</li>
+<li>参考文献、报刊、古籍、人物与回忆可以互相引出线索，每种材料都要看其出处和条件。</li>
+<li>检索词会影响结果。某个词找不到目标时，检查问题表达并换角度继续寻找。</li>
+</ul>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="214">[00:03:34]</button> 现在、原点与中间的来路</li>
+<li><button type="button" class="timecode" data-seconds="334">[00:05:34]</button> 从梁祝检索结果拆出研究方向</li>
+<li><button type="button" class="timecode" data-seconds="632">[00:10:32]</button> 把兴趣收窄到民国戏曲舞台</li>
+<li><button type="button" class="timecode" data-seconds="816">[00:13:36]</button> 顺着参考文献找报刊</li>
+<li><button type="button" class="timecode" data-seconds="1008">[00:16:48]</button> 古籍材料与关键词偏差</li>
+<li><button type="button" class="timecode" data-seconds="1218">[00:20:18]</button> 追索人物、书籍和回忆</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>“梁祝”为什么是有用的起点，又为什么还需要进一步限定？</li>
+<li>AI 给出的研究方向与实际论文之间，还需要经过哪些阅读和核对？</li>
+<li>一篇论文的参考文献怎样帮助寻找报刊材料？</li>
+<li>“民歌”和地方传说的检索偏差，说明了提问时什么问题？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "如果我对一个东西感兴趣，我要怎么找到它的谱系？", "duration": "24:59", "src": "", "poster": "../assets/frames/BV15KhK6HEJ5-00340.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

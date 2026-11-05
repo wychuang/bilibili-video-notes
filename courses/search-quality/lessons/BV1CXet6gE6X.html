@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从课程报名看架构设计：把规则、流程和数据库分开 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">从课程报名看架构设计：把规则、流程和数据库分开</h1>
+    <div class="meta"><span>Hucci写代码</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1CXet6gE6X/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">从课程报名看架构设计：把规则、流程和数据库分开</a><ul>
+<li><a href="#_2">先辨认报名过程里的职责</a></li>
+<li><a href="#_3">把“能否报名”放进课程模型</a></li>
+<li><a href="#service">Service 安排流程，接口约定需要什么</a></li>
+<li><a href="#_4">接口接收请求，入口负责组装</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">时间导航</a></li>
+<li><a href="#_7">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1CXet6gE6X.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#engineering">← 软件工程与架构</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1CXet6gE6X" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1CXet6gE6X-00115.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1CXet6gE6X&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1CXet6gE6X/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1CXet6gE6X"><h1>从课程报名看架构设计：把规则、流程和数据库分开</h1>
+<blockquote>
+<p>原标题：5 分钟学会写架构设计<br>
+UP 主：Hucci写代码<br>
+时长：6 分 50 秒<br>
+链接：https://www.bilibili.com/video/BV1CXet6gE6X/<br>
+阅读强度：标准</p>
+</blockquote>
+<p>一个学生要报名一门课程。系统收到请求后，需要找到这个学生和这门课，判断课程还有没有名额、学生是否已经报过名；条件满足时，把学生加入名单，再保存结果。假如课程满了，系统需要告诉请求方报名失败。这些动作很容易被写进同一个函数：前半段查询数据库，中间穿插判断，后面保存数据或返回 HTTP 错误。<button type="button" class="timecode" data-seconds="3">[00:00:03]</button></p>
+<p>这样的函数可以工作，但当我们只想理解“什么条件下允许报名”时，要先从数据库查询和接口错误处理之间找出那几条判断。测试课程已满时，如果规则和数据库连接紧紧放在一起，测试也可能需要先准备数据库。将来更换数据库时，散落在流程里的查询语句也需要逐处检查。课程报名给了我们一个很小的例子，观察怎样把这些不同的工作分开。<button type="button" class="timecode" data-seconds="18">[00:00:18]</button></p>
+<h2 id="_2">先辨认报名过程里的职责</h2>
+<p>报名规则关心的是课程和学生：课程已满就不能再加人，同一个学生也不能重复报名。编排流程关心这些工作何时发生：先取出学生和课程，再执行报名规则，最后保存结果。接口关心外部怎样发起请求、怎样得到响应；数据库操作关心数据怎样读取和保存。四项工作共同完成一次报名，却回答着不同的问题。<button type="button" class="timecode" data-seconds="53">[00:00:53]</button></p>
+<p>我们把它们分别放在 Domain、Service、API 和 DB 四层。Domain 是领域层，保存报名涉及的对象和规则；Service 是服务层，安排一次报名要调用哪些工作；API 是系统接收外部请求的入口；DB 负责具体的数据读写。这里的“层”帮助我们观察代码职责，并不意味着所有项目都必须建出同样数量的文件。这个示例拆分后代码和文件会变多；是否值得这样划分，要结合项目的变化和维护需要判断。<button type="button" class="timecode" data-seconds="65">[00:01:05]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1CXet6gE6X-00115.jpg" data-caption="四层分别承担接口调用、数据库操作、流程编排和领域规则。">
+    <img src="../assets/frames/BV1CXet6gE6X-00115.jpg" loading="lazy" alt="视频截图 01，00:01:55：四层分别承担接口调用、数据库操作、流程编排和领域规则。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="115.000">图 01 · 00:01:55</button><span>四层分别承担接口调用、数据库操作、流程编排和领域规则。</span></figcaption>
+</figure>
+<p>图里的关系值得仔细区分。代码依赖讲的是一个模块需要认识哪些定义：在此设计中，API 和 DB 分别依赖 Service 中的定义，Service 依赖 Domain；具体数据库实现遵守 Service 所声明的接口。一次请求运行时的调用顺序却从 API 进入 Service，再由 Service 调用数据库读取、调用领域规则，并让数据库保存结果。运行时 Service 会调用数据库提供的方法，这不要求 Service 的代码直接依赖某个具体数据库类。<button type="button" class="timecode" data-seconds="113">[00:01:53]</button></p>
+<h2 id="_3">把“能否报名”放进课程模型</h2>
+<p>领域层先建立两个模型：<code>Student</code> 表示学生，<code>Course</code> 表示课程。学生有编号和姓名；当前报名流程主要用编号，姓名在这个小例子里没有承担关键判断。课程有编号、容量和已经报名的学生名单。模型就是用程序中的对象表达当前问题需要的信息，让规则能够对这些信息进行判断。<button type="button" class="timecode" data-seconds="132">[00:02:12]</button></p>
+<p>报名行为放在 <code>Course</code> 对象中，因为成功报名会改变课程的学生名单。先看名单人数是否达到或超过容量；达到时抛出课程已满的异常。异常可以理解成程序用来表达特定失败情况的一种方式。未满时，再看学生是否已经在名单里；已经存在就抛出重复报名的异常。两个条件都没有触发时，才把学生加入名单，表示课程对象的报名状态发生了变化。按这段判断顺序，课程已满时会先遇到满员异常。<button type="button" class="timecode" data-seconds="155">[00:02:35]</button></p>
+<p>这段规则只需要课程容量、名单和要报名的学生。我们可以针对一个课程对象检查：容量已满时是否出现相应异常，学生已在名单时是否被拒绝，条件满足时名单是否增加该学生。规则与数据库连接分开后，检查这些领域行为时就可以直接准备所需对象。这里选择把报名方法放进课程类，是因为当前行为主要改变课程；其他用例也可以选择把行为放在类外，具体取决于要表达的关系。<button type="button" class="timecode" data-seconds="186">[00:03:06]</button></p>
+<h2 id="service">Service 安排流程，接口约定需要什么</h2>
+<p>有了报名规则，还需要有人安排完整的操作。Service 接收一个数据库对象，先从中取得对应的学生和课程，再调用课程对象的报名方法，成功后把更新后的课程保存回去。报名方法抛出异常时，流程会转去处理失败，不会沿成功路径继续保存。这样，Service 描述的是一次报名的工作顺序；课程能否接受学生的判断仍留给 Domain。<button type="button" class="timecode" data-seconds="198">[00:03:18]</button></p>
+<p>一个问题随之出现：Service 还没有确定用 SQLite 还是 PostgreSQL，怎么知道数据库对象能做什么？做法是在 Service 一侧定义一个 <code>Database</code> 接口。接口在这里是一份约定：数据库实现要提供 <code>get_student</code>、<code>get_course</code> 和 <code>save_course</code>，分别供流程读取学生、读取课程和保存课程。接口先说明需要哪些操作，具体如何查询和保存留给实现。<button type="button" class="timecode" data-seconds="218">[00:03:38]</button></p>
+<p>代码使用 <code>ABC</code> 和 <code>abstractmethod</code> 声明这些抽象方法。可以先把它理解为：<code>Database</code> 规定实现者需要补齐哪些方法，Service 按约定使用这些方法。图中可以看到接口声明与从 Domain 导入的 <code>Course</code>、<code>Student</code>；三个方法让流程讨论学生和课程，而不必把某一种数据库的查询细节写进流程。<button type="button" class="timecode" data-seconds="237">[00:03:57]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1CXet6gE6X-00238.jpg" data-caption="Service 中的 Database 抽象声明读取学生、读取课程和保存课程的方法。">
+    <img src="../assets/frames/BV1CXet6gE6X-00238.jpg" loading="lazy" alt="视频截图 02，00:03:58：Service 中的 Database 抽象声明读取学生、读取课程和保存课程的方法。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="238.000">图 02 · 00:03:58</button><span>Service 中的 Database 抽象声明读取学生、读取课程和保存课程的方法。</span></figcaption>
+</figure>
+<p>DB 层随后导入这个接口，继承它，并实现约定的三个方法。SQLite 实现可以有自己的数据库语句，PostgreSQL 实现也可以有不同的语句；只要它们提供符合约定的操作，Service 就能沿用同一套报名流程。这里所谓“依赖倒置”，指 Service 不把自己绑死在具体数据库实现上，具体实现转而遵守 Service 需要的抽象。抽象表达流程需要的能力，数据库类提供具体做法。<button type="button" class="timecode" data-seconds="249">[00:04:09]</button></p>
+<p>这也解释了为什么运行调用和代码依赖可以朝不同方向：运行时，Service 通过接口调用传进来的数据库对象；看代码结构，具体 DB 实现要认识并实现 Service 所定义的接口。流程知道“需要读取课程”，无需因此写死“只能由 SQLite 的某个类完成读取”。接口也需要被正确实现，方法名字相同只是约定的一部分，实际行为仍需符合报名流程的需要。<button type="button" class="timecode" data-seconds="277">[00:04:37]</button></p>
+<h2 id="_4">接口接收请求，入口负责组装</h2>
+<p>API 层使用 FastAPI 定义报名端点，也就是外部可以访问的一个请求入口。它接收报名需要的信息和 Service，再调用 Service 完成流程。领域层抛出的“课程已满”或“已经报名”异常，在 API 层转换成 HTTP 异常，让系统外部能够收到适合接口的失败响应。这样领域规则不必依赖某个 HTTP 框架来表达报名失败。<button type="button" class="timecode" data-seconds="305">[00:05:05]</button></p>
+<p>API 需要一个 Service，却不必自己决定要把哪一种数据库绑定给它。把所需对象从外部提供给使用它的代码，叫依赖注入。这个词可以直接对应到报名例子：Service 需要数据库对象，创建 Service 时把数据库传进去；API 需要报名 Service，运行时再把组装好的 Service 提供给 API。接收对象的一方可以按约定使用它，具体选择放在组装处。<button type="button" class="timecode" data-seconds="322">[00:05:22]</button></p>
+<p>入口文件把几层连接起来。先用 <code>SqliteDb('school.db')</code> 创建数据库对象，再把这个对象传给 <code>EnrollService(db)</code>，得到报名服务。随后创建 FastAPI 应用并包含路由，通过依赖配置把报名服务提供给 API 使用。画面里的 <code>dependency_overrides</code> 关联 <code>get_enroll</code> 和已创建的服务，让入口处选定的对象进入请求处理流程。<button type="button" class="timecode" data-seconds="339">[00:05:39]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1CXet6gE6X-00351.jpg" data-caption="入口创建 SqliteDb 和 EnrollService，再通过 FastAPI 的依赖配置提供报名服务。">
+    <img src="../assets/frames/BV1CXet6gE6X-00351.jpg" loading="lazy" alt="视频截图 03，00:05:51：入口创建 SqliteDb 和 EnrollService，再通过 FastAPI 的依赖配置提供报名服务。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="351.000">图 03 · 00:05:51</button><span>入口创建 SqliteDb 和 EnrollService，再通过 FastAPI 的依赖配置提供报名服务。</span></figcaption>
+</figure>
+<p>这份组装关系让数据库选择集中在入口。教学示例准备了另一种实现后，可以在入口调整使用哪个实现，Service 中的报名流程无需因此改写。不过，真实数据库迁移还可能涉及连接配置、表结构、数据迁移和行为差异等工作；入口绑定能否调整，与整个迁移是否完成是两件需要分别检查的事。<button type="button" class="timecode" data-seconds="368">[00:06:08]</button></p>
+<p>一次报名就这样走完了：外部请求进入 API，Service 取出对象并安排操作，Course 根据规则决定能否加入名单，DB 保存变化。四层把不同职责显露出来，也带来了接口和组装代码。对于这个小例子，我们可以用它练习判断变化发生在哪里、每一部分需要知道什么；实际项目中还应权衡这些边界带来的清晰度和额外复杂度。<button type="button" class="timecode" data-seconds="383">[00:06:23]</button></p>
+<h2 id="_5">总结提炼</h2>
+<ul>
+<li>报名规则围绕课程容量和学生名单；流程负责取数据、调用规则、保存结果。</li>
+<li><code>Database</code> 接口由 Service 所需的三个操作构成，具体 DB 实现遵守该约定。</li>
+<li>代码依赖方向与运行时调用顺序各回答一个问题，需要分别观察。</li>
+<li>入口负责把数据库、Service 和 API 连接起来；替换入口绑定不等于完成真实数据库迁移。</li>
+</ul>
+<h2 id="_6">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="3">[00:00:03]</button> 一次报名和混合职责带来的困难</li>
+<li><button type="button" class="timecode" data-seconds="53">[00:00:53]</button> 四层职责与依赖关系</li>
+<li><button type="button" class="timecode" data-seconds="132">[00:02:12]</button> 学生、课程和报名规则</li>
+<li><button type="button" class="timecode" data-seconds="198">[00:03:18]</button> Service 流程与数据库接口</li>
+<li><button type="button" class="timecode" data-seconds="249">[00:04:09]</button> 数据库实现与依赖倒置</li>
+<li><button type="button" class="timecode" data-seconds="305">[00:05:05]</button> API、依赖注入和入口组装</li>
+</ul>
+<h2 id="_7">复习</h2>
+<ol>
+<li>课程满员和重复报名分别在哪里判断？为什么这些判断需要课程名单？</li>
+<li><code>get_student</code>、<code>get_course</code> 和 <code>save_course</code> 分别为报名流程提供什么？</li>
+<li>Service 在运行时调用数据库，为什么代码仍可以不依赖具体的 SQLite 类？</li>
+<li>数据库对象和报名服务分别在哪里创建，又如何进入 API？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "5 分钟学会写架构设计", "duration": "06:50", "src": "", "poster": "../assets/frames/BV1CXet6gE6X-00115.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

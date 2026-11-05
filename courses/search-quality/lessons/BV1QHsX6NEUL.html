@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>越来越卷，死磕大厂还值吗？打工 3 年真实感受 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="3">越来越卷，死磕大厂还值吗？打工 3 年真实感受</h1>
+    <div class="meta"><span>月亮猹-</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1QHsX6NEUL/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#3">越来越卷，死磕大厂还值吗？打工 3 年真实感受</a><ul>
+<li><a href="#_1">收入与支出</a></li>
+<li><a href="#_2">岗位与健康代价</a></li>
+<li><a href="#ai">AI 和就业</a></li>
+<li><a href="#_3">如何选择</a></li>
+<li><a href="#_4">总结提炼</a></li>
+<li><a href="#_5">时间导航</a></li>
+<li><a href="#_6">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1QHsX6NEUL.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#career">← 职业与成长</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1QHsX6NEUL" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1QHsX6NEUL&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1QHsX6NEUL/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1QHsX6NEUL"><h1>越来越卷，死磕大厂还值吗？打工 3 年真实感受</h1>
+<p><strong>UP 主：</strong> 月亮猹-　<strong>时长：</strong> 10 分 23 秒　<strong>链接：</strong> https://www.bilibili.com/video/BV1QHsX6NEUL/　<strong>阅读强度：</strong> standard</p>
+<h2 id="_1">收入与支出</h2>
+<p>拿到一份薪资更高的工作，我们很容易先想到收入会增加。真正上班以后，还要面对工作时长、城市开销和身体精力的变化。月亮猹回顾自己进入互联网行业三年的经历：岗位要求效率高、能同时处理多项任务、愿意加班，工作占去许多个人时间；团队里也有一批聪明、主动、能扛压力的年轻人，愿意把事情做完。长期处在这种节奏里，她感受到同事之间逐渐变得强势、讲求效率，也更容易刻薄。<button type="button" class="timecode" data-seconds="10">[00:00:10]</button></p>
+<p>她在 2023 年毕业时做运营，每月到手约 1.2 万元，全年收入约 20 万元。那时她相信收入会继续增长，努力也会得到回报。工作后，开销跟着涨了：她回忆毕业前一年支出约 4 万元，工作后一年支出约 20 万元。把这两笔年度数字放在一起，就能看到她为何觉得工资没有转化成多少积蓄。对家境不宽裕的人来说，大厂可能提供更快积累资金的机会；月亮猹也认为技术岗位的收入机会尤其值得期待。可判断一份工作能否帮助自己攒钱，还得看收入扣掉生活支出后剩下多少。<button type="button" class="timecode" data-seconds="73">[00:01:13]</button></p>
+<p>钱以外，她也享受过穿衣自由、健身房、节日福利、办公环境和公司内部的信息资源。大公司每天会产生大量文档和经验材料，她喜欢从中寻找有价值的内容；但工作压力让她几乎没有时间慢慢读这些资料。资源摆在眼前，并不保证我们有时间使用它们，福利能不能改善生活也要看自己的工作节奏。<button type="button" class="timecode" data-seconds="134">[00:02:14]</button></p>
+<h2 id="_2">岗位与健康代价</h2>
+<p>秋招时，挣钱和证明自己是她最在意的事。家庭条件较差，她想证明学历和能力可以换来大厂工作。真正开始上班后，账面收入之外的投入才显现出来：她形容自己有时做着两三个人的工作，拿到约一点五个人的收入；绩效汇报、效率、工时、产出和投入程度也都成了比较的内容。这是她对自身负荷的描述，数字表达的是她感受到的工作量与报酬落差。<button type="button" class="timecode" data-seconds="168">[00:02:48]</button></p>
+<p>身体状况也进入了这笔账。她回忆当年的体检报告有 17 项异常，并感觉异常项目随着工龄增长而增加。这个数目属于她个人的体检经历；她没有逐项说明原因，也不能用它推断其他人的健康状况。对她来说，持续过劳带来的担心已经足以改变职业选择：收入之外，她还开始考虑自己是否正在透支健康。<button type="button" class="timecode" data-seconds="233">[00:03:53]</button></p>
+<p>工作第二年，她观察同事和领导的生活，发现那不是自己想要的样子，也找不到继续向上拼搏的理由。升职可能带来更高的责任，她不觉得职位升高就会让自己成为公司的主人。可是不争取晋升也不代表压力消失：她感受到竞争会推动大家投入更多时间，既难以持续加码，也很难真正放松。<button type="button" class="timecode" data-seconds="259">[00:04:19]</button></p>
+<p>大公司的岗位分工很细，做久了一个窄领域，积累的能力未必容易迁移到其他岗位。她跳槽后发现，上一家公司的几位同事也在新公司；彼此原以为自己选择了小众方向，结果仍然遇到了熟悉的同事。这个经历让她看到，大平台的履历未必自动打开很多选择，转行和寻找下一份工作仍会受岗位经历影响。<button type="button" class="timecode" data-seconds="298">[00:04:58]</button></p>
+<h2 id="ai">AI 和就业</h2>
+<p>后来，AI 改变了她做事的方式。她描述的循环是：AI 提高了效率，手上的工作随之增加；工作多了，再用 AI 提高效率。以前需要实习生花半天完成的任务，有时现在一句指令就能完成。任务变快没有让她的工作量自动减少，她担心自己会不断接下更多工作。她还判断校招名额收缩，毕业年份对求职的影响可能变大；这是她对当时就业环境的个人看法，不能当作行业统计。<button type="button" class="timecode" data-seconds="324">[00:05:24]</button></p>
+<p>她也感到互联网行业更加看重年轻人。工作三年时，她已经开始想象被优化后的生活，随手列出导游、咨询师、健身房团课教练、企业文化培训师、网约车司机和脱口秀演员等可能方向，还笑说自己没有驾照。这些是当时浮现的想法，并不表示她已计划转行。她有时会梦到自己 35 岁前没有取得巨大成功，仿佛人生就此失去意义；这让职业成就的压力显得格外具体。<button type="button" class="timecode" data-seconds="372">[00:06:12]</button></p>
+<h2 id="_3">如何选择</h2>
+<p>要不要进大厂，可以先问自己几件事：现在是否很需要收入，是否还在寻找适合自己的生活，是否愿意承受高强度竞争，身体和精力能不能支持这样的节奏。月亮猹的回答很直接：缺钱或想体验时可以考虑，已有明确生活目标或精力较弱时就该慎重。这些问题适合拿来检查自己的处境，答案仍要结合家庭支持、岗位要求、城市开销和身体状况来定。<button type="button" class="timecode" data-seconds="413">[00:06:53]</button></p>
+<p>如果目标是攒钱，还要估算大城市的生活支出、压力下的额外消费、长期房贷，以及身体健康可能付出的代价，再看收入能否留下积累。高薪只说明收入较高，能否达到攒钱目标，要看这些支出之后还剩下多少。没能进入大厂也不值得用一生的不甘来惩罚自己；她提醒，一次职业选择不会毁掉整个人生。<button type="button" class="timecode" data-seconds="452">[00:07:32]</button></p>
+<p>经历三年工作后，她决定更珍惜自己的时间、精力和能力。除了工作，她还做视频、锻炼、学英语和钢琴，也安排家里的事情。她知道自己有能力参与竞争，却不想把本领都用来和别人较劲；毕业后的日子常常感觉相似，时间和钱都在流走，她想认真决定把它们花在哪里。<button type="button" class="timecode" data-seconds="488">[00:08:08]</button></p>
+<p>她对工作的看法也从校招时的新鲜主动，经历挣扎和痛苦，慢慢变得平和。她不再期待从当前工作里找到使命感，把工作看作换取收入的一种方式；面对管理者的鼓励、施压或批评，她也更能把它们放回管理关系中理解，减少了对职场的愤怒。她已经走过“学历—工作”这条主线，现在想了解人生还有哪些方向。<button type="button" class="timecode" data-seconds="540">[00:09:00]</button></p>
+<h2 id="_4">总结提炼</h2>
+<p>进入大厂是否符合目标，要同时衡量工资、生活支出、工时、身体精力和岗位选择。对月亮猹而言，重要的两项是收入是否真正留下积累、时间是否花在自己愿意过的生活上。</p>
+<h2 id="_5">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="10">[00:00:10]</button> 工作要求、团队气氛与高强度生活</li>
+<li><button type="button" class="timecode" data-seconds="73">[00:01:13]</button> 收入提高后，开销也随之增加</li>
+<li><button type="button" class="timecode" data-seconds="168">[00:02:48]</button> 进公司后逐渐看见的工作负荷</li>
+<li><button type="button" class="timecode" data-seconds="324">[00:05:24]</button> AI、校招与年龄焦虑</li>
+<li><button type="button" class="timecode" data-seconds="413">[00:06:53]</button> 按自己的处境判断是否进入大厂</li>
+<li><button type="button" class="timecode" data-seconds="488">[00:08:08]</button> 更珍惜时间，也更平和地看待工作</li>
+</ul>
+<h2 id="_6">复习</h2>
+<ol>
+<li>一份工作收入更高时，哪些开销和时间成本会影响最终能留下的积蓄？</li>
+<li>月亮猹跳槽后遇到上一家公司同事的经历，怎样影响她对岗位细分的判断？</li>
+<li>她为何把身体精力、长期支出和自己想过的生活也放进职业选择里？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "越来越卷，死磕大厂还值吗？打工3年真实感受", "duration": "10:23", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

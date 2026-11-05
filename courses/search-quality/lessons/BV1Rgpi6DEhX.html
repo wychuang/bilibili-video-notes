@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>自卑会在哪一天消失？两段成长经历里的比较、归属与自我接纳 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">自卑会在哪一天消失？两段成长经历里的比较、归属与自我接纳</h1>
+    <div class="meta"><span>成都幽默帝国</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Rgpi6DEhX/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">自卑会在哪一天消失？两段成长经历里的比较、归属与自我接纳</a><ul>
+<li><a href="#_2">同样是“条件不同”，进入新环境后感受会变</a></li>
+<li><a href="#_3">被排斥后，差异会变成对自己的怀疑</a></li>
+<li><a href="#_4">钱能解决一些困难，却未必替代关系</a></li>
+<li><a href="#_5">自卑会不会消失，取决于我们怎样看待它</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Rgpi6DEhX.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#wellbeing">← 身心与生活</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1Rgpi6DEhX" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Rgpi6DEhX&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Rgpi6DEhX/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Rgpi6DEhX"><h1>自卑会在哪一天消失？两段成长经历里的比较、归属与自我接纳</h1>
+<blockquote>
+<p>来源：<strong>【雀说】雀巢&amp;鲸尾 | 自卑在哪一天消失</strong>｜UP 主：成都幽默帝国｜时长：32:00｜<a href="https://www.bilibili.com/video/BV1Rgpi6DEhX/">Bilibili 原视频</a>｜阅读强度：deep</p>
+</blockquote>
+<p>一双鞋穿到露出脚趾，自己却觉得它很幸运；换上新买的回力鞋，兴冲冲地告诉同学，得到的却是嘲笑。雀巢后来回想，真正刺痛他的，是第一次清楚地发现：自己省钱、穿旧衣服的生活方式，在同学眼里成了被取笑的理由。<button type="button" class="timecode" data-seconds="208">[00:03:28]</button></p>
+<p>这段回忆和齐经纬谈到的校园经历，给了我们两个不同入口：一个人进入新的环境后，如何发现自己和周围人不一样；而当这种差异被不断比较、排斥或忽视时，为什么会慢慢变成对自己的怀疑。两人的经历属于他们自己，不能直接替所有人的自卑下定义。沿着他们的例子，我们能看见环境、关系和自我认识怎样交织在一起。</p>
+<h2 id="_2">同样是“条件不同”，进入新环境后感受会变</h2>
+<p>雀巢回忆，自己十五六岁去美国留学前，父母一直向他灌输“家里很穷”的观念。家里在北京有房，但父母生活上非常节省：过期的啤酒、陈米、姜和冰糖还会继续吃。后来他进了学费不低的国际高中，依旧把“省钱才是硬道理”带进校园。他穿着破洞的旧鞋，给鞋取名叫 Lucky，也会多年穿同一件衣服。物质条件、父母的生活习惯和他自己形成的消费观，混在一起构成了他的日常。<button type="button" class="timecode" data-seconds="140">[00:02:20]</button></p>
+<p>同学之间流行名牌球鞋和特定穿搭，他对那些东西没有兴趣。真正刺痛他的，是买了回力鞋后受到同学嘲笑。他原本只是高兴地分享一双新鞋，却在那一刻意识到，自己的节俭会被旁人当作“和别人不同”的标记。人未必因为缺少某件昂贵物品就自卑；当差异变成群体评价，才更容易让人开始怀疑自己。<button type="button" class="timecode" data-seconds="216">[00:03:36]</button></p>
+<p>去美国后，差异又换了一种形式。雀巢不想离开熟悉的生活，也更喜欢动漫，原本希望去日本学习相关内容；父母则认为美国机会更好。他第一户寄宿家庭条件很差：家里人多，午餐常是放在洗衣机上的面包，后来发现面包已经生虫；家里没有 Wi-Fi，八个人分一只鸡，他常常吃不饱。寄宿中介起初把他的求助解释成“想回国”，直到母亲亲自去看，才决定给他换住处。<button type="button" class="timecode" data-seconds="290">[00:04:50]</button></p>
+<p>雀巢的讲述里，难处不只来自某一顿饭或某个住家，而在于当时他还是未成年人，身处陌生地方，求助却没有马上得到相信。他提到自己从小在农村长大，家到镇上要先走四十分钟，再坐公交；附近村里的孩子凌晨五点出门上学，有人举火把照路。小时候大家都在相似条件下生活，他和堂哥上山抓兔子，并不会因此感到自卑。离开原来的环境、进入家庭条件差异很大的学校后，原来习以为常的生活突然成了比较对象。<button type="button" class="timecode" data-seconds="495">[00:08:15]</button></p>
+<h2 id="_3">被排斥后，差异会变成对自己的怀疑</h2>
+<p>齐经纬谈到，自己小学时成绩很好，进入附近城市里排名靠前、学费较高的学校后，周围同学的家庭背景和生活条件与他差异很大。有人问他是不是住在悬崖上；他还记得同学把历史书扔进厕所，老师不相信他的解释，要求他重新抄一遍。后来跑操时，班里要每排选一个“说话最多的人”，他明明没讲话，却因为看起来更好欺负而被选中。<button type="button" class="timecode" data-seconds="558">[00:09:18]</button></p>
+<p>他年纪也比同班同学小：四岁读一年级，十岁小学毕业，进初中时，同学比他大两岁左右。年龄、兴趣、家庭环境都不一样，原本靠成绩得到的认可也逐渐消失。成绩下滑后，他收到的批评越来越多，状态继续变差，最后初二时直接不去学校了。回头看，这串经历显示了一个具体过程：一个孩子在新环境里失去同伴位置和肯定，受到欺负时又无法为自己辩解，便容易把“他们在排斥我”转成“是不是我哪里出了问题”。<button type="button" class="timecode" data-seconds="622">[00:10:22]</button></p>
+<p>雀巢在美国也经历过针对种族身份的辱骂。他说，大学时有一群同样喜欢二次元的朋友，路上有人喊他们“滚回自己的国家”时，他反而没有以前那么难受，因为身边有朋友一起回应、一起嘲笑对方。侮辱没有因此变得合理，改变的是他不再孤零零地承受它：他能从熟悉的人那里确认自己有归属，不必把陌生人的偏见当成对自身价值的判决。<button type="button" class="timecode" data-seconds="718">[00:11:58]</button></p>
+<p>这也解释了为什么“找到同类”对两人的回忆很重要。雀巢说，自己既找不到典型的国内学生同伴，也难以融入美国学生；他喜欢的二次元文化又相对小众。那时他想要的不只是钱，而是被认可、被关注，知道自己有朋友、有伙伴，能在某个地方找到归宿。后来买到小时候一直想要的百兽战队玩具，他发现自己真正渴望的是拥有它所代表的童年愿望；如今做视频得到观众关注，也让他感到“被看见”的愿望有所实现。<button type="button" class="timecode" data-seconds="859">[00:14:19]</button></p>
+<h2 id="_4">钱能解决一些困难，却未必替代关系</h2>
+<p>雀巢小时候常把家庭争吵归因于钱，想象只要自己有钱，就会过得开心，也会有很多朋友。他后来逐渐意识到，钱能改变一些具体处境，却不能自动带来认可和归属。十六岁时，他做视频赚到一笔钱，给好友买了昂贵的鞋；另一个熟人借走三千元，至今没有归还。这些经历让“拥有可支配的钱”和“获得可靠关系”显得并不相同。<button type="button" class="timecode" data-seconds="781">[00:13:01]</button></p>
+<p>齐经纬也回忆，读书时每周生活费有限，买文具、买书都要从中安排；为了买漫画，他有时宁愿少吃一顿。这个例子呈现的是一个学生如何在有限资源里取舍，以及这些经历怎样留下对钱和生活安全感的记忆。两个人都把钱当作童年时容易看见的答案，后来才发现自己的需要还包括有人理解、有人陪伴，以及能够表达情绪。<button type="button" class="timecode" data-seconds="1074">[00:17:54]</button></p>
+<p>雀巢说，自己小时候向母亲表达“受不了了”，常常又用“算了，我也是穷孩子”把求助收回去。他觉得自己的情感没有人接住，渐渐把袒露愤怒、难过或悲伤看成丢脸。成年后，他关心同事时可能会用给对方加工资的方式表达，而不习惯直接说“你还好吗”。他把这种表达方式联系到自己的成长经历；这是个人对自身的理解，也说明同一种关心可以通过不同方式表达。<button type="button" class="timecode" data-seconds="901">[00:15:01]</button><button type="button" class="timecode" data-seconds="1774">[00:29:34]</button></p>
+<h2 id="_5">自卑会不会消失，取决于我们怎样看待它</h2>
+<p>两人并没有给“自卑在哪一天消失”一个相同答案。雀巢说，过去经历留下的伤痕有时会重新出现：大学时他曾经很外向，给同学讲物理课，也会主动安慰刚到学校、还不适应的人；后来在一次颁奖活动上，他看到别人自然地去敬酒，自己却需要旁人鼓励，短暂地想过“为什么他能做到，我做不到”。他很快又提醒自己，这反映的是成长经历不同，并不等于自己比别人差。<button type="button" class="timecode" data-seconds="1163">[00:19:23]</button></p>
+<p>即使已经有收入和关注，比较仍可能冒出来。雀巢说，自己的生活已经足够愉快，但看到同龄人毕业就得到家人买车、买房的支持时，仍会感到不舒服，尽管他并不喜欢买车买房。这段话把“我想要那件东西”和“我看见别人拥有它时感到不平衡”分开了：后者有时关乎资源差异本身，也可能让旧有的匮乏感再次浮现。<button type="button" class="timecode" data-seconds="1294">[00:21:34]</button></p>
+<p>在谈快乐时，雀巢提出一种个人观察：人常会因为进步和变化感到兴奋，达到某个目标后又把目标推高。比如从没钱到有钱、从一百万粉丝到想要两百万、从乡村来到大城市，变化过程可能带来期待；等目标实现，新的比较标准又会出现。他用“加速度”描述这种体验。这是他对欲望和快乐的理解；他也用自己的玩具愿望举例，提醒自己去喜欢现实生活里已经得到的东西。<button type="button" class="timecode" data-seconds="1490">[00:24:50]</button></p>
+<p>最后，雀巢被问到是否愿意按下“删除自卑”的按钮。他选择不按，因为那些经历已经进入他对自己的理解，也影响了他如何创作、如何表达情感。他举出一个很具体的遗憾：学生时代因为容貌自卑，几乎没有留下照片，后来制作十年前与现在的对比内容时，反而找不到足够的旧素材。对他来说，回到过去删除痛苦，或许能让当时的自己轻松一些，却也会抹去后来理解自身经历的线索。<button type="button" class="timecode" data-seconds="1616">[00:26:56]</button></p>
+<p>齐经纬的回答有所不同：若在痛苦刚结束的当下，他会想删掉那段经历；随着时间过去，他一点点找回生活里缺失的部分，也愿意保留这段过程。两人的分歧很重要：承认一段经历后来塑造了自己，不等于当时的伤害就合理，更不意味着每个人都必须把痛苦当作财富。雀巢把痛苦和快乐比作生存模式里挖到钻石的过程——经历过匮乏和努力后，得到的东西更有分量；这仍是他对自身经历的解释，不应拿来要求正在受伤的人忍耐。<button type="button" class="timecode" data-seconds="1626">[00:27:06]</button></p>
+<p>他们能共同给出的提醒要更谨慎：如果你因为外貌、家庭条件、兴趣或表达方式与别人不同而自卑，不要据此认定自己低人一等。雀巢也承认两人的阅历有限，未来可能会修正现在说过的话。我们可以听见他们如何从孤立走向找到同伴，也可以保留自己的判断：有些经历后来会成为理解自己的材料，但是否能转化、何时能转化，各人不同；遇到持续伤害时，寻求可信任的人帮助仍然重要。<button type="button" class="timecode" data-seconds="1830">[00:30:30]</button></p>
+<h2 id="_6">总结提炼</h2>
+<ul>
+<li>差异本身未必带来自卑；被嘲笑、排斥或长期否定后，人更容易把外界评价内化成对自己的怀疑。</li>
+<li>资源可以改善生活条件，却不能自动替代被认可、被倾听和找到同伴的需要。</li>
+<li>童年经历可能影响成年后的比较、情绪表达和创作，但个人经验不能直接推广成所有人的规律。</li>
+<li>回看痛苦时可以理解它怎样塑造了自己，也要承认伤害发生时真实存在，不必要求每个人都把痛苦解释成礼物。</li>
+</ul>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="87">[00:01:27]</button> 两人回忆自己自卑最重的阶段</li>
+<li><button type="button" class="timecode" data-seconds="208">[00:03:28]</button> 雀巢在国际高中穿旧鞋、因回力鞋被嘲笑</li>
+<li><button type="button" class="timecode" data-seconds="290">[00:04:50]</button> 去美国后寄宿生活的困难与求助</li>
+<li><button type="button" class="timecode" data-seconds="558">[00:09:18]</button> 齐经纬进入新学校后遭遇排斥与校园欺负</li>
+<li><button type="button" class="timecode" data-seconds="859">[00:14:19]</button> 从“想要钱”转向“想被需要、被认可”</li>
+<li><button type="button" class="timecode" data-seconds="1163">[00:19:23]</button> 自卑记忆如何在成年后的场景中重新出现</li>
+<li><button type="button" class="timecode" data-seconds="1490">[00:24:50]</button> 对快乐、欲望和不断比较的个人理解</li>
+<li><button type="button" class="timecode" data-seconds="1591">[00:26:31]</button> 是否删除自卑：两人的不同回答</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>为什么同学对回力鞋的反应让雀巢难受？</li>
+<li>齐经纬从校园欺负到不再上学的经历中，哪些条件让他越来越难找到肯定？</li>
+<li>雀巢为什么觉得“有钱”和“被认可”并非同一件事？</li>
+<li>两人对删除自卑的回答有什么不同？这份分歧提醒我们如何看待个人经历？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【雀说】雀巢&鲸尾 | 自卑在哪一天消失", "duration": "32:00", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

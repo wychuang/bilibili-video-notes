@@ -1,16 +1,18 @@
-# 搜索与 Agent 质量：从问题到证据
+# 视频学习笔记：沿着脉络找到下一篇
 
-[打开课程](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/) · [本地入口](index.html)
+[学习脉络图](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/flow.html) · [全部笔记](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/) · [本地入口](flow.html)
 
-51 篇中文学习讲解，涵盖搜索、评测、数据、Agent、产品、调研与学习方法。文章沿着具体问题和案例展开，配合关键画面、对照表、公式和视频时间导航。更新日期：2026-10-11。
+141 篇中文学习讲解，沿 AI 与软件、产品与设计、研究与知识管理、学习与职业、经济与生活、文化与娱乐六条路线组织。文章从具体问题和案例展开，配合关键画面、对照表、公式和视频时间导航。更新日期：2026-11-05。
 
 ## 怎样开始
 
-打开首页，从“先走通这六步”开始。每次读懂一个问题，再进入下一篇；其余内容可以搜索，或按核心、补充、拓展筛选。无需一次学完整个目录。
+打开脉络图，可以先走“弄清 AI 怎么工作 → 说清要解决的问题 → 判断做得好不好”这条主线，也可以直接选择感兴趣的路线。展开专题后，先看“从这里开始”的文章，再按卡片顺序深入具体问题；主线、专题和细节会分别标出。封面和标题都能直接打开笔记。
+
+全部笔记页提供封面卡片、搜索与筛选，也保留原有六篇起步路线。两个视图使用同一份已读记录。动态效果可以暂停，并遵循系统的减少动态效果设置；手机上会调整为容易点选的纵向路线。
 
 每篇保留视频播放区、章节目录、总结提炼和复习内容。点击播放按钮、正文时间戳或图注时间，会联网加载对应视频或分集；若嵌入播放受登录或平台限制，可用播放器下方的链接前往 B 站。截图点击放大，公式可以离线阅读。
 
-页面、截图和字体随仓库提供，下载后可以直接打开本目录的 `index.html`。正文阅读无需安装软件。浏览器对本地文件的进度保存策略可能不同，跨设备以导出文件为准。
+页面、封面、截图和字体随仓库提供，下载后可以直接打开本目录的 `flow.html` 或 `index.html`。正文阅读无需安装软件。浏览器对本地文件的进度保存策略可能不同，跨设备以导出文件为准。
 
 ## 换设备继续学习
 
@@ -18,11 +20,14 @@
 
 ## 尚未提供讲解的内容
 
-目录另有 3 个条目，目前仅提供 B 站入口：
+目录另有 6 个条目，目前仅提供 B 站入口：
 
 - [BV1RywNeNEry](https://www.bilibili.com/video/BV1RywNeNEry/)
 - [BV1pC4y1P7dR](https://www.bilibili.com/video/BV1pC4y1P7dR/)
 - [BV1h8DYBzErB](https://www.bilibili.com/video/BV1h8DYBzErB/)
+- [BV1ucaK6UEHR](https://www.bilibili.com/video/BV1ucaK6UEHR/)
+- [BV1k8nH69ERR](https://www.bilibili.com/video/BV1k8nH69ERR/)
+- [BV12jad6DEfK](https://www.bilibili.com/video/BV12jad6DEfK/)
 
 ## 来源与使用
 

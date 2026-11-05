@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>研究陌生主题：从兴趣、选题到整理证据 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">研究陌生主题：从兴趣、选题到整理证据</h1>
+    <div class="meta"><span>冷水浇头烂柯人</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1U9nB6GEjY/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">研究陌生主题：从兴趣、选题到整理证据</a><ul>
+<li><a href="#_2">先有问题，还是先四处阅读？</a></li>
+<li><a href="#_3">用容易进入的材料画出第一张地图</a></li>
+<li><a href="#_4">让研究能在生活中继续</a></li>
+<li><a href="#_5">把材料变成可以思考的笔记</a></li>
+<li><a href="#_6">判断来源与检查自己的推断</a></li>
+<li><a href="#_7">用一份产物整理思路</a></li>
+<li><a href="#_8">总结提炼</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1U9nB6GEjY.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#research">← 调研、信息源与推理</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1U9nB6GEjY" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1U9nB6GEjY&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1U9nB6GEjY/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1U9nB6GEjY"><h1>研究陌生主题：从兴趣、选题到整理证据</h1>
+<blockquote>
+<p>原标题：【中英+文稿】🔥如何研究任何主题<br>
+UP 主：冷水浇头烂柯人<br>
+时长：29 分 43 秒<br>
+链接：https://www.bilibili.com/video/BV1U9nB6GEjY/<br>
+阅读强度：标准</p>
+</blockquote>
+<p>有时我们列出一张“应该了解”的清单，准备把每一个主题都学完，却发现自己越学越没有劲。分享这套方法的人也经历过类似处境：他把学习当成必须完成的清单，后来才留意到自己真正想讨论、会主动思考的问题。接下来这套方法，就从这样的个人探索出发，说明怎样找到值得追问的题目，再把资料连成自己的理解。<button type="button" class="timecode" data-seconds="62">[00:01:02]</button></p>
+<h2 id="_2">先有问题，还是先四处阅读？</h2>
+<p>选题有两种进入方式。第一种是先确定想回答的问题，再围绕它寻找资料。例如，你已经知道自己要研究一个具体概念，就可以用问题判断一篇文章是否相关。这种方式方向清楚；同时也要小心，假如在查找之前便认定答案，可能只挑选支持自己看法的材料。<button type="button" class="timecode" data-seconds="154">[00:02:34]</button></p>
+<p>第二种更像在感兴趣的范围里采集：先阅读、观察、记下觉得奇怪或有意思的地方，过一段时间再看哪些问题反复出现。并非每条线索最后都会用上，较明确的选题可能在阅读中慢慢形成。这种方式适合还不知道问题在哪里的阶段，也可能花费更多时间。等问题出现后，我们可以转入有目标的查找，补上回答它所需的资料。<button type="button" class="timecode" data-seconds="198">[00:03:18]</button></p>
+<p>时间有限时，问题的范围和想达到的深度需要一起考虑。如果目标是初步认识哲学中的几个方向，可以较宽地阅读，先了解主要问题；如果要讨论一个特定论点，就需要缩小范围，仔细看它的论证与反对意见。两种安排各有用途。随着理解增加，我们可以改变范围，让下一步在现有时间里真正可做。<button type="button" class="timecode" data-seconds="295">[00:04:55]</button></p>
+<h2 id="_3">用容易进入的材料画出第一张地图</h2>
+<p>面对陌生主题，不必先收集完整书单。可以从一两份材料开始，顺着里面的参考文献和进一步阅读寻找下一份。初次接触专业文章时，术语和背景可能让人无从下手；这时先看一本入门书、科普文章、视频或百科条目，有助于认识基本词汇和争论的位置。<button type="button" class="timecode" data-seconds="413">[00:06:53]</button></p>
+<p>分享者以自己接触“道德反实在论”为例：他在访谈里听到这个概念，产生兴趣，但直接读专业书和论文时还不熟悉相关术语与背景。于是他先查文章、百科和视频，尝试弄清有哪些主要观点和例子，再准备进入更深入的材料。入门材料提供的是一张初步地图；作者选择了什么、略过了什么，都会影响地图的样子。<button type="button" class="timecode" data-seconds="493">[00:08:13]</button></p>
+<p>搜索到一本书或一篇论文时，可以先查看目录、简介、摘要或结论，判断它与当前问题的关系，再决定哪些部分值得细读。时间紧张时，书中相关章节可以成为入口；需要依赖某项研究作重要判断时，还应回到方法、结果和论证，了解上下文。先筛选能节省精力，筛选后的关键材料仍需要认真阅读。<button type="button" class="timecode" data-seconds="610">[00:10:10]</button></p>
+<p>遇到付费墙，可以查看自己所在机构或公共图书馆的访问条件，搜索作者公开提供的版本，或向作者请求文章。获取途径和权限会随机构及作品变化。保存文献信息时，记下标题、作者、出版信息和具体页码，方便以后找回原文；一条漂亮的摘录如果丢失出处，之后就很难核对它原来的含义。<button type="button" class="timecode" data-seconds="566">[00:09:26]</button> <button type="button" class="timecode" data-seconds="744">[00:12:24]</button></p>
+<p>一份材料只能呈现作者掌握的资料和采用的解释。比较多份相关来源，可以看到它们在哪些地方一致、哪些地方有分歧，以及是否使用了同一份证据。译文也值得留意：不同译者会选择不同的措辞和语气，分享者以《奥德赛》的不同译本说明这种差异。比较时尽量记下译本信息；材料数量增加本身并不能保证结论正确。<button type="button" class="timecode" data-seconds="671">[00:11:11]</button></p>
+<h2 id="_4">让研究能在生活中继续</h2>
+<p>自学常常要在其他事情之间进行。分享者个人习惯每天早晨留出一到两小时，内容可以是阅读、写作或重看旧笔记。这个数字反映他自己的安排。你可以根据现实条件选择适合自己的时间、地点和可重复的工作量，让下一次坐下来时知道从哪里开始。<button type="button" class="timecode" data-seconds="774">[00:12:54]</button></p>
+<p>研究被生活打断很常见。留下简短记录：读到哪里、目前想到什么、还有哪些问题、下一次要查什么。隔几天回来时，记录可以把当时的思路接上。规划工具应帮助我们继续学习；如果花大量时间填写永远做不完的任务表，反而可能挤掉实际阅读的时间。<button type="button" class="timecode" data-seconds="900">[00:15:00]</button></p>
+<h2 id="_5">把材料变成可以思考的笔记</h2>
+<p>想象一个逐渐收窄的漏斗。最上面是初步看到、可能有关的资料；接着留下值得细读的文章或章节；读过后记下与问题有关的观点；最后再把观点之间的联系、冲突和顺序整理出来。每一层都要求我们做一点判断，因此最后留下的内容能更直接地服务当前问题。<button type="button" class="timecode" data-seconds="953">[00:15:53]</button></p>
+<p>做笔记时，可以用自己的话复述一条观点，再保留通向原文的位置。复述会暴露自己是否明白句子在说什么；需要准确引用时，仍应回查原文。还可以记下作者遇到的困难、研究限制或不同作者之间的分歧，再尝试把相关概念放在一起比较。两篇文章看起来有关，并不自动证明它们互相支持，关系本身也需要检查。<button type="button" class="timecode" data-seconds="1073">[00:17:53]</button></p>
+<p>材料变多后，可以写一页自己的目录或主题索引：目前有哪些问题、哪些笔记属于哪个问题、还有什么没有读懂。分享者使用笔记软件和画布整理，手机笔记或其他简单方式也能承担这个作用。索引是随理解变化的地图，可以重新组织，帮助我们回到研究中的具体位置。<button type="button" class="timecode" data-seconds="1154">[00:19:14]</button></p>
+<h2 id="_6">判断来源与检查自己的推断</h2>
+<p>一份资料值不值得依靠，可以从几个问题入手：它写于什么时候，领域里的情况是否已经变化？它和我们的问题是否真的相关？作者或出版机构具有什么背景？论点是否有足够证据、有没有说明限制？写作目的、资助与所处环境又可能怎样影响内容？把这些问题放在一起，能帮助我们决定接下来应该仔细检查文章的哪一部分。<button type="button" class="timecode" data-seconds="1216">[00:20:16]</button></p>
+<p>例如，同样谈一个主题的两篇文章，可能研究的人群、时期或问题不同。标题相近，并不能证明它们回答同一问题；发表时间较早也不自动意味着材料失效，基础文本和历史材料可能依然重要。看过身份和出版信息后，还要检查论证：作者提出了什么主张，依据是什么，证据能支持到哪一步，哪些前提还需要证明。<button type="button" class="timecode" data-seconds="1241">[00:20:41]</button> <button type="button" class="timecode" data-seconds="1507">[00:25:07]</button></p>
+<p>我们也需要留意自己的确认偏误：已经倾向某个答案时，更容易注意到支持它的材料，忽略相反证据。主动读一些有分歧的可靠来源，可以帮助检查自己的判断。遇到暂时看不懂的专业文章，可以先回到较基础的介绍；再次使用简化材料时，也要记得它经过了讲解者的选择，重要结论仍需回查相关原文。<button type="button" class="timecode" data-seconds="1470">[00:24:30]</button> <button type="button" class="timecode" data-seconds="1538">[00:25:38]</button></p>
+<h2 id="_7">用一份产物整理思路</h2>
+<p>研究可以最终形成一篇文章、一份讲解或一段视频，也可以只写给自己看。分享者觉得这样的目标让自己的阅读有方向：为了让其他人看懂，需要把散乱的笔记排出顺序，交代各个观点之间的关系。这个过程也会暴露仍然缺少资料的地方。是否公开、做成什么形式，可以根据自己的目的决定。<button type="button" class="timecode" data-seconds="1629">[00:27:09]</button></p>
+<h2 id="_8">总结提炼</h2>
+<ul>
+<li>可以先带着问题检索，也可以从广泛阅读中逐渐发现问题。</li>
+<li>在有限时间里协调范围与深度，用入门材料建立词汇，再回查重要来源。</li>
+<li>记录出处、分歧和未解问题，让研究中断后仍能接续。</li>
+<li>判断论点时看证据、条件与限制，也检查自己是否只接受熟悉的看法。</li>
+</ul>
+<h2 id="_9">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="154">[00:02:34]</button> 两种选题路径</li>
+<li><button type="button" class="timecode" data-seconds="295">[00:04:55]</button> 范围与深度的取舍</li>
+<li><button type="button" class="timecode" data-seconds="493">[00:08:13]</button> 从道德反实在论的入门阅读开始</li>
+<li><button type="button" class="timecode" data-seconds="953">[00:15:53]</button> 从筛选到整理观点</li>
+<li><button type="button" class="timecode" data-seconds="1216">[00:20:16]</button> 检查资料与论证</li>
+<li><button type="button" class="timecode" data-seconds="1629">[00:27:09]</button> 把研究整理成产物</li>
+</ul>
+<h2 id="_10">复习</h2>
+<ol>
+<li>两种选题方式分别适合什么处境？怎样从广泛探索转向具体问题？</li>
+<li>入门材料可以帮初学者做什么，使用时又有哪些限制？</li>
+<li>从一条摘录回到原文需要保存哪些信息？</li>
+<li>面对一项与你原有观点一致的主张，你会怎样检查它的证据？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【中英+文稿】🔥如何研究任何主题", "duration": "29:43", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

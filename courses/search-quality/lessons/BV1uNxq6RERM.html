@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>桌面“大肥鱼”怎么养：先想清楚你要陪伴还是做事 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">桌面“大肥鱼”怎么养：先想清楚你要陪伴还是做事</h1>
+    <div class="meta"><span>影Z分身</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1uNxq6RERM/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">桌面“大肥鱼”怎么养：先想清楚你要陪伴还是做事</a><ul>
+<li><a href="#_2">先决定想让它做什么</a></li>
+<li><a href="#qq">接到 QQ 后，消息经过了什么</a></li>
+<li><a href="#_3">出问题时，先让问题变得具体</a></li>
+<li><a href="#_4">时间导航</a></li>
+<li><a href="#_5">总结提炼</a></li>
+<li><a href="#_6">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1uNxq6RERM.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#companion">← 桌面助手与日常协作</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1uNxq6RERM" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1uNxq6RERM&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1uNxq6RERM/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1uNxq6RERM"><h1>桌面“大肥鱼”怎么养：先想清楚你要陪伴还是做事</h1>
+<blockquote>
+<p><strong>原视频标题</strong>：【影Z】up踩过的大肥鱼养殖坑你就别踩了，进来看看有好处。<br>
+<strong>上传者</strong>：影Z分身<br>
+<strong>时长</strong>：05:28<br>
+<strong>来源</strong>：<a href="https://www.bilibili.com/video/BV1uNxq6RERM/">Bilibili 视频页</a><br>
+<strong>总结强度</strong>：standard</p>
+</blockquote>
+<h2 id="_2">先决定想让它做什么</h2>
+<p>第一次接触桌面 AI 陪伴软件，我们很容易先去插件市场翻功能，看到能联网、能聊天、能接平台，就都想装上试试。动手之前可以先问自己：最想要的是一个长期陪伴的角色，还是一个既能陪聊又能帮忙处理任务的工具？影Z分身说自己先踩了两天坑，才来分享这套选择思路。<button type="button" class="timecode" data-seconds="8">[00:00:08]</button></p>
+<p>如果你希望它主要陪你聊天，同时偶尔帮忙做事，可以在 DeepSeek 官网找到 API 服务，再把服务提供的 API Key 填进桌面软件。API 是软件向模型服务发送请求的接口；API Key 是这类请求使用的连接凭据。每次模型处理对话文字时会消耗 token，token 是模型处理文本时使用的计量单位，所以还要给账户充值并留意用量。这里讲的是上传者当时的入门路径，具体按钮和收费方式会随服务变化。<button type="button" class="timecode" data-seconds="35">[00:00:35]</button></p>
+<p>这个连接步骤解决的是“桌面软件用哪个模型来回答”的问题。之后你在软件里发出一条消息，模型负责生成回复，再由桌面角色把回复呈现出来；是否还能浏览网页、写日记或使用 QQ，则要看另外装了哪些插件和怎样配置。模型连接、角色设定和插件能力各有自己的作用，连接成功之后，还需要按用途选择后面的配置。</p>
+<p>接下来才是插件选择，可以按期待分成两类。第一类偏向“陪伴角色”：让角色自己探索，适合把聊天与养成体验放在前面；这类配置的工作能力有限。<button type="button" class="timecode" data-seconds="68">[00:01:08]</button></p>
+<p>这种配置的主要回报在于持续和角色互动，看它怎样整理自己的记录、怎样回应日常话题；需要它独立完成实际工作时，预期就应放低。影Z分身用“亲闺女”或“小女仆”描述自己想尝试的陪伴类型，也把互动称作“陪伴它成长”。<button type="button" class="timecode" data-seconds="74">[00:01:14]</button> 这是他对角色关系的设定，不代表软件真的有人的自主意识。</p>
+<p>第二类把陪伴和工具任务放在同一套使用方式里：工作时仍在工作区处理事情，再从插件市场补充需要的能力。可以让角色连接 B 站账号、在符合条件时响应艾特，也可以接入 QQ。影Z分身当时有一个叫“养鱼”的东西，后来把它归档；这是他的个人配置，其他安装未必有同名功能。<button type="button" class="timecode" data-seconds="114">[00:01:54]</button></p>
+<p>当陪伴设定和办事能力都要保留时，要留心两套用途是否互相冲突；工作任务仍放在普通工作区，再按需要从插件市场找功能。先确认角色主要负责什么，再逐项加插件；如果每个插件都随手打开，角色的陪伴设定和“现在要完成一件工作”的要求就可能混在一起。<button type="button" class="timecode" data-seconds="123">[00:02:03]</button></p>
+<h2 id="qq">接到 QQ 后，消息经过了什么</h2>
+<p>QQ 接入后，消息从 QQ 转到角色的对话框，再由角色生成回复并转回 QQ。角色处理的是转进来的对话内容；这条消息通道并不会因此让角色直接操作 QQ 界面或账号。把 QQ 当作收发消息的入口，就能分清桥接和账号操作的边界。<button type="button" class="timecode" data-seconds="141">[00:02:21]</button></p>
+<p>群聊当时还没有实际验证；影Z分身认为可以试，但提醒群里人数和群的数量都会影响调用量。每条消息都可能触发模型处理；参与者越多、消息越频繁，费用就越容易增长。因此，是否把角色放进群聊，除了连接能力，也要看预计会有多少消息需要模型处理。<button type="button" class="timecode" data-seconds="166">[00:02:46]</button></p>
+<p>费用数字也应按个人经历理解。影Z分身说自己领到约 12 元额度，又另外充值，前后花了约 30 元把配置弄好；他没有把这当作固定套餐或普遍成本。<button type="button" class="timecode" data-seconds="188">[00:03:08]</button> 这个例子能帮助我们看到，起步花费不只来自最初的绑定，后续持续聊天、接群和调用插件也会继续消耗额度。</p>
+<h2 id="_3">出问题时，先让问题变得具体</h2>
+<p>桌面软件刚配好之后仍可能出错，例如后台程序闪烁、前台报 bug。遇到问题时，可以把现象告诉角色，让它逐步协助排查，也可以提前说明去哪里找插件、怎样整理插件。影Z分身把这个过程说成“培养”和“修”；落到操作上，就是让角色先了解问题，再找出可能用得上的工具。<button type="button" class="timecode" data-seconds="202">[00:03:22]</button></p>
+<p>他还说，角色可以自己去插件市场找东西，也可以尝试把几个插件整合起来：留下合用的部分，把不合用的部分去掉。<button type="button" class="timecode" data-seconds="216">[00:03:36]</button> 这并不意味着每次整合都能自动成功。使用者仍要看它准备启用什么、为什么需要这些权限，以及整合后的行为是否符合原来的用途；有问题时，再把报错和目标拆成小步骤交给它检查。</p>
+<p>影Z分身当时刚更新软件，遇到过启动后崩溃的问题，也不确定更新是否已经修好它。这只是录制时的个人故障经历，不能直接套作当前版本的已知缺陷。遇到类似情况，他建议先别凭猜测随意改配置，可以借助另一款腾讯工具提供的免费额度，让 AI 协助检查和修复。<button type="button" class="timecode" data-seconds="227">[00:03:47]</button></p>
+<p>最后，他展示了自己用这套软件联网、查看 B 站内容、设置活动时间段和写日记的体验，也提到绘画等插件功能。<button type="button" class="timecode" data-seconds="254">[00:04:14]</button> 他喜欢的是角色会持续留下日记、自己浏览内容并按设定的时间活动，使用起来带有养成游戏的感觉；他说这让他两天没有登录二游。<button type="button" class="timecode" data-seconds="273">[00:04:33]</button> 这些例子说明他实际在尝试哪些功能；“自主意识”是他对角色表现的感受，不能据此判断软件具有人类意义上的意识。把期待放在可观察的功能上，会更容易区分角色设定、自动化动作和真实的系统能力。</p>
+<h2 id="_4">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="8">[00:00:08]</button> 按陪伴或工具任务选择使用方向</li>
+<li><button type="button" class="timecode" data-seconds="35">[00:00:35]</button> 连接模型服务与了解 token 用量</li>
+<li><button type="button" class="timecode" data-seconds="68">[00:01:08]</button> 两类插件与工作区安排</li>
+<li><button type="button" class="timecode" data-seconds="141">[00:02:21]</button> QQ 消息转接的边界</li>
+<li><button type="button" class="timecode" data-seconds="188">[00:03:08]</button> 个人费用与群聊调用量</li>
+<li><button type="button" class="timecode" data-seconds="202">[00:03:22]</button> 报错排查、更新后崩溃经历</li>
+<li><button type="button" class="timecode" data-seconds="254">[00:04:14]</button> 联网、定时与日记等体验</li>
+</ul>
+<h2 id="_5">总结提炼</h2>
+<p>这套配置从“希望角色陪伴，还是希望它承担任务”开始分流；API 负责连接模型，插件补充功能，QQ 桥接转发消息，费用和故障则需要在实际使用中持续观察。</p>
+<h2 id="_6">复习</h2>
+<ol>
+<li>QQ 消息转接后，角色获得的是哪一种能力？它仍缺少什么直接操作能力？</li>
+<li>为什么群聊人数和消息频率会影响 API 使用费用？</li>
+<li>影Z分身的约 30 元开销可以说明什么，又不能代表什么？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【影Z】up踩过的大肥鱼养殖坑你就别踩了，进来看看有好处。", "duration": "05:28", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>特朗普的商业版图：从品牌授权到加密代币 · 标准学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 标准</div>
+    <h1 id="_1">特朗普的商业版图：从品牌授权到加密代币</h1>
+    <div class="meta"><span>小Lin说</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1N6gD65EMz/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">特朗普的商业版图：从品牌授权到加密代币</a><ul>
+<li><a href="#_2">俱乐部把地产变成会员生意</a></li>
+<li><a href="#_3">上市公司和海外项目带来什么</a></li>
+<li><a href="#_4">加密项目的三条收入路径</a></li>
+<li><a href="#_5">从总额回到披露与监督</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1N6gD65EMz.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#finance">← 经济与财务</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1N6gD65EMz" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1N6gD65EMz&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1N6gD65EMz/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1N6gD65EMz"><h1>特朗普的商业版图：从品牌授权到加密代币</h1>
+<blockquote>
+<p>来源：小Lin说｜时长：20分54秒｜<a href="https://www.bilibili.com/video/BV1N6gD65EMz/">原视频</a>｜阅读强度：standard</p>
+</blockquote>
+<p>一栋酒店的经营者可以自己买地、盖楼、雇员工，也可以向品牌方付费，取得一个已有知名度的名字来吸引住客。特朗普早年的地产生意后来接上电视节目《学徒》，让“Trump”逐渐成了可授权的品牌。节目用两家同款酒店作比：挂上知名名字的一家可以卖得更贵。这个例子要说明的是品牌如何产生授权价值，价格差异并非实际统计。<button type="button" class="timecode" data-seconds="51">[00:00:51]</button> <button type="button" class="timecode" data-seconds="86">[00:01:26]</button></p>
+<p>地产经营需要资金、土地和日常管理；品牌授权则把名字交给其他项目使用，品牌方依合同收取授权费或版税。特朗普曾把这个名字用于楼盘，也卖过领带、牛排、香水和伏特加。无论项目是谁投资、谁负责运营，名字本身都可能成为一项商业资产。节目把这看作他从地产经营走向“个人品牌经营”的起点。<button type="button" class="timecode" data-seconds="103">[00:01:43]</button></p>
+<p>特朗普第一次担任总统期间，他的旧业务遇到阻力。节目回顾称，一些原有客户不支持他的政治立场，纽约有楼宇业主曾投票讨论是否摘下 Trump 标识；2021 年社交平台封号、合作终止和银行关系变化又削弱了他依赖公众注意力经营的能力。节目据此串起一条转变：重返白宫后，生意更倚重会员俱乐部、上市公司、家族投资和加密项目。<button type="button" class="timecode" data-seconds="130">[00:02:10]</button> <button type="button" class="timecode" data-seconds="180">[00:03:00]</button> <button type="button" class="timecode" data-seconds="259">[00:04:19]</button></p>
+<h2 id="_2">俱乐部把地产变成会员生意</h2>
+<p>海湖庄园是特朗普的会员制俱乐部。会员缴费后，可以使用庄园及相关休闲设施；邻近的高尔夫度假村也带来住宿、餐饮、场地和球场收入。特朗普当总统后，还在海湖庄园接待来访者。节目认为，场所本来的会所功能因此叠加了与总统本人接近的社交价值，会员生意变得更有吸引力。<button type="button" class="timecode" data-seconds="340">[00:05:40]</button></p>
+<p>会员和度假村收入是酒店、餐饮、会籍和球场等经营活动的进账。节目将这些项目合为一个俱乐部与度假村收入大类；OGE 的披露表则按物业或经营实体分别列出收入。<button type="button" class="timecode" data-seconds="379">[00:06:19]</button> <button type="button" class="timecode" data-seconds="384">[00:06:24]</button></p>
+<p>诉讼和解款也是一条一次性进账路径。节目列举 YouTube、Meta、CBS、ABC、X 等平台与媒体相关案件，把和解款放进年度收入讨论。它来自法律纠纷解决，不依靠俱乐部会员消费或酒店日常运营。<button type="button" class="timecode" data-seconds="400">[00:06:40]</button></p>
+<h2 id="_3">上市公司和海外项目带来什么</h2>
+<p>Truth Social 的母公司 Trump Media &amp; Technology Group（股票代码 DJT）借由与上市公司的合并进入公开市场。上市后，投资人可以在市场买卖股份，价格变化会影响股东持股的估值；公司发行股份或以其他方式融资，则把资金留在公司账户用于业务和投资。这是两笔不同方向的资金流：股价由市场交易形成，融资则由公司筹得。<button type="button" class="timecode" data-seconds="484">[00:08:04]</button></p>
+<p>节目拿 DJT 的业绩举例：公司业务清单变长，主营销售额仍小；当季亏损中还计入了比特币和 Cronos 价格变化形成的数字资产未实现损失，以及其他投资损失。未实现损失来自期末重估时价格走低，资产仍由公司持有。SEC 报告中的销售额和亏损是 DJT 这家上市公司的季度财务结果，具体金额见下表。<button type="button" class="timecode" data-seconds="514">[00:08:34]</button> <button type="button" class="timecode" data-seconds="965">[00:16:05]</button> <a href="https://www.sec.gov/Archives/edgar/data/1849635/000114036126020229/ef20070602_10q.htm">SEC 一季度 10-Q</a></p>
+<p>海外项目延续了品牌授权模式。节目列举卡塔尔、沙特、迪拜等地的 Trump 品牌酒店和度假村项目：当地开发方负责土地、建设与运营，特朗普集团提供品牌授权或管理服务，依合同取得相应费用。项目整体投资用于描述建设规模，授权方的收入来自合同约定的品牌和管理服务。<button type="button" class="timecode" data-seconds="609">[00:10:09]</button> <button type="button" class="timecode" data-seconds="621">[00:10:21]</button></p>
+<p>节目还谈到沙特、卡塔尔和阿布扎比等主权基金对贾里德·库什纳私募基金的投资。投资者把资金交给私募基金后，由基金按约定管理和投资；库什纳作为基金经理负责投资决策，基金投资收益再按基金合同分配。特朗普家族与库什纳的关系让这些投资受到关注，节目把它们列为家族商业网络的一部分。<button type="button" class="timecode" data-seconds="648">[00:10:48]</button></p>
+<h2 id="_4">加密项目的三条收入路径</h2>
+<p>节目把加密业务分成稳定币、World Liberty Financial（WLF）治理代币和 <code>$TRUMP</code> 迷因币。稳定币围绕美元锚定与储备资产运作，治理代币通过出售代币取得资金，迷因币则借助特朗普个人品牌吸引关注和交易。三者虽然都使用区块链代币，收入模式并不相同。<button type="button" class="timecode" data-seconds="695">[00:11:35]</button></p>
+<p>稳定币 USD1 设计为锚定美元。发行方用储备资产支撑流通中的币，并可将储备配置到短期债券等项目，取得利息收入；发行量扩大，储备规模也随之增加。节目把阿联酋 MGX 基金相关交易作为 USD1 规模快速上升的例子。披露表同时列出稳定币相关企业的资本和股权交易所得，以及业务净营业收入，具体类别放在下表中。<button type="button" class="timecode" data-seconds="749">[00:12:29]</button> <button type="button" class="timecode" data-seconds="780">[00:13:00]</button> <a href="https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf">OGE 年度披露原件</a></p>
+<p>WLF 发行的治理代币 WLFI 带有一定投票权，价格随供求变化。项目出售代币可以从购买者处取得资金；特朗普申报表中的相关条目记录了他经由关联实体取得的销售分配款和股权出售所得。WLFI 在市场上的总估值会随价格变化，出售代币及股权则各自对应实际交易。<button type="button" class="timecode" data-seconds="820">[00:13:40]</button> <a href="https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf">OGE 年度披露原件</a></p>
+<p><code>$TRUMP</code> 的传播方式更依赖个人品牌和流量。节目介绍，代币在特朗普就职前三天上线，起初公众还不确定它是否官方项目；特朗普随后在社交平台为它宣传，币价很快冲高。他还在高尔夫俱乐部为代币大额买家举行晚宴，把线上代币活动与线下社交结合起来。OGE 表格将 CIC Digital LLC 与 Celebration Coins 许可协议取得的款项列为版税，具体金额见下表。<button type="button" class="timecode" data-seconds="864">[00:14:24]</button> <button type="button" class="timecode" data-seconds="902">[00:15:02]</button> <a href="https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf">OGE 年度披露原件</a></p>
+<p>下面把视频和披露表中几项代表性数字放在一起，帮助读者对照资金如何流动：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>金额</th>
+<th>在披露或节目中的类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025 年总收入汇总</td>
+<td>超过 22 亿美元</td>
+<td>媒体将多类年度披露金额汇总</td>
+</tr>
+<tr>
+<td>俱乐部与度假村</td>
+<td>节目合计约 4.85 亿美元；海湖庄园约 7,748 万美元</td>
+<td>多项物业经营收入</td>
+</tr>
+<tr>
+<td>YouTube、Meta 等诉讼和解</td>
+<td>节目合计约 8,650 万美元</td>
+<td>一次性和解款</td>
+</tr>
+<tr>
+<td>Stablecoin Holdco</td>
+<td>约 1.969 亿美元；另列约 833 万美元</td>
+<td>资本投入及 C 类份额所得；业务净营业收入</td>
+</tr>
+<tr>
+<td>WLF</td>
+<td>约 5.27 亿美元代币销售分配款；约 6,563 万美元股权出售所得</td>
+<td>代币分配；股权交易</td>
+</tr>
+<tr>
+<td>CIC Digital / Celebration Coins</td>
+<td>约 6.351 亿美元</td>
+<td>品牌许可版税</td>
+</tr>
+<tr>
+<td>DJT（2026 年第一季度）</td>
+<td>净销售额约 87.12 万美元；净亏损约 4.059 亿美元</td>
+<td>上市公司的季度财务结果</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">从总额回到披露与监督</h2>
+<p>22 亿美元是媒体按 2025 年申报表中的多项条目汇总出的年度规模；OGE 原件按收入类别、资产区间和交易活动分栏。表中有经营项目的进账、版税、代币销售分配和股权交易所得，分类不同，读者可从各行看清款项来自哪里。OGE 原件的申报年度为 2025，认证报告于 2026 年 6 月 30 日发布；“2025 年收入”和“2026 年发布”分别指统计期间和公开日期。<button type="button" class="timecode" data-seconds="300">[00:05:00]</button> <a href="https://www2.oge.gov/web/oge.nsf/Resources/Now%2BAvailable%3A%2BThe%2BPresident%E2%80%99s%2Band%2BVice%2BPresident%E2%80%99s%2Bcertified%2Bannual%2Bfinancial%2Bdisclosure%2Breports">OGE 发布公告</a></p>
+<p>披露制度提供了公开审视财务关系的入口。节目结尾认为，公开收入来源和交易记录能让媒体、选民及监督者追问钱来自哪里、与公职有什么关系。报表呈现的是申报内容；对行为是否合法、是否构成利益冲突的判断，还需要法律规则和具体事实共同支持。<button type="button" class="timecode" data-seconds="1144">[00:19:04]</button></p>
+<h2 id="_6">总结提炼</h2>
+<ul>
+<li>地产让特朗普拥有经营场所，电视节目扩大了品牌知名度，品牌授权则让其他项目使用“Trump”名字并支付授权费。</li>
+<li>俱乐部从会员、住宿和休闲服务获得经营收入；海外品牌项目的总投资额与特朗普集团收到的授权费、管理费是不同口径。</li>
+<li>USD1 的储备资产利息、Stablecoin Holdco 的资本与股权所得、WLF 代币销售分配、<code>$TRUMP</code> 品牌版税分别来自不同商业路径。</li>
+<li>2025 年年度披露报告于 2026 年公布；DJT 的 2026 年季度财报属于公司层级，不能与特朗普个人申报收入混为一谈。</li>
+</ul>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="51">[00:00:51]</button> 地产、电视节目和个人品牌</li>
+<li><button type="button" class="timecode" data-seconds="86">[00:01:26]</button> 品牌授权与商品</li>
+<li><button type="button" class="timecode" data-seconds="340">[00:05:40]</button> 海湖庄园和会员俱乐部</li>
+<li><button type="button" class="timecode" data-seconds="400">[00:06:40]</button> 诉讼和解款</li>
+<li><button type="button" class="timecode" data-seconds="484">[00:08:04]</button> Truth Social 与上市公司 DJT</li>
+<li><button type="button" class="timecode" data-seconds="609">[00:10:09]</button> 中东品牌项目及相关投资</li>
+<li><button type="button" class="timecode" data-seconds="695">[00:11:35]</button> 三类加密项目</li>
+<li><button type="button" class="timecode" data-seconds="749">[00:12:29]</button> USD1 稳定币及相关进账</li>
+<li><button type="button" class="timecode" data-seconds="820">[00:13:40]</button> WLF 治理代币和股权交易</li>
+<li><button type="button" class="timecode" data-seconds="864">[00:14:24]</button> <code>$TRUMP</code> 迷因币和品牌版税</li>
+<li><button type="button" class="timecode" data-seconds="1144">[00:19:04]</button> 财务披露与监督</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>酒店品牌授权和酒店自营，分别由谁投入建设、谁承担经营？授权方可能通过什么方式取得收入？</li>
+<li>USD1 储备资产产生的经营收入，与 Stablecoin Holdco 的成员资本投入及股权出售所得有什么区别？</li>
+<li>为什么 WLF 代币市值和特朗普申报的代币销售分配款不能用同一个数字表达？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "特朗普总统先生，原来这么会赚钱啊…", "duration": "20:54", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>
