@@ -34,98 +34,151 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def check_flow(page, browser, base, site, chosen, route_request):
     page.goto(base + 'flow.html', wait_until='networkidle')
-    data = page.evaluate('window.LEARNING_FLOW')
-    paths = data['paths']
-    assert {p['id'] for p in paths} == {'ai', 'product', 'research', 'learning', 'life', 'culture'}
-    assert page.locator('.map-node').count() == len(paths)
-    assert len(data['spine']) == 3
-    assert page.locator('.spine-item').count() == page.locator('.gateway-card').count() == len(data['spine'])
-    for index, item in enumerate(data['spine']):
-        assert item['href'] and (site / 'courses/search-quality' / item['href']).is_file()
-        assert page.locator('.spine-item').nth(index).get_attribute('href') == item['href']
-        assert page.locator('.gateway-card').nth(index).get_attribute('href') == item['href']
-        page.locator('.gateway-card').nth(index).click()
-        assert page.locator('article').is_visible()
-        page.go_back(wait_until='networkidle')
-    for path in paths:
-        page.locator(f'.map-node[data-path="{path["id"]}"]').click()
-        assert page.locator('.branch').count() == len(path['branches']) > 0
-        branch = path['branches'][0]
-        page.locator(f'.branch[data-branch="{branch["id"]}"]').click()
-        assert page.locator('.branch-content .card').count() == len(branch['lessons'])
-        page.go_back()
-        page.wait_for_function("!location.hash.slice(1).includes('/')")
-        assert page.locator('.branch-content').count() == 0
-        page.locator('[data-reset]').first.click()
-    page.locator('#flow-search').fill('不存在的搜索测试xyz')
-    assert page.locator('#search-results').get_by_text('没有找到相关内容', exact=False).is_visible()
-    page.locator('#flow-search').fill(chosen)
-    result = page.locator(f'.result[data-go-lesson="{chosen}"]').first
+    page.wait_for_function('window.atlas && document.querySelectorAll("[data-node]").length > 0')
+    counts = page.evaluate("""() => {
+      const g = window.atlas.graph;
+      return {lessons: g.nodes.filter(n => n.type === 'lesson').length,
+              branches: g.nodes.filter(n => n.type === 'branch').length,
+              spine: g.nodes.filter(n => n.type === 'spine').length,
+              paths: g.routes.map(p => p.id)};
+    }""")
+    entries = json.loads((site / 'courses/search-quality/index.json').read_text(encoding='utf-8'))
+    extras = page.evaluate('(window.LEARNING_FLOW.external || []).length')
+    assert counts['lessons'] == len(entries) + extras
+    assert set(counts['paths']) == {'ai', 'product', 'research', 'learning', 'life', 'culture'}
+    assert counts['spine'] == len(page.evaluate('window.LEARNING_FLOW.spine')) == 3
+    assert page.locator('#world-labels [data-node]').count() == counts['lessons'] + counts['branches'] + counts['spine'] + len(counts['paths'])
+    assert page.locator('#route-nav [data-route]').count() == len(counts['paths'])
+    assert page.locator('#atlas-stage').get_attribute('data-renderer') == '3d'
+    page.locator('[data-action=fullscreen]').click()
+    page.wait_for_function('document.fullscreenElement !== null')
+    page.locator('[data-action=fullscreen]').click()
+    page.wait_for_function('document.fullscreenElement === null')
+    page.locator('[data-action=list]:visible').first.click()
+    assert page.locator('#library-panel .library-item').count() == counts['lessons']
+    page.locator('[data-action=close-list]').click()
+    for path in counts['paths']:
+        page.locator(f'#route-nav [data-route="{path}"]').click()
+        assert page.evaluate('window.atlas.selected') == path
+        assert page.locator('#inspector').is_visible()
+        assert page.locator('#inspector .detail-list button').count() > 0
+    page.locator('#route-nav [data-route="ai"]').click()
+    page.locator('#inspector .detail-list button').first.click()
+    assert page.evaluate('window.atlas.selected').startswith('ai/')
+    page.go_back()
+    page.wait_for_function('window.atlas.selected === "ai"')
+    page.screenshot(path=str(QA / 'atlas-route-1440.png'))
+    page.locator('[data-action=overview]').click()
+    page.locator('#atlas-stage').hover(position={'x': page.viewport_size['width'] // 2, 'y': page.viewport_size['height'] // 2})
+    page.mouse.wheel(0, 120)
+    page.wait_for_function('window.atlas.step === 1')
+    assert page.evaluate('window.atlas.selected.startsWith("spine/")')
+    stage = page.locator('#atlas-stage').bounding_box()
+    x, y = stage['x'] + stage['width'] * .52, stage['y'] + stage['height'] * .38
+    page.mouse.move(x, y)
+    page.mouse.down()
+    page.mouse.move(x + 80, y + 40, steps=6)
+    page.mouse.up()
+    assert page.evaluate('window.atlas.free')
+    before = page.evaluate('window.atlas.scene.target.zoom')
+    page.locator('[data-action=zoom-in]').click()
+    assert page.evaluate('window.atlas.scene.target.zoom') > before
+    page.locator('#atlas-search').fill('不存在的搜索测试xyz')
+    assert page.locator('#search-results .result-empty').is_visible()
+    page.locator('#atlas-search').fill(chosen)
+    result = page.locator(f'#search-results [data-select$="/{chosen}"]').first
     assert result.is_visible()
     result.click()
-    assert page.locator(f'#lesson-{chosen}').is_visible()
-    assert page.locator(f'[data-done="{chosen}"]').is_checked()
-    chosen_card = page.locator(f'#lesson-{chosen}')
-    cover_link = chosen_card.locator('a.cover')
-    assert cover_link.get_attribute('href') == chosen_card.locator('h4 a').get_attribute('href')
-    assert cover_link.get_attribute('aria-label')
-    cover_link.click()
+    assert page.evaluate('window.atlas.selected').endswith('/' + chosen)
+    assert page.locator(f'#inspector [data-done="{chosen}"]').is_checked()
+    page.screenshot(path=str(QA / 'atlas-lesson-1440.png'))
+    link = page.locator('#inspector .primary-link')
+    assert link.get_attribute('href') == f'lessons/{chosen}.html'
+    link.click()
     assert page.locator('article').is_visible()
     assert urlsplit(page.url).path.endswith(f'/lessons/{chosen}.html')
     page.go_back(wait_until='networkidle')
-    page.locator(f'[data-done="{chosen}"]').uncheck()
+    assert page.locator(f'#inspector [data-done="{chosen}"]').is_checked()
+    page.locator(f'#inspector [data-done="{chosen}"]').uncheck()
     page.goto(base, wait_until='networkidle')
     assert not page.locator(f'[data-check="{chosen}"]').is_checked()
     page.locator(f'[data-check="{chosen}"]').check()
     page.goto(base + 'flow.html', wait_until='networkidle')
-    page.locator('#motion-toggle').click()
-    assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'true'
-    assert page.evaluate("getComputedStyle(document.querySelector('.current')).animationPlayState") == 'paused'
-    page.locator('#motion-toggle').click()
-    assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
-    for width in (1440, 768, 390):
-        page.set_viewport_size({'width': width, 'height': 900})
+    pending = page.evaluate("""() => window.atlas.graph.nodes.filter(n =>
+      n.type === 'lesson' && !n.lesson.ready && !n.lesson.external).map(n => ({id:n.id,bvid:n.lesson.bvid}))""")
+    assert len(pending) == sum(not e['ready'] for e in entries)
+    for item in pending:
+        page.evaluate('(id) => window.atlas.selectNode(id)', item['id'])
+        link = page.locator('#inspector .primary-link')
+        assert link.get_attribute('href') == f'https://www.bilibili.com/video/{item["bvid"]}/'
+        assert link.get_attribute('rel') == 'noopener noreferrer'
+    external = page.evaluate("""() => window.atlas.graph.nodes.filter(n =>
+      n.type === 'lesson' && n.lesson.external).map(n => ({id:n.id,href:n.lesson.href}))""")
+    assert len(external) == extras
+    for item in external:
+        page.evaluate('(id) => window.atlas.selectNode(id)', item['id'])
+        assert page.locator('#inspector .primary-link').get_attribute('href') == item['href']
+    page.locator('[data-action=motion]').click()
+    assert page.locator('[data-action=motion]').get_attribute('aria-pressed') == 'true'
+    assert page.evaluate('window.atlas.scene.paused')
+    paused_time = page.evaluate('window.atlas.scene.time')
+    page.wait_for_timeout(200)
+    assert page.evaluate('window.atlas.scene.time') == paused_time
+    page.locator('[data-action=motion]').click()
+    assert not page.evaluate('window.atlas.scene.paused')
+    for width, height in ((1920, 1080), (1440, 900), (390, 844)):
+        page.set_viewport_size({'width': width, 'height': height})
         page.goto(base + 'flow.html', wait_until='networkidle')
-        page.locator('.map-node').first.click()
-        page.locator('.branch').first.click()
-        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Flow overflow at {width}'
-        page.screenshot(path=str(QA / f'flow-{width}.png'))
-    cover_entry = next(((p, b, lesson) for p in paths for b in p['branches'] for lesson in b['lessons'] if lesson.get('cover')), None)
-    assert cover_entry, 'Expected at least one local video cover'
-    path, branch, lesson = cover_entry
+        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+        assert page.locator('[data-action=list]:visible').count() >= 1
+        if width == 1920:
+            page.wait_for_function('document.querySelectorAll(".world-node.featured").length >= 3')
+        if width == 390:
+            assert page.evaluate("""() => {
+              const boxes = [...document.querySelectorAll('.world-node.spine .node-title, .world-node.path .node-title')].map(e => e.getBoundingClientRect());
+              return boxes.every((a, i) => boxes.slice(i + 1).every(b => a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top));
+            }""")
+        page.screenshot(path=str(QA / f'atlas-{width}.png'))
     page.route('**/assets/covers/*.webp', lambda route: route.fulfill(status=200, content_type='image/webp', body=b'invalid image'))
     page.goto('about:blank')
-    page.goto(base + f'flow.html#{path["id"]}/{branch["id"]}', wait_until='networkidle')
-    card = page.locator(f'#lesson-{lesson["bvid"]}')
-    card.scroll_into_view_if_needed()
-    page.wait_for_function('(id) => !document.querySelector(`#lesson-${id} .cover img`)', arg=lesson['bvid'])
-    assert card.locator('.cover-fallback').is_visible()
+    page.goto(base + 'flow.html', wait_until='networkidle')
+    covered = page.evaluate("window.atlas.graph.nodes.find(n => n.type === 'lesson' && n.lesson.cover).id")
+    page.evaluate('(id) => window.atlas.selectNode(id)', covered)
+    page.wait_for_function('document.querySelector("#inspector .detail-cover")?.hidden === true')
     page.unroute('**/assets/covers/*.webp')
-    pending = [(p, b, lesson) for p in paths for b in p['branches'] for lesson in b['lessons'] if not lesson['ready']]
-    assert pending, 'Expected at least one pending lesson'
-    for path, branch, lesson in pending:
-        page.goto(base + f'flow.html#{path["id"]}/{branch["id"]}', wait_until='networkidle')
-        card = page.locator(f'#lesson-{lesson["bvid"]}')
-        assert card.locator('a.cover').count() == 0
-        assert card.locator('.cover').count() == 1
-        assert card.get_by_role('link', name='观看原视频').get_attribute('href') == f'https://www.bilibili.com/video/{lesson["bvid"]}/'
     reduced = browser.new_context(reduced_motion='reduce')
     try:
         reduced.route('**/*', route_request)
         reduced_page = reduced.new_page()
         reduced_page.goto(base + 'flow.html', wait_until='networkidle')
-        assert reduced_page.evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches")
-        assert reduced_page.evaluate("getComputedStyle(document.querySelector('.current')).animationName") == 'none'
+        assert reduced_page.evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches && window.atlas.scene.reduced")
     finally:
         reduced.close()
+    fallback = browser.new_context()
+    try:
+        fallback.route('**/*', route_request)
+        fallback.add_init_script("""(() => {
+          const original = HTMLCanvasElement.prototype.getContext;
+          HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+            if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') return null;
+            return original.call(this, type, ...args);
+          };
+        })()""")
+        fallback_page = fallback.new_page()
+        fallback_page.goto(base + 'flow.html', wait_until='networkidle')
+        assert fallback_page.locator('#atlas-stage').get_attribute('data-renderer') == '2d'
+        fallback_page.locator('[data-action=list]:visible').first.click()
+        assert fallback_page.locator('#library-panel .library-item').count() == counts['lessons']
+    finally:
+        fallback.close()
     local = browser.new_context()
     try:
         local.route('**/*', route_request)
         local_page = local.new_page()
         local_page.goto((site / 'courses/search-quality/flow.html').as_uri(), wait_until='load')
-        assert local_page.locator('.map-node').count() == len(paths)
-        local_page.locator('.map-node').first.click()
-        assert local_page.locator('.branch').count() > 0
+        assert local_page.locator('#world-labels [data-node]').count() == page.locator('#world-labels [data-node]').count()
+        local_page.locator('[data-action=list]:visible').first.click()
+        assert local_page.locator('#library-panel .library-item').count() == counts['lessons']
     finally:
         local.close()
 
@@ -170,6 +223,11 @@ def main():
                 page.evaluate("document.fonts.ready")
                 assert page.locator(".lesson-card").count() == total
                 assert page.locator("[data-check]").count() == readable
+                external_home = page.locator('.external-card')
+                external_entries = json.loads((site / 'courses/search-quality/external.json').read_text(encoding='utf-8'))
+                assert external_home.count() == len(external_entries) == 7
+                assert page.locator('a[href="https://hackertube.org/categories"]').count() > 0
+                assert all(external_home.nth(i).locator('h3 a').get_attribute('href') == entry['url'] for i, entry in enumerate(external_entries))
                 home_cover = page.locator('.lesson-card a:has(> .card-cover)').first
                 home_href = home_cover.get_attribute('href')
                 assert home_cover.get_attribute('aria-label')
@@ -292,7 +350,7 @@ def main():
                         print(f'Checked {index + 1}/{readable} lessons at desktop and mobile widths', flush=True)
                 assert not overflows, f"Lesson overflow: {', '.join(overflows)}"
                 assert not errors, errors
-                print(json.dumps({"status":"passed","cards":total,"readable":readable,"viewports":[1440,768,390],"checks":["filter","progress persistence","export/import","invalid import","flow navigation and search","flow history and shared progress","motion preferences","cover fallback","file access","lesson navigation","online playback routing fixture","18-part playlist","part timestamps","frame jump and zoom","MathML","all-lesson images and overflow","console/network"]}, ensure_ascii=False))
+                print(json.dumps({"status":"passed","cards":total,"readable":readable,"viewports":[1920,1440,768,390],"checks":["filter","progress persistence","export/import","invalid import","3D navigation, search, wheel, drag and zoom","history and shared progress","external links","fullscreen","motion preferences","cover fallback","2D fallback","file access","lesson navigation","online playback routing fixture","18-part playlist","part timestamps","frame jump and zoom","MathML","all-lesson images and overflow","console/network"]}, ensure_ascii=False))
             finally:
                 browser.close()
     finally:

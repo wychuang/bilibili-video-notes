@@ -1,0 +1,86 @@
+[
+  {
+    "id": "3b1b-neural-network",
+    "title": "But what is a neural network? | Deep learning chapter 1",
+    "author": "3Blue1Brown",
+    "url": "https://www.youtube.com/watch?v=aircAruvnKk",
+    "hacker_tube_url": "https://hackertube.org/watch/aircAruvnKk",
+    "summary": "用手写数字识别的动画，直观解释神经元、层与基础网络怎样计算。",
+    "prerequisites": "无需编程；先熟悉图示和基础算术即可。",
+    "path": "ai",
+    "branch": "evaluate",
+    "cover": "assets/covers/external-3b1b-neural-network.webp"
+  },
+  {
+    "id": "3b1b-transformers",
+    "title": "Transformers, the tech behind LLMs | Deep Learning Chapter 5",
+    "author": "3Blue1Brown",
+    "url": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "hacker_tube_url": "https://hackertube.org/watch/wjZofJX0v4M",
+    "summary": "用视觉动画展示 Transformer 中的信息流动，并介绍 token 预测、embedding 与 softmax。",
+    "prerequisites": "先有神经网络的基本图景会更容易理解；无需微积分。",
+    "path": "ai",
+    "branch": "evaluate",
+    "cover": "assets/covers/external-3b1b-transformers.webp"
+  },
+  {
+    "id": "karpathy-llm-intro",
+    "title": "[1hr Talk] Intro to Large Language Models",
+    "author": "Andrej Karpathy",
+    "url": "https://www.youtube.com/watch?v=zjkBMFhNj_g",
+    "hacker_tube_url": "https://hackertube.org/watch/zjkBMFhNj_g",
+    "summary": "从推理与训练讲到助手微调、工具、安全和规模化，搭起理解大语言模型的概念地图。内容录于 2023 年。",
+    "prerequisites": "无需高等数学；先看 Transformer 入门有助于理解技术词汇。",
+    "path": "ai",
+    "branch": "evaluate",
+    "cover": "assets/covers/external-karpathy-llm-intro.webp"
+  },
+  {
+    "id": "ousterhout-software-design",
+    "title": "A Philosophy of Software Design | John Ousterhout | Talks at Google",
+    "author": "John Ousterhout · Talks at Google",
+    "url": "https://www.youtube.com/watch?v=bmSAYlu0NcY",
+    "hacker_tube_url": "https://hackertube.org/watch/bmSAYlu0NcY",
+    "summary": "讨论如何管理软件复杂度，以及模块和接口如何帮助形成更清晰的设计。",
+    "prerequisites": "有一点阅读或编写软件的经验会更容易代入。",
+    "path": "ai",
+    "branch": "engineering",
+    "cover": "assets/covers/external-ousterhout-software-design.webp"
+  },
+  {
+    "id": "stanford-product-market-fit",
+    "title": "How to Find Product Market Fit - Stanford CS183F: Startup School",
+    "author": "Peter Reinhardt · Stanford Online",
+    "url": "https://www.youtube.com/watch?v=_6pl5GG8RQ4",
+    "hacker_tube_url": "https://hackertube.org/watch/_6pl5GG8RQ4",
+    "summary": "Segment 联合创始人 Peter Reinhardt 分享公司寻找产品市场匹配的经历。",
+    "prerequisites": "无需商业背景；把它作为一个创业案例来观察。",
+    "path": "product",
+    "branch": "product",
+    "cover": "assets/covers/external-stanford-product-market-fit.webp"
+  },
+  {
+    "id": "marty-lobdell-study",
+    "title": "Marty Lobdell - Study Less Study Smart",
+    "author": "Marty Lobdell · Pierce College District WA",
+    "url": "https://www.youtube.com/watch?v=IlU-zDU6aQ0",
+    "hacker_tube_url": "https://hackertube.org/watch/IlU-zDU6aQ0",
+    "summary": "面向学习时间很长却记不牢的学生，讨论专注时段、休息、环境和记忆策略。",
+    "prerequisites": "无需前置知识；可从当前最想改善的学习习惯开始看。",
+    "path": "learning",
+    "branch": "learn",
+    "cover": "assets/covers/external-marty-lobdell-study.webp"
+  },
+  {
+    "id": "vanderplas-statistics-hackers",
+    "title": "Jake Vanderplas - Statistics for Hackers - PyCon 2016.mp4",
+    "author": "Jake VanderPlas · PyCon 2016",
+    "url": "https://www.youtube.com/watch?v=Iq9DzN6mvYA",
+    "hacker_tube_url": "https://hackertube.org/watch/Iq9DzN6mvYA",
+    "summary": "用模拟、抽样、打乱数据和交叉验证，把统计问题转成可运行的小实验。",
+    "prerequisites": "会写基础 Python 循环有帮助；PyCon 将讲座标为初学者级别。",
+    "path": "research",
+    "branch": "research",
+    "cover": "assets/covers/external-vanderplas-statistics-hackers.webp"
+  }
+]

@@ -1,23 +1,17 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#071619">
-  <title>学习脉络 · 从问题到行动</title>
-  <link rel="stylesheet" href="assets/flow.css">
-  <script defer src="assets/flow-data.js"></script>
-  <script defer src="assets/flow.js"></script>
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="flow.html"><span class="brand-mark">✳</span><span>学习脉络<small>LEARNING FLOW</small></span></a>
-    <nav aria-label="课程导航"><a class="active" href="flow.html" aria-current="page">学习脉络</a><a href="index.html">全部笔记 ↗</a></nav>
-    <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="false">暂停动效</button>
-  </header>
-  <main id="app">
-    <div class="loading">正在展开学习脉络…</div>
-  </main>
-  <footer><span>LEARNING FLOW / 按自己的问题出发</span><a href="index.html">返回全部笔记 ↗</a></footer>
-</body>
-</html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4f3ed"><meta name="description" content="沿着主线探索视频学习笔记：全屏三维知识地图、视频封面与清晰的学习起点。"><title>脉络 · Learning Atlas</title>
+<link rel="stylesheet" href="assets/flow.css?v=20261105-green"><script defer src="assets/vendor/three-r180.js"></script><script defer src="assets/flow-data.js?v=20261105-green"></script><script defer src="assets/atlas-scene.js?v=20261105-green"></script><script defer src="assets/flow.js?v=20261105-green"></script></head>
+<body><a class="skip-link" href="#atlas-search">搜索所有内容</a>
+<main id="atlas-app">
+  <div id="atlas-stage" aria-label="知识地图：滚轮沿路线前进，拖动自由探索"><div id="world-labels"></div></div>
+  <header class="atlas-header"><a class="atlas-brand" href="flow.html"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M3 27 15 6l9 15L33 8M3 27l21-6 9 7M15 6l3 25"/></svg><span>脉络<small>LEARNING ATLAS</small></span></a><span id="total-badge" class="total-badge"></span><div class="search-shell"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="atlas-search" type="search" placeholder="搜索视频、概念、问题…" aria-label="搜索全部视频和外部课程" autocomplete="off"><kbd>/</kbd><div id="search-results" hidden></div></div><button class="header-list" data-action="list" aria-label="打开全部内容">目录</button><nav class="header-links"><a href="index.html">全部笔记 ↗</a><button data-action="fullscreen" aria-label="切换全屏">⛶ <span>全屏</span></button></nav></header>
+  <aside class="route-rail"><div class="rail-heading">六条探索路线</div><nav id="route-nav" aria-label="选择学习路线"></nav><div class="rail-divider"></div><button class="rail-utility" data-action="list">☷ 全部内容 <span id="all-count"></span></button><a class="rail-utility" href="https://hackertube.org/categories" target="_blank" rel="noopener noreferrer">↗ HackerTube<small>发现更多知识视频</small></a><div class="rail-foot"><span id="read-count"></span><span id="renderer-status">3D 空间视图</span></div></aside>
+  <div class="atlas-caption" id="atlas-caption"><div class="overline">AN ATLAS OF UNDERSTANDING</div><h1>让理解，<em>连成一片。</em></h1><p>三篇共同起点，六条探索路线。<br>每一个光点，都通向一条具体内容。</p></div>
+  <aside id="inspector" class="inspector" aria-label="当前内容详情" hidden></aside>
+  <section id="library-panel" class="library-panel" aria-label="全部内容列表" hidden></section>
+  <div class="camera-tools" aria-label="视角控制"><button data-action="zoom-in" aria-label="放大">+</button><button data-action="zoom-out" aria-label="缩小">−</button><span></span><button data-action="orbit" aria-label="旋转视角">⤾</button><button data-action="overview" aria-label="回到全景">⌖</button><button data-action="motion" aria-pressed="false" aria-label="暂停流光">Ⅱ</button></div>
+  <div id="node-tooltip" role="tooltip" hidden></div>
+  <footer class="journey-bar"><div class="journey-mode"><button data-action="mode" aria-pressed="false">循线漫游 <span>⌁</span></button><small id="gesture-hint">滚轮前进 · 拖动探索 · Ctrl + 滚轮缩放</small></div><div class="journey-center"><div class="journey-title"><span id="journey-name">先走通三个共同起点</span><span id="journey-count"></span></div><div id="journey-stops" aria-label="路线进度"></div></div><div class="journey-arrows"><button data-action="prev" aria-label="路线前一步">←</button><button data-action="next" aria-label="路线下一步">→</button></div></footer>
+  <div id="atlas-status" class="sr-only" aria-live="polite"></div>
+  <noscript><div class="no-script">交互地图需要 JavaScript。<a href="index.html">打开全部图文笔记</a></div></noscript>
+</main></body></html>

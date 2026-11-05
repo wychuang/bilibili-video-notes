@@ -5,15 +5,16 @@ from datetime import date
 import json
 from pathlib import Path
 import re
+from urllib.parse import parse_qs, urlsplit
 
 COURSE = Path(__file__).resolve().parents[1] / "courses/search-quality"
 PATHS = [
-    ("ai", "AI 与软件", "#b8f3c6", "先认识模型，再沿检索、工具调用和评测进入真实软件。", ["map", "search", "evaluate", "agent", "companion", "engineering"]),
-    ("product", "产品与设计", "#f1d59b", "从人的任务出发，理解产品选择与设计表达。", ["product", "design"]),
-    ("research", "研究与知识管理", "#aad8f0", "寻找资料、判断证据，并整理可用的知识。", ["research", "knowledge"]),
-    ("learning", "学习与职业", "#d6c7f4", "把学习、实践和职业经验连接起来。", ["learn", "career"]),
-    ("life", "经济与生活", "#f0c6a2", "从具体问题理解经济与日常生活的选择。", ["finance", "home", "wellbeing"]),
-    ("culture", "文化与娱乐", "#f0bed1", "通过作品、故事和文化内容拓宽视野。", ["culture"]),
+    ("ai", "AI 与软件", "#4b9474", "先认识模型，再沿检索、工具调用和评测进入真实软件。", ["map", "search", "evaluate", "agent", "companion", "engineering"]),
+    ("product", "产品与设计", "#4b9474", "从人的任务出发，理解产品选择与设计表达。", ["product", "design"]),
+    ("research", "研究与知识管理", "#4b9474", "寻找资料、判断证据，并整理可用的知识。", ["research", "knowledge"]),
+    ("learning", "学习与职业", "#4b9474", "把学习、实践和职业经验连接起来。", ["learn", "career"]),
+    ("life", "经济与生活", "#4b9474", "从具体问题理解经济与日常生活的选择。", ["finance", "home", "wellbeing"]),
+    ("culture", "文化与娱乐", "#4b9474", "通过作品、故事和文化内容拓宽视野。", ["culture"]),
 ]
 BRANCHES = {
     "map": ("认识 AI 工具与概念", "先区分模型、工具和运行环境各自的作用。"),
@@ -58,7 +59,50 @@ SPINE = [{"id": key, "label": label, "description": description, "bvid": bvid} f
 ]]
 
 
-def make_flow(catalog, index, course=COURSE):
+EXTERNAL_REQUIRED = {"id", "title", "author", "url", "hacker_tube_url", "summary", "prerequisites", "path", "branch", "cover"}
+EXTERNAL_ALLOWED = EXTERNAL_REQUIRED | {"year"}
+
+
+def load_external(course=COURSE):
+    path = course / "external.json"
+    if not path.is_file():
+        raise ValueError("Missing external watch resources: " + str(path))
+    external = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(external, list):
+        raise ValueError("External watch resources must be a list")
+    seen = set()
+    branch_ids = {path_id: set(modules) for path_id, _, _, _, modules in PATHS}
+    for item in external:
+        if not isinstance(item, dict) or not EXTERNAL_REQUIRED.issubset(item) or set(item) - EXTERNAL_ALLOWED:
+            raise ValueError("Invalid external resource schema")
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", str(item["id"])) or item["id"] in seen:
+            raise ValueError("Invalid or duplicate external resource id")
+        seen.add(item["id"])
+        for key in ("title", "author", "summary", "prerequisites"):
+            if not isinstance(item[key], str) or not item[key].strip():
+                raise ValueError("External resource field must be non-empty: " + key)
+        for key, hosts in (("url", {"youtube.com", "www.youtube.com"}), ("hacker_tube_url", {"hackertube.org"})):
+            parsed = urlsplit(item[key]) if isinstance(item[key], str) else None
+            if not parsed or parsed.scheme != "https" or parsed.hostname not in hosts or parsed.username or parsed.password:
+                raise ValueError("Unapproved external resource URL: " + key)
+        youtube_id = parse_qs(urlsplit(item["url"]).query).get("v", [""])[0]
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", youtube_id):
+            raise ValueError("External YouTube URL must contain a video id")
+        watch_match = re.fullmatch(r"/watch/([A-Za-z0-9_-]+)", urlsplit(item["hacker_tube_url"]).path)
+        if not watch_match or watch_match.group(1) != youtube_id:
+            raise ValueError("HackerTube URL must point to a watch page")
+        if item["path"] not in branch_ids or item["branch"] not in branch_ids[item["path"]]:
+            raise ValueError("Unknown external learning path or branch")
+        if not isinstance(item["cover"], str) or (item["cover"] and not re.fullmatch(r"assets/covers/external-[a-z0-9-]+\.webp", item["cover"])):
+            raise ValueError("Invalid external resource cover path")
+        if item["cover"] and not (course / item["cover"]).is_file():
+            raise ValueError("Missing external resource cover: " + item["cover"])
+        if "year" in item and (not isinstance(item["year"], int) or not 1900 <= item["year"] <= 2100):
+            raise ValueError("Invalid external resource year")
+    return external
+
+
+def make_flow(catalog, index, course=COURSE, external=None):
     indexed = {item["bvid"]: item for item in index}
     modules = {module for *_, modules in PATHS for module in modules}
     unknown = {item["module"] for item in catalog["videos"]} - modules
@@ -93,13 +137,15 @@ def make_flow(catalog, index, course=COURSE):
     available = {e["bvid"]: e for p in paths for b in p["branches"] for e in b["lessons"]}
     spine = [{**step, **{k: available[step["bvid"]][k] for k in ("href", "cover", "ready", "title")}}
              for step in SPINE if step["bvid"] in available and available[step["bvid"]]["ready"]]
-    return {"updated": catalog.get("updated") or date.today().isoformat(), "spine": spine, "paths": paths}
+    external = load_external(course) if external is None else external
+    return {"updated": catalog.get("updated") or date.today().isoformat(), "spine": spine, "paths": paths, "external": external}
 
 
 def build(course=COURSE):
     catalog = json.loads((course / "catalog.json").read_text(encoding="utf-8"))
     index = json.loads((course / "index.json").read_text(encoding="utf-8"))
-    flow = make_flow(catalog, index, course)
+    external = load_external(course)
+    flow = make_flow(catalog, index, course, external)
     # Escaping prevents a catalog string from ending the JavaScript statement.
     payload = json.dumps(flow, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     (course / "assets/flow-data.js").write_text("window.LEARNING_FLOW=" + payload + ";\n", encoding="utf-8", newline="\n")

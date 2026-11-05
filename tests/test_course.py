@@ -130,12 +130,25 @@ class CourseTests(unittest.TestCase):
             (course / "catalog.json").write_text('{"videos":[]}', encoding="utf-8")
             for name in ("index.json", "index.html", "flow.html", "assets/flow.css", "assets/flow.js", "assets/flow-data.js", "assets/reader.css", "assets/reader.js", "assets/frames.json"):
                 (course / name).write_text("", encoding="utf-8")
+            (course / "external.json").write_text(json.dumps([{
+                "id": "fixture-video", "title": "Fixture video", "author": "Fixture author",
+                "url": "https://www.youtube.com/watch?v=abc123", "hacker_tube_url": "https://hackertube.org/watch/abc123",
+                "summary": "Fixture summary", "prerequisites": "None", "path": "ai", "branch": "engineering", "cover": "assets/covers/external-fixture-video.webp"
+            }]), encoding="utf-8")
+            (course / "assets/covers").mkdir()
+            (course / "assets/covers/external-fixture-video.webp").write_bytes(b"fixture cover")
+            vendor = course / "assets/vendor"
+            vendor.mkdir(parents=True)
+            (vendor / "THREE-LICENSE.txt").write_text("fixture license", encoding="utf-8")
             for name in ("LXGWWenKaiGBScreen.ttf", "OFL-LXGW-WenKai-Screen.txt"):
                 (root / "assets/fonts" / name).write_bytes(b"fixture")
             (course / "private-draft.json").write_text("private fixture", encoding="utf-8")
             with patch.object(builder, "ROOT", root), patch.object(builder, "COURSE", course):
                 builder.stage()
                 self.assertFalse((root / ".state/course-site/courses/search-quality/private-draft.json").exists())
+                self.assertTrue((root / ".state/course-site/courses/search-quality/assets/vendor/THREE-LICENSE.txt").is_file())
+                self.assertTrue((root / ".state/course-site/courses/search-quality/external.json").is_file())
+                self.assertTrue((root / ".state/course-site/courses/search-quality/assets/covers/external-fixture-video.webp").is_file())
                 stray = root / ".state/course-site/stray.txt"
                 stray.write_text("not approved", encoding="utf-8")
                 with self.assertRaisesRegex(ValueError, "Stale"):
@@ -144,6 +157,8 @@ class CourseTests(unittest.TestCase):
     def test_learning_flow_uses_catalog_and_safe_existing_assets(self):
         flow = builder.build_learning_flow.make_flow(self.catalog, self.index, COURSE)
         self.assertEqual(["ai", "product", "research", "learning", "life", "culture"], [p["id"] for p in flow["paths"]])
+        self.assertEqual(["#4b9474"] * 6, [p["color"] for p in flow["paths"]])
+        self.assertEqual(7, len(flow["external"]))
         lessons = [e for p in flow["paths"] for b in p["branches"] for e in b["lessons"]]
         self.assertEqual({e["bvid"] for e in self.catalog["videos"]}, {e["bvid"] for e in lessons})
         for entry in lessons:
@@ -157,6 +172,39 @@ class CourseTests(unittest.TestCase):
         for path in flow["paths"]:
             for branch in path["branches"]:
                 self.assertTrue(set(branch["start_bvids"]).issubset({e["bvid"] for e in branch["lessons"] if e["ready"]}))
+
+    def test_external_resources_are_valid_and_linked_to_existing_branches(self):
+        external = builder.build_learning_flow.load_external(COURSE)
+        self.assertEqual(7, len(external))
+        paths = {p["id"]: {b["id"] for b in p["branches"]} for p in builder.build_learning_flow.make_flow(self.catalog, self.index, COURSE)["paths"]}
+        for item in external:
+            with self.subTest(resource=item["id"]):
+                self.assertEqual({"id", "title", "author", "url", "hacker_tube_url", "summary", "prerequisites", "path", "branch", "cover"}, set(item))
+                self.assertTrue(item["url"].startswith("https://www.youtube.com/watch?v="))
+                self.assertTrue(item["hacker_tube_url"].startswith("https://hackertube.org/watch/"))
+                self.assertIn(item["branch"], paths[item["path"]])
+                self.assertTrue((COURSE / item["cover"]).is_file())
+        section = builder.external_section(external)
+        self.assertIn("浏览 HackerTube 分类", section)
+        self.assertIn("外部观看", section)
+        self.assertIn("尚未整理成本地课程笔记", section)
+        self.assertEqual(7, section.count('class="external-card"'))
+
+    def test_external_loader_rejects_untrusted_urls_unknown_fields_and_duplicate_ids(self):
+        valid = json.loads((COURSE / "external.json").read_text(encoding="utf-8"))[0]
+        valid["cover"] = ""
+        cases = [
+            ([{**valid, "url": "javascript:alert(1)"}], "scheme"),
+            ([{**valid, "private_note": "must not publish"}], "unknown field"),
+            ([valid, dict(valid)], "duplicate id"),
+        ]
+        for items, reason in cases:
+            with self.subTest(reason=reason), tempfile.TemporaryDirectory(dir=ROOT / ".state") as tmp:
+                course = Path(tmp) / "courses/search-quality"
+                course.mkdir(parents=True)
+                (course / "external.json").write_text(json.dumps(items), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    builder.build_learning_flow.load_external(course)
 
     def test_learning_flow_rejects_unknown_module(self):
         with self.assertRaisesRegex(ValueError, "Unknown learning-flow modules"):

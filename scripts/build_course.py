@@ -143,13 +143,23 @@ def shell(title, content, *, lesson=False):
     return f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light"><meta name="description" content="围绕具体问题展开的中文学习笔记，配合实例、关键画面和时间导航。">
-<title>{html.escape(title)}</title><link rel="stylesheet" href="{asset}/reader.css"><script src="{asset}/reader.js" defer></script><style>.card-cover{{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin-bottom:12px}}.cover-placeholder{{display:grid;place-items:center;aspect-ratio:16/9;background:#e9eee9;color:#536b5e;border-radius:6px;margin-bottom:12px;font-size:13px}}</style></head>
+<title>{html.escape(title)}</title><link rel="stylesheet" href="{asset}/reader.css"><script src="{asset}/reader.js" defer></script><style>.card-cover{{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin-bottom:12px}}.cover-placeholder{{display:grid;place-items:center;aspect-ratio:16/9;background:#e9eee9;color:#536b5e;border-radius:6px;margin-bottom:12px;font-size:13px}}.external-resources{{margin:42px 0;padding:26px;border:1px solid #cbd8cc;border-radius:12px;background:#f4f8f4}}.external-heading{{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:20px}}.external-heading h2{{margin:.3em 0}}.external-heading p{{max-width:720px;color:#52665a}}.external-heading>a,.external-discovery{{color:#327658;font-weight:650}}.external-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;list-style:none;padding:0;margin:0}}.external-card{{padding:18px;border:1px solid #d8e2d9;border-radius:9px;background:#fff}}.external-cover{{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin:12px 0}}.external-card h3{{font-size:17px;line-height:1.45}}.external-card p{{line-height:1.65;color:#405147}}.external-card .external-prereq{{font-size:13px;color:#68766d}}.external-card .card-eyebrow{{display:flex;justify-content:space-between;gap:12px;color:#4b725b;font-size:12px}}@media(max-width:640px){{.external-heading{{display:block}}.external-heading>a{{display:inline-block;margin:10px 0}}}}</style></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="{home}">学习笔记</a><a href="{'../flow.html' if lesson else 'flow.html'}">学习脉络 ↗</a></header>
 {content}<footer>视频与截图版权归原作者 · 正文和公式离线可读，视频回看需要联网。<br>学习进度保存在当前浏览器，可手动导出到其他设备。</footer></body></html>'''
 
 
+def external_section(external):
+    cards = []
+    for item in external:
+        cover = f'<img class="external-cover" src="{html.escape(item["cover"], quote=True)}" alt="" loading="lazy">' if item.get("cover") else ""
+        cards.append(f'''<li class="external-card"><div class="card-eyebrow"><span>外部观看</span><span>{html.escape(item['author'])}</span></div>{cover}<h3><a href="{html.escape(item['url'], quote=True)}" target="_blank" rel="noopener noreferrer">{html.escape(item['title'])} ↗</a></h3><p>{html.escape(item['summary'])}</p><p class="external-prereq"><strong>建议前置：</strong>{html.escape(item['prerequisites'])}</p><a class="external-discovery" href="{html.escape(item['hacker_tube_url'], quote=True)}" target="_blank" rel="noopener noreferrer">HackerTube 条目 ↗</a></li>''')
+    cards = ''.join(cards)
+    return f'''<section class="external-resources" id="external-resources"><div class="external-heading"><div><div class="eyebrow">外部观看入口 / FOUNDATION VIDEOS</div><h2>精选主干视频</h2><p>以下资源由原作者或课程机构发布，点击后会打开外部视频；它们尚未整理成本地课程笔记。</p></div><a href="https://hackertube.org/categories" target="_blank" rel="noopener noreferrer">浏览 HackerTube 分类 ↗</a></div><ul class="external-grid">{cards}</ul></section>'''
+
+
 def build():
     catalog = json.loads((COURSE / "catalog.json").read_text(encoding="utf-8"))
+    external = build_learning_flow.load_external(COURSE)
     previous_path = COURSE / "index.json"
     previous = {e["bvid"]: e for e in json.loads(previous_path.read_text(encoding="utf-8"))} if previous_path.exists() else {}
     lessons = COURSE / "lessons"
@@ -195,6 +205,7 @@ def build():
     starters = ''.join(f'<a href="lessons/{bv}.html"><span>0{i}</span>{label} →</a>' for i, (bv, label) in enumerate(starter, 1) if any(e['bvid'] == bv and e['ready'] for e in entries))
     content = f'''<main id="main" class="home"><section class="hero"><div class="eyebrow">一份可以慢慢读的学习路线 / {html.escape(str(catalog.get('updated') or date.today().isoformat()))}</div><h1>{html.escape(catalog['title'])}</h1><p class="lead">{html.escape(catalog['subtitle'])}</p><p>从感兴趣的具体问题出发，按自己的节奏探索。</p><div class="hero-meta"><span>{ready} 篇可读笔记</span><span>{sum(any(e['module'] == m for e in entries) for m in catalog['modules'])} 个主题</span><span>视频回看 · 离线公式 · 关键画面</span></div><p><a href="flow.html">探索学习脉络 →</a></p></section>
 <section class="start"><div><div class="eyebrow">先从这里开始</div><h2>从一个问题出发。</h2><p>这些入口聚焦搜索与 Agent，也可以在学习脉络中按兴趣选择其他主题。</p></div><div class="start-links">{starters}</div></section>
+{external_section(external)}
 <section class="practice"><h2>贯穿课程的一张练习纸</h2><p>选一个你确实想解决的问题，保留原回答，然后写下：</p><ol><li>用户此刻要完成什么？怎样才算完成？</li><li>哪一句话或哪一步出了问题？证据在哪里？</li><li>改动哪个环节？哪些条件保持不变？</li><li>怎样用另一个问题检验，避免只修好这一例？</li></ol><p>AI 生成的示例只能作为练习材料；项目经历、判断和测量结果需要自己完成并如实记录。</p></section>
 <nav class="module-nav" aria-label="课程章节">{module_links}</nav>
 <div class="tools"><label>找一篇笔记 <input id="course-search" type="search" placeholder="搜索 RAG、数据、调研…"></label><label>阅读范围 <select id="priority"><option value="all">全部内容</option><option value="核心">只看核心</option><option value="补充">通用能力补充</option><option value="拓展">技术与视野拓展</option><option value="unread">尚未学过</option></select></label><span id="progress" aria-live="polite"></span></div><p id="empty" hidden>当前筛选没有结果，试试清空关键词或切回全部内容。</p>
@@ -216,7 +227,7 @@ def stage():
     dest = ROOT / ".state/course-site"
     dest.mkdir(parents=True, exist_ok=True)
     catalog = json.loads((COURSE / "catalog.json").read_text(encoding="utf-8"))
-    files = {COURSE / p for p in ("catalog.json", "index.json", "index.html", "flow.html", "assets/flow.css", "assets/flow.js", "assets/flow-data.js", "assets/reader.css", "assets/reader.js", "assets/frames.json")}
+    files = {COURSE / p for p in ("catalog.json", "index.json", "external.json", "index.html", "flow.html", "assets/flow.css", "assets/flow.js", "assets/flow-data.js", "assets/reader.css", "assets/reader.js", "assets/frames.json", "assets/vendor/THREE-LICENSE.txt")}
     if (COURSE / "README.md").is_file():
         files.add(COURSE / "README.md")
     for item in catalog["videos"]:
@@ -225,6 +236,13 @@ def stage():
         files.update(p for ext in ("md", "html") if (p := COURSE / "lessons" / f"{item['bvid']}.{ext}").is_file())
         cover = COURSE / "assets/covers" / f"{item['bvid']}.webp"
         if cover.is_file():
+            files.add(cover)
+    for item in build_learning_flow.load_external(COURSE):
+        cover_path = item.get("cover")
+        if cover_path:
+            cover = COURSE / cover_path
+            if not cover.is_file():
+                raise ValueError(f"Missing external video cover: {cover_path}")
             files.add(cover)
     pages = [p for p in files if p.suffix == ".html"]
     for page in pages:
