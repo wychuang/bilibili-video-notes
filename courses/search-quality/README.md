@@ -4,6 +4,56 @@
 
 172 篇中文学习讲解，沿 AI 与软件、产品与设计、研究与知识管理、学习与职业、经济与生活、文化与娱乐六条路线组织。文章从具体问题和案例展开，配合关键画面、对照表、公式和视频时间导航。更新日期：2026-11-16。
 
+## 2026-11-16 新增笔记
+
+本次新增 31 篇，已归入原有主题与学习脉络。下面可直接打开完整阅读页。
+
+### AI 与软件（10 篇）
+
+- [AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1PznU6YEZE.html)
+- [e-means：少读几遍数据，为什么还能把聚类做得更好](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1HPWZ6FEU9.html)
+- [用 AI 长期开发复杂项目：从写出功能到维护整套工作](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1rPWd6nEpP.html)
+- [一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1Fuxf6aEgJ.html)
+- [DSH 插件演示：上下文、工作区与操作权限](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1GJnZ6MEFw.html)
+- [MCP 与自研插件：企业接入工具时的四类取舍](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1RxWE66E2D.html)
+- [DSH 插件榜单当周观察：功能、下载变化与版本条件](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1BoWj6rE26.html)
+- [把 Agent 的常见错误变成代码检查](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1qtWC6jE2e.html)
+- [DeepSeek Harness 插件演示：从费用面板到命令审批](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV17LWq6cE53.html)
+- [让 Agent 的长期记忆能够纠错](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1KoW16NEBf.html)
+
+### 产品与设计（10 篇）
+
+- [把经营目标拆成团队任务：BOSS 工作台怎样组织信息](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1Dw4n61EbX.html)
+- [在画面上直接改稿：咖啡活动页的一次 AI 设计试用](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1QM4p6JEHj.html)
+- [作品集如何从首屏带人走到联系入口：小路网站的视觉观察](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1774G6eEXP.html)
+- [找 Logo 参考时，分别看图形、应用与设计过程](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1c8356uEUT.html)
+- [NextTodo：先理清依赖，再决定眼下做什么](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1adW76wEpD.html)
+- [用 AI 设计界面：怎样从相似初稿走到具体、有取舍的作品](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1nbe16SESV.html)
+- [UI UX Pro Max：给编码助手提供一套设计规则](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV12gWR6tEuq.html)
+- [把一个满意页面变成能继续扩展的设计系统](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1E6Jf6UEUc.html)
+- [看懂海报的构图：从主体、留白到视觉平衡](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1hP486KEAc.html)
+- [如何使用 AI 做出有高级感的设计](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1YPWi6SEPD.html)
+
+### 研究与知识管理（5 篇）
+
+- [Graphify：把散落文件中的概念连起来](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV17ssL6BEeU.html)
+- [把 Obsidian 里的书接着听：朗读、缓存与离线音频](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV17psV6wEP7.html)
+- [ARIS 的基本思路：让执行与审查分开承担](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1Z3W269ERC.html)
+- [从用户名查找公开账号：先理解查询结果代表什么](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV18o446AE44.html)
+- [潮线：把今天、项目与积累放进同一张航海图](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1CfWo6aEEC.html)
+
+### 学习与职业（4 篇）
+
+- [在笔记里追问、复述与试验：一种 AI 辅助学习界面](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV13W4J6kEHS.html)
+- [给重要的事留出位置：减少干扰、借用固定日程、持续调整计划](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1yLnV6wEzJ.html)
+- [计算机专业内容做成技能树，学习路线怎样看](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1FTx46CEN8.html)
+- [两个月的 Agent 自学复盘：从业务场景走到可测试系统](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1WpbW62Eg3.html)
+
+### 经济与生活（2 篇）
+
+- [足弓、膝盖与髋部：三种下肢控制练习分别在观察什么](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1aZWJ6BE6Q.html)
+- [Human 3.0：用四个生活面向梳理当前处境](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1PEHY6dEBK.html)
+
 ## 怎样开始
 
 打开脉络图，可以先走“弄清 AI 怎么工作 → 说清要解决的问题 → 判断做得好不好”这条主线，也可以直接选择感兴趣的路线。全屏空间中，绿色连线把共同起点、主题分支和具体视频连起来；靠近分支后会展开更多封面。点击视频卡片，在详情中打开完整笔记。
