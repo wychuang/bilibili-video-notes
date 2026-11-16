@@ -54,6 +54,50 @@
 - [足弓、膝盖与髋部：三种下肢控制练习分别在观察什么](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1aZWJ6BE6Q.html)
 - [Human 3.0：用四个生活面向梳理当前处境](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1PEHY6dEBK.html)
 
+## 2026-11-04 视频清单（22 篇）
+
+本批内容已收录在现有学习笔记中。按主题打开讲解正文，也可返回对应原视频。
+
+### AI 与软件开发（4 篇）
+
+- [从两次文件误改看 AI 的任务边界](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1Cgxk6dEm7.html) · [原视频](https://www.bilibili.com/video/BV1Cgxk6dEm7/)
+- [从课程报名看架构设计：把规则、流程和数据库分开](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1CXet6gE6X.html) · [原视频](https://www.bilibili.com/video/BV1CXet6gE6X/)
+- [把 B 站读成一本杂志：浏览器扩展的界面预告](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1CoxY6YE4y.html) · [原视频](https://www.bilibili.com/video/BV1CoxY6YE4y/)
+- [一篇文字为什么读起来像流水线？从实例检查表达](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1uQ8E6LE6G.html) · [原视频](https://www.bilibili.com/video/BV1uQ8E6LE6G/)
+
+### 职业与个人成长（3 篇）
+
+- [越来越卷，死磕大厂还值吗？打工 3 年真实感受](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1QHsX6NEUL.html) · [原视频](https://www.bilibili.com/video/BV1QHsX6NEUL/)
+- [允许自己紧张，然后把下一句话说出来](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1kbpu69ECw.html) · [原视频](https://www.bilibili.com/video/BV1kbpu69ECw/)
+- [“54万元的自由报价”从哪里来：生活预算、卖出看跌期权与资金预留](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1GWnU6CEA8.html) · [原视频](https://www.bilibili.com/video/BV1GWnU6CEA8/)
+
+### 投资与市场（4 篇）
+
+- [大宗商品超级周期：一条关于货币、需求与供给的推演](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1qQsX6yEQz.html) · [原视频](https://www.bilibili.com/video/BV1qQsX6yEQz/)
+- [从照着估值表买基金，到只重仓看得懂的公司：一段个人投资复盘](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1q9xi6AE6X.html) · [原视频](https://www.bilibili.com/video/BV1q9xi6AE6X/)
+- [期权怎样定价：用一个两种结果的模型理解看涨权利](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1AjH96mEoo.html) · [原视频](https://www.bilibili.com/video/BV1AjH96mEoo/)
+- [一条时间线上的上证指数：音乐视频中的市场图形](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1qAsZ6XE8R.html) · [原视频](https://www.bilibili.com/video/BV1qAsZ6XE8R/)
+
+### 大肥鱼：部署、插件与记忆（5 篇）
+
+- [桌面“大肥鱼”怎么养：先想清楚你要陪伴还是做事](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1uNxq6RERM.html) · [原视频](https://www.bilibili.com/video/BV1uNxq6RERM/)
+- [给桌面 AI 加记忆：外部档案、主动检索与空闲压缩](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1S6xY65Eey.html) · [原视频](https://www.bilibili.com/video/BV1S6xY65Eey/)
+- [这条“鱼”新增了哪些日常活动和记忆功能](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1Fg4c6zEGV.html) · [原视频](https://www.bilibili.com/video/BV1Fg4c6zEGV/)
+- [从 Bot 实例到记忆插件：一条桌面 AI 鱼的部署流程](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1zLx76jEyn.html) · [原视频](https://www.bilibili.com/video/BV1zLx76jEyn/)
+- [从 API Key 到群聊插嘴：把桌面 AI 鱼接进 QQ](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1S3nQ6EEDf.html) · [原视频](https://www.bilibili.com/video/BV1S3nQ6EEDf/)
+
+### Obsidian、笔记与工作台（3 篇）
+
+- [如何优雅地用 Obsidian 边看视频边记笔记？](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1LDnv6mESx.html) · [原视频](https://www.bilibili.com/video/BV1LDnv6mESx/)
+- [把笔记连成自己的网络：从属性、链接到定期回顾](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1VnHp6CEVD.html) · [原视频](https://www.bilibili.com/video/BV1VnHp6CEVD/)
+- [把涉外非诉工作的常用材料收进一个工作台](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1scx76dEtR.html) · [原视频](https://www.bilibili.com/video/BV1scx76dEtR/)
+
+### 研究方法与知识探索（3 篇）
+
+- [对一个题目感兴趣，怎么找到它的来路？](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV15KhK6HEJ5.html) · [原视频](https://www.bilibili.com/video/BV15KhK6HEJ5/)
+- [怎样研究一个陌生问题：从具体提问到文献网络](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1GKpX6bEA2.html) · [原视频](https://www.bilibili.com/video/BV1GKpX6bEA2/)
+- [研究陌生主题：从兴趣、选题到整理证据](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/lessons/BV1U9nB6GEjY.html) · [原视频](https://www.bilibili.com/video/BV1U9nB6GEjY/)
+
 ## 怎样开始
 
 打开脉络图，可以先走“弄清 AI 怎么工作 → 说清要解决的问题 → 判断做得好不好”这条主线，也可以直接选择感兴趣的路线。全屏空间中，绿色连线把共同起点、主题分支和具体视频连起来；靠近分支后会展开更多封面。点击视频卡片，在详情中打开完整笔记。
