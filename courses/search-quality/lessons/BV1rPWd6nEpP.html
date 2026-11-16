@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 AI 长期开发复杂项目：从写出功能到维护整套工作 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">用 AI 长期开发复杂项目：从写出功能到维护整套工作</h1>
+    <div class="meta"><span>oil欧呦</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1rPWd6nEpP/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#ai">用 AI 长期开发复杂项目：从写出功能到维护整套工作</a><ul>
+<li><a href="#_1">混乱会怎样一点点累积</a></li>
+<li><a href="#_2">写代码之前，把选型和方案变成可以判断的事情</a></li>
+<li><a href="#_3">主会话协调工作，执行任务交给独立会话</a></li>
+<li><a href="#_4">多个功能同时开发，先给修改各自的空间</a></li>
+<li><a href="#_5">测试要分层，常走的调试路径可以固定下来</a></li>
+<li><a href="#_6">反复踩坑的地方，要进入项目规则</a></li>
+<li><a href="#_7">多轮修不好的问题，需要人重新选择方向</a></li>
+<li><a href="#_8">发布之后，用户还要有一条恢复的路</a></li>
+<li><a href="#_9">总结提炼</a></li>
+<li><a href="#_10">时间导航</a></li>
+<li><a href="#_11">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1rPWd6nEpP.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#engineering">← 软件工程与架构</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1rPWd6nEpP" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1rPWd6nEpP&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1rPWd6nEpP/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1rPWd6nEpP"><h1>用 AI 长期开发复杂项目：从写出功能到维护整套工作</h1>
+<blockquote>
+<p>来源：如何用 AI 长期开发一个复杂项目<br>
+UP 主：oil欧呦｜时长：00:24:40｜阅读强度：deep<br>
+链接：https://www.bilibili.com/video/BV1rPWd6nEpP/</p>
+</blockquote>
+<p>一个功能今天能运行，下个月再加一个功能，为什么就越来越费劲？我们让 AI 写出界面、接上业务，再接着增加需求，最初似乎推进很快。等项目积累几十次修改，类似的按钮可能在各处各写一遍，同一种操作出现不同样式，旧方案还残留着几套实现。每次加功能，AI 都要读更多代码和文档，却更难弄清应该沿用哪条路。长期开发的难处就从“这一段能不能写出来”，逐渐转到“后面的修改能不能继续建立在可靠的已有工作上”。<button type="button" class="timecode" data-seconds="43">[00:00:43]</button></p>
+<p>这里以 oil欧呦开发视频剪辑工具 Oil Studio 的一两个月经验为主线。该项目采用 Swift，涉及他此前并不熟悉的各项技术。他对模型分工、界面体验和测试成本的判断都带有个人使用条件；具体模型名称和能力比较也属于录制时的选择。我们要理解的是需求、方案、执行、检查和维护怎样接起来，再看哪些做法适用于自己的项目。<button type="button" class="timecode" data-seconds="11">[00:00:11]</button></p>
+<h2 id="_1">混乱会怎样一点点累积</h2>
+<p>先看样式和固定数值。新页面单独写了一组颜色、间距和选择器，旧页面也有相似的组件，却没有被复用。刚完成时，两处都能用；到统一调整时，我们才发现相同的含义分别写在多个地方，需要逐处修改。硬编码就是把具体数值直接散写在实现中。它的问题在这个情境里很具体：规范没有集中维护，换设备、调样式或增加功能时，要改的地方很多，还容易漏掉。<button type="button" class="timecode" data-seconds="60">[00:01:00]</button></p>
+<p>重复逻辑会把问题再放大。项目文件多了，AI 没找到已有函数，就在新文件里重新写一份。两份实现开始时相近，以后却可能各改各的，形成同一种业务在不同入口表现不同的情况。更隐蔽的是旧实现残留：一个功能改了好几版，旧路径一直作为 fallback 留着。Fallback 是主路径失败时的备用处理，但一个尚未上线的项目就保存多套无实际用途的兜底，会让后续阅读和判断变得更难。这一批代码需要有人决定去留，不能把“留着也许有用”当成长期默认。<button type="button" class="timecode" data-seconds="106">[00:01:46]</button></p>
+<p>文档也会参与这种累积。早期设计写的是一种框架，后来代码已经换了，旧方案却还在当前资料中。AI 如果把旧文档当成现行要求，就可能基于已经放弃的业务规则开发新功能。此时增加文档数量并不能自动改善维护：文档承担着快速告诉后续工作“现在怎样做”的作用，过期内容会把人和 AI 引向错误方向。代码、规范和说明需要随着同一次修改一起更新，历史方案则应有清楚的位置和身份。<button type="button" class="timecode" data-seconds="155">[00:02:35]</button></p>
+<h2 id="_2">写代码之前，把选型和方案变成可以判断的事情</h2>
+<p>正式动手前，先调查已有项目和框架能承担多少工作。成熟项目可能已经处理过多年的特殊边界，其中某段乍看不直观的写法，可能正好保护着一个难复现的问题。基于已有实现继续开发，能继承这些经验；但能否采用，还要看许可证和实际业务。MIT、Apache 与 GPL、AGPL 等许可附带的条件各有差异，选择框架必须同时检查许可义务。商业使用、分发和源码义务需要分别核对，不能仅凭许可证名称把商业化一概判为允许或禁止。<button type="button" class="timecode" data-seconds="198">[00:03:18]</button></p>
+<p>Oil Studio 最终选择 Swift，出发点是苹果原生应用的性能目标，以及对当时调研到的跨端方案的取舍。这个案例没有证明原生语言在所有项目上都优于跨端框架。它说明选型需要对应具体产品：要在哪些设备上运行，什么性能会影响使用，现有框架能否覆盖核心需求，后续维护由谁承担。即使自己尚未掌握某门语言，也可以借助 AI 调研这些条件；但“模型说自己熟悉”只是一项交流反馈，实际方案仍需要检查和验收。<button type="button" class="timecode" data-seconds="322">[00:05:22]</button></p>
+<p>选完技术，接着写产品方案。方案先让负责人知道接下来会发生什么：界面怎样变、用什么思路实现、大概修改哪些区域、遇到特殊情况怎么办、哪些决定需要人来做、最后怎样验收。如果满篇只有语言和框架术语，不熟悉技术的人就无法判断产品会变成什么；如果只是把需求换句话复述一遍，又看不到具体动作与风险。可读的方案要把需求推进到下一步，让人有能力指出理解偏差，而无需先学完全部技术细节。<button type="button" class="timecode" data-seconds="374">[00:06:14]</button></p>
+<p>这里采用多个模型交叉审阅：一方负责把产品方案写得清楚，另一方寻找遗漏的边界情况，再把意见交回主会话综合。不同模型可能关注不同问题，互相审阅可以增加发现漏洞的机会。不过，两个模型达成共识也不能替代事实验证。方案中涉及性能、外部接口或用户体验的部分，最后仍要由实际运行来检验。人的确认尤其需要落在自己能看懂的描述上，否则只是批准了一个尚未理解的长文档。<button type="button" class="timecode" data-seconds="410">[00:06:50]</button></p>
+<h2 id="_3">主会话协调工作，执行任务交给独立会话</h2>
+<p>进入实现以后，可以让一个主会话持续负责需求交流和分配工作，再让独立的执行会话读代码、修改和返回结果。这个安排解决的是上下文与沟通成本：主会话需要记住产品目标和已作出的决定，如果全部构建日志、调试尝试和代码细节都堆进去，后续讨论会越来越重。任务分出去以后，主会话接回必要结果，继续判断下一步；执行会话则集中处理某个明确任务。<button type="button" class="timecode" data-seconds="596">[00:09:56]</button></p>
+<p>oil欧呦在录制时把较适合交流和设计的模型放在主会话，把代码实现或检查交给另一套工具调用。这也受到订阅额度、价格和个人交流偏好的影响，无法仅凭他的用量推出所有项目都适合相同搭配。可借鉴的关系是：产品负责人不必直接逐个管理执行细节，协调会话可以先拆清任务，再把执行结果与原方案核对。与此同时，分派本身需要清楚的任务边界，否则只是把含糊需求搬进更多窗口。<button type="button" class="timecode" data-seconds="631">[00:10:31]</button></p>
+<p>实现完成后，审查从业务能否真正运行开始。界面上的操作要实际点过，完整流程要实际走过；仅仅为函数写几项检查，无法证明用户能够完成任务。再往下看，是否重复实现了已有组件，是否留下复杂难维护的逻辑，是否绕开了项目已经具备的基础能力。检查发现的问题交回协调会话，由它决定交给谁修复，再核对结果。这样，代码审查接着需求和方案往前走，避免只评价局部代码看起来是否整齐。<button type="button" class="timecode" data-seconds="700">[00:11:40]</button></p>
+<h2 id="_4">多个功能同时开发，先给修改各自的空间</h2>
+<p>分支记录不同的修改路线，Git worktree 则允许同一个仓库在不同目录保有独立工作区。我们可以在一份工作区开发一个新功能，在另一份工作区推进另一个功能，减少编辑同一批文件时互相打断。直观地看，本地有了另一份可独立编辑的项目文件；需要记住这些工作区仍属于同一个仓库，完成以后要把修改合并起来。独立目录减少了同时写文件的冲突，两个功能碰到相同逻辑时，合并冲突和业务兼容性仍需要处理。<button type="button" class="timecode" data-seconds="779">[00:12:59]</button></p>
+<p>自动测试与人工体验检查也有不同任务。自动化能重复执行一组步骤，确认流程是否能跑通；人再实际使用复杂功能，判断流程是否自然、交互是否舒服。Oil Studio 的经验尤其关注这后一层，因为剪辑工具的按钮、选择和工作顺序会直接影响使用感受。性能测试则更适合让 AI 协助采集运行指标、分析耗时链路，再针对具体问题修改。性能目标必须现实；反复追求达不到的数字，可能把已经清楚的实现改得越来越复杂。<button type="button" class="timecode" data-seconds="808">[00:13:28]</button></p>
+<h2 id="_5">测试要分层，常走的调试路径可以固定下来</h2>
+<p>每次局部修改都跑全量测试，成本会随测试数量增长。算一下时间：一次两分钟，反复跑十次，一小时中就有二十分钟花在等待。可以把纯运算逻辑与界面相关检查分开，局部修改先跑相关模块，整个功能完成以后再做较重的回归和端到端检查。这样保留了最终验证，也让开发阶段更快看到与当前修改直接相关的反馈。它不意味着任何情况下都能推迟检查；选择范围要看这次修改可能影响到哪里。<button type="button" class="timecode" data-seconds="882">[00:14:42]</button></p>
+<p>另一类成本来自重复操作界面。某段链路已经调试过，后续又经常需要验证，就可以把它整理成 CLI 或测试脚本，给入参数直接执行。复杂的文件上传流程也可以把若干操作封装起来，避免每次从头模拟所有点击。桌面程序还可以支持后台静默测试，减少反复弹窗抢占人的屏幕。这里程序化的对象是已经理解、需要重复执行的步骤；复杂体验仍需要人亲自检查，不能用自动完成步骤代替“这套操作是否好用”的判断。<button type="button" class="timecode" data-seconds="916">[00:15:16]</button></p>
+<p>测试本身也会积累冗余。拿“验证一加一是否等于二”这个极端例子来说，有些测试只把当前实现再写一遍；实现换成另一种同样正确的规则，测试也得同步改，却没有保护独立的业务要求。需要定期检查这类测试究竟发现过什么风险，保留能保护行为和边界的检查，清理机械复述代码的部分。判断依据应是测试提供的保证，不能因为测试跑得慢就一概删除。<button type="button" class="timecode" data-seconds="1089">[00:18:09]</button></p>
+<h2 id="_6">反复踩坑的地方，要进入项目规则</h2>
+<p>如果审查在同一个位置反复发现问题，或者两个功能都重复犯同一种错，这已超出单次修补。可以把具体陷阱写进 AGENTS.md 或专用审查说明，让下一次开发和审查在读到该区域时就知道要关注什么。规则最好对应真实出现过的问题，让后续工作知道什么行为必须避免、怎样确认没有重犯。频繁出现的问题才有机会从事后返工，转成事前提醒。<button type="button" class="timecode" data-seconds="974">[00:16:14]</button></p>
+<p>界面规范也要集中维护。Oil Studio 有一次原本统一使用卡片式单选，新增功能却出现下拉选择器，结果相近的操作在不同页面有不同表现。治理时把颜色、间距、通用组件和交互选择集中到一份现行规范，后续实现先沿用已有约定。同一份规范集中维护，才能减少多个地方各写一套、更新时彼此不同步的情况。长对话仍可能降低模型对早期约束的遵循程度，所以规范与检查都要长期维护。<button type="button" class="timecode" data-seconds="1034">[00:17:14]</button></p>
+<p>文档巡检同样要回到实际代码。如果旧文档和代码不同，AI 可能花时间判断谁有效；更糟时，它可能根本没有读代码，就按旧说明增加新功能。可以定期比对当前实现，删除无效内容，修正仍有价值的说明，并把文档凝练到足够指导下一次工作。文档像目录，帮助快速找到项目结构与业务逻辑；目录指错方向，会把一次小修改带进完全不同的路线。<button type="button" class="timecode" data-seconds="1224">[00:20:24]</button></p>
+<h2 id="_7">多轮修不好的问题，需要人重新选择方向</h2>
+<p>一个 bug 连续修了几轮仍然存在，就该暂停沿当前假设继续改。先让 AI 明确核心问题，必要时由两个能力较强的模型各自调查，再由人判断排查方向。oil欧呦把模型给出的置信度当成辅助参考，但自报的“九成把握”没有经过概率校准，不能代替复现、日志和验证结果。真正需要判断的是：模型有没有找到可解释现象的原因，提出的修改能否在同样条件下消除故障。<button type="button" class="timecode" data-seconds="1279">[00:21:19]</button></p>
+<p>如果某个功能技术上始终难以可靠实现，可以减少范围，或者换一种方式满足用户需求。这个决定也和维护成本有关：开发时连自己都难定位的问题，上线后再出现，仍然需要给用户一个稳定的解决办法。继续投入时间并不自动增加成功概率，反复修补也可能把结构变得更难理解。人的介入在这里承担产品取舍，决定哪些能力值得继续做、哪些应改变路径。<button type="button" class="timecode" data-seconds="1323">[00:22:03]</button></p>
+<h2 id="_8">发布之后，用户还要有一条恢复的路</h2>
+<p>发布规范要对应具体产品，把创建分支、提交合并、必要测试、本地操作、版本号和官网更新日志接起来。能够由程序强制检查的条件，可以做成发布入口的限制，例如确认必要验证已经执行、相关版本信息已经更新。保留上一版配置也很重要，出问题时才有机会快速切回已知可用的状态。这里的规则应直接服务这套产品的发版流程，不能只堆一份通用检查清单。<button type="button" class="timecode" data-seconds="1360">[00:22:40]</button></p>
+<p>Oil Studio 曾发布过一个打开就崩溃的桌面版本。此时即使官网已有新版，用户可能想不到要重新下载，应用内部也来不及解释怎么办。由此形成的处理是保留尽量简单的安全模式：主程序无法正常运行时，至少能显示恢复提示，告诉用户安装可用版本。安全模式的价值落在最坏情况下仍能传达下一步。它自身必须尽可能可靠，否则正常界面与恢复入口同时失败，用户就失去产品内的自救路径。<button type="button" class="timecode" data-seconds="1425">[00:23:45]</button></p>
+<h2 id="_9">总结提炼</h2>
+<p>长期使用 AI 开发复杂项目，需要持续维护需求到发布的整条工作。可读方案让人有能力判断方向，独立执行会话减少协调负担，真实流程检查验证产品行为；集中规则、复用组件、测试分层和文档巡检，则让下一次修改仍有清楚的基础。人的精力逐渐转向反复问题的治理与产品取舍，开发速度才能在迭代中继续保持。</p>
+<h2 id="_10">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="43">[00:00:43]</button> 五类长期混乱怎样出现。</li>
+<li><button type="button" class="timecode" data-seconds="198">[00:03:18]</button> 先调研已有框架，再做业务选型。</li>
+<li><button type="button" class="timecode" data-seconds="374">[00:06:14]</button> 可读方案与交叉审阅。</li>
+<li><button type="button" class="timecode" data-seconds="596">[00:09:56]</button> 主会话协调、独立会话执行。</li>
+<li><button type="button" class="timecode" data-seconds="808">[00:13:28]</button> 人工体验、性能分析和测试分层。</li>
+<li><button type="button" class="timecode" data-seconds="974">[00:16:14]</button> 规则、交互规范及文档治理。</li>
+<li><button type="button" class="timecode" data-seconds="1279">[00:21:19]</button> 疑难问题止损与发布恢复。</li>
+</ul>
+<h2 id="_11">复习</h2>
+<ol>
+<li>同一种组件重复实现，为什么会使后续修改越来越贵？</li>
+<li>一个能供人确认的方案，应该让负责人知道哪些具体变化？</li>
+<li>局部测试、重型回归、人工体验检查分别保护什么？</li>
+<li>程序一打开就崩溃时，安全模式要给用户留下什么能力？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "如何用 AI 长期开发一个复杂项目", "duration": "24:40", "src": "", "poster": ""}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

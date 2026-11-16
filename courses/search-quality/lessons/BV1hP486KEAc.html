@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>看懂海报的构图：从主体、留白到视觉平衡 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="_1">看懂海报的构图：从主体、留白到视觉平衡</h1>
+    <div class="meta"><span>视研的董掌柜</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1hP486KEAc/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">看懂海报的构图：从主体、留白到视觉平衡</a><ul>
+<li><a href="#_2">看一张图时，先问它哪里挤、哪里空</a></li>
+<li><a href="#_3">重复、裁切和分区也能组织空白</a></li>
+<li><a href="#_4">让线条、文字和留白互相配合</a></li>
+<li><a href="#_5">把分析变成可复用的观察习惯</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1hP486KEAc.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#design">← 设计与表达</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1hP486KEAc" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1hP486KEAc-P01-00086.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1hP486KEAc&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1hP486KEAc/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1hP486KEAc"><h1>看懂海报的构图：从主体、留白到视觉平衡</h1>
+<blockquote>
+<p>来源：视研的董掌柜｜17:06｜<a href="https://www.bilibili.com/video/BV1hP486KEAc/">Bilibili 原视频</a>｜深度阅读</p>
+</blockquote>
+<h2 id="_2">看一张图时，先问它哪里挤、哪里空</h2>
+<p>拿到一张海报，我们可能先觉得“挺好看”，却说不清画面为什么舒服。分析时可以先把主体轮廓和画布放在一起看：主体偏方、偏长还是很窄？它放进画面后，四周还剩多少空间？如果主体细长，硬把它放进宽阔的横向画布，两侧就容易出现大片空地。接下来要看的，是设计如何把空地变成有用的构图区域。</p>
+<p>一张人物海报用手绘线条和实拍人物结合，人物两侧还有像发型一样的装饰。主体本身比较窄，右侧便排入时间信息；时间是独立的一组内容，可以分行、竖向排列，形成窄长的矩形。左侧则增加日期文字和一架只露出一部分的钢琴，给另一边补足视觉重量。右侧有较醒目的圆形装饰和时间，左侧的日期与钢琴回应这份重量，主体两旁因此有了各自的安排。<button type="button" class="timecode" data-seconds="21">[00:00:21]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1hP486KEAc-P01-00086.jpg" data-caption="窄长的人物组合占据中间，右侧时间信息与两边钢琴装饰共同组织剩余空间。">
+    <img src="../assets/frames/BV1hP486KEAc-P01-00086.jpg" loading="lazy" alt="视频截图 01，00:01:26：窄长的人物组合占据中间，右侧时间信息与两边钢琴装饰共同组织剩余空间。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="86.000">图 01 · 00:01:26</button><span>窄长的人物组合占据中间，右侧时间信息与两边钢琴装饰共同组织剩余空间。</span></figcaption>
+</figure>
+<p>这里可以学到一个实用判断：独立、容易换行的信息，适合放进狭长区域。若把所有字都挤成一大块，或者只在窄主体旁边留出空白，画面就难以平衡。先找出主体轮廓，再决定哪些信息适合成为边缘的长条，哪些元素能给另一侧增加分量，排版会有清楚的起点。</p>
+<p>另一张图用两个人物解决单人构图留下的空缺。只保留其中一个人物时，人物朝向和姿势会让右上方显得空；把另一个人物放在空的一侧，两个人便构成互相补位的组合。做海报时，可以先试着单独摆放主体，观察视线、动作和轮廓把空白引向哪里，再判断能否增加第二个主体，或改变现有人物的朝向与姿势。图像生成工具降低了调整人物方向和动作的门槛；是否继续学习节点式工作流，可以跟着实际任务决定。需要控制生成过程或修改其中某一环时，掌握工作流会更有帮助。<button type="button" class="timecode" data-seconds="188">[00:03:08]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1hP486KEAc-P01-00195.jpg" data-caption="两个人物的脸部、手势和身体轮廓互相补位，填入单个人物构图留下的空区。">
+    <img src="../assets/frames/BV1hP486KEAc-P01-00195.jpg" loading="lazy" alt="视频截图 02，00:03:15：两个人物的脸部、手势和身体轮廓互相补位，填入单个人物构图留下的空区。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="195.000">图 02 · 00:03:15</button><span>两个人物的脸部、手势和身体轮廓互相补位，填入单个人物构图留下的空区。</span></figcaption>
+</figure>
+<h2 id="_3">重复、裁切和分区也能组织空白</h2>
+<p>第三种处理方式，是让重复的主体与版式一起工作。一张图把相似图像复制、叠放，画面上方和下方又有部分元素被裁切，形成“藏头露尾”的效果。叠加会稍微增加阅读干扰，但当图像之间明暗反差足够明显时，重复本身也能填充空间，带来不寻常的节奏。信息排布并不复杂：一组文字两端对齐，另一组放在对角位置，底部再用放大的文字形成回应。先看整体的重复与对角关系，再看每块信息如何对齐，就能理解丰富的画面怎样由简单规则组成。<button type="button" class="timecode" data-seconds="351">[00:05:51]</button></p>
+<p>分析一张更复杂的海报时，可以先给画布划分区域。顶部是一块独立区域，其余部分再分成视觉区和阅读区：人物、放大的英文和留白集中在视觉区，较长、需要逐行阅读的文字放在一侧。这样划分后，视觉元素不会和说明文字争抢同一片空间。若客户只说想要“高级感”，选图仍是关键的第一步：人物状态、摄影质感和整体明暗先决定画面的气质，字体缩小、加英文等排版处理只能继续塑造气质，无法替一张不合适的图解决问题。<button type="button" class="timecode" data-seconds="435">[00:07:15]</button></p>
+<figure class="evidence-figure" id="evidence-frame-03">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1hP486KEAc-P01-00459.jpg" data-caption="黄色画面里，人物与大字承担视觉形象，右侧窄栏保留连续阅读文字。">
+    <img src="../assets/frames/BV1hP486KEAc-P01-00459.jpg" loading="lazy" alt="视频截图 03，00:07:39：黄色画面里，人物与大字承担视觉形象，右侧窄栏保留连续阅读文字。">
+    <span class="frame-stamp">视频画面 / 03</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="459.000">图 03 · 00:07:39</button><span>黄色画面里，人物与大字承担视觉形象，右侧窄栏保留连续阅读文字。</span></figcaption>
+</figure>
+<p>同一张海报还展示了对角平衡。左上角的图形填得比较满，视觉重量较大；右下角的区域更疏，文字和线条便一起给它增加分量。高填充面可以理解为单位面积里元素更密、空隙更少，低填充面则相反。两边无需放相同的物件，也不用做成镜像：一侧用密集的面，另一侧用更大的轮廓、文字或线条，整体看起来大致稳定就够了。重要的是比较两侧的面积、疏密和位置，而非逐个寻找相同元素。<button type="button" class="timecode" data-seconds="572">[00:09:32]</button></p>
+<h2 id="_4">让线条、文字和留白互相配合</h2>
+<p>画面里的路径线会把视线带向某个方向，但不一定能单独承担构图重量。在线条较密的一侧加入文字，可以让对角两端的分量更接近；文字既传达姓名等信息，也能成为画面里的形状。分析时，可以先眯起眼看大块区域的疏密，再恢复细节，检查信息文字是否也在参与构图。平衡是整体感受，不要求两角的物件完全相同。<button type="button" class="timecode" data-seconds="607">[00:10:07]</button></p>
+<p>另一张人物图把文字穿插在主体周围：有些文字压在人物后方，有些从人物前方经过，也有些直接叠在上面。前后关系增加了层次，人物身上的线条还能把视线引向内部较密集的位置。版式看似错落，局部仍有隐性的对齐关系：某些字块彼此对齐，另一些边缘呼应画面中的线条。因此，错开文字的位置不等于随意摆放；要让读者看到灵活变化，同时保留可以追踪的秩序。<button type="button" class="timecode" data-seconds="675">[00:11:15]</button></p>
+<p>留白也有具体用途。若画面主体略微偏下，设计者可能是为下方重要姓名或说明留下空间；此时需要判断这块空白是否服务于重点，而不能只按“主体必须居中”去调整。排布时还可以安排紧、松、紧的节奏：先让几组信息聚拢，再留出较宽区域，接着把另一组元素收紧。物件的摆放、云层、草地与背景线条，也能形成指向主体的路径。拍摄时可以改变机位、利用景深，或移开杂物，让背景引导视线而不分散注意力。<button type="button" class="timecode" data-seconds="812">[00:13:32]</button></p>
+<h2 id="_5">把分析变成可复用的观察习惯</h2>
+<p>看作品时不必把每个细节都解释成唯一答案。比如，某条路径究竟代表钢琴还是其他形状，单凭画面未必能确定；可以先讨论它对角线的走向、与文字的位置关系，以及它是否帮助平衡两侧。把“我看不懂这个符号”转成“它在画面里承担什么作用”，就能在信息不完整时仍然分析构图，同时把不确定的含义留在边界之外。</p>
+<p>一次分析可以按这个顺序进行：先看主体轮廓与画布的比例，找出明显的空白；接着观察重复、裁切、文字和配图怎样填充或回应空白；然后把画面粗略分区，比较不同区域的疏密、重量和阅读顺序；最后回到细节，看文字是否既可读又参与构图，留白是否为重要信息服务。随着练习增多，我们看到一张图时就不只是在判断“好不好看”，也能说清楚它用哪些元素组织空间。</p>
+<h2 id="_6">总结提炼</h2>
+<ul>
+<li>先比较主体轮廓与画布比例，再寻找空白由哪些信息或图形承担。</li>
+<li>独立、可拆行的信息适合放进狭长区域；两侧可用不同元素形成大致平衡。</li>
+<li>重复、叠放、裁切和错落排版能增加变化，局部对齐仍需保持秩序。</li>
+<li>视觉区与阅读区分开后，图片、留白和说明文字更容易各司其职。</li>
+<li>观察疏密、位置和方向，比机械追求镜像对称更能解释画面平衡。</li>
+</ul>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="21">[00:00:21]</button> 窄主体如何处理横向画布留下的两侧空间</li>
+<li><button type="button" class="timecode" data-seconds="188">[00:03:08]</button> 两个人物组合如何补足单人构图的空缺</li>
+<li><button type="button" class="timecode" data-seconds="351">[00:05:51]</button> 重复、叠放与裁切组成的版式</li>
+<li><button type="button" class="timecode" data-seconds="435">[00:07:15]</button> 把海报划分为视觉区域和阅读区域</li>
+<li><button type="button" class="timecode" data-seconds="572">[00:09:32]</button> 用高填充面与低填充面形成对角平衡</li>
+<li><button type="button" class="timecode" data-seconds="675">[00:11:15]</button> 文字穿插、隐性对齐与留白用途</li>
+<li><button type="button" class="timecode" data-seconds="812">[00:13:32]</button> 通过背景路径引导视线</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>窄长主体放进宽画布后，哪些信息适合排成狭长区域？</li>
+<li>观察一张海报时，怎样区分视觉区域和阅读区域？</li>
+<li>对角两侧的疏密不同，哪些元素可以帮助形成大致平衡？</li>
+<li>一组文字看起来错落时，怎样检查它仍有隐藏的对齐关系？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "审美想大幅提升！就得这么分析！", "duration": "17:06", "src": "", "poster": "../assets/frames/BV1hP486KEAc-P01-00086.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

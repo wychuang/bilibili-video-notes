@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程</h1>
+    <div class="meta"><span>马克的技术工作坊</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1PznU6YEZE/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#ai">AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程</a><ul>
+<li><a href="#_1">先看代码如何从开发走到用户手里</a></li>
+<li><a href="#pr">提交 PR 之前：先让功能能运行，再让新视角检查改动</a></li>
+<li><a href="#pr-ai">PR 检查中：自动测试、AI审查、安全检查和人工审批</a></li>
+<li><a href="#_2">合并时与合并后：在最新代码上测试，并逐步开放</a></li>
+<li><a href="#_3">人把注意力放在哪些地方</a></li>
+<li><a href="#_4">总结提炼</a></li>
+<li><a href="#_5">时间导航</a></li>
+<li><a href="#_6">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1PznU6YEZE.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#engineering">← 软件工程与架构</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1PznU6YEZE" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1PznU6YEZE-P01-00650.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1PznU6YEZE&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1PznU6YEZE/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1PznU6YEZE"><h1>AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程</h1>
+<blockquote>
+<p><strong>来源</strong>：如何审核 AI 写的代码？从写代码到上线，一套保证产品质量的全流程<br>
+<strong>UP 主</strong>：马克的技术工作坊　<strong>时长</strong>：24 分 34 秒　<strong>链接</strong>：https://www.bilibili.com/video/BV1PznU6YEZE/　<strong>阅读强度</strong>：deep</p>
+</blockquote>
+<p>AI 几分钟能写出几千行代码，逐行检查很费时间；完全不看，又很难知道代码有没有按预期工作。只挑“重要部分”也会遇到下一道难题：错误有时藏在看似不起眼的改动里。要把审查做得可持续，关键是让每次改动都经过一串互相补位的检查，再把人的注意力留给那些机器难以判断的决策。</p>
+<h2 id="_1">先看代码如何从开发走到用户手里</h2>
+<p>一个功能从写出来到被用户使用，大致经过提交、检查、合并和发布。开发者写完代码后，会提交一个 PR（Pull Request，合并申请），说明希望把这组改动合入主分支。PR 通常先跑自动检查，例如测试，再由其他开发者审查目标是否实现、有没有潜在风险。检查通过后，代码进入主分支；之后仍要经过发布，功能才真正到达用户。合并说明代码已进入共同开发版本，发布才改变用户正在使用的软件。</p>
+<p>这套流程可以分为四段：提交 PR 之前、PR 检查中、合入主分支时，以及合入之后逐步发布。AI 参与写代码后，四段的骨架仍然存在，变化的是每个位置如何安排机器检查、AI 判断和人工审批。这样看代码审查，就不会把它当成一次“读完 diff 就结束”的孤立活动；前后的测试和发布措施也共同决定一次改动能否安全上线。<button type="button" class="timecode" data-seconds="91">[00:01:31]</button></p>
+<h2 id="pr">提交 PR 之前：先让功能能运行，再让新视角检查改动</h2>
+<p>第一步是确认产品功能能运行。AI 可以调用运行程序、打开网页、截图和操作界面等工具，实际走一遍功能，再检查结果是否符合需求。给 AI 一段代码让它“看起来没问题”还不够；让它能启动产品、执行操作并观察结果，才有机会发现代码编译通过但界面无法使用、交互没有反应等运行层面的错误。检查工具要覆盖真正的用户动作，AI 才能验证功能效果。<button type="button" class="timecode" data-seconds="177">[00:02:57]</button></p>
+<p>第二步检查代码质量，例如实现是否符合项目规范、架构是否合理、改动有没有带来风险。原来负责写代码的 AI 手里保留着需求、思考和实现过程；让它回头自审时，它容易沿用原来的解释方式，把实现意图当成实现正确的证据。审查者需要从“代码实际上做了什么”出发重新判断。</p>
+<p>为此，团队另开一个全新的 AI agent，只给它目标和相关代码改动，让它判断改动能否达到目标、可能产生哪些风险。新 agent 不知道原 agent 的推理过程，少了沿原先思路自我确认的机会。它仍然是自动审查的一环，结论需要放进后续测试和 PR 检查里一起处理；换一个 agent 并不会让审查自动变成正确答案。<button type="button" class="timecode" data-seconds="261">[00:04:21]</button></p>
+<h2 id="pr-ai">PR 检查中：自动测试、AI审查、安全检查和人工审批</h2>
+<p>PR 提交之后，第一关是 CI（持续集成）。每次代码改动提交后，CI 会自动运行预先配置的检查，例如代码风格、类型、多平台测试和项目构建。凡是可以稳定自动运行、无需 AI 临场判断的检查，都适合放在这里。它们能快速挡住格式、类型或构建问题，让后续审查把精力放在更需要理解代码行为的判断上。<button type="button" class="timecode" data-seconds="325">[00:05:25]</button></p>
+<p>CI 通过后，AI 审查大体分三步。第一步发现问题：检查 PR 是否达到预定目标、是否能和现有系统协作、会不会影响其他部分。只看新函数自己是否合理还不够，改动还可能影响调用它的代码或其他依赖功能。</p>
+<p>第二步过滤低价值意见。若团队长期认为某类意见不影响运行、也无需每次修改，例如一般风格差异或冗余代码，就可以把处理规则写清楚，交给过滤环节识别。这样能减少开发者逐条判断无关意见的时间。过滤规则只适用于团队已经确认不需处理的类别；能否过滤，取决于问题是否会影响运行、维护或行为，而不只看它是否琐碎。</p>
+<p>第三步处理留下的问题。每条意见都要有结果：修复，或写明理由后关闭。意见可以标成重要问题、小问题，或改动前就已存在的问题；已有问题虽不由这次 PR 引入，也需要明确回应。只要有未处理意见，PR 就不能继续合并。这样，审查结论会留在 PR 的讨论里，作者和后续维护者也能知道问题怎样处置。<button type="button" class="timecode" data-seconds="350">[00:05:50]</button></p>
+<p>AI 审查还需要用真实事故来衡量。团队把线上出现的问题与引入问题的 PR 配成案例，再组成评测集。评估时把当时的 PR 交给当前审查流程，检查它能否找到对应的真实问题；案例命中记一分，漏掉记零分，累加成基准分。修改提示词、工具或模型后，再用同一批案例比较结果，便能判断调整是否帮助审查找回了更多真实缺陷。<button type="button" class="timecode" data-seconds="451">[00:07:31]</button></p>
+<p>只看找回真实问题的数量会鼓励 AI 多报意见，因为报得越多，命中真实问题的机会也可能越大。开发者却得花时间检查每一条意见，错误警报过多会抵消审查带来的收益。因此还要统计无效意见比例。</p>
+<p>一种统计方法是观察 PR 作者如何处理意见：作者按意见修改，通常说明它有帮助；作者指出判断有误、说明原实现是有意设计，或认为无需处理，则被归为无效意见。另一种方法是把确认没有问题的 PR 送进审查流程；这类 PR 上报出的意见通常属于误报。调整审查流程时，要同时看它找到了多少线上缺陷、又制造了多少无效工作。<button type="button" class="timecode" data-seconds="529">[00:08:49]</button></p>
+<p>AI 审查还有可能陷入“提意见—改代码—再提新意见”的循环。有一个 PR 在一夜之间往返修改了五十多轮，说明审核流程可能每次都翻出旧问题，写代码的 AI 也可能始终没有按要求改对。解决办法包括给轮数设边界：来回三轮仍未通过时，先停下来检查整体实现思路，避免继续在局部打补丁。<button type="button" class="timecode" data-seconds="650">[00:10:50]</button></p>
+<p>前几轮仍要检查整个 PR 和受影响的代码。比如 PR 修改一个函数，审查者需要找出项目中调用这个函数的地方，判断改动会不会改变调用方行为。等这轮整体检查已重复多次、主要风险都过了一遍，之后的审核可以收窄到新一轮实际修改的几行。否则每轮都重读整个项目，AI 会继续发现这次改动以前就存在的问题，流程便难以收敛。扩大范围用于初期影响分析，缩小范围用于后续核对新修复，两个阶段承担不同任务。<button type="button" class="timecode" data-seconds="672">[00:11:12]</button></p>
+<p>另外两条规则也让反馈更容易一次解决：同类错误在多处出现时，尽量一轮指出全部位置；之前已经提出的意见，后续不要重复。团队报告称，调整这四条规则后，一轮审查即可通过的 PR 比例从 65% 增至 78%。这个指标表示流程更快结束，评估时还需与缺陷命中率和无效意见比例并看，避免只追求快速通过。<button type="button" class="timecode" data-seconds="814">[00:13:34]</button></p>
+<p>安全审查是另一道单独的自动检查，专门查代码安全问题；发现的问题也必须处置后才能合并。最后一关是按风险审批：文档和文案改动、只供内部员工使用的功能属于低风险，自动检查通过即可；普通产品功能或缓存自动更新等中风险改动需要一位批准者；高风险代码则需要两人批准。计费逻辑和 CI 配置等变更可能造成更大影响，人工把关的人数和强度应随风险提高。<button type="button" class="timecode" data-seconds="871">[00:14:31]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1PznU6YEZE-P01-00650.jpg" data-caption="审查意见与代码修改反复往返。需要控制轮数，并检查问题是否真正收敛。">
+    <img src="../assets/frames/BV1PznU6YEZE-P01-00650.jpg" loading="lazy" alt="视频截图 01，00:10:50：审查意见与代码修改反复往返。需要控制轮数，并检查问题是否真正收敛。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="650.000">图 01 · 00:10:50</button><span>审查意见与代码修改反复往返。需要控制轮数，并检查问题是否真正收敛。</span></figcaption>
+</figure>
+<h2 id="_2">合并时与合并后：在最新代码上测试，并逐步开放</h2>
+<p>PR 通过检查后，改动进入合并队列。轮到某个 PR 时，系统会把它与当时最新的主分支合在一起再运行测试。若测试通过，才正式合入；下一项 PR 则基于已经包含上一项改动的新主分支接受测试。</p>
+<p>这一步能发现单独测试看不出的组合问题：某个 PR 自己运行正常，和别人刚合入的改动放在一起，却可能破坏共同依赖的行为。合并队列逐项验证最新组合状态，失败的改动退回作者处理，主分支因此持续经过测试。<button type="button" class="timecode" data-seconds="961">[00:16:01]</button></p>
+<p>代码进了主分支之后，也不会立刻向所有用户打开。新功能先藏在功能开关后，内部员工先使用；他们频繁使用产品，较容易在普通用户遇到问题前发现缺陷。团队观察一段时间后，再打开面向用户的开关。</p>
+<p>发布渠道也分层：新版本先进入 latest，让愿意尝鲜的用户使用；大约一周观察后，团队再把稳定版本推到 stable。这个间隔给团队时间观察真实运行情况。若出现问题，最快的办法是远程关闭功能开关；开关无法解决时，再构建并发布修复版本。分阶段开放配合监测和回滚，可以减少一个未发现问题立刻影响所有用户的机会。<button type="button" class="timecode" data-seconds="1022">[00:17:02]</button></p>
+<p>把流程连起来看，一个潜在缺陷要先经过功能运行验证、独立代码审查、CI、AI 审查、安全检查和风险审批；随后在合并队列与最新主分支再次测试，进入内部试用、latest 和 stable，最后仍有监测、关开关和回滚。单个关卡都可能漏掉问题，多种检查从不同角度重复覆盖，才能逐步降低缺陷到达用户端的可能性。团队报告称，6月至9月合并的 PR 数量增长一倍以上，同时需要回滚的比例下降超过40%；这组数字反映的是团队自己的流程表现。<button type="button" class="timecode" data-seconds="1097">[00:18:17]</button></p>
+<h2 id="_3">人把注意力放在哪些地方</h2>
+<p>自动流程承担大量执行工作后，人的工作更集中在五类判断。第一，决定做什么功能、产品该有什么方向和品位。第二，亲自审查高风险代码，例如计费和 CI 配置。第三，把关架构，因为一个基础设计一旦被团队反复沿用，错误也可能随复制扩散。</p>
+<p>第四，人要读支撑结论的证据：测试输出、运行命令、返回结果、产品截图和 AI 发现。检查者据此判断测试覆盖了什么、结果是否支持改动符合预期，再决定是否接受或要求补充验证。第五，为上线结果负责。代码由 AI 生成，也仍然需要人对发布决策和用户影响承担责任。<button type="button" class="timecode" data-seconds="1241">[00:20:41]</button></p>
+<p>这套流程的目标，是让机器和 AI 执行重复的检查与代码工作，同时把人的时间留给需求取舍、高风险判断、架构、证据审阅和责任承担。审查 AI 代码因此不仅是找错，也是在决定哪些证据足以支持上线、哪些后果必须由人来判断。<button type="button" class="timecode" data-seconds="1323">[00:22:03]</button></p>
+<h2 id="_4">总结提炼</h2>
+<p>代码审查嵌在完整发布链路中：提交前验证功能并用新上下文检查代码；PR 阶段组合 CI、AI 审查、安全检查和按风险审批；合并队列在最新主分支上复测；合并后通过功能开关、分渠道发布、监测和回滚控制影响范围。AI 审查要同时衡量真实缺陷命中和无效意见，避免持续迭代失去边界。人的注意力集中在产品方向、高风险代码、架构、证据和结果责任上。</p>
+<h2 id="_5">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="91">[00:01:31]</button> PR、自动检查、审查与发布的基本顺序</li>
+<li><button type="button" class="timecode" data-seconds="177">[00:02:57]</button> PR前的产品验证与独立代码审查</li>
+<li><button type="button" class="timecode" data-seconds="325">[00:05:25]</button> CI与AI审查的发现、过滤、处理步骤</li>
+<li><button type="button" class="timecode" data-seconds="451">[00:07:31]</button> 用线上问题构建AI审查评测集</li>
+<li><button type="button" class="timecode" data-seconds="529">[00:08:49]</button> 统计无效意见与误报</li>
+<li><button type="button" class="timecode" data-seconds="650">[00:10:50]</button> 审查轮数上限和逐步收窄检查范围</li>
+<li><button type="button" class="timecode" data-seconds="814">[00:13:34]</button> 四条流程优化规则及单轮通过比例</li>
+<li><button type="button" class="timecode" data-seconds="871">[00:14:31]</button> 安全审核与按风险审批</li>
+<li><button type="button" class="timecode" data-seconds="961">[00:16:01]</button> 合并队列对最新主分支重新测试</li>
+<li><button type="button" class="timecode" data-seconds="1022">[00:17:02]</button> 功能开关、latest/stable发布与回滚</li>
+<li><button type="button" class="timecode" data-seconds="1241">[00:20:41]</button> 人需要承担的五类工作</li>
+</ul>
+<h2 id="_6">复习</h2>
+<ol>
+<li>为什么负责写代码的 AI 不适合单独审查自己的实现？</li>
+<li>真实缺陷评测与无效意见统计分别衡量 AI 审查的什么表现？</li>
+<li>为什么前几轮要检查整个改动及受影响代码，之后可以只看新增修改？</li>
+<li>合并队列、功能开关和 latest/stable 渠道分别在哪个阶段降低风险？</li>
+<li>哪些决定仍需要人来承担？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "如何审核 AI 写的代码？从写代码到上线，一套保证产品质量的全流程", "duration": "24:34", "src": "", "poster": "../assets/frames/BV1PznU6YEZE-P01-00650.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

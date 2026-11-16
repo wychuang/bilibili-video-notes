@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>e-means：少读几遍数据，为什么还能把聚类做得更好 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="e-means">e-means：少读几遍数据，为什么还能把聚类做得更好</h1>
+    <div class="meta"><span>技术Flow</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1HPWZ6FEU9/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#e-means">e-means：少读几遍数据，为什么还能把聚类做得更好</a><ul>
+<li><a href="#_1">同样的质心，还能用来压缩和均衡数据</a></li>
+<li><a href="#lloyd">先把 Lloyd 算法走完一遍</a></li>
+<li><a href="#_2">提速有两条路，旧办法各有代价</a></li>
+<li><a href="#e-means_1">e-means 怎样遗忘过时的分配</a></li>
+<li><a href="#_3">批次和遗忘因子怎样一起选</a></li>
+<li><a href="#_4">让收不到点的质心重新承担工作</a></li>
+<li><a href="#_5">更低的损失从哪里来，提速又来自哪里</a></li>
+<li><a href="#_6">总结提炼</a></li>
+<li><a href="#_7">时间导航</a></li>
+<li><a href="#_8">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1HPWZ6FEU9.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#evaluate">← 评测、品味与数据</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1HPWZ6FEU9" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1HPWZ6FEU9-P01-00791.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1HPWZ6FEU9&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1HPWZ6FEU9/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1HPWZ6FEU9"><h1>e-means：少读几遍数据，为什么还能把聚类做得更好</h1>
+<blockquote>
+<p>来源：70 年历史的 K-means 算法提速 10 倍 | e-means<br>
+UP 主：技术Flow｜时长：00:27:45｜阅读强度：deep<br>
+链接：https://www.bilibili.com/video/BV1HPWZ6FEU9/</p>
+</blockquote>
+<p>我们有一百万条图片、文档或句子的数字表示，想找出和一个查询最相似的条目。数字表示可以看成空间中的点，相似的条目往往靠得更近。最直接的搜索要把查询和一百万个点逐一比较；查询多起来，距离计算就会反复消耗时间。假如先把这些点分成一千簇，每簇找一个代表，查询到来时就可以先比较这一千个代表，再进入最近的少数几个簇寻找结果。聚类先花了一笔计算，后面的搜索就有机会省下大量工作。<button type="button" class="timecode" data-seconds="98">[00:01:38]</button></p>
+<p>每个簇的代表叫质心，K-means 要找的就是 <span class="math-inline" aria-label="K"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>K</mi></mrow></math></span> 个这样的代表以及各个点的归属。以一千个簇里选八个为例，簇大小近似均衡时，再检查约八千个点，加上比较质心的一千次距离，合计约九千次，远少于逐一比较的一百万次。这里用的是先筛候选区域的近似检索：没有进入候选的簇会被跳过。把每个簇对应的成员名单存起来，就形成倒排文件结构。后面讨论的算法优化，最终也会重新用到这个结构。</p>
+<h2 id="_1">同样的质心，还能用来压缩和均衡数据</h2>
+<p>如果我们不再保存每个点的全部坐标，只保存最近质心的编号，就能用一个小编号近似表示原来的向量。二百五十六个质心只需要一个字节的编号，但用一个质心替代整条向量会产生误差。乘积量化进一步把向量切成几片，每片分别聚类、分别保存编号。八片各一个字节，组合起来有 <span class="math-inline" aria-label="2^{64}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mn>2</mn><mrow><mn>64</mn></mrow></msup></mrow></math></span> 种可能的编码；小码本的组合能表示大量不同的向量。<button type="button" class="timecode" data-seconds="178">[00:02:58]</button></p>
+<p>同一个“用有限个代表概括连续向量”的思路，也出现在 VQ-VAE 的码本里。图片或声音先变成向量，再用码本中最近的一项替换，编号就成为后续生成模型可以处理的离散 token。另一个用途是训练数据均衡：互联网数据里有些概念出现几百万次，有些只有寥寥几次。先聚类，再在簇之间较均匀地采样，就能减少常见概念对训练集的支配。这些用途都可能面对数十亿个点和数百万个质心，聚类本身的费用因此成为关键问题。<button type="button" class="timecode" data-seconds="204">[00:03:24]</button></p>
+<h2 id="lloyd">先把 Lloyd 算法走完一遍</h2>
+<p>设想空间里有五团点，我们随意放下五个初始质心。第一步，让每个点比较自己到五个质心的距离，把自己分给最近的那个。第二步，对每个簇取所有成员的平均坐标，把质心移到这个平均位置。再用新质心重新分配所有点，重新求平均，如此反复。这个交替过程就是 Lloyd 算法，也是传统 K-means 实现的基础。这里的“一遍”特指完整处理一次数据集；读完一遍才完成一次整体质心更新。<button type="button" class="timecode" data-seconds="298">[00:04:58]</button></p>
+<p>怎样判断质心放得好不好？我们计算每个点到所属质心的平方距离，再对全部点取平均。设有 <span class="math-inline" aria-label="N"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi></mrow></math></span> 个点，第 <span class="math-inline" aria-label="i"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 个点是 <span class="math-inline" aria-label="x_i"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math></span>，所属簇编号是 <span class="math-inline" aria-label="a_i"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></math></span>，对应质心为 <span class="math-inline" aria-label="c_{a_i}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>c</mi><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></msub></mrow></math></span>，目标就是减小下面的均方误差：</p>
+<div class="math-display" aria-label="L=\frac{1}{N}\sum_{i=1}^{N}\|x_i-c_{a_i}\|^2."><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>N</mi></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><mo fence="false" stretchy="false">‖</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><msub><mi>c</mi><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></msub><msup><mo fence="false" stretchy="false">‖</mo><mn>2</mn></msup><mo>.</mo></mrow></math></div>
+<p>Lloyd 的两步都不会增加这个目标。重新分配时，只会选择同样近或更近的质心；成员固定后，平均值恰好使这组点的平方距离和最小。因此损失一路下降，最终分配和质心会稳定下来。但稳定并不保证找到了最好的分组。五团点的例子里，两个质心可能挤在同一团，另一团却没有代表；要把一个质心挪过去，途中可能要暂时承受更大的损失。只允许下降的过程就会停在这样的局部最优。<button type="button" class="timecode" data-seconds="358">[00:05:58]</button></p>
+<p>费用也很容易算清：每个点比较 <span class="math-inline" aria-label="K"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>K</mi></mrow></math></span> 个质心，每次比较处理 <span class="math-inline" aria-label="d"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi></mrow></math></span> 个坐标，一遍的计算规模约为 <span class="math-inline" aria-label="NKd"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mi>K</mi><mi>d</mi></mrow></math></span>。十亿个点配一百万个质心，一遍就涉及 <span class="math-inline" aria-label="10^{15}"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mn>10</mn><mrow><mn>15</mn></mrow></msup></mrow></math></span> 次点与质心的距离比较，还没有把每次比较内部的维度运算展开。更麻烦的是，一遍如此昂贵的工作，只换来一次整体更新。<button type="button" class="timecode" data-seconds="459">[00:07:39]</button></p>
+<h2 id="_2">提速有两条路，旧办法各有代价</h2>
+<p>第一条路是让每遍更便宜。利用三角不等式，可以证明某些质心绝不可能更近，从而跳过距离计算。不过，跳过的项目因点而异，会让计算变得不规整。GPU 擅长大量相同形式的并行工作，所以另一种做法把距离比较组织为大矩阵运算，再分块计算，只保留每个点目前最近的质心，不保存巨大的完整距离表。Flash K-means 属于这类实现。在给出的单 GPU 例子里，一千万个向量、约六万五千个簇、二十五遍计算，从约两分半降到十四至二十二秒；每遍便宜了，遍数仍然存在。<button type="button" class="timecode" data-seconds="506">[00:08:26]</button></p>
+<p>第二条路是减少遍数。K-means++ 让初始质心彼此分散，减少后续收拾错误起点的工作，但经典初始化要依次选出质心，本身会增加扫描开销。另一类在线、小批次方法索性不等整遍结束，处理一个点或一小批点就更新质心。这样每遍可以更新很多次，初期损失下降很快，后期却可能停在较差的位置。原因要从质心的记忆方式看：累计平均把所有历史分配看得一样重，收到第 <span class="math-inline" aria-label="n"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 个点时，新点只能把质心拉动约 <span class="math-inline" aria-label="1/n"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn><mo>/</mo><mi>n</mi></mrow></math></span> 的距离。到第一万个点时，新分配已经几乎拉不动质心，早期错误归属却仍有影响。<button type="button" class="timecode" data-seconds="570">[00:09:30]</button></p>
+<h2 id="e-means_1">e-means 怎样遗忘过时的分配</h2>
+<p>把每个簇的状态拆成两项，就容易看清几种方法的区别：<span class="math-inline" aria-label="S"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi></mrow></math></span> 保存成员向量的求和，<span class="math-inline" aria-label="N_c"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>N</mi><mi>c</mi></msub></mrow></math></span> 保存成员计数，质心是 <span class="math-inline" aria-label="S/N_c"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>/</mo><msub><mi>N</mi><mi>c</mi></msub></mrow></math></span>。一批新点到来，先按当前质心分配；对其中落入某个簇的点，求出本批向量和 <span class="math-inline" aria-label="s"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi></mrow></math></span> 与本批计数 <span class="math-inline" aria-label="n"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span>。Lloyd 在整批为全体数据时直接用 <span class="math-inline" aria-label="s,n"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo>,</mo><mi>n</mi></mrow></math></span> 替代旧状态；累计平均一直把 <span class="math-inline" aria-label="s,n"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo>,</mo><mi>n</mi></mrow></math></span> 加进去；e-means 则给旧状态打折，同时吸收新批次。<button type="button" class="timecode" data-seconds="703">[00:11:43]</button></p>
+<div class="math-display" aria-label="S\leftarrow(1-\alpha)S+\alpha s,\qquad
+N_c\leftarrow(1-\alpha)N_c+\alpha n,\qquad
+c=\frac{S}{N_c}."><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mo>←</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo><mi>S</mi><mo>+</mo><mi>α</mi><mi>s</mi><mo>,</mo><mspace width="2em" /><msub><mi>N</mi><mi>c</mi></msub><mo>←</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo><msub><mi>N</mi><mi>c</mi></msub><mo>+</mo><mi>α</mi><mi>n</mi><mo>,</mo><mspace width="2em" /><mi>c</mi><mo>=</mo><mfrac><mrow><mi>S</mi></mrow><mrow><msub><mi>N</mi><mi>c</mi></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>这里的 <span class="math-inline" aria-label="\alpha"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 控制新旧记忆的比例。每经过一批，旧点的权重就再乘一次 <span class="math-inline" aria-label="1-\alpha"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></math></span>，更早的分配因而按指数衰减。取 <span class="math-inline" aria-label="\alpha=0.36"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi><mo>=</mo><mn>0.36</mn></mrow></math></span> 时，最近一批的基础权重为 36%，前一批约为 23%，再前一批约为 15%。当计数稳定在每批接收到的点数附近，质心每次朝本批均值移动的比例也大致是 <span class="math-inline" aria-label="\alpha"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span>。这样，早期不准确的分配会逐渐失去影响，新数据仍有能力推动质心。e 所对应的就是这种指数移动平均。<button type="button" class="timecode" data-seconds="734">[00:12:14]</button></p>
+<p>这个公式同时更新求和与计数，使质心保持为实际数据点的加权平均。直接对损失做梯度下降也能移动质心，但大批次下可能出现过大的更新。给出的两组比较中，即使选择各自较好的设置，梯度下降的最终误差仍分别比 e-means 高 1.6% 和 0.4%；“大步可能越过整团数据”是研究者对现象的解释猜测，不能由这两个分数单独证明。把 e-means 的批次设成全体数据、<span class="math-inline" aria-label="\alpha"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 设成一，又会回到 Lloyd 更新，所以两者可以放在同一个框架下理解。<button type="button" class="timecode" data-seconds="873">[00:14:33]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1HPWZ6FEU9-P01-00791.jpg" data-caption="Lloyd 直接替换，累积式更新保留全部旧贡献，e-means 则按遗忘率混合旧统计与新批次。">
+    <img src="../assets/frames/BV1HPWZ6FEU9-P01-00791.jpg" loading="lazy" alt="视频截图 01，00:13:11：Lloyd 直接替换，累积式更新保留全部旧贡献，e-means 则按遗忘率混合旧统计与新批次。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="791.000">图 01 · 00:13:11</button><span>Lloyd 直接替换，累积式更新保留全部旧贡献，e-means 则按遗忘率混合旧统计与新批次。</span></figcaption>
+</figure>
+<h2 id="_3">批次和遗忘因子怎样一起选</h2>
+<p>小批次可以多更新几次，但每批的成员均值更嘈杂；大批次更稳定，却减少了同样扫描预算内的更新次数。因此，批次大小和遗忘因子需要一起选择。在二十万个点、三十二维、约一千个簇的例子里，每套设置都运行五遍，再用留出的新点测误差。把结果画成曲面，会看到一条较低的谷：批次增大时，合适的步长也会增大。批次里的噪声变小，才更能信任这一批的均值。<button type="button" class="timecode" data-seconds="937">[00:15:37]</button></p>
+<p>每换一份数据就搜索整张曲面，代价可能超过聚类本身。e-means 的研究者在 DEEP 数据集上进行了约七万五千次训练，覆盖十万到一亿个点、二百五十六到约六万五千个簇，再拟合决定批次和初始步长的缩放关系。批次选择的目标是在误差不超过最优值 0.2% 的范围内尽量用大批次，以适应 GPU。百万点、一万六千簇、三遍预算的例子，得到约六万五千点一批、初始步长约 0.36，每遍约十五次更新，Lloyd 同期只有一次。这里的数值属于特定规模与预算，不能直接当成所有问题的默认参数。<button type="button" class="timecode" data-seconds="1021">[00:17:01]</button></p>
+<p>这些关系在未参与拟合的数据集上，中位表现与完整搜索所得的最优设置相差不到 0.2%。但拟合对象主要是高维嵌入向量，规模很小、维度很低的问题未必适合直接套用。这项限制和省掉调参成本的优势要一起保留：关系式给出了实用起点，没有证明所有点云都共享同一套最佳设置。<button type="button" class="timecode" data-seconds="1121">[00:18:41]</button></p>
+<h2 id="_4">让收不到点的质心重新承担工作</h2>
+<p>一个质心可能被邻居抢走全部成员，之后再也收不到点。它仍占着一个质心名额，却不代表任何区域，这就是死簇。给出的一万六千簇例子里，不处理会有四千多个死簇；把死质心随机挪到本批点上，最终仍有约两千三百个。随机复活能把质心放回数据附近，却没有充分利用哪里最需要更多代表的信息。<button type="button" class="timecode" data-seconds="1150">[00:19:10]</button></p>
+<p>e-means 每五批检查一次，把计数低于平均计数十分之一的簇重新安排。它按簇大小加权选一个供体，把供体质心复制两份，向相反方向轻微扰动，每份分一半计数；死质心接手其中一份。这样相当于把较大的簇分成两部分，让闲置名额去覆盖成员较多的区域。同一个例子里，剩余死簇降到四十七个。逐项关闭组件的比较中，取消复活对训练损失的影响接近 3%，大于取消余弦步长调度或最后收尾的影响。<button type="button" class="timecode" data-seconds="1192">[00:19:52]</button></p>
+<p>完整过程从随机选出的数据点作为初始质心开始，给初始状态很小的权重，让第一批可以充分改变它。随后每批完成最近质心分配、指数状态更新，并定期复活死簇。遗忘因子沿余弦曲线逐渐降到初始值的十分之一，让前期更能移动、后期更稳定。最后再用末遍的归属点计算精确均值，可以降低训练损失；若更关心新数据，也可以额外维护一份变化更慢的质心平均，以改善测试误差。这两种收尾关注的评价对象不同。<button type="button" class="timecode" data-seconds="1233">[00:20:33]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1HPWZ6FEU9-P01-01208.jpg" data-caption="随机重采样仍留下大量死簇；分裂方法从有成员的簇中选择供体，让空闲质心重新参与分配。">
+    <img src="../assets/frames/BV1HPWZ6FEU9-P01-01208.jpg" loading="lazy" alt="视频截图 02，00:20:08：随机重采样仍留下大量死簇；分裂方法从有成员的簇中选择供体，让空闲质心重新参与分配。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1208.000">图 02 · 00:20:08</button><span>随机重采样仍留下大量死簇；分裂方法从有成员的簇中选择供体，让空闲质心重新参与分配。</span></figcaption>
+</figure>
+<h2 id="_5">更低的损失从哪里来，提速又来自哪里</h2>
+<p>回到两个质心挤在一团点的困境。小批次只看到全体数据的一部分，得到的均值会有波动，质心因而会在精确均值附近轻微抖动。有时这会帮助质心跨过空隙，进入原来无人代表的点团，损失暂时上升后再落到更低的位置。但这没有保证每个问题都能逃离局部最优。每种玩具问题各跑二百个随机起点时，直线五团点的卡住比例是 Lloyd 46%、e-means 0%；大小悬殊的两团为 26% 和 3.5%；在 <span class="math-inline" aria-label="3\times3"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow></math></span> 网格上却是 43% 和 44%，e-means 并未占优。<button type="button" class="timecode" data-seconds="1359">[00:22:39]</button></p>
+<p>速度优势还要落到真实执行上。两类算法的大部分时间都花在寻找最近质心，e-means 使用与 Flash K-means 同类的融合 GPU 内核，因此少扫描一遍，通常就少掉一整遍最昂贵的工作。给出的四个嵌入数据集覆盖一百万至十亿个向量，e-means 平均约用 1.4 至 2.6 遍，达到比 Flash K-means 二十五遍更低的损失；对应 GPU 时间减少约十至四十五倍，CPU 相对 Faiss 的比较约快八至十五倍。倍数有明确的对照方法和数据范围，不能脱离条件泛化。<button type="button" class="timecode" data-seconds="1500">[00:25:00]</button></p>
+<p>进一步放大到一百亿个向量，逐点比较全部质心仍然太贵，于是把开头的倒排结构用在质心本身：先给质心分桶，每个点只检查较近的桶，相当于在聚类内部再用一层聚类缩小候选。给出的大规模比较中，精确分配约需七百七十九 GPU 小时，采用这种近似检索后不到二十三 GPU 小时。它同时改变了候选搜索方式，因此这组巨大降幅不能全部归给指数更新。算法的统计更新和系统的检索实现，在这里共同决定最终费用。<button type="button" class="timecode" data-seconds="1554">[00:25:54]</button></p>
+<h2 id="_6">总结提炼</h2>
+<p>e-means 把每次完整扫描拆成多次仍然有效的更新，用指数衰减削弱早期错误分配的影响。批次与遗忘因子共同控制更新频率、噪声和移动幅度，死簇分裂则把有限的质心名额送回需要更多代表的区域。小批次的波动有机会帮助逃离局部最优，但具体优势要放回数据、预算、初始化和检索方式里判断。</p>
+<h2 id="_7">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="98">[00:01:38]</button> 聚类怎样服务检索、压缩和均衡采样。</li>
+<li><button type="button" class="timecode" data-seconds="298">[00:04:58]</button> Lloyd 两步、均方误差与局部最优。</li>
+<li><button type="button" class="timecode" data-seconds="703">[00:11:43]</button> 指数遗忘的求和、计数更新。</li>
+<li><button type="button" class="timecode" data-seconds="937">[00:15:37]</button> 批次、步长和缩放关系。</li>
+<li><button type="button" class="timecode" data-seconds="1150">[00:19:10]</button> 死簇、供体分裂与完整算法。</li>
+<li><button type="button" class="timecode" data-seconds="1359">[00:22:39]</button> 局部最优实验及真实规模的速度比较。</li>
+</ul>
+<h2 id="_8">复习</h2>
+<ol>
+<li>为什么每一步都降低损失，仍可能留在较差的聚类里？</li>
+<li>累计平均为什么越到后面越难移动？指数遗忘改变了哪项权重？</li>
+<li>为什么只说“少读数据”解释不了死簇分裂的作用？</li>
+<li>比较十至四十五倍提速与七百七十九降到二十三 GPU 小时时，各自改变了什么条件？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "70 年历史的 K-means 算法提速 10 倍 | e-means", "duration": "27:45", "src": "", "poster": "../assets/frames/BV1HPWZ6FEU9-P01-00791.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

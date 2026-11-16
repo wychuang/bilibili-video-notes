@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>如何使用 AI 做出有高级感的设计 · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="ai">如何使用 AI 做出有高级感的设计</h1>
+    <div class="meta"><span>oil欧呦</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1YPWi6SEPD/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#ai">如何使用 AI 做出有高级感的设计</a><ul>
+<li><a href="#ai_1">从“看起来像 AI 做的”开始调整</a></li>
+<li><a href="#_1">把选中的方向写成规范，再逐轮打磨</a></li>
+<li><a href="#_2">减掉干扰，让一个页面有清楚的重心</a></li>
+<li><a href="#_3">让创意和实现各用合适的工具</a></li>
+<li><a href="#_4">总结提炼</a></li>
+<li><a href="#_5">时间导航</a></li>
+<li><a href="#_6">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1YPWi6SEPD.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#design">← 设计与表达</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1YPWi6SEPD" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1YPWi6SEPD-P01-01447.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1YPWi6SEPD&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1YPWi6SEPD/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1YPWi6SEPD"><h1>如何使用 AI 做出有高级感的设计</h1>
+<blockquote>
+<p>来源：oil欧呦｜31:04｜<a href="https://www.bilibili.com/video/BV1YPWi6SEPD/">Bilibili 原视频</a>｜深度阅读</p>
+</blockquote>
+<h2 id="ai_1">从“看起来像 AI 做的”开始调整</h2>
+<p>用 AI 做网页时，第一版常常显得熟悉又平淡：页面中央放一个大标题，背景铺蓝紫渐变，周围散着星星、表情符号和圆角卡片；每个角落还添上解释性小字。单看某个元素都说得过去，放在一起却像一套默认模板。一个原因是模型倾向于组合常见设计元素，选出它认为稳妥的平均答案。要让页面长出自己的气质，就得先决定它要服务谁、传达什么，再挑选能支持这些目标的文字和视觉元素。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<p>挑模型时也可以先看它自然生成的审美，再考虑复杂提示词能否纠正输出。每个模型的能力与偏好都会变化，录制时的排行只能代表当时的观察。与其只抄一份模型榜单，不如用一个简单页面任务试一轮，观察默认排版、色彩和图片处理是否合自己的口味。也可以把文字能力和视觉能力分开看：能写出通顺文案，不等于能安排好画面；某次榜单靠前，也不保证它恰好适合你的设计方向。<button type="button" class="timecode" data-seconds="74">[00:01:14]</button></p>
+<p>如果第一版的结构和气质都不对，不妨先把方向重新打开。不断在错误版式上加提示，模型会沿着已有上下文继续修补，改动空间容易受限。可以先让 AI 采访你：产品给谁用，页面里最重要的任务是什么，用户需要先看到什么，你希望呈现怎样的气氛。问题回答得越具体，后面越容易把“做得高级一点”变成可以检查的选择。</p>
+<p>接下来先发散再收敛。让模型一次提出几种差异清楚的方向，最好用网页或卡片并排呈现。不要只说“要独特”，而要让方案在明确的维度上不同：一种用衬线字体、一种用无衬线字体；一种明亮、一种深色；一种对称、一种偏置。比较之后挑出一两个接近目标的方案，再指出喜欢其中哪些部分。这样的比较会帮助我们说清偏好，也减少从空白页面猜设计的负担。<button type="button" class="timecode" data-seconds="430">[00:07:10]</button></p>
+<p>例如，做工业控制面板时，可以希望按钮看起来有触感、操作时有轻微声音反馈，同时避免界面变成卡通玩具。如果第一版只有单调的灰色渐变，就继续要求增加合适的纹理和色彩层次。每条要求都关联到具体对象和用户感受，模型更容易知道要改什么。随机、独特、未来感之类的词可以描述方向，却不足以替代布局、字体、色彩和交互的具体选择。</p>
+<h2 id="_1">把选中的方向写成规范，再逐轮打磨</h2>
+<p>方向选定后，把它整理成一份设计说明，例如 <code>DESIGN.md</code>。除颜色、字体和圆角等可复用参数，也写下页面想呈现的情绪、品牌印象与使用场景。数字规范能帮助多个页面保持一致，但只给一组色值和组件尺寸还不够：新页面仍可能把同一组数字用出不同的气质。把“为什么选这些样式”也讲清楚，后续扩展才更容易守住统一方向。<button type="button" class="timecode" data-seconds="730">[00:12:10]</button></p>
+<p>进入迭代后，尽量把直觉翻译成可执行的观察。比如，发现下载按钮不够醒目，就指出它在页面中的位置、与周围按钮相比哪里弱；发现顶部按钮视觉太重、抢走主标题的注意力，就让 AI 调整尺寸、颜色或间距。我们未必能说出准确的设计术语，也能从视觉效果出发描述问题，再让模型提出具体改法。改完看效果是否符合目标，再决定保留、回退或继续调整。<button type="button" class="timecode" data-seconds="850">[00:14:10]</button></p>
+<p>当自己盯着一个页面太久，容易只看到实现细节。可以把当前页面截图交给另一个独立的设计评审，让它只从视觉角度检查，并要求给出具体修改建议。检查项目可以包括导航文字是否重叠、是否出现空白屏、排版是否清楚、动效是否拖沓、是否堆了无用的小字；“看起来不够高级”这样的评价还需要落到页面上的位置和可执行动作。若最初有参考图，可以把参考图和当前页面一起交给评审，让它比较哪些地方偏离原方向。<button type="button" class="timecode" data-seconds="930">[00:15:30]</button></p>
+<p>迭代要留出判断空间。先做一两轮，再比较页面是否真的变好；如果连续多轮评分仍达不到目标，例如十轮都没有达到自己设定的九分，可以停下来换模型或重定方向。评分只是辅助判断，视觉变化和实际使用效果仍要一起看。评审任务通常比重新设计和写代码轻，因而可以把更强的模型留给截图评审，把生成与实现分开安排。<button type="button" class="timecode" data-seconds="970">[00:16:10]</button></p>
+<p>若想让 AI 改某个具体区域，却说不清位置，可以在截图上框出元素，也可以用书签式选择工具点选页面中的标签。工具把选中元素对应的代码位置整理成提示词，复制后交给模型，修改范围会更明确。举例来说，标签文字没有垂直居中时，点选标签并附上“让文字在标签内垂直居中”，比反复描述它在页面哪个角落更直接。<button type="button" class="timecode" data-seconds="1044">[00:17:24]</button></p>
+<h2 id="_2">减掉干扰，让一个页面有清楚的重心</h2>
+<p>页面框架搭好后，常见的下一步是做减法。模型容易把页面塞满：顶部有很多说明，中间放很大的首屏区域，下面再铺上商品或功能卡片。内容越多，用户越难判断先看什么。可以让每个屏幕保留一个主要视觉重心：如果这一页要让人先看到促销卡片，就让它醒目，其余信息沿着次要层级安排。<button type="button" class="timecode" data-seconds="1100">[00:18:20]</button></p>
+<p>后台页面尤其容易堆出一面数据墙。先列出操作人员最关心的指标，让它们在首屏清晰可见；次要数据可以进入详情页、弹窗或侧边抽屉，按需要再展开。分隔线不必都很厚，较轻的边框、清爽的配色和整齐的排版能保留区块关系，也让内容有呼吸感。图表的颜色也要协助阅读，避免许多深色块同时争夺注意力。<button type="button" class="timecode" data-seconds="1160">[00:19:20]</button></p>
+<p>文字说明也应按用户是否需要来决定。选项列表已经明显承担目录作用时，顶部再加“目录”二字通常没有新信息；但一个信封形状的按钮未必能让人知道它代表投稿，就需要清楚标注动作。删减的判断标准，是这段文字能不能帮助用户理解页面或完成操作。文字本身的大小、字距和行高也会影响阅读：页面文字多时，增加行间距、提高可读性，并用合适的配图隔开较长段落，能减轻连续阅读的压力。<button type="button" class="timecode" data-seconds="1220">[00:20:20]</button></p>
+<p>组件库和图标库可以提供稳定的基础，例如 Tailwind 一类样式工具，以及 shadcn/ui、HeroUI 等组件库，都能帮助搭出常见的按钮与布局，减少让模型从零拼每个控件的工作。不过，整齐的容器和文字还不一定构成完整的视觉设计。配图往往更直接地改变页面观感：一张合适的书籍封面能为简单的页面增加主题，白底黑字的页面也可以靠高质量图片建立气质。<button type="button" class="timecode" data-seconds="1325">[00:22:05]</button></p>
+<p>为网页生成配图时，要一并考虑文字将放在哪里。若标题叠在图上，就请模型在文字区域留出干净、颜色较浅的空间；把复杂纹理铺在文字后方，文字会难以辨认。透明底素材方便叠放：白底图标贴到另一张图上会盖住下面的内容，透明图标则可以自然压在背景上。若生成模型不能直接输出透明背景，可以在绿底图上保留主体，再用程序抠掉绿色。复杂效果例如玻璃折射、流光或波纹可以按需要添加，先确保页面信息清楚，再决定是否值得加入。<button type="button" class="timecode" data-seconds="1401">[00:23:21]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1YPWi6SEPD-P01-01447.jpg" data-caption="左侧复杂画面压住文字，右侧为标题留出空白；透明底素材也能避免白色方框遮住背景。">
+    <img src="../assets/frames/BV1YPWi6SEPD-P01-01447.jpg" loading="lazy" alt="视频截图 01，00:24:07：左侧复杂画面压住文字，右侧为标题留出空白；透明底素材也能避免白色方框遮住背景。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="1447.000">图 01 · 00:24:07</button><span>左侧复杂画面压住文字，右侧为标题留出空白；透明底素材也能避免白色方框遮住背景。</span></figcaption>
+</figure>
+<p>定制图标能让一组页面更有自己的识别特征。可以先生成一张 4×4 的图标表，再从中选出合适的图标。按创作者自己的项目经验，常见网站需要的自定义图标数量有限，一张表就能提供足够多的候选。品牌形象也能延伸到不同产品：同一个小人物作为图标主体，再按代码工具、阅读产品等类别更换装饰和背景，用户在不同页面里会逐渐认出这套视觉语言。个人网站中的人物和小狗还会随着鼠标移动视线，克制的小动效和细节彩蛋能补充个性，前提是它们没有妨碍阅读和操作。<button type="button" class="timecode" data-seconds="1501">[00:25:01]</button></p>
+<h2 id="_3">让创意和实现各用合适的工具</h2>
+<p>如果模型直接设计界面的能力有限，可以先生成一张界面草图，再让它参考图片实现页面。草图阶段的任务是确认布局和视觉方向；实现阶段则把已确定的方向转成可运行的页面。创意和代码转换需要的能力不同，拆开之后，也更容易看出问题来自设计方向还是实现细节。<button type="button" class="timecode" data-seconds="1720">[00:28:40]</button></p>
+<p>同样可以按任务难度分配模型：需要提出风格、做出设计判断时，用能力更强的模型；规范、参考图和页面原型确定以后，再让成本较低的模型完成常规实现。若让较弱的模型从开放要求开始做复杂设计，它可能无法充分理解设计说明，结果需要反复返工；方向已经明确时，工作更接近按规范搭建页面，对创意的要求会低得多。录制时提及的具体模型和工具会变化，值得保留的是这种任务分工：先把设计方向做清楚，再用合适的工具完成实现。<button type="button" class="timecode" data-seconds="1745">[00:29:05]</button></p>
+<p>一套可重复的流程由几步连在一起：先通过访谈明确用户、目标和气质；提出差异明确的方案并选定方向；把样式与设计意图写成规范；实现页面后根据具体观察迭代；再用独立视角检查截图，继续调整层级、配图和细节。每做一个新产品，都能从已有规范、图标和视觉习惯中积累素材。高级感很少来自一次生成，更多来自方向清楚、取舍明确，并愿意逐轮打磨。</p>
+<h2 id="_4">总结提炼</h2>
+<ul>
+<li>先明确用户、页面任务和希望传达的气质，再探索视觉方案。</li>
+<li>让模型同时给出差异清楚的方向，选定后把视觉规范和设计意图写下来。</li>
+<li>用具体观察描述迭代目标，并通过截图评审检查层级、排版和冗余信息。</li>
+<li>每个屏幕优先保留一个重心；配图、图标、留白和动效共同支持页面气质。</li>
+<li>把开放式设计交给更强的创意工具，把明确规范下的实现交给合适的工具。</li>
+</ul>
+<h2 id="_5">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="0">[00:00:00]</button> 常见的 AI 模板感从哪里来</li>
+<li><button type="button" class="timecode" data-seconds="74">[00:01:14]</button> 按实际审美试用模型</li>
+<li><button type="button" class="timecode" data-seconds="430">[00:07:10]</button> 通过访谈与多方案比较确定风格</li>
+<li><button type="button" class="timecode" data-seconds="730">[00:12:10]</button> 把视觉方向写成可复用规范</li>
+<li><button type="button" class="timecode" data-seconds="930">[00:15:30]</button> 用截图评审发现具体问题</li>
+<li><button type="button" class="timecode" data-seconds="1044">[00:17:24]</button> 选中页面元素以说明修改位置</li>
+<li><button type="button" class="timecode" data-seconds="1100">[00:18:20]</button> 减少页面信息并确定视觉重心</li>
+<li><button type="button" class="timecode" data-seconds="1325">[00:22:05]</button> 配图、留白与组件库</li>
+<li><button type="button" class="timecode" data-seconds="1501">[00:25:01]</button> 自定义图标、品牌视觉和微动效</li>
+<li><button type="button" class="timecode" data-seconds="1720">[00:28:40]</button> 拆分设计草图与页面实现</li>
+</ul>
+<h2 id="_6">复习</h2>
+<ol>
+<li>页面已经有一套常见渐变、圆角卡片和说明小字时，怎样重新确认设计方向？</li>
+<li>为什么让模型同时提供几种差异清楚的方案，有助于确定风格？</li>
+<li>截图评审应如何把“看起来不够高级”变成可执行的修改意见？</li>
+<li>设计方向和规范确定之后，哪些实现工作可以交给成本较低的模型？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "如何使用 AI 做出有高级感的设计", "duration": "31:04", "src": "", "poster": "../assets/frames/BV1YPWi6SEPD-P01-01447.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

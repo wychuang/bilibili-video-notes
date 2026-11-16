@@ -1303,7 +1303,224 @@
       "reason": "创作者怎样把对动画角色的喜爱包装成个人投资挑战？",
       "start": false,
       "flow_role": "细节"
+    },
+    {
+      "bvid": "BV1Dw4n61EbX",
+      "module": "product",
+      "strength": "quick",
+      "reason": "把经营目标拆成团队任务：BOSS 工作台怎样组织信息",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV17ssL6BEeU",
+      "module": "knowledge",
+      "strength": "quick",
+      "reason": "Graphify：把散落文件中的概念连起来",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1QM4p6JEHj",
+      "module": "design",
+      "strength": "quick",
+      "reason": "在画面上直接改稿：咖啡活动页的一次 AI 设计试用",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV17psV6wEP7",
+      "module": "knowledge",
+      "strength": "quick",
+      "reason": "把 Obsidian 里的书接着听：朗读、缓存与离线音频",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1Z3W269ERC",
+      "module": "research",
+      "strength": "quick",
+      "reason": "ARIS 的基本思路：让执行与审查分开承担",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV18o446AE44",
+      "module": "research",
+      "strength": "quick",
+      "reason": "从用户名查找公开账号：先理解查询结果代表什么",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1774G6eEXP",
+      "module": "design",
+      "strength": "quick",
+      "reason": "作品集如何从首屏带人走到联系入口：小路网站的视觉观察",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1CfWo6aEEC",
+      "module": "knowledge",
+      "strength": "quick",
+      "reason": "潮线：把今天、项目与积累放进同一张航海图",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV13W4J6kEHS",
+      "module": "learn",
+      "strength": "quick",
+      "reason": "在笔记里追问、复述与试验：一种 AI 辅助学习界面",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1c8356uEUT",
+      "module": "design",
+      "strength": "quick",
+      "reason": "找 Logo 参考时，分别看图形、应用与设计过程",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1aZWJ6BE6Q",
+      "module": "wellbeing",
+      "strength": "quick",
+      "reason": "足弓、膝盖与髋部：三种下肢控制练习分别在观察什么",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1yLnV6wEzJ",
+      "module": "learn",
+      "strength": "quick",
+      "reason": "给重要的事留出位置：减少干扰、借用固定日程、持续调整计划",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1PznU6YEZE",
+      "module": "engineering",
+      "strength": "deep",
+      "reason": "怎样把代码运行验证、AI 审查、自动测试、风险审批和分阶段发布组织成一条可收敛的质量流程？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1FTx46CEN8",
+      "module": "learn",
+      "strength": "quick",
+      "reason": "怎样把计算机领域、课程前置关系、个人进度和技能内知识点组织成可浏览的学习路线？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1adW76wEpD",
+      "module": "product",
+      "strength": "quick",
+      "reason": "怎样用任务依赖、AI 整理和轻量入口减少待办清单中的排序与记录负担？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1HPWZ6FEU9",
+      "module": "evaluate",
+      "strength": "deep",
+      "reason": "指数遗忘怎样减少聚类扫描并保留质量",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1rPWd6nEpP",
+      "module": "engineering",
+      "strength": "deep",
+      "reason": "怎样避免长期 AI 迭代使代码、测试和文档逐步失控",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1Fuxf6aEgJ",
+      "module": "map",
+      "strength": "deep",
+      "reason": "一条请求怎样经过设备、模型计算、缓存、部署与服务",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1nbe16SESV",
+      "module": "design",
+      "strength": "deep",
+      "reason": "怎样通过多方案探索、具体意向和评审删减改善AI界面",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1PEHY6dEBK",
+      "module": "wellbeing",
+      "strength": "deep",
+      "reason": "如何用心智、身体、心灵和事业四个面向整理自身处境，并理解各面向的不同发展状态？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1GJnZ6MEFw",
+      "module": "companion",
+      "strength": "quick",
+      "reason": "DSH八种插件分别处理哪些使用场景？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1RxWE66E2D",
+      "module": "agent",
+      "strength": "quick",
+      "reason": "哪些企业业务条件会促使团队选择自研插件，而非直接使用通用MCP服务？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1BoWj6rE26",
+      "module": "companion",
+      "strength": "quick",
+      "reason": "这次DSH插件榜单展示了哪些功能变化与兼容条件？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1WpbW62Eg3",
+      "module": "career",
+      "strength": "quick",
+      "reason": "如何从业务流程出发，把Agent Demo做成可观察、可测试的工程系统？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV12gWR6tEuq",
+      "module": "design",
+      "strength": "quick",
+      "reason": "UI UX Pro Max 怎样把行业和体验规则带给编码助手",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1E6Jf6UEUc",
+      "module": "design",
+      "strength": "standard",
+      "reason": "怎样把番茄钟一个满意页面整理成可延展、可验证的规则",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1hP486KEAc",
+      "module": "design",
+      "strength": "deep",
+      "reason": "怎样从主体、留白、疏密和阅读顺序解释一张海报的构图？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1qtWC6jE2e",
+      "module": "engineering",
+      "strength": "standard",
+      "reason": "怎样把 Agent 在代码中的重复错误转成可执行的工程约束，并用验证结果支撑更高的交付速度？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV17LWq6cE53",
+      "module": "companion",
+      "strength": "quick",
+      "reason": "DSH 的插件分别怎样帮助观察成本、管理工作区、控制操作与恢复代码？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1KoW16NEBf",
+      "module": "agent",
+      "strength": "standard",
+      "reason": "Agent怎样在持久化记忆中保留证据、纠正错误，并控制维护成本？",
+      "priority": "拓展"
+    },
+    {
+      "bvid": "BV1YPWi6SEPD",
+      "module": "design",
+      "strength": "deep",
+      "reason": "怎样让 AI 设计从常见模板走向符合产品目标、能持续打磨的视觉方向？",
+      "priority": "拓展"
     }
   ],
-  "updated": "2026-11-05"
+  "updated": "2026-11-16"
 }

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra · 深度学习笔记</title>
+  <style>
+    @font-face { font-family:"Bili WenKai"; src:url("../../../assets/fonts/LXGWWenKaiGBScreen.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root { --ink:#17211b; --muted:#66736b; --paper:#f5f1e8; --card:#fffdf8; --accent:#168b62; --line:#dcd6ca; --night:#101713; --display:KaiTi,STKaiti,"楷体",serif; --body:"Bili WenKai","LXGW WenKai GB Screen","LXGW WenKai Screen",FangSong,"仿宋",serif; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--body); line-height:1.82; }
+    #progress { position:fixed; z-index:20; top:0; left:0; height:3px; width:0; background:var(--accent); }
+    .hero { padding:64px 24px 42px; background:linear-gradient(135deg,#13251c 0%,#1d4d39 65%,#246a4c 100%); color:#f9f6ed; }
+    .hero-inner { width:min(1040px,100%); margin:auto; }
+    .eyebrow { font:600 13px/1.4 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:#a9dcc7; }
+    .hero h1 { max-width:900px; margin:14px 0 18px; font:700 clamp(32px,5vw,58px)/1.16 var(--display); letter-spacing:.02em; overflow-wrap:anywhere; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; font:14px/1.5 system-ui,sans-serif; color:#d7e8df; }
+    .meta a { color:#d7f6e8; }
+    .shell { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; display:grid; grid-template-columns:260px minmax(0,760px); gap:38px; justify-content:center; }
+    aside { position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow:auto; padding:18px; border:1px solid var(--line); border-radius:14px; background:rgba(255,253,248,.9); font:14px/1.6 system-ui,sans-serif; }
+    .toc-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 10px; padding:0; border:0; color:var(--accent); background:transparent; font:700 14px/1.6 system-ui,sans-serif; text-align:left; cursor:pointer; }
+    .toc-toggle .toc-state { color:var(--muted); font-size:11px; font-weight:500; }
+    .toc-content.collapsed { display:none; }
+    aside ul { margin:0; padding-left:18px; }
+    aside a { color:#3d5046; text-decoration:none; }
+    aside a:hover { color:var(--accent); }
+    .resource-links { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    main { min-width:0; }
+    .player { margin-bottom:28px; padding:12px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#101713; box-shadow:0 14px 35px rgba(24,34,29,.12); }
+    video { display:block; width:100%; min-width:0; max-height:70vh; border-radius:9px; background:#000; }
+    #source-online-player { display:block; width:100%; aspect-ratio:16/9; border:0; border-radius:9px; background:#000; }
+    .online-start { position:relative; display:grid; place-items:center; aspect-ratio:16/9; overflow:hidden; border-radius:9px; color:#eef5f1; text-align:center; }
+    .online-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16; }
+    .online-start-content { position:relative; padding:24px; font:14px/1.7 system-ui,sans-serif; }
+    #load-online-video { padding:12px 24px; border:1px solid #8de0bc; border-radius:8px; color:#102119; background:#a9e4ca; font:600 16px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .online-note { display:flex; flex-wrap:wrap; gap:6px 12px; padding:12px 4px 2px; color:#b5cbbf; font:12px/1.7 system-ui,sans-serif; }
+    .online-note a { color:#a9e4ca; }
+    .part-list { margin-top:10px; padding:4px 8px 8px; border-top:1px solid #2b3d33; color:#eef5f1; font:13px/1.45 system-ui,sans-serif; }
+    .part-list-head { display:flex; justify-content:space-between; padding:11px 8px 8px; color:#8fb7a3; font-size:12px; letter-spacing:.08em; }
+    .part-button { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:10px; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; color:#cbd8d1; background:transparent; text-align:left; cursor:pointer; }
+    .part-button:hover { background:#19261f; color:white; }
+    .part-button.active { color:#c7f5df; background:#203a2d; }
+    .part-number { color:#7fb99d; font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.06em; }
+    .part-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .part-duration { color:#799087; font:11px/1.4 ui-monospace,monospace; }
+    article { padding:42px clamp(24px,6vw,64px); border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 48px rgba(40,45,40,.08); font-size:17px; font-weight:400; line-height:1.96; letter-spacing:.015em; font-kerning:normal; text-rendering:optimizeLegibility; overflow-wrap:anywhere; }
+    article h1 { display:none; }
+    article h2 { margin:2.2em 0 .7em; padding-top:.2em; font:700 30px/1.3 var(--display); border-bottom:1px solid var(--line); }
+    article h3 { margin:1.8em 0 .5em; font:700 23px/1.35 var(--display); }
+    article p { margin:1.08em 0; text-wrap:pretty; }
+    article li { margin:.3em 0; }
+    article blockquote { margin:1.4em 0; padding:.2em 1.2em; border-left:4px solid var(--accent); color:#405047; background:#f1f5ef; }
+    article table { width:100%; border-collapse:collapse; display:block; overflow:auto; font:14px/1.6 system-ui,sans-serif; }
+    article th, article td { min-width:8em; padding:10px 12px; border:1px solid var(--line); text-align:left; }
+    article code { padding:.15em .4em; border-radius:4px; background:#ece8de; }
+    article math { font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif; }
+    .math-display { margin:1.7em 0; padding:1.05em 1.2em; overflow-x:auto; border-block:1px solid #e3ddd1; color:#16231c; background:#fbf8f1; text-align:center; scrollbar-width:thin; }
+    .math-display math { min-width:max-content; margin-inline:auto; font-size:1.18em; }
+    .math-inline { display:inline-flex; align-items:baseline; max-width:100%; margin-inline:.08em; vertical-align:-.18em; }
+    .math-inline math { font-size:1.02em; }
+    .math-fallback { color:#7d3f35; background:#f7ebe6; }
+    .math-display.math-fallback { text-align:left; }
+    .timecode { margin:0 .08em; padding:.1em .42em; border:1px solid #9bc8b4; border-radius:999px; color:#126c4e; background:#edf8f2; font:600 12px/1.5 ui-monospace,monospace; cursor:pointer; vertical-align:.08em; }
+    .timecode:hover { color:white; background:var(--accent); }
+    .evidence-figure { margin:2em -24px 2.4em; overflow:hidden; border:1px solid #22362c; border-radius:18px; background:var(--night); box-shadow:0 18px 42px rgba(15,25,20,.18); }
+    .frame-image { position:relative; display:block; width:100%; padding:0; overflow:hidden; border:0; background:#0b100d; cursor:zoom-in; }
+    .frame-image img { display:block; width:100%; height:auto; transition:transform .45s cubic-bezier(.2,.75,.25,1),filter .3s ease; }
+    .frame-image:hover img { transform:scale(1.012); filter:saturate(1.04); }
+    .frame-image:focus-visible { outline:3px solid #8de0bc; outline-offset:-3px; }
+    .frame-stamp { position:absolute; top:14px; left:14px; padding:6px 9px; border:1px solid rgba(255,255,255,.28); border-radius:4px; color:#f7f1e6; background:rgba(11,22,16,.78); backdrop-filter:blur(8px); font:700 10px/1.2 ui-monospace,monospace; letter-spacing:.12em; }
+    .evidence-figure figcaption { display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; padding:15px 18px 17px; color:#d9e3dd; font:14px/1.65 system-ui,sans-serif; }
+    .frame-jump { margin-top:1px; padding:4px 8px; white-space:nowrap; border:1px solid #3b6e57; border-radius:999px; color:#a9e4ca; background:#15271e; font:700 11px/1.4 ui-monospace,monospace; cursor:pointer; }
+    .frame-jump:hover { color:#102119; background:#a9e4ca; }
+    .lightbox { width:min(1180px,calc(100vw - 40px)); max-width:none; padding:0; overflow:hidden; border:1px solid rgba(255,255,255,.18); border-radius:18px; color:#f7f1e6; background:#0b100d; box-shadow:0 28px 90px rgba(0,0,0,.55); }
+    .lightbox::backdrop { background:rgba(5,10,7,.82); backdrop-filter:blur(8px); }
+    .lightbox img { display:block; width:100%; max-height:calc(100vh - 130px); object-fit:contain; background:#050805; }
+    .lightbox-bar { display:flex; gap:16px; align-items:center; justify-content:space-between; padding:13px 16px; color:#d9e3dd; font:14px/1.5 system-ui,sans-serif; }
+    .lightbox-close { flex:0 0 auto; width:34px; height:34px; border:1px solid #466355; border-radius:50%; color:#f7f1e6; background:transparent; font:22px/1 system-ui,sans-serif; cursor:pointer; }
+    .lightbox-close:hover { color:#102119; background:#a9e4ca; }
+    .foot { margin-top:20px; color:var(--muted); font:12px/1.6 system-ui,sans-serif; text-align:center; }
+    @media (max-width:900px) { .shell { grid-template-columns:1fr; } aside { position:static; max-height:none; padding:14px 16px; } .toc-toggle { margin:0; } .toc-content { margin-top:10px; } .hero { padding-top:46px; } }
+    @media (max-width:600px) { .shell { width:calc(100% - 18px); margin-top:12px; gap:12px; } article { padding:28px 19px; } .hero { padding-inline:18px; } .meta { display:grid; gap:6px; overflow-wrap:anywhere; } .player { padding:8px; } article h2 { font-size:26px; } .math-display { margin-inline:-8px; padding-inline:12px; text-align:left; } .evidence-figure { margin:1.6em -10px 2em; border-radius:12px; } .evidence-figure figcaption { grid-template-columns:1fr; gap:9px; } .frame-jump { width:max-content; } .lightbox { width:calc(100vw - 16px); } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .frame-image img { transition:none; } }
+  </style>
+<style>.course-controls{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.course-controls .done{padding:9px 12px;border:1px solid #9bc8b4;border-radius:7px;background:#edf8f2;color:#126c4e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer}.course-controls .done[aria-pressed="true"]{color:white;background:#126c4e}.course-controls .done:focus-visible{outline:3px solid #b59168;outline-offset:3px}</style><script src="../assets/reader.js" defer></script></head>
+<body>
+  <div id="progress"></div>
+  <header class="hero"><div class="hero-inner">
+    <div class="eyebrow">Bilibili Video Notes · 深度</div>
+    <h1 id="gpu-ai-infra">一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra</h1>
+    <div class="meta"><span>鸽鸽王分王</span><span>在线回看 · 未保存视频</span><a href="https://www.bilibili.com/video/BV1Fuxf6aEgJ/" target="_blank" rel="noopener">打开原始页面</a></div>
+  </div></header>
+  <div class="shell">
+    <aside><button type="button" class="toc-toggle" aria-expanded="true"><span>本页导航</span><span class="toc-state">收起</span></button><div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#gpu-ai-infra">一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra</a><ul>
+<li><a href="#_1">应用、模型与基础设施各自负责什么</a></li>
+<li><a href="#gpu">GPU 怎样把一行代码变成大量计算</a></li>
+<li><a href="#_2">装得下与读得快，是两项约束</a></li>
+<li><a href="#_3">权重怎样训练，多卡怎样一起学习</a></li>
+<li><a href="#_4">文字怎样变成一个接一个的回答</a></li>
+<li><a href="#kv-cache">KV Cache 省下重算，也占掉空间</a></li>
+<li><a href="#_5">分页、连续组批与前缀复用，各省在哪里</a></li>
+<li><a href="#_6">怎样部署、升级和扩容</a></li>
+<li><a href="#_7">用时间和产量定位“变慢”</a></li>
+<li><a href="#_8">总结提炼</a></li>
+<li><a href="#_9">时间导航</a></li>
+<li><a href="#_10">复习</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><nav class="resource-links" aria-label="资料与入口"><a href="BV1Fuxf6aEgJ.md">Markdown 笔记</a><a href="../index.html">课程目录</a></nav><div class="course-controls"><a href="../index.html#map">← 先画清技术地图</a><a href="../flow.html">学习脉络 ↗</a><button class="done" data-done="BV1Fuxf6aEgJ" type="button" aria-pressed="false">标记学过</button></div></aside>
+    <main>
+      <section class="player" aria-label="原视频播放"><div id="online-start" class="online-start"><img class="online-poster" src="../assets/frames/BV1Fuxf6aEgJ-P01-02834.jpg" alt="视频画面预览"><div class="online-start-content"><p>原视频 · 在线回看</p><button type="button" id="load-online-video">加载在线视频</button><p>点击后联网加载 B 站播放器；本地不下载整段视频。</p></div></div><iframe id="source-online-player" title="B站原视频播放器" src="about:blank" data-player-url="https://player.bilibili.com/player.html?bvid=BV1Fuxf6aEgJ&amp;page=1&amp;autoplay=0" hidden allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><div class="online-note">播放需联网，可能受 B 站登录或嵌入限制。<a id="online-fallback" href="https://www.bilibili.com/video/BV1Fuxf6aEgJ/" target="_blank" rel="noopener">在 B 站打开当前时间</a></div></section>
+      <article data-lesson="BV1Fuxf6aEgJ"><h1>一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra</h1>
+<blockquote>
+<p>来源：【AI Infra 一小时入门】GPU、CUDA、vLLM、PyTorch、KV Cache、Triton、K8s、Ray，一次搞懂大模型背后的技术体系<br>
+UP 主：鸽鸽王分王｜时长：01:20:04｜阅读强度：deep<br>
+链接：https://www.bilibili.com/video/BV1Fuxf6aEgJ/</p>
+</blockquote>
+<p>我们打开聊天窗口，问“推荐一道晚餐”，有时立刻看到回答，有时对话框却空着好几秒。消息已经送到服务器，模型也早已加载，为什么还要等？假设一张 GPU 留给请求上下文的空间只够四条对话，前面四个人正在生成回答，第五条请求就只能等待。它迟迟没有第一个字，可能根本还没开始模型计算。等某条对话结束、空间归还，调度器才有条件接纳它。<button type="button" class="timecode" data-seconds="0">[00:00:00]</button></p>
+<p>如果另一张卡上已有一份完整模型，而且还有空位，第五条就可以被分过去。模型内容没有改变，变化的是计算资源与请求的安排。AI 基础设施，也就是 AI Infra，要为训练和在线服务提供计算、存储和网络，并组织这些资源，让模型持续工作。我们沿着这条请求，依次看设备怎样执行、权重怎样训练、回答怎样生成，再把部署和监控接回来。<button type="button" class="timecode" data-seconds="108">[00:01:48]</button></p>
+<h2 id="_1">应用、模型与基础设施各自负责什么</h2>
+<p>在公司知识库里问“这次出差的报销最晚哪天提交”，制度写的是“返程后十个工作日”，回答却变成“十天内”，就可能算错日期。应用先检索差旅办法，取出相关条款，把问题和条款一起交给模型；模型理解条件、组织回答，应用再提供能回到原文的引用。检索到了正确条款，还需要模型读准“工作日”；模型有能力理解，高峰时也可能因为资源不足而排队。几个问题发生在不同位置，需要分别检查。<button type="button" class="timecode" data-seconds="135">[00:02:15]</button></p>
+<p>上传整本手册后，应用要保证文件处理、检索和引用展示正常；算法评估检查模型在长材料里是否仍能找到条款、理解条件；基础设施关心材料变长后要占多少显存、处理多久、还能同时接待多少人。资料更多并不自动保证答案更准，卡更贵也不能自动修正日期理解。只有先知道哪一步承担什么任务，才不会把所有异常都归结为模型能力。</p>
+<p>上线以前，数据先清洗、去重、分词并组织成训练样本，训练程序把样本分批送入设备，反复更新参数；还可以用监督微调，即 SFT，让模型学习示范问答。独立评估检查它处理未见样本的能力。部署前如果做了格式转换或量化，必须再评估最终产物，然后把权重、配置、分词器和版本信息配套交给服务。线上发现新的日期错误，又可以补进评测集，进入下一轮改进。<button type="button" class="timecode" data-seconds="305">[00:05:05]</button></p>
+<h2 id="gpu">GPU 怎样把一行代码变成大量计算</h2>
+<p>先不谈模型，只把六个数分别乘二。每一项只依赖自己的输入，没有先后关系，因此可以并行。CPU 擅长通用控制和数据准备，也能通过多核心，或用 SIMD 让一条指令处理多份数据；GPU 更偏向把大量相似工作分给更多线程，可以先把线程看成分别负责一份数据的执行者。矩阵乘法也能拆开：输出左上角来自第一个矩阵第一行与第二个矩阵第一列的对应元素相乘再相加，其他输出位置有各自的行列组合，可以分别计算。<button type="button" class="timecode" data-seconds="610">[00:10:10]</button></p>
+<p>十万个线程不会同时塞进设备。我们提交一段 GPU 上执行的程序，这段程序叫内核。一次内核启动覆盖的线程组成 grid，也叫网格；网格划成 block，也叫线程块。线程块被分到 SM，即流式多处理器，同一块内的线程可以协作。进入 SM 后，线程按 warp 分组；以常见 NVIDIA GPU 为例，一组通常是三十二个线程，同一条指令处理各自的数据。一组等待数据时，可以执行另一组已准备好的线程，减少计算单元空等。<button type="button" class="timecode" data-seconds="757">[00:12:37]</button></p>
+<p>Occupancy 描述驻留 warp 相对于硬件上限的比例，有助于判断设备是否有足够工作隐藏等待，但更高的数字不保证更快。线程占用的寄存器和共享内存会限制同时驻留的数量，速度还取决于数据是否及时到达。Tensor Core 是专门加速矩阵乘加的部件，只有数据类型、矩阵形状和指令满足条件时才能利用。任务很小时，准备数据、启动和传输的开销甚至可能超过计算本身，所以 GPU 不会对任意工作都自动提速。</p>
+<p>我们通常写 PyTorch 这样的高层代码。它把数组和参数表示成张量，组织张量运算，再选择适合设备、类型和形状的实现。具体提交给 GPU 执行的设备端程序叫 kernel，即内核。矩阵乘法可调用 cuBLAS，许多深度学习操作可用 cuDNN，多卡交换数据可使用 NCCL；开发者也可以用 CUDA C++ 或 Triton 写专门内核。这里的 Triton 指 GPU 编程语言，与 NVIDIA Triton Inference Server 是不同工具。<button type="button" class="timecode" data-seconds="1164">[00:19:24]</button></p>
+<p>用两个六元素数组相加看区别。CUDA C++ 内核根据块编号、块内线程编号和块大小算出下标，负责下标二的线程读取六和四，相加得到十，再写回第三个位置。演示启动三十二个线程，数组却只有六项，多余线程必须先判断边界。Triton 示例每个程序实例处理四个位置，第二组覆盖四到七，用掩码关闭六和七的无效访问。PyTorch 只需表达 C 等于 A 加 B，选择实现、线程分工和边界处理由框架承担。不同写法处在不同抽象层，最终要让有效位置得到相同结果。</p>
+<p>这些工作还需要到硬件的通路。CUDA Runtime 提供申请显存、复制数据和启动内核等接口，再通过驱动与操作系统同设备交互；Toolkit 提供编译器等开发工具。程序放进容器以后，宿主机仍要有可用驱动，并开放 GPU 设备访问，容器中的运行库也要兼容。CPU 系统内存、GPU 设备内存、SSD 存储各有位置，多卡通过 PCIe、NVLink 等交换数据，跨服务器可能使用 InfiniBand。看不到 GPU 时，单查 Python 代码会漏掉下面这些环节。<button type="button" class="timecode" data-seconds="1302">[00:21:42]</button></p>
+<h2 id="_2">装得下与读得快，是两项约束</h2>
+<p>权重先要装进显存，运行时还要放请求缓存、临时张量和其他开销。权重能加载，只说明服务有机会启动；来了多条长对话，剩余空间可能不够继续生成。申请超出容量，可能发生 OOM，即内存不足。引擎可以限制并发或暂缓接收请求，避免运行中才发现放不下。这解释了第五条请求的等待：即使计算单元还有余力，也未必有保存上下文的位置。<button type="button" class="timecode" data-seconds="867">[00:14:27]</button></p>
+<p>容量表示总共能放多少，带宽表示每秒能搬多少。如果计算单元在等数据，增加理论算力无法直接解决等待。GPU 还有更近的存储：多个 SM 可共享 L2 缓存，L1 靠近各自 SM，线程私有寄存器适合保留反复使用的值，块内共享内存让多个线程复用同一小片输入。矩阵乘法经常先把一块数据搬到片上，让它参与多次乘加，再写出结果，减少反复读取显存。<button type="button" class="timecode" data-seconds="923">[00:15:23]</button></p>
+<p>看“矩阵乘法、加偏置、ReLU”这段连续过程。偏置是可学习的调整量，ReLU 把负值变零、正值保留。在数学表达里，它们是不同算子；如果各用一个内核，乘法结果先写回显存，加法再读出，激活又读写一次。能够融合时，一个内核连续完成几个动作，中间值留在寄存器等片上存储，最后再写回。减少中间张量读写和启动次数，才有机会更快；寄存器压力、张量形状和硬件条件也可能让拆开更合适。<button type="button" class="timecode" data-seconds="1037">[00:17:17]</button></p>
+<p>计算受限表示数据已就绪，计算单元仍忙不过来，要减少运算或提高执行效率；访存受限表示计算在等数据，要减少搬运、改善复用。FlashAttention 提供一个典型例子：朴素注意力可能先生成巨大的分数矩阵，写回显存，再读出做归一化和后续运算。FlashAttention 把 Q、K、V 分块读到片上，边处理边更新归一化统计量，并修正已有部分结果，不必保存完整分数矩阵。数学目标保持一致，执行顺序与浮点舍入可能不同，实际提速需要测量。<button type="button" class="timecode" data-seconds="1375">[00:22:55]</button></p>
+<h2 id="_3">权重怎样训练，多卡怎样一起学习</h2>
+<p>用补字任务看一次训练。输入“天气很”，希望接“晴”，模型起初给“晴”的概率只有 30%，更倾向于其他字。损失函数把预测与答案的差异变成一个数，反向计算求损失对参数的梯度，优化器据此更新参数。示例更新后，“晴”的概率升到 60%，说明对这道题的预测变化了；没见过的题是否更好，需要独立评估。真实语言模型处理的是分词器切出的 token，它可以是字、词或词的一部分，补单字只是简化示意。<button type="button" class="timecode" data-seconds="1501">[00:25:01]</button></p>
+<p>PyTorch 将这条链组织为计算图：前向计算从输入与参数得到预测、损失，记录操作之间的依赖；调用 backward 后，沿依赖反向求梯度；优化器再更新参数。最简单的梯度下降中，学习率决定向梯度反方向移动多少，SGD、Adam 等优化器还可能保存历史状态：</p>
+<div class="math-display" aria-label="\theta_{\text{new}}=\theta_{\text{old}}-\eta\nabla_\theta L."><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>θ</mi><mrow><mtext>new</mtext></mrow></msub><mo>=</mo><msub><mi>θ</mi><mrow><mtext>old</mtext></mrow></msub><mo>−</mo><mi>η</mi><msub><mo>∇</mo><mi>θ</mi></msub><mi>L</mi><mo>.</mo></mrow></math></div>
+<p>推理通常只用训练好的权重做前向计算，不反向求导、不更新参数。不同请求改变当前输入与上下文，同一份权重仍可以重复使用。训练期间还需要梯度和优化器状态，所以训练与推理的显存预算不能只按同一份权重文件估计。<button type="button" class="timecode" data-seconds="1621">[00:27:01]</button></p>
+<p>一张卡不够，先问是不够快还是装不下。数据并行让每卡保留完整模型和训练状态、处理不同样本，再同步梯度。张量并行把同一层参数和计算切给多卡，但要交换中间结果。流水线并行把不同层分给不同卡，让不同微批次沿阶段推进。FSDP，即全分片数据并行，把参数、梯度和优化器状态分散保存，需要时通信与重建。它们切分对象不同，费用和适用条件也不同。<button type="button" class="timecode" data-seconds="1731">[00:28:51]</button></p>
+<p>数据并行中，假设两卡对同一参数算出本地梯度二和六，All-Reduce 汇总后求平均，得到四。各卡用相同结果更新，副本才能保持一致。NVIDIA 集群常由 NCCL 执行这种集合通信，训练框架再协调分片和交换。此外，调度器要凑齐设备，数据加载器要及时读盘、预处理；任何一环跟不上，GPU 都可能空等。多卡效率依赖计算、网络和数据供给共同配合。<button type="button" class="timecode" data-seconds="1848">[00:30:48]</button></p>
+<p>长训练还要定期保存 checkpoint，即检查点，包括权重、优化器状态与训练进度。节点故障后，读取最近一次完整检查点继续；上次保存到故障之间通常要重算。可靠性就在这些具体动作里：能保存完整状态，也能识别和恢复。只保存权重，未必足以接续原来的优化过程。<button type="button" class="timecode" data-seconds="1913">[00:31:53]</button></p>
+<h2 id="_4">文字怎样变成一个接一个的回答</h2>
+<p>模型训练好了，用户问“什么是人工智能”。分词器先切成 token，再给片段整数编号；编号用于查嵌入表，取得参与计算的向量。示意里“人工”的编号是一百零六，只对应当前分词结果，换分词器会改变切法和编号。编号负责查表，取得的向量才进入后续网络，不能把示意编号当成文字通用的数字定义。<button type="button" class="timecode" data-seconds="2130">[00:35:30]</button></p>
+<p>因果 Transformer 的注意力层将每个位置的表示经不同线性变换得到 Q、K、V。Q 是当前位置发出的查询，与各位置 K 比较得到匹配分数；分数归一化为权重，用来汇总对应 V，当前表示就融入前文。因果遮罩限制当前位置只看自己与更早内容，不能偷看后面的答案。即使训练时整句话一起准备，遮罩仍保留这个限制。<button type="button" class="timecode" data-seconds="2193">[00:36:33]</button></p>
+<p>多头注意力并行使用多组 Q、K、V，RoPE 等位置编码纳入位置信息；前馈网络再分别变换各位置向量，残差连接合并变换前后的信息，归一化控制数值尺度。多层计算后，末尾位置交给语言模型输出头，为候选 token 计算未归一化分数 logits。温度改变分布平缓程度，top-k 留下最高的若干候选，top-p 留下累计概率达到阈值的集合，再按策略选出一个 token。新 token 接回输入，才能继续预测下一个。<button type="button" class="timecode" data-seconds="2258">[00:37:38]</button></p>
+<p>生成分成两个阶段。Prefill，即预填充，一次处理已有输入位置，建立后续生成的上下文，各位置仍受因果遮罩限制。同一次前向计算各层 K、V，并用末尾分数选出第一个输出。Decode，即逐步解码，把刚选出的 token 再送入模型，为新位置生成状态并预测下一个。第一个输出来自处理输入的那次计算，后续输出再随解码逐轮推进。<button type="button" class="timecode" data-seconds="2378">[00:39:38]</button></p>
+<p>长输入增加 prefill 工作，容易推迟首 token；长输出增加 decode 轮数，推迟整段结束。长输入下 prefill 往往更容易受计算能力影响，低并发 decode 则反复读取权重与历史状态，常受显存带宽影响；批次、硬件和模型会改变实际瓶颈。流式输出把已生成内容分段发回，让用户边等边读，一段可能合并多个 token，并不要求逐 token 发送。<button type="button" class="timecode" data-seconds="2491">[00:41:31]</button></p>
+<h2 id="kv-cache">KV Cache 省下重算，也占掉空间</h2>
+<p>第四个位置的 Q 要与前三个位置的 K 匹配，再汇总对应 V。不保存历史结果，就要反复计算它们。因果遮罩保证早先位置看不到后来内容，因此在同一上下文延续中，已经得到的 K、V 可以继续用。把各层历史 K、V 留下来就是 KV Cache。每轮为新位置追加状态，再读取历史缓存，省掉早先位置的重复计算，却仍需要读取历史信息。<button type="button" class="timecode" data-seconds="2540">[00:42:20]</button></p>
+<p>标准多头注意力 MHA 中，每个查询头有对应 K、V；GQA 让一组查询头共享一组 K、V，MQA 让全部查询头共享一组。估算时要看真实 KV 头数。每条请求还需要自己的上下文，同一副本中的权重则通常共享。模型只装一份，十二条长对话的缓存依然会分别增长，不能用共享权重推断对话也不再占空间。<button type="button" class="timecode" data-seconds="2646">[00:44:06]</button></p>
+<p>以 Llama 3.1 8B 为例：三十二层，每层八个 KV 头，头维度一百二十八，K、V 各一份，BF16 每个数两字节。单 token 的原始 KV 为：</p>
+<div class="math-display" aria-label="32\times8\times128\times2\times2
+=131072\ \text{bytes}=128\ \text{KiB}."><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>32</mn><mo>×</mo><mn>8</mn><mo>×</mo><mn>128</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn><mo>=</mo><mn>131072</mn><mtext> </mtext><mtext>bytes</mtext><mo>=</mo><mn>128</mn><mtext> </mtext><mtext>KiB</mtext><mo>.</mo></mrow></math></div>
+<p>一千零二十四个 token 约占 128 MiB，八千一百九十二个约占 1 GiB；十二条各有这么长历史的对话，原始 KV 约需 12 GiB，尚未算权重、临时空间和管理开销。“还能接几条”因而取决于请求长度，不能只数用户。<button type="button" class="timecode" data-seconds="2800">[00:46:40]</button></p>
+<figure class="evidence-figure" id="evidence-frame-01">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Fuxf6aEgJ-P01-02834.jpg" data-caption="同一模型的 KV 显存随上下文长度增长：1,024 个 token 约占 128 MiB，8,192 个约占 1 GiB。">
+    <img src="../assets/frames/BV1Fuxf6aEgJ-P01-02834.jpg" loading="lazy" alt="视频截图 01，00:47:14：同一模型的 KV 显存随上下文长度增长：1,024 个 token 约占 128 MiB，8,192 个约占 1 GiB。">
+    <span class="frame-stamp">视频画面 / 01</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="2834.000">图 01 · 00:47:14</button><span>同一模型的 KV 显存随上下文长度增长：1,024 个 token 约占 128 MiB，8,192 个约占 1 GiB。</span></figcaption>
+</figure>
+<p>小缓存池的例子更直观：总共十八格，A 增长到七格，B 申请五格，C 申请四格，合计十六格，只剩两格。D 至少要三格，就算还有计算余力，也得等别人归还。决定是否接入请求，要同时检查本轮计算预算和可分配 KV 空间，单看 GPU 利用率无法完整判断。<button type="button" class="timecode" data-seconds="2699">[00:44:59]</button></p>
+<h2 id="_5">分页、连续组批与前缀复用，各省在哪里</h2>
+<p>若每条请求一开始就按最长回答预留连续区域，短回答用不到的部分也被占着。PagedAttention 将 KV 按固定大小分块，用块表记录逻辑顺序与物理位置。示意每块存四个 token，A 的逻辑块可在 P2、P5，增长时再领 P1，无需搬到更长连续区域。内核按块表仍能沿正确顺序读取。这里借鉴分页管理，KV 数据依然放在 GPU 显存里。<button type="button" class="timecode" data-seconds="2850">[00:47:30]</button></p>
+<figure class="evidence-figure" id="evidence-frame-02">
+  <button type="button" class="frame-image" data-src="../assets/frames/BV1Fuxf6aEgJ-P01-02930.jpg" data-caption="逻辑顺序由块表连接到 P2、P5、P1；新增 KV 不必紧接原来的物理位置。">
+    <img src="../assets/frames/BV1Fuxf6aEgJ-P01-02930.jpg" loading="lazy" alt="视频截图 02，00:48:50：逻辑顺序由块表连接到 P2、P5、P1；新增 KV 不必紧接原来的物理位置。">
+    <span class="frame-stamp">视频画面 / 02</span>
+  </button>
+  <figcaption><button type="button" class="frame-jump" data-seconds="2930.000">图 02 · 00:48:50</button><span>逻辑顺序由块表连接到 P2、P5、P1；新增 KV 不必紧接原来的物理位置。</span></figcaption>
+</figure>
+<p>A、B 从同一空闲池领块，各自保留块表，共用池子不等于共用对话。A 结束以后，没有其他引用、也不需保留的块可以归还，B 的块继续使用，C 再申请释放的空间。按需增长减少提前预留浪费，但末块可能未写满，池子容量也仍有限。分页解决分配问题，没有抹掉每个历史 token 的真实费用。<button type="button" class="timecode" data-seconds="2954">[00:49:14]</button></p>
+<p>有了空间，何时计算仍由组批决定。固定批处理里，A 还需两轮、B 还需四轮，新来的 C 可能等整批结束。连续批处理在每轮后重新检查队列和资源，允许先为 C 做 prefill，再加入 decode；A 完成便退出，B 继续。示例中 C 第三轮完成，固定处理却可能第五轮才开始解码、第六轮结束。提前接入仍受 KV、每轮 token 数和延迟目标约束，长输入也会拉长同轮计算。<button type="button" class="timecode" data-seconds="3053">[00:50:53]</button></p>
+<p>前缀缓存省的是重复输入。两人附同一本差旅手册，分别问报销与订票，若提示词开头 token 完全一致，前一请求算过的 KV 就有机会复用。引擎要核对模型、token 序列和相关配置，并遵守数据隔离；文字相似不够。共同前缀以后的问题仍需计算，缓存空间紧张也可以淘汰。复用输入状态没有替用户生成新的答案，它只是减少重新处理相同前文的工作。<button type="button" class="timecode" data-seconds="3151">[00:52:31]</button></p>
+<p>权重占空间太多时可以考虑量化或模型并行。量化用更少比特近似表示数值，例如把 0.71875 按尺度恢复为约 0.7，减少存储和搬运，同时引入误差。必须检查内核是否支持格式，并重新测效果与速度。模型并行把同一模型分给多卡，减少单卡份额，但带来通信。它们不能与分页缓存互相替代：权重、请求缓存、重复输入和中间读写各有费用。<button type="button" class="timecode" data-seconds="3257">[00:54:17]</button></p>
+<p>投机解码处理长回答逐轮生成的成本。小而快的草稿模型先猜几个 token，目标模型在一次前向里检查多个位置。贪心例子中，前两个候选符合目标选择就保留，第三个不一致则从分歧处改用目标结果；随机采样另需接受与修正规则。猜得准确，一次验证可确认多个 token；猜偏时，起草和验证也花时间，所以要测整条链的实际收益。<button type="button" class="timecode" data-seconds="3404">[00:56:44]</button></p>
+<h2 id="_6">怎样部署、升级和扩容</h2>
+<p>应用通过 HTTP 调用模型 API，消息体放问题与生成参数，例如最多输出一百二十八个 token、是否流式返回。入口检查格式、权限和额度，合法请求再进入队列；推理调度器挑选本轮请求，worker 调用模型并维护状态，结果沿原连接返回。取消以后，应停止继续调度并回收不再需要的缓存。HTTP 429 表示限流一类拒绝，超时限制请求最多等待多久，两者需要分别记录。<button type="button" class="timecode" data-seconds="3493">[00:58:13]</button></p>
+<p>vLLM、SGLang、TensorRT-LLM 等推理引擎组织模型外面的执行工作：本轮谁一起算、准备什么状态、怎样调用底层计算。它们与 API 格式处在不同位置。即使两个服务声称兼容相同接口，切换前也要用真实请求核对模型、参数、流式内容和错误格式，接口相近无法保证行为全部一致。<button type="button" class="timecode" data-seconds="1997">[00:33:17]</button></p>
+<p>开发机能跑，换服务器却可能因缺少 FastAPI 依赖而报错。Docker 镜像把代码、依赖与启动配置组织为统一模板，容器是从模板启动的实例；大权重可单独存放，启动时挂载或获取。容器通常共享宿主机内核，GPU 仍需要宿主机驱动和设备访问。镜像让环境更一致，无法自动替代全部硬件条件。<button type="button" class="timecode" data-seconds="3621">[01:00:21]</button></p>
+<p>模型注册表记录版本、权重、配置、分词器和评估结果。新副本申请设备、加载模型，先用内部请求预热，再通过 readiness，即就绪检查，才接真实流量；liveness，即存活检查，判断进程是否正常、是否要重启。滚动更新让新副本逐个就绪，旧副本继续处理手头请求，切换后退出。新版出错，先恢复旧副本可用状态，再把流量切回。<button type="button" class="timecode" data-seconds="3722">[01:02:02]</button></p>
+<p>Kubernetes 把承载容器的 Pod 放到节点，并持续比较期望副本数与实际数量，少一个就尝试补建，前提是资源足够。Ray 处理程序内部的分布式 task 和 actor：task 适合一次执行，actor 可长期保留状态，例如加载模型后反复接任务。服务内部的推理引擎再安排请求批次。三者的对象分别是 Pod、程序任务和模型请求，所在层次不同。<button type="button" class="timecode" data-seconds="3845">[01:04:05]</button></p>
+<p>两卡各放完整模型，形成两个独立副本，入口负载均衡分发请求，各有权重和 KV 池；多卡共同跑一份模型，则只构成一个协作副本，也可以再复制多个这样的副本。已经生成的请求通常留在原副本以沿用缓存。自动伸缩新增副本，还需申请资源、加载和就绪时间；缩容要先停接新请求，等已有回答完成再释放设备。<button type="button" class="timecode" data-seconds="3972">[01:06:12]</button></p>
+<h2 id="_7">用时间和产量定位“变慢”</h2>
+<p>TTFT 是发送请求到首 token 的时间，包括网络、入口、排队和前向处理；ITL 是相邻 token 到达间隔，TPOT 概括后续 token 平均耗时。示例首 token 在 0.8 秒到达，四个 token 全部结束在 1.1 秒，后续共 0.3 秒，三个间隔平均 0.1 秒。四个 token 之间只有三个间隔，不能拿整段时间随意除以四。首字慢与后续慢需要分开看。<button type="button" class="timecode" data-seconds="4097">[01:08:17]</button></p>
+<p>两秒里 A 输出四个 token、B 输出六个，总输出吞吐量为每秒五个 token；完成两条请求，请求吞吐量就是每秒一条。并发统计尚未完成的请求，排队未上 GPU 的 C 也在其中。提高并发可能增加总产量，也可能拉长每人的等待，所以必须把吞吐和延迟一起判断。<button type="button" class="timecode" data-seconds="4176">[01:09:36]</button></p>
+<p>模拟负载例子保持模型、硬件与请求长度不变。低负载首 token 延迟一百八十毫秒；增加并发，产量上升，个人等待也略增。并发到二十，产量只再增加每秒二十五个 token，达到二百零五，已有八条排队，TTFT 升到一千三百毫秒，显存占用 94%。拆开后，九百五十毫秒耗在排队。还要继续检查可用 KV 块和每轮 token 预算，单看显存总量无法判明限制；内核变快也不会直接清除已经发生的队列等待。<button type="button" class="timecode" data-seconds="4236">[01:10:36]</button></p>
+<p>平均数可能掩盖尾部。P50 为中位延迟，P95、P99 是相应比例请求不超过的延迟位置。SLO 是服务目标，例如请求成功并在八百毫秒内返回首 token。十秒处理一百条，九十五条满足指定目标，则 goodput，即有效吞吐量，为每秒 9.5 条。它把“做了多少”进一步约束为“多少达到了用户需要的标准”。<button type="button" class="timecode" data-seconds="4366">[01:12:46]</button></p>
+<p>监控指标显示异常发生的时间和队列、资源变化；日志记录 R-17 当时申请不到 KV 块；trace 把它经过的网关、排队、执行与返回连起来，显示九百五十毫秒耗在哪一段。请求已执行仍慢，再用 profiling 把内核和传输放到同一时间线找原因。开头第五条晚餐请求，由此能解释成具体的缓存与队列问题。等空间释放、它进入 prefill 和 decode，服务才把“西红柿炒蛋”等已生成内容分段送回，结束后再把无需保留的块归还。<button type="button" class="timecode" data-seconds="4423">[01:13:43]</button></p>
+<h2 id="_8">总结提炼</h2>
+<p>训练把数据变成权重，部署把配套产物加载为就绪副本，入口接请求，推理引擎安排批次和缓存，GPU 执行计算，服务返回回答。不同优化针对不同费用：量化减少表示空间，KV Cache 省历史重算，分页减少预留浪费，前缀缓存省共同输入，FlashAttention 减少中间读写，连续组批改善资源衔接。定位等待发生在哪里，才能判断该改哪一项。</p>
+<h2 id="_9">时间导航</h2>
+<ul>
+<li><button type="button" class="timecode" data-seconds="0">[00:00:00]</button> 第五条请求为什么等。</li>
+<li><button type="button" class="timecode" data-seconds="135">[00:02:15]</button> 应用、算法与基础设施。</li>
+<li><button type="button" class="timecode" data-seconds="610">[00:10:10]</button> GPU、线程和内核。</li>
+<li><button type="button" class="timecode" data-seconds="867">[00:14:27]</button> 显存、带宽与融合。</li>
+<li><button type="button" class="timecode" data-seconds="1501">[00:25:01]</button> 训练、PyTorch 和多卡。</li>
+<li><button type="button" class="timecode" data-seconds="2130">[00:35:30]</button> 注意力、prefill 与 decode。</li>
+<li><button type="button" class="timecode" data-seconds="2540">[00:42:20]</button> KV 缓存与分页。</li>
+<li><button type="button" class="timecode" data-seconds="3053">[00:50:53]</button> 连续组批及其他优化。</li>
+<li><button type="button" class="timecode" data-seconds="3621">[01:00:21]</button> 容器、部署与集群。</li>
+<li><button type="button" class="timecode" data-seconds="4097">[01:08:17]</button> 延迟、吞吐和排查。</li>
+</ul>
+<h2 id="_10">复习</h2>
+<ol>
+<li>权重已经加载，第五条请求为什么仍无法执行？</li>
+<li>PyTorch、CUDA Runtime 与 kernel 分别做什么？</li>
+<li>KV 为什么可以保留复用，又增加了什么费用？</li>
+<li>分页、前缀缓存与连续批处理各改变什么？</li>
+<li>Kubernetes、Ray 与推理引擎分别调度什么？</li>
+<li>TTFT 中大部分时间在排队，接下来要查哪些具体资源？</li>
+</ol></article>
+      <div class="foot">点击截图可放大；点击时间戳可回看相应内容。在线播放需要联网。</div>
+    </main>
+  </div>
+  <dialog class="lightbox" id="frame-lightbox">
+    <img id="lightbox-image" alt="放大的关键画面">
+    <div class="lightbox-bar"><span id="lightbox-caption"></span><button type="button" class="lightbox-close" aria-label="关闭大图">×</button></div>
+  </dialog>
+  <script>
+    const video = document.getElementById('source-video');
+    const onlineVideo = document.getElementById('source-online-player');
+    const partVideos = [{"part": 1, "title": "【AI Infra 一小时入门】GPU、CUDA、vLLM、PyTorch、KV Cache、Triton、K8s、Ray，一次搞懂大模型背后的技术体系", "duration": "80:04", "src": "", "poster": "../assets/frames/BV1Fuxf6aEgJ-P01-02834.jpg"}];
+    const videoByPart = new Map(partVideos.map(item => [Number(item.part), item]));
+    let activePart = Number(partVideos[0]?.part || 1);
+    function activatePart(part, seconds = 0, autoplay = false) {
+      const selected = videoByPart.get(Number(part));
+      if (!selected) return;
+      document.querySelectorAll('.part-button').forEach(button => {
+        button.classList.toggle('active', Number(button.dataset.part) === Number(part));
+      });
+      if (onlineVideo) {
+        const url = new URL(onlineVideo.dataset.playerUrl);
+        url.searchParams.set('page', String(part));
+        url.searchParams.set('t', String(Math.max(0, Number(seconds) || 0)));
+        url.searchParams.set('autoplay', autoplay ? '1' : '0');
+        onlineVideo.src = url.href;
+        onlineVideo.hidden = false;
+        document.getElementById('online-start').hidden = true;
+        const fallback = document.getElementById('online-fallback');
+        const source = new URL(fallback.href);
+        source.searchParams.set('p', String(part));
+        source.searchParams.set('t', url.searchParams.get('t'));
+        fallback.href = source.href;
+        activePart = Number(part);
+        return;
+      }
+      const seek = () => {
+        video.currentTime = Number(seconds || 0);
+        if (autoplay) video.play().catch(() => {});
+      };
+      if (activePart !== Number(part)) {
+        activePart = Number(part);
+        video.src = selected.src;
+        video.poster = selected.poster || '';
+        video.load();
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else if (video.readyState === 0) {
+        video.addEventListener('loadedmetadata', seek, {once:true});
+      } else {
+        seek();
+      }
+    }
+    document.getElementById('load-online-video')?.addEventListener('click', () => activatePart(activePart, 0, true));
+    document.querySelectorAll('.part-button').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part), 0, false);
+    }));
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocContent = document.querySelector('.toc-content');
+    const tocState = document.querySelector('.toc-state');
+    function setTocExpanded(expanded) {
+      tocToggle.setAttribute('aria-expanded', String(expanded));
+      tocContent.classList.toggle('collapsed', !expanded);
+      tocState.textContent = expanded ? '收起' : '展开';
+    }
+    if (matchMedia('(max-width: 900px)').matches) setTocExpanded(false);
+    tocToggle.addEventListener('click', () => setTocExpanded(tocToggle.getAttribute('aria-expanded') !== 'true'));
+    document.querySelectorAll('.timecode, .frame-jump').forEach(button => button.addEventListener('click', () => {
+      activatePart(Number(button.dataset.part || activePart), Number(button.dataset.seconds || 0), true);
+      document.querySelector('.player').scrollIntoView({behavior:'smooth', block:'center'});
+    }));
+    const lightbox = document.getElementById('frame-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    document.querySelectorAll('.frame-image').forEach(button => button.addEventListener('click', () => {
+      lightboxImage.src = button.dataset.src || '';
+      lightboxCaption.textContent = button.dataset.caption || '';
+      lightbox.showModal();
+    }));
+    document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.close());
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    const progress = document.getElementById('progress');
+    addEventListener('scroll', () => {
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (height > 0 ? scrollY / height * 100 : 0) + '%';
+    }, {passive:true});
+  </script>
+</body>
+</html>

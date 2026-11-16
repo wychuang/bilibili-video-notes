@@ -79,9 +79,9 @@ $env:BILI_NOTES_TEXT_PROVIDER = "deepseek"
 
 ### Lightweight public course / 轻量公开课程
 
-`courses/search-quality/` is an intentionally public course. It does not change the archive-first GUI workflow. All 141 readable entries now have canonical `lessons/<BV>.md` files and full-reader HTML, including the 9 originally reused articles. The 6 evidence-blocked entries remain pending. `scripts/build_course.py` uses `render_summary_html` with safe Markdown, static MathML, online playback, part selection, frame zoom, source links, section navigation and course progress controls. Without private source metadata, a rebuild preserves the public identity and playlist metadata in `index.json`.
+`courses/search-quality/` is an intentionally public course. It does not change the archive-first GUI workflow. All 172 readable entries now have canonical `lessons/<BV>.md` files and full-reader HTML, including the 9 originally reused articles. The 6 evidence-blocked entries remain pending. `scripts/build_course.py` uses `render_summary_html` with safe Markdown, static MathML, online playback, part selection, frame zoom, source links, section navigation and course progress controls. Without private source metadata, a rebuild preserves the public identity and playlist metadata in `index.json`.
 
-141 篇课程稿统一以 `courses/search-quality/lessons/*.md` 为编辑入口，课程不再从旧 `notes/` 覆盖正文。三篇用户认可稿保留正文，其余稿按完整原文重写。所有页面保留总结提炼、时间导航和复习内容，章节名称可随内容自然调整。写完保存后须完整读回审校；不要把校对记录、过程说明和未确认字段塞进阅读页。Skills 规则与项目文档仍需同步。
+172 篇课程稿统一以 `courses/search-quality/lessons/*.md` 为编辑入口，课程不再从旧 `notes/` 覆盖正文。三篇用户认可稿保留正文，其余稿按完整原文重写。所有页面保留总结提炼、时间导航和复习内容，章节名称可随内容自然调整。写完保存后须完整读回审校；不要把校对记录、过程说明和未确认字段塞进阅读页。Skills 规则与项目文档仍需同步。
 
 课程采集器 `scripts/course_evidence.py` 只写项目 `.state/course-evidence/`，拒绝 Windows 系统盘项目。先获取并检查字幕的 BV/CID 与时长；缺字幕时显式加 `--audio`，复用已有 small 模型进行 GPU 转写，无下载模型或 CPU 回退。每个临时音频在 `finally` 中删除。历史曾发现不匹配字幕响应，旧管线证据不再复用；有效转写元数据必须为 `pipeline_version: 2`，仍需人工检查主题与术语。
 
@@ -124,7 +124,7 @@ Limits: 2 GiB evidence footprint, at least 5 GiB free on the project drive, and 
 
 The local scripts are `assets/flow-data.js` (public content), `flow.js` (navigation and accessible HTML), `atlas-scene.js` (3D rendering with a 2D fallback), and `vendor/three-r180.js`. Three.js 0.180.0 is pinned from the official npm distribution (`https://unpkg.com/three@0.180.0/build/three.cjs`), wrapped in a local classic-script export so `file://` works without modules, installs or runtime CDNs. Preserve `vendor/THREE-LICENSE.txt` when redistributing. WebGL context loss opens the complete content list so reading remains available.
 
-`external.json` contains explicitly labeled external courses, with original video links, HackerTube discovery links and placement in an existing topic branch. They appear in the homepage and map without changing the 147-entry Bilibili catalog or claiming a local article. Small original WebP covers, referenced inspected frames, named external resources and dependency licenses use the publication allowlist. The original directory, full reader and map share the `search-quality-course-v1` progress store; external resources do not count as readable notes.
+`external.json` contains explicitly labeled external courses, with original video links, HackerTube discovery links and placement in an existing topic branch. They appear in the homepage and map without changing the 178-entry Bilibili catalog or claiming a local article. Small original WebP covers, referenced inspected frames, named external resources and dependency licenses use the publication allowlist. The original directory, full reader and map share the `search-quality-course-v1` progress store; external resources do not count as readable notes.
 
 Validate route/branch selection, search, back navigation, cover failures, keyboard access, shared progress, pause and reduced-motion behavior. Animations pause in hidden tabs. Check desktop, tablet and phone layouts, then run the full-reader browser checks; keep QA output under ignored `.state/`.
 

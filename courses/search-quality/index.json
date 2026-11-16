@@ -3315,5 +3315,625 @@
         "duration_seconds": 90
       }
     ]
+  },
+  {
+    "bvid": "BV1Dw4n61EbX",
+    "module": "product",
+    "priority": "拓展",
+    "reason": "把经营目标拆成团队任务：BOSS 工作台怎样组织信息",
+    "strength": "quick",
+    "title": "把经营目标拆成团队任务：BOSS 工作台怎样组织信息",
+    "ready": true,
+    "reused": false,
+    "uploader": "赛博老爸AI",
+    "duration_seconds": 185,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "",
+        "duration_seconds": 185
+      }
+    ]
+  },
+  {
+    "bvid": "BV17ssL6BEeU",
+    "module": "knowledge",
+    "priority": "拓展",
+    "reason": "Graphify：把散落文件中的概念连起来",
+    "strength": "quick",
+    "title": "Graphify：把散落文件中的概念连起来",
+    "ready": true,
+    "reused": false,
+    "uploader": "网络宝藏社",
+    "duration_seconds": 83,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "GitHub 届又炸了！狂揽 147.0k stars，现在登场的是：Graphify，把一堆代码、PDF、截图自动变成知识图谱，还能省几十倍 token",
+        "duration_seconds": 83
+      }
+    ]
+  },
+  {
+    "bvid": "BV1QM4p6JEHj",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "在画面上直接改稿：咖啡活动页的一次 AI 设计试用",
+    "strength": "quick",
+    "title": "在画面上直接改稿：咖啡活动页的一次 AI 设计试用",
+    "ready": true,
+    "reused": false,
+    "uploader": "动感Tibo",
+    "duration_seconds": 102,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "宝玉把 Claude Design 搬进 DSH，我装上试了试",
+        "duration_seconds": 102
+      }
+    ]
+  },
+  {
+    "bvid": "BV17psV6wEP7",
+    "module": "knowledge",
+    "priority": "拓展",
+    "reason": "把 Obsidian 里的书接着听：朗读、缓存与离线音频",
+    "strength": "quick",
+    "title": "把 Obsidian 里的书接着听：朗读、缓存与离线音频",
+    "ready": true,
+    "reused": false,
+    "uploader": "我的猫猫叫包仔",
+    "duration_seconds": 146,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【obsidian 插件】deepseek tts 让大肥鱼读书给你听",
+        "duration_seconds": 146
+      }
+    ]
+  },
+  {
+    "bvid": "BV1Z3W269ERC",
+    "module": "research",
+    "priority": "拓展",
+    "reason": "ARIS 的基本思路：让执行与审查分开承担",
+    "strength": "quick",
+    "title": "ARIS 的基本思路：让执行与审查分开承担",
+    "ready": true,
+    "reused": false,
+    "uploader": "宝藏青临",
+    "duration_seconds": 74,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AI 自动研究这块最高的山来了！狂揽19.0k stars。ARIS一套让 AI 在你睡觉的时候自动做研究的工作流。",
+        "duration_seconds": 74
+      }
+    ]
+  },
+  {
+    "bvid": "BV18o446AE44",
+    "module": "research",
+    "priority": "拓展",
+    "reason": "从用户名查找公开账号：先理解查询结果代表什么",
+    "strength": "quick",
+    "title": "从用户名查找公开账号：先理解查询结果代表什么",
+    "ready": true,
+    "reused": false,
+    "uploader": "无巧不成书吖",
+    "duration_seconds": 29,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【第30期】侦探界最高的神器来了，Github九万颗星！免费开源且功能十分强大！",
+        "duration_seconds": 29
+      }
+    ]
+  },
+  {
+    "bvid": "BV1774G6eEXP",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "作品集如何从首屏带人走到联系入口：小路网站的视觉观察",
+    "strength": "quick",
+    "title": "作品集如何从首屏带人走到联系入口：小路网站的视觉观察",
+    "ready": true,
+    "reused": false,
+    "uploader": "屹-然",
+    "duration_seconds": 56,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "mmexport1793707617765",
+        "duration_seconds": 56
+      }
+    ]
+  },
+  {
+    "bvid": "BV1CfWo6aEEC",
+    "module": "knowledge",
+    "priority": "拓展",
+    "reason": "潮线：把今天、项目与积累放进同一张航海图",
+    "strength": "quick",
+    "title": "潮线：把今天、项目与积累放进同一张航海图",
+    "ready": true,
+    "reused": false,
+    "uploader": "千城暮雪Q_Q",
+    "duration_seconds": 194,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "「潮线」我做了一个Obsidian插件",
+        "duration_seconds": 194
+      }
+    ]
+  },
+  {
+    "bvid": "BV13W4J6kEHS",
+    "module": "learn",
+    "priority": "拓展",
+    "reason": "在笔记里追问、复述与试验：一种 AI 辅助学习界面",
+    "strength": "quick",
+    "title": "在笔记里追问、复述与试验：一种 AI 辅助学习界面",
+    "ready": true,
+    "reused": false,
+    "uploader": "Paarapple",
+    "duration_seconds": 49,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【Obsidian 插件】它完全改变了我的学习方式。",
+        "duration_seconds": 49
+      }
+    ]
+  },
+  {
+    "bvid": "BV1c8356uEUT",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "找 Logo 参考时，分别看图形、应用与设计过程",
+    "strength": "quick",
+    "title": "找 Logo 参考时，分别看图形、应用与设计过程",
+    "ready": true,
+    "reused": false,
+    "uploader": "逆否设计工作室",
+    "duration_seconds": 83,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "设计师必逛的网站 你怎么还不知道",
+        "duration_seconds": 83
+      }
+    ]
+  },
+  {
+    "bvid": "BV1aZWJ6BE6Q",
+    "module": "wellbeing",
+    "priority": "拓展",
+    "reason": "足弓、膝盖与髋部：三种下肢控制练习分别在观察什么",
+    "strength": "quick",
+    "title": "足弓、膝盖与髋部：三种下肢控制练习分别在观察什么",
+    "ready": true,
+    "reused": false,
+    "uploader": "范李猿",
+    "duration_seconds": 100,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "O 型腿、小腿外翻？3 个关键动作改善！",
+        "duration_seconds": 100
+      }
+    ]
+  },
+  {
+    "bvid": "BV1yLnV6wEzJ",
+    "module": "learn",
+    "priority": "拓展",
+    "reason": "给重要的事留出位置：减少干扰、借用固定日程、持续调整计划",
+    "strength": "quick",
+    "title": "给重要的事留出位置：减少干扰、借用固定日程、持续调整计划",
+    "ready": true,
+    "reused": false,
+    "uploader": "大脑认知提升计划",
+    "duration_seconds": 406,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【卡卡】how to manage time so well people think you have 30 hours a day [mrm76NNw...",
+        "duration_seconds": 406
+      }
+    ]
+  },
+  {
+    "bvid": "BV1PznU6YEZE",
+    "module": "engineering",
+    "priority": "拓展",
+    "reason": "怎样把代码运行验证、AI 审查、自动测试、风险审批和分阶段发布组织成一条可收敛的质量流程？",
+    "strength": "deep",
+    "title": "AI写了代码，谁来保证它能上线：一套从改动到发布的审查流程",
+    "ready": true,
+    "reused": false,
+    "uploader": "马克的技术工作坊",
+    "duration_seconds": 1474,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "如何审核 AI 写的代码？从写代码到上线，一套保证产品质量的全流程",
+        "duration_seconds": 1474
+      }
+    ]
+  },
+  {
+    "bvid": "BV1FTx46CEN8",
+    "module": "learn",
+    "priority": "拓展",
+    "reason": "怎样把计算机领域、课程前置关系、个人进度和技能内知识点组织成可浏览的学习路线？",
+    "strength": "quick",
+    "title": "计算机专业内容做成技能树，学习路线怎样看",
+    "ready": true,
+    "reused": false,
+    "uploader": "孤独生命态",
+    "duration_seconds": 125,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "大肥鱼把计算机专业内容做成了技能树",
+        "duration_seconds": 125
+      }
+    ]
+  },
+  {
+    "bvid": "BV1adW76wEpD",
+    "module": "product",
+    "priority": "拓展",
+    "reason": "怎样用任务依赖、AI 整理和轻量入口减少待办清单中的排序与记录负担？",
+    "strength": "quick",
+    "title": "NextTodo：先理清依赖，再决定眼下做什么",
+    "ready": true,
+    "reused": false,
+    "uploader": "JunieXD",
+    "duration_seconds": 134,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "开源待办 App NextTodo：设好先后，只看现在能做的事",
+        "duration_seconds": 134
+      }
+    ]
+  },
+  {
+    "bvid": "BV1HPWZ6FEU9",
+    "module": "evaluate",
+    "priority": "拓展",
+    "reason": "指数遗忘怎样减少聚类扫描并保留质量",
+    "strength": "deep",
+    "title": "e-means：少读几遍数据，为什么还能把聚类做得更好",
+    "ready": true,
+    "reused": false,
+    "uploader": "技术Flow",
+    "duration_seconds": 1665,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "70 年历史的 K-means 算法提速 10 倍 | e-means",
+        "duration_seconds": 1665
+      }
+    ]
+  },
+  {
+    "bvid": "BV1rPWd6nEpP",
+    "module": "engineering",
+    "priority": "拓展",
+    "reason": "怎样避免长期 AI 迭代使代码、测试和文档逐步失控",
+    "strength": "deep",
+    "title": "用 AI 长期开发复杂项目：从写出功能到维护整套工作",
+    "ready": true,
+    "reused": false,
+    "uploader": "oil欧呦",
+    "duration_seconds": 1480,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "如何用 AI 长期开发一个复杂项目",
+        "duration_seconds": 1480
+      }
+    ]
+  },
+  {
+    "bvid": "BV1Fuxf6aEgJ",
+    "module": "map",
+    "priority": "拓展",
+    "reason": "一条请求怎样经过设备、模型计算、缓存、部署与服务",
+    "strength": "deep",
+    "title": "一条聊天请求怎样得到回答：从 GPU 到在线服务理解 AI Infra",
+    "ready": true,
+    "reused": false,
+    "uploader": "鸽鸽王分王",
+    "duration_seconds": 4804,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【AI Infra 一小时入门】GPU、CUDA、vLLM、PyTorch、KV Cache、Triton、K8s、Ray，一次搞懂大模型背后的技术体系",
+        "duration_seconds": 4804
+      }
+    ]
+  },
+  {
+    "bvid": "BV1nbe16SESV",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "怎样通过多方案探索、具体意向和评审删减改善AI界面",
+    "strength": "deep",
+    "title": "用 AI 设计界面：怎样从相似初稿走到具体、有取舍的作品",
+    "ready": true,
+    "reused": false,
+    "uploader": "oil欧呦",
+    "duration_seconds": 1610,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "如何使用 AI 做出顶级的 UI 设计",
+        "duration_seconds": 1610
+      }
+    ]
+  },
+  {
+    "bvid": "BV1PEHY6dEBK",
+    "module": "wellbeing",
+    "priority": "拓展",
+    "reason": "如何用心智、身体、心灵和事业四个面向整理自身处境，并理解各面向的不同发展状态？",
+    "strength": "deep",
+    "title": "Human 3.0：用四个生活面向梳理当前处境",
+    "ready": true,
+    "reused": false,
+    "uploader": "肥糖AI",
+    "duration_seconds": 2341,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "Human 3.0：通往顶尖百分之一人生的路线图",
+        "duration_seconds": 2341
+      }
+    ]
+  },
+  {
+    "bvid": "BV1GJnZ6MEFw",
+    "module": "companion",
+    "priority": "拓展",
+    "reason": "DSH八种插件分别处理哪些使用场景？",
+    "strength": "quick",
+    "title": "DSH 插件演示：上下文、工作区与操作权限",
+    "ready": true,
+    "reused": false,
+    "uploader": "天才依山尽",
+    "duration_seconds": 175,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【拒绝废话】用DSH必须下载的八个插件",
+        "duration_seconds": 175
+      }
+    ]
+  },
+  {
+    "bvid": "BV1RxWE66E2D",
+    "module": "agent",
+    "priority": "拓展",
+    "reason": "哪些企业业务条件会促使团队选择自研插件，而非直接使用通用MCP服务？",
+    "strength": "quick",
+    "title": "MCP 与自研插件：企业接入工具时的四类取舍",
+    "ready": true,
+    "reused": false,
+    "uploader": "AI大模型-阿水",
+    "duration_seconds": 261,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "AI界USB火了一年，大厂为何偏要砸钱手写插件？",
+        "duration_seconds": 261
+      }
+    ]
+  },
+  {
+    "bvid": "BV1BoWj6rE26",
+    "module": "companion",
+    "priority": "拓展",
+    "reason": "这次DSH插件榜单展示了哪些功能变化与兼容条件？",
+    "strength": "quick",
+    "title": "DSH 插件榜单当周观察：功能、下载变化与版本条件",
+    "ready": true,
+    "reused": false,
+    "uploader": "小菌君的AI资讯网格",
+    "duration_seconds": 180,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "DSH插件11月第一周横评：榜单大洗牌",
+        "duration_seconds": 180
+      }
+    ]
+  },
+  {
+    "bvid": "BV1WpbW62Eg3",
+    "module": "career",
+    "priority": "拓展",
+    "reason": "如何从业务流程出发，把Agent Demo做成可观察、可测试的工程系统？",
+    "strength": "quick",
+    "title": "两个月的 Agent 自学复盘：从业务场景走到可测试系统",
+    "ready": true,
+    "reused": false,
+    "uploader": "程序员海豚吞",
+    "duration_seconds": 379,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "自学两个月Agent，复盘思考",
+        "duration_seconds": 379
+      }
+    ]
+  },
+  {
+    "bvid": "BV12gWR6tEuq",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "UI UX Pro Max 怎样把行业和体验规则带给编码助手",
+    "strength": "quick",
+    "title": "UI UX Pro Max：给编码助手提供一套设计规则",
+    "ready": true,
+    "reused": false,
+    "uploader": "山海之花",
+    "duration_seconds": 61,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "GitHub届又炸了！狂揽148.5k stars，这可能是目前最强的AI做界面设计工具，UI UX Pro Max，一个给 AI 补上一整套专业设计知识",
+        "duration_seconds": 61
+      }
+    ]
+  },
+  {
+    "bvid": "BV1E6Jf6UEUc",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "怎样把番茄钟一个满意页面整理成可延展、可验证的规则",
+    "strength": "standard",
+    "title": "把一个满意页面变成能继续扩展的设计系统",
+    "ready": true,
+    "reused": false,
+    "uploader": "阿橙OrangeDesign",
+    "duration_seconds": 286,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "用AI做设计🧑‍🎨设计系统篇EP.02",
+        "duration_seconds": 286
+      }
+    ]
+  },
+  {
+    "bvid": "BV1hP486KEAc",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "怎样从主体、留白、疏密和阅读顺序解释一张海报的构图？",
+    "strength": "deep",
+    "title": "看懂海报的构图：从主体、留白到视觉平衡",
+    "ready": true,
+    "reused": false,
+    "uploader": "视研的董掌柜",
+    "duration_seconds": 1026,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "审美想大幅提升！就得这么分析！",
+        "duration_seconds": 1026
+      }
+    ]
+  },
+  {
+    "bvid": "BV1qtWC6jE2e",
+    "module": "engineering",
+    "priority": "拓展",
+    "reason": "怎样把 Agent 在代码中的重复错误转成可执行的工程约束，并用验证结果支撑更高的交付速度？",
+    "strength": "standard",
+    "title": "把 Agent 的常见错误变成代码检查",
+    "ready": true,
+    "reused": false,
+    "uploader": "Mentaline",
+    "duration_seconds": 1059,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【中英双语】poteto：别再加规则了，把 Agent 的错误堵进代码里｜AIE Code Summit",
+        "duration_seconds": 1059
+      }
+    ]
+  },
+  {
+    "bvid": "BV17LWq6cE53",
+    "module": "companion",
+    "priority": "拓展",
+    "reason": "DSH 的插件分别怎样帮助观察成本、管理工作区、控制操作与恢复代码？",
+    "strength": "quick",
+    "title": "DeepSeek Harness 插件演示：从费用面板到命令审批",
+    "ready": true,
+    "reused": false,
+    "uploader": "Git源宝",
+    "duration_seconds": 211,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "【小众好用】有哪些DeepSeek好用的必装插件？如何榨干 DeepSeek Harness所有性能？DSH插件安装指南！",
+        "duration_seconds": 211
+      }
+    ]
+  },
+  {
+    "bvid": "BV1KoW16NEBf",
+    "module": "agent",
+    "priority": "拓展",
+    "reason": "Agent怎样在持久化记忆中保留证据、纠正错误，并控制维护成本？",
+    "strength": "standard",
+    "title": "让 Agent 的长期记忆能够纠错",
+    "ready": true,
+    "reused": false,
+    "uploader": "Agent智能体深度研究院",
+    "duration_seconds": 730,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "[Agent记忆] Anthropic公开Claude记忆架构：用Dreaming回查记录，修正笔记并整理知识页",
+        "duration_seconds": 730
+      }
+    ]
+  },
+  {
+    "bvid": "BV1YPWi6SEPD",
+    "module": "design",
+    "priority": "拓展",
+    "reason": "怎样让 AI 设计从常见模板走向符合产品目标、能持续打磨的视觉方向？",
+    "strength": "deep",
+    "title": "如何使用 AI 做出有高级感的设计",
+    "ready": true,
+    "reused": false,
+    "uploader": "oil欧呦",
+    "duration_seconds": 1864,
+    "parts": 1,
+    "pages": [
+      {
+        "part": 1,
+        "title": "如何使用 AI 做出有高级感的设计",
+        "duration_seconds": 1864
+      }
+    ]
   }
 ]

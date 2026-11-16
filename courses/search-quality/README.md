@@ -2,7 +2,7 @@
 
 [学习脉络图](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/flow.html) · [全部笔记](https://wychuang.github.io/bilibili-video-notes/courses/search-quality/) · [本地入口](flow.html)
 
-141 篇中文学习讲解，沿 AI 与软件、产品与设计、研究与知识管理、学习与职业、经济与生活、文化与娱乐六条路线组织。文章从具体问题和案例展开，配合关键画面、对照表、公式和视频时间导航。更新日期：2026-11-05。
+172 篇中文学习讲解，沿 AI 与软件、产品与设计、研究与知识管理、学习与职业、经济与生活、文化与娱乐六条路线组织。文章从具体问题和案例展开，配合关键画面、对照表、公式和视频时间导航。更新日期：2026-11-16。
 
 ## 怎样开始
 
